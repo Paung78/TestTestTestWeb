@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>BigWin Wingo 30 Mini V1.2 - Key Unlock</title>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+            --bg: #f1f5f9;
+            --text: #0f172a;
+            --muted: #475569;
+            --surface: #ffffff;
+            --neumo-text: #2d3748;
+            --neumo-muted: #718096;
+            --neumo-sh-dark: rgba(163, 177, 198, 0.52);
+            --neumo-sh-light: rgba(255, 255, 255, 0.92);
+            --neumo-inset-sm: inset 3px 3px 6px var(--neumo-sh-dark), inset -3px -3px 6px var(--neumo-sh-light);
+            --bw-green: #22c55e;
+            --text-bw: #15803d;
+            --main-color: #22c55e;
+            --main-color-dark: #16a34a;
+            --main-color-alpha-10: rgba(34, 197, 94, 0.12);
+            --main-color-alpha-20: rgba(34, 197, 94, 0.22);
+            --main-color-alpha-30: rgba(34, 197, 94, 0.32);
+            --yellow-accent: #ca8a04;
+            --shadow: 0 2px 8px rgba(15, 23, 42, 0.08);
+        }
+        /* SPECIAL badge — bright yellow + glow (Key unlock + Prediction) */
+        .special-badge {
+            display: inline-block;
+            margin-left: 10px;
+            padding: 4px 14px;
+            font-size: 0.7rem;
+            font-weight: 900;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: #1c1917;
+            text-shadow: 0 0 8px rgba(255, 255, 255, 0.95), 0 0 14px rgba(254, 240, 138, 0.9);
+            background: linear-gradient(135deg, #fde047 0%, #facc15 45%, #eab308 100%);
+            border: 1px solid rgba(254, 249, 195, 0.95);
+            border-radius: 999px;
+            vertical-align: middle;
+            box-shadow:
+                0 0 10px rgba(250, 204, 21, 0.95),
+                0 0 22px rgba(234, 179, 8, 0.75),
+                0 0 36px rgba(202, 138, 4, 0.4);
+            animation: special-badge-glow 1.8s ease-in-out infinite alternate;
+        }
+        .ck12-unlock-title .special-badge,
+        .results-container h1 .special-badge,
+        .bw12-unlock-brand-title .special-badge,
+        .bw30-unlock-brand-title .special-badge {
+            font-size: clamp(0.55rem, 2vw, 0.7rem);
+        }
+        @keyframes special-badge-glow {
+            from {
+                box-shadow:
+                    0 0 8px rgba(253, 224, 71, 0.9),
+                    0 0 18px rgba(234, 179, 8, 0.6),
+                    0 0 28px rgba(202, 138, 4, 0.3);
+            }
+            to {
+                box-shadow:
+                    0 0 14px rgba(254, 240, 138, 1),
+                    0 0 28px rgba(250, 204, 21, 0.95),
+                    0 0 48px rgba(234, 179, 8, 0.6);
+            }
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg);
+            min-height: 100vh;
+            color: var(--text);
+            padding: clamp(10px, 2.5vw, 20px);
+            padding-top: calc(clamp(10px, 2.5vw, 20px) + env(safe-area-inset-top));
+            padding-bottom: calc(clamp(10px, 2.5vw, 20px) + env(safe-area-inset-bottom));
+            -webkit-font-smoothing: antialiased;
+        }
+        #gate {
+            display: none;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 24px;
+            position: fixed;
+            inset: 0;
+            z-index: 9999;
+            background: var(--bg);
+        }
+        .bw30-unlock-card {
+            width: min(480px, 100%);
+            padding: clamp(28px, 6vw, 48px);
+            background: #e4e9f0;
+            border: none;
+            border-radius: 28px;
+            box-shadow: 6px 6px 12px rgba(163, 177, 198, 0.52), -6px -6px 12px rgba(255, 255, 255, 0.92);
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 18px;
+            text-align: left;
+        }
+        .bw30-unlock-brand-header {
+            width: 100%;
+            text-align: left;
+        }
+        .bw30-unlock-brand-title {
+            font-size: clamp(1rem, 3.2vw, 1.25rem);
+            font-weight: 700;
+            color: var(--neumo-text);
+            letter-spacing: 0.04em;
+            line-height: 1.2;
+            margin: 0 0 4px 0;
+        }
+        .bw30-unlock-brand-sub {
+            margin: 0;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--neumo-muted);
+            letter-spacing: 0.05em;
+        }
+        .brand-red { color: #dc2626; }
+        .brand-black { color: #111827; }
+        .bw30-input-wrap { margin-bottom: 0; }
+        .bw30-key-input {
+            width: 100%;
+            padding: 18px 22px;
+            background: #ffffff;
+            border: 2px solid var(--main-color-alpha-30);
+            border-radius: 18px;
+            color: var(--neumo-text);
+            font-size: 1rem;
+            font-family: var(--font-sans);
+            letter-spacing: 0.3em;
+            text-transform: uppercase;
+            text-align: center;
+            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: var(--neumo-inset-sm);
+        }
+        .bw30-key-input::placeholder { color: var(--neumo-muted); }
+        .bw30-key-input:focus {
+            outline: none;
+            border-color: var(--bw-green);
+            box-shadow: 0 0 0 3px var(--main-color-alpha-20);
+        }
+        .bw30-activate-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(145deg, #4ade80 0%, #22c55e 45%, #16a34a 100%);
+            border: none;
+            border-radius: 18px;
+            color: #fff;
+            font-size: 0.95rem;
+            font-weight: 700;
+            font-family: var(--font-sans);
+            letter-spacing: 0.25em;
+            text-transform: uppercase;
+            cursor: pointer;
+            box-shadow: 6px 6px 14px rgba(22, 163, 74, 0.3), -4px -4px 12px rgba(255, 255, 255, 0.35);
+        }
+        .bw30-activate-btn:hover:not(:disabled) {
+            transform: none;
+            box-shadow: 6px 6px 14px rgba(22, 163, 74, 0.3), -4px -4px 12px rgba(255, 255, 255, 0.35);
+        }
+        .bw30-activate-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+        .bw30-timer {
+            margin-top: 0;
+            padding: 14px;
+            background: var(--main-color-alpha-10);
+            border: 1px solid var(--main-color-alpha-30);
+            border-radius: 12px;
+            font-weight: 700;
+            color: var(--main-color-dark);
+            text-align: center;
+            display: none;
+        }
+        .bw30-success {
+            margin-top: 0;
+            padding: 12px;
+            background: var(--main-color-alpha-10);
+            border: 1px solid var(--main-color-alpha-30);
+            border-radius: 12px;
+            color: var(--text-bw);
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-align: center;
+            display: none;
+        }
+        .bw30-telegram { margin-top: 24px; }
+        .bw30-telegram a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            background: var(--main-color-alpha-10);
+            border: 1px solid var(--main-color-alpha-30);
+            border-radius: 12px;
+            color: var(--main-color-dark);
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: background 0.2s ease;
+        }
+        .bw30-telegram a:hover { background: var(--main-color-alpha-20); }
+        .results-container {
+            display: none;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 16px;
+            background: var(--surface);
+            border-radius: 16px;
+            border: 1px solid var(--main-color-alpha-30);
+            box-shadow: var(--shadow);
+            position: relative;
+        }
+        .results-container.unlocked { display: block; animation: bw30-fadeIn 0.3s ease; }
+        @keyframes bw30-fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .results-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            gap: 16px;
+        }
+        .results-header-left { flex: 1; }
+        .results-container h1 {
+            font-size: clamp(1.2rem, 3.5vw, 1.6rem);
+            font-weight: 700;
+            color: var(--bw-green);
+            margin-bottom: 4px;
+        }
+        .results-container .bw30-subtitle { color: var(--muted); font-size: 0.9rem; font-weight: 500; }
+        .results-time-badge {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            padding: 8px 14px;
+            background: var(--main-color-alpha-10);
+            border: 1px solid var(--main-color-alpha-30);
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--main-color-dark);
+            white-space: nowrap;
+            display: none;
+        }
+        .results-time-badge.visible { display: block; }
+        .bw30-bst-box {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 14px 20px;
+            background: var(--main-color-alpha-10);
+            border: 1px solid var(--main-color-alpha-30);
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .bw30-bst-item { text-align: center; }
+        .bw30-bst-label { font-size: 0.7rem; color: var(--muted); font-weight: 600; text-transform: uppercase; margin-bottom: 4px; }
+        .bw30-bst-value { font-size: 1.4rem; font-weight: 800; color: var(--neumo-text); }
+        .bw30-predictions-pair-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: clamp(8px, 2vw, 16px);
+            margin-bottom: 20px;
+            align-items: start;
+        }
+        .bw30-predictions-pair-row .bw30-pred-box,
+        .bw30-predictions-pair-row .bw30-pred-system-box {
+            margin-bottom: 0 !important;
+            min-width: 0;
+        }
+        @media (max-width: 540px) {
+            .bw30-predictions-pair-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+        }
+        .bw30-pred-box {
+            padding: 16px;
+            background: var(--main-color-alpha-10);
+            border: 1px solid var(--main-color-alpha-30);
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .bw30-pred-row {
+            display: flex;
+            align-items: stretch;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 4px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(34, 197, 94, 0.15);
+        }
+        .bw30-pred-row:last-child { border-bottom: none; }
+        .bw30-pred-label {
+            font-size: clamp(0.65rem, 2.8vw, 0.85rem);
+            color: var(--muted);
+            font-weight: 600;
+            width: 100%;
+            text-align: left;
+            letter-spacing: 0.04em;
+        }
+        .bw30-pred-value {
+            font-size: clamp(0.75rem, 3.2vw, 0.95rem);
+            font-weight: 700;
+            color: var(--neumo-text);
+            font-family: ui-monospace, monospace;
+            width: 100%;
+            text-align: left;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+        }
+        .bw30-pred-system-box {
+            padding: 16px;
+            background: var(--main-color-alpha-10);
+            border: 1px solid var(--main-color-alpha-30);
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+        .bw30-pred-system-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: var(--neumo-text);
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--main-color-alpha-30);
+        }
+        .bw30-pred-system-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            padding: 6px 0;
+            font-size: 0.85rem;
+            color: var(--neumo-text);
+            gap: 6px 10px;
+        }
+        .bw30-pred-system-label { font-weight: 600; color: var(--muted); min-width: 0; max-width: 100%; }
+        .bw30-pred-system-value {
+            font-family: ui-monospace, monospace;
+            font-weight: 600;
+            text-align: right;
+            min-width: 0;
+            max-width: 100%;
+            word-break: break-word;
+            overflow-wrap: anywhere;
+        }
+        .bw30-pred-system-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            padding: 24px;
+            font-size: 0.95rem;
+            color: var(--muted);
+            font-weight: 600;
+        }
+        .bw30-pred-system-loading .dots { display: inline-flex; gap: 4px; }
+        .bw30-pred-system-loading .dots span {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            background: var(--bw-green);
+            animation: bw30-dot 1.4s ease-in-out infinite;
+        }
+        .bw30-pred-system-loading .dots span:nth-child(1) { animation-delay: 0s; }
+        .bw30-pred-system-loading .dots span:nth-child(2) { animation-delay: 0.2s; }
+        .bw30-pred-system-loading .dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes bw30-dot {
+            0%, 80%, 100% { opacity: 0.3; transform: scale(0.8); }
+            40% { opacity: 1; transform: scale(1.1); }
+        }
+        .bw30-pred-system-content { animation: bw30-fadeIn 0.4s ease; }
+        .bw30-win { color: #15803d; font-weight: 700; }
+        .bw30-lose { color: #dc2626; font-weight: 700; }
+        .bw30-table-wrap {
+            background: var(--surface);
+            border: 1px solid var(--main-color-alpha-30);
+            border-radius: 12px;
+            overflow-x: auto;
+            overflow-y: visible;
+            margin-bottom: 20px;
+            -webkit-overflow-scrolling: touch;
+        }
+        .bw30-table-wrap table {
+            width: max-content;
+            min-width: 100%;
+            border-collapse: collapse;
+            table-layout: auto;
+        }
+        .bw30-table-wrap th {
+            padding: 14px 12px;
+            background: linear-gradient(145deg, #ecfdf5 0%, #d1fae5 100%);
+            color: var(--main-color-dark);
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            text-align: left;
+            border-bottom: 1px solid var(--main-color-alpha-20);
+            white-space: normal;
+            word-break: break-word;
+        }
+        .bw30-table-wrap td {
+            padding: 12px;
+            border-top: 1px solid rgba(15, 23, 42, 0.06);
+            font-size: 0.85rem;
+            color: var(--neumo-text);
+            white-space: normal;
+            word-break: break-word;
+        }
+        @media (hover: hover) and (pointer: fine) {
+            .bw30-table-wrap tbody tr:hover { background: var(--main-color-alpha-10); }
+        }
+        .bw30-table-wrap .period-num { font-weight: 700; color: var(--text); }
+        .bw30-table-wrap .result-big { color: var(--yellow-accent); font-weight: 700; }
+        .bw30-table-wrap .result-small { color: var(--main-color-dark); font-weight: 700; }
+        .bw30-last-update { text-align: center; font-size: 0.8rem; color: var(--muted); padding: 12px; font-weight: 600; }
+        .no-data { text-align: center; padding: 40px 20px; color: var(--neumo-muted); font-weight: 500; }
+        #status { display: none; padding: 12px; margin-bottom: 16px; border-radius: 12px; }
+        #status.loading { background: var(--main-color-alpha-10); color: var(--main-color-dark); }
+        #status.error { background: rgba(220, 38, 38, 0.08); color: #dc2626; }
+        @media (max-width: 768px) {
+            .bw30-unlock-card { padding: 28px 20px; }
+        }
+        @media (max-width: 600px) {
+            .bw30-table-wrap th, .bw30-table-wrap td {
+                padding: 8px 5px;
+                font-size: clamp(0.58rem, 2.4vw, 0.72rem);
+            }
+            .bw30-key-input { letter-spacing: 0.08em; }
+            .results-header { flex-direction: column; align-items: flex-start; }
+            .results-time-badge { position: static; margin-top: 8px; }
+            .bw30-bst-box { flex-wrap: wrap; gap: 12px; }
+        }
+        @media (max-width: 400px) {
+            .bw30-table-wrap th, .bw30-table-wrap td {
+                padding: 6px 3px;
+                font-size: clamp(0.52rem, 2.2vw, 0.65rem);
+            }
+        }
+    
+    </style>
+</head>
+<body>
+    <section id="gate">
+        <div class="bw30-unlock-card">
+            <div class="bw30-unlock-brand-header">
+                <h1 class="bw30-unlock-brand-title"><span class="brand-red">SuperSel</span> <span class="brand-black">Earing</span><span class="special-badge">SPECIAL</span></h1>
+                <p class="bw30-unlock-brand-sub">BigWin30MiniV1.2</p>
+            </div>
+            <div class="bw30-input-wrap">
+                <input type="text" id="keyInput" class="bw30-key-input" placeholder="ENTER ACCESS KEY" autocomplete="off">
+            </div>
+            <button class="bw30-activate-btn" id="activateBtn">
+                <i class="fas fa-unlock-alt"></i> UNLOCK
+            </button>
+            <div id="keyTimer" class="bw30-timer"></div>
+            <div id="keySuccess" class="bw30-success">Access Granted</div>
+        </div>
+    </section>
+
+    <div class="results-container" id="resultsContainer">
+        <div class="results-header">
+            <div class="results-header-left">
+                <h1><span class="brand-red">SuperSel</span> <span class="brand-black">Earing</span><span class="special-badge">SPECIAL</span></h1>
+                <p class="bw30-subtitle">BigWin30MiniV1.2</p>
+            </div>
+            <div id="resultsTimeRemaining" class="results-time-badge"></div>
+        </div>
+        <div id="status" class="status"></div>
+
+        <div class="bw30-bst-box">
+            <div class="bw30-bst-item"><div class="bw30-bst-label">BIG</div><div class="bw30-bst-value" id="bigCount">0</div></div>
+            <div class="bw30-bst-item"><div class="bw30-bst-label">SMALL</div><div class="bw30-bst-value" id="smallCount">0</div></div>
+            <div class="bw30-bst-item"><div class="bw30-bst-label">TOTAL</div><div class="bw30-bst-value" id="totalCount">0</div></div>
+        </div>
+
+        <div class="bw30-predictions-pair-row">
+            <div class="bw30-pred-box">
+                <div class="bw30-pred-row">
+                    <span class="bw30-pred-label">Next Period Number</span>
+                    <span class="bw30-pred-value" id="predNextPeriod">-</span>
+                </div>
+                <div class="bw30-pred-row">
+                    <span class="bw30-pred-label">Prediction</span>
+                    <span class="bw30-pred-value" id="predValue">-</span>
+                </div>
+                <div class="bw30-pred-row">
+                    <span class="bw30-pred-label">WinGo CD Time</span>
+                    <span class="bw30-pred-value" id="wingoCD">30s</span>
+                </div>
+            </div>
+
+            <div class="bw30-pred-system-box">
+                <div class="bw30-pred-system-title">Prediction System</div>
+                <div id="predSystemContent"></div>
+            </div>
+        </div>
+
+        <div class="bw30-table-wrap">
+            <div id="resultsTable"></div>
+        </div>
+        <div id="lastUpdate" class="bw30-last-update"></div>
+    </div>
+
+    <script>
+        const ACCEPTED_KEY_TYPES = ['bigwin'];
+        const FIREBASE_PATH = 'bigwin/default';
+        const STORAGE_PREFIX = 'bigwinShared_';
+        const LEGACY_STORAGE_PREFIXES = ['bw1_', 'bw30_'];
+        const firebaseConfig = {
+            apiKey: "AIzaSyDj6z3O91NnlQ1zVdripiGhqQMsQhR4_ak",
+            authDomain: "ck30-35e97.firebaseapp.com",
+            databaseURL: "https://ck30-35e97-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "ck30-35e97",
+            storageBucket: "ck30-35e97.appspot.com",
+            messagingSenderId: "625630152314",
+            appId: "1:625630152314:web:c035009eec389371b51dc3",
+            measurementId: "G-6Z7DYPKHR2"
+        };
+        const loginConfigBigWin = {
+            apiKey: "AIzaSyBynBT5W_C6rNVEUB4j7ABiJQeSfQGU4Mo",
+            authDomain: "lotteryoo.firebaseapp.com",
+            databaseURL: "https://lotteryoo-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "lotteryoo",
+            storageBucket: "lotteryoo.firebasestorage.app",
+            messagingSenderId: "72782915477",
+            appId: "1:72782915477:web:011fc0a614aff7c666b89c",
+            measurementId: "G-M06SN8YLD3"
+        };
+
+        let db = null, loginDb = null, firebaseListener = null, keyStatusListener = null;
+        let serverOffset = 0, expireTime = parseInt(localStorage.getItem(STORAGE_PREFIX + 'expireTime')) || 0;
+        let activatedKeyId = localStorage.getItem(STORAGE_PREFIX + 'activatedKeyId') || null;
+        if (!expireTime || !activatedKeyId) {
+            for (const legacyPrefix of LEGACY_STORAGE_PREFIXES) {
+                const legacyExpire = parseInt(localStorage.getItem(legacyPrefix + 'expireTime')) || 0;
+                const legacyKeyId = localStorage.getItem(legacyPrefix + 'activatedKeyId') || null;
+                if (legacyExpire > 0 && legacyKeyId) {
+                    expireTime = legacyExpire;
+                    activatedKeyId = legacyKeyId;
+                    localStorage.setItem(STORAGE_PREFIX + 'expireTime', String(expireTime));
+                    localStorage.setItem(STORAGE_PREFIX + 'activatedKeyId', activatedKeyId);
+                    break;
+                }
+            }
+        }
+        let timerInterval = null;
+        let wingoCDInterval = null;
+        let currentResults = [];
+        let lastPeriodKey = null;
+        let lastRenderedPeriodKey = null;
+        let predSystemTimeout = null;
+        let wingoCDSec = 30;
+
+        const getServerTime = () => Date.now() + serverOffset;
+
+        function initLoginFirebase() {
+            try {
+                if (!loginDb) {
+                    const app = firebase.initializeApp(loginConfigBigWin, 'loginBigWin30');
+                    loginDb = app.database();
+                }
+                loginDb.ref(".info/serverTimeOffset").on("value", s => { serverOffset = s?.val() || 0; });
+                return true;
+            } catch (e) { console.error('Login Firebase error:', e); return false; }
+        }
+
+        function initFirebase() {
+            try {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.database();
+                return true;
+            } catch (e) { console.error('Firebase init error:', e); return false; }
+        }
+
+        function activateKey() {
+            const key = document.getElementById('keyInput').value.trim().toUpperCase();
+            if (!key) { alert('Please enter an access key'); return; }
+            const btn = document.getElementById('activateBtn');
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Verifying...';
+            btn.disabled = true;
+            if (!loginDb && !initLoginFirebase()) {
+                btn.innerHTML = '<i class="fas fa-unlock-alt"></i> UNLOCK';
+                btn.disabled = false;
+                alert('Network error');
+                return;
+            }
+            loginDb.ref('keys/' + key).once('value').then(snapshot => {
+                btn.innerHTML = '<i class="fas fa-unlock-alt"></i> UNLOCK';
+                btn.disabled = false;
+                if (snapshot.exists()) {
+                    const data = snapshot.val();
+                    if (!ACCEPTED_KEY_TYPES.includes(data.keyType || '')) {
+                        const typeName = data.keyType === 'ck' ? 'CK Key Bot' : data.keyType === '6wingo' ? '6 Key Bot' : 'Unknown';
+                        alert('Invalid key type. This key is from ' + typeName + '. Use keys from BigWin Key Bot only.');
+                        return;
+                    }
+                    if (data.used) {
+                        alert('This key has already been used.');
+                        return;
+                    }
+                    const extra = (data.duration || 0) * 60 * 1000;
+                    expireTime = Math.max(getServerTime(), expireTime) + extra;
+                    localStorage.setItem(STORAGE_PREFIX + 'expireTime', expireTime);
+                    activatedKeyId = key;
+                    localStorage.setItem(STORAGE_PREFIX + 'activatedKeyId', key);
+                    loginDb.ref('keys/' + key).update({
+                        used: true,
+                        activatedAt: firebase.database.ServerValue.TIMESTAMP,
+                        expiresAt: expireTime
+                    });
+                    document.getElementById('keySuccess').style.display = 'block';
+                    document.getElementById('keyInput').value = '';
+                    startSession();
+                    startKeyMonitoring(key);
+                } else {
+                    alert('Invalid key');
+                }
+            }).catch(err => {
+                btn.innerHTML = '<i class="fas fa-unlock-alt"></i> UNLOCK';
+                btn.disabled = false;
+                alert('Network error. Try again.');
+            });
+        }
+
+        function startSession() {
+            if (timerInterval) clearInterval(timerInterval);
+            updateTimer();
+            timerInterval = setInterval(updateTimer, 1000);
+        }
+
+        function updateTimer() {
+            const remaining = expireTime - getServerTime();
+            const gate = document.getElementById('gate');
+            const container = document.getElementById('resultsContainer');
+            const timerEl = document.getElementById('keyTimer');
+            const resultsTimeEl = document.getElementById('resultsTimeRemaining');
+
+            if (remaining <= 0) {
+                clearInterval(timerInterval);
+                document.getElementById('keySuccess').style.display = 'none';
+                if (timerEl) timerEl.style.display = 'none';
+                if (resultsTimeEl) { resultsTimeEl.classList.remove('visible'); resultsTimeEl.textContent = ''; }
+                if (wingoCDInterval) { clearInterval(wingoCDInterval); wingoCDInterval = null; }
+                if (predSystemTimeout) { clearTimeout(predSystemTimeout); predSystemTimeout = null; }
+                gate.style.display = 'flex';
+                container.classList.remove('unlocked');
+                localStorage.removeItem(STORAGE_PREFIX + 'expireTime');
+                localStorage.removeItem(STORAGE_PREFIX + 'activatedKeyId');
+                const keyToClean = activatedKeyId;
+                activatedKeyId = null;
+                if (firebaseListener && db) {
+                    db.ref(FIREBASE_PATH).off('value', firebaseListener);
+                    firebaseListener = null;
+                }
+                if (keyStatusListener && loginDb && keyToClean) {
+                    loginDb.ref('keys/' + keyToClean).off('value', keyStatusListener);
+                    keyStatusListener = null;
+                }
+                return;
+            }
+            const h = Math.floor(remaining / 3600000);
+            const m = Math.floor((remaining % 3600000) / 60000);
+            const s = Math.floor((remaining % 60000) / 1000);
+            const txt = `${h}h ${m}m ${s}s`;
+            if (timerEl) { timerEl.textContent = txt; timerEl.style.display = 'block'; }
+            if (resultsTimeEl) { resultsTimeEl.textContent = txt; resultsTimeEl.classList.add('visible'); }
+            gate.style.display = 'none';
+            container.classList.add('unlocked');
+            if (!firebaseListener) setTimeout(connectFirebase, 300);
+        }
+
+        function redirectToUnlock(reason) {
+            if (timerInterval) clearInterval(timerInterval);
+            if (wingoCDInterval) { clearInterval(wingoCDInterval); wingoCDInterval = null; }
+            if (predSystemTimeout) { clearTimeout(predSystemTimeout); predSystemTimeout = null; }
+            document.getElementById('resultsContainer').classList.remove('unlocked');
+            document.getElementById('gate').style.display = 'flex';
+            document.getElementById('keySuccess').style.display = 'none';
+            localStorage.removeItem(STORAGE_PREFIX + 'expireTime');
+            localStorage.removeItem(STORAGE_PREFIX + 'activatedKeyId');
+            const keyToClean = activatedKeyId;
+            activatedKeyId = null;
+            displayedHistory = [];
+            lastSeenLatestPeriodKey = null;
+            if (firebaseListener && db) { db.ref(FIREBASE_PATH).off('value', firebaseListener); firebaseListener = null; }
+            if (keyStatusListener && loginDb && keyToClean) {
+                loginDb.ref('keys/' + keyToClean).off('value', keyStatusListener);
+                keyStatusListener = null;
+            }
+            alert(reason || 'Session expired');
+        }
+
+        function startKeyMonitoring(keyId) {
+            if (!loginDb || !keyId) return;
+            if (keyStatusListener && activatedKeyId) {
+                loginDb.ref('keys/' + activatedKeyId).off('value', keyStatusListener);
+            }
+            keyStatusListener = loginDb.ref('keys/' + keyId).on('value', snapshot => {
+                if (!snapshot.exists()) {
+                    if (expireTime - getServerTime() > 0) return;
+                    redirectToUnlock('Key expired');
+                    return;
+                }
+                const d = snapshot.val();
+                if (d.used && d.expiresAt && d.expiresAt < getServerTime()) {
+                    redirectToUnlock('Key expired');
+                } else if (d.used === false && d.claimed === false && keyId === activatedKeyId) {
+                    redirectToUnlock('Key deactivated');
+                }
+            });
+        }
+
+        function classifyBigSmall(n) {
+            if (n == null) return null;
+            const num = parseInt(n);
+            return isNaN(num) ? null : (num >= 5 ? 'BIG' : 'SMALL');
+        }
+
+        function calculatePrediction(historyData) {
+            // historyData: [latest, older, older, ...]
+            if (!historyData || historyData.length < 3) return null;
+
+            // 1) နောက်ဆုံး 3 ပွဲ trend ရှိရင် အဲဒီဘက်ကို follow
+            const last3 = historyData.slice(0, Math.min(3, historyData.length));
+            const bsLast3 = last3
+                .map(item => classifyBigSmall(item.number))
+                .filter(Boolean);
+
+            if (bsLast3.length === 3 &&
+                bsLast3[0] === bsLast3[1] &&
+                bsLast3[1] === bsLast3[2]) {
+                // နောက်ဆုံး 3 ပွဲတိုင်တာ BIG / SMALL တစ်မျိုးတည်း
+                return bsLast3[0]; // 'BIG' or 'SMALL'
+            }
+
+            // 2) Trend မရှင်းရင် weighted vote (နောက်ဆုံး 8 ပွဲအထိ)
+            const windowSize = Math.min(8, historyData.length);
+            const recent = historyData.slice(0, windowSize);
+
+            let bigScore = 0;
+            let smallScore = 0;
+
+            // index 0 = latest ⇒ အမြင့်ဆုံး weight
+            for (let i = 0; i < recent.length; i++) {
+                const item = recent[i];
+                const bs = classifyBigSmall(item.number);
+                if (!bs) continue;
+
+                const weight = recent.length - i; // latest ပွဲ weight အများဆုံး
+                if (bs === 'BIG') bigScore += weight;
+                else if (bs === 'SMALL') smallScore += weight;
+            }
+
+            if (bigScore === 0 && smallScore === 0) return null;
+
+            // Weight ပိုများတဲ့ဘက်ကို follow
+            return bigScore > smallScore ? 'BIG' : 'SMALL';
+        }
+
+        function calculateRate(historyData) {
+            if (!historyData || historyData.length < 6) return null;
+            let correctCount = 0, totalChecked = 0;
+            for (let i = 0; i < 3 && i + 5 < historyData.length; i++) {
+                const historyForPrediction = historyData.slice(i + 1);
+                const predictedValue = calculatePrediction(historyForPrediction);
+                const actualBigSmall = classifyBigSmall(historyData[i].number);
+                if (predictedValue && actualBigSmall) {
+                    if (predictedValue === actualBigSmall) correctCount++;
+                    totalChecked++;
+                }
+            }
+            if (totalChecked === 0) return null;
+            const pct = (correctCount / totalChecked) * 100;
+            return pct < 33 ? 'Low' : pct <= 66 ? 'Medium' : 'High';
+        }
+
+        function getNextPeriod(issueNum) {
+            if (!issueNum && issueNum !== 0) return '-';
+            try {
+                const s = String(issueNum).replace(/[^0-9]/g, '');
+                if (!s) return '-';
+                return (BigInt(s) + 1n).toString();
+            } catch (e) { return '-'; }
+        }
+
+        function startWingoCD() {
+            if (wingoCDInterval) clearInterval(wingoCDInterval);
+            wingoCDSec = 30;
+            const el = document.getElementById('wingoCD');
+            if (el) el.textContent = '30s';
+            wingoCDInterval = setInterval(() => {
+                wingoCDSec = Math.max(0, wingoCDSec - 1);
+                if (el) el.textContent = wingoCDSec + 's';
+                if (wingoCDSec <= 0) clearInterval(wingoCDInterval);
+            }, 1000);
+        }
+
+        function showPredictionSystemData(results) {
+            const sysEl = document.getElementById('predSystemContent');
+            const predEl = document.getElementById('predValue');
+            const nextEl = document.getElementById('predNextPeriod');
+            if (!results || results.length === 0 || !sysEl) return;
+            const nextPrediction = calculatePrediction(results);
+            const rate = calculateRate(results);
+            const last5 = results.slice(0, Math.min(5, results.length));
+            const analysisPattern = last5.map(r => classifyBigSmall(r.number)).filter(Boolean).join(' → ');
+            let sysHtml = '<div class="bw30-pred-system-content">';
+            sysHtml += '<div class="bw30-pred-system-row"><span class="bw30-pred-system-label">Analysis (Last 5 B/S)</span><span class="bw30-pred-system-value">' + (analysisPattern || '-') + '</span></div>';
+            sysHtml += '<div class="bw30-pred-system-row"><span class="bw30-pred-system-label">Next Prediction</span><span class="bw30-pred-system-value">' + (nextPrediction || '-') + '</span></div>';
+            sysHtml += '<div class="bw30-pred-system-row"><span class="bw30-pred-system-label">Accuracy Rate</span><span class="bw30-pred-system-value">' + (rate || '-') + '</span></div>';
+            sysHtml += '</div>';
+            sysEl.innerHTML = sysHtml;
+            if (predEl) predEl.textContent = nextPrediction || '-';
+            const latest = results[0];
+            const issueNum = latest.period ?? latest.issueNumber ?? latest.issue ?? latest.periodNumber;
+            if (nextEl) nextEl.textContent = getNextPeriod(issueNum);
+        }
+
+        function updatePredictionBox(results) {
+            const nextEl = document.getElementById('predNextPeriod');
+            const predEl = document.getElementById('predValue');
+            const sysEl = document.getElementById('predSystemContent');
+            if (predSystemTimeout) { clearTimeout(predSystemTimeout); predSystemTimeout = null; }
+            if (!results || results.length === 0) {
+                if (nextEl) nextEl.textContent = '-';
+                if (predEl) predEl.textContent = '-';
+                if (sysEl) sysEl.innerHTML = '<div class="bw30-pred-system-row"><span class="bw30-pred-system-label">No data</span></div>';
+                lastRenderedPeriodKey = null;
+                return;
+            }
+            const latest = results[0];
+            const issueNum = latest.period ?? latest.issueNumber ?? latest.issue ?? latest.periodNumber;
+            const periodKey = String(issueNum ?? '');
+            const isNewPeriod = periodKey && periodKey !== lastRenderedPeriodKey;
+            if (periodKey && periodKey !== lastPeriodKey) {
+                lastPeriodKey = periodKey;
+                startWingoCD();
+            }
+            if (nextEl) nextEl.textContent = getNextPeriod(issueNum);
+            if (isNewPeriod) {
+                if (sysEl) sysEl.innerHTML = '<div class="bw30-pred-system-loading">Analysis<span class="dots"><span></span><span></span><span></span></span></div>';
+                if (predEl) predEl.textContent = '...';
+                predSystemTimeout = setTimeout(function() {
+                    predSystemTimeout = null;
+                    lastRenderedPeriodKey = periodKey;
+                    showPredictionSystemData(results);
+                }, 450);
+            } else {
+                lastRenderedPeriodKey = periodKey;
+                showPredictionSystemData(results);
+            }
+        }
+
+        let displayedHistory = [];
+        let lastSeenLatestPeriodKey = null;
+
+        function getPeriodKey(r) {
+            const v = r.period ?? r.issueNumber ?? r.issue ?? r.periodNumber ?? '';
+            return String(v);
+        }
+
+        function renderTable(fullResults, historyResults) {
+            const wrap = document.getElementById('resultsTable');
+            if (!fullResults || fullResults.length === 0) {
+                wrap.innerHTML = '<div class="no-data">No data. Waiting for Firebase...</div>';
+                document.getElementById('bigCount').textContent = '0';
+                document.getElementById('smallCount').textContent = '0';
+                document.getElementById('totalCount').textContent = '0';
+                updatePredictionBox([]);
+                displayedHistory = [];
+                lastSeenLatestPeriodKey = null;
+                return;
+            }
+            const bigCount = fullResults.filter(r => classifyBigSmall(r.number) === 'BIG').length;
+            const smallCount = fullResults.filter(r => classifyBigSmall(r.number) === 'SMALL').length;
+            const totalCount = fullResults.length;
+            document.getElementById('bigCount').textContent = bigCount;
+            document.getElementById('smallCount').textContent = smallCount;
+            document.getElementById('totalCount').textContent = totalCount;
+            updatePredictionBox(fullResults);
+
+            const toShow = historyResults || [];
+            if (toShow.length === 0) {
+                wrap.innerHTML = '<div class="no-data">Waiting for next period...</div>';
+                return;
+            }
+            let html = '<table><thead><tr><th>#</th><th>Period</th><th>Premium</th><th>Number</th><th>B/S</th><th>Win/Lose</th></tr></thead><tbody>';
+            toShow.forEach((r, i) => {
+                const bs = classifyBigSmall(r.number);
+                const periodRaw = (r.period ?? r.issueNumber ?? r.issue ?? r.periodNumber ?? '-').toString();
+                const periodNum = periodRaw.replace(/[^0-9]/g, '') || periodRaw;
+                const periodShort = periodNum.length > 5 ? periodNum.slice(-5) : (periodNum || '-');
+                const premium = (r.premium ?? r.hashValue ?? r.blockHashtag ?? '-').toString();
+                const premiumShort = premium.length > 8 ? premium.slice(-8) : premium;
+                const bsClass = bs === 'BIG' ? 'result-big' : (bs === 'SMALL' ? 'result-small' : '');
+                const idxInFull = fullResults.findIndex(x => getPeriodKey(x) === getPeriodKey(r));
+                const historyForRow = idxInFull >= 0 ? fullResults.slice(idxInFull + 1) : [];
+                const predicted = calculatePrediction(historyForRow);
+                let winLoseHtml = '-';
+                if (predicted && bs) {
+                    winLoseHtml = predicted === bs ? '<span class="bw30-win">Win</span>' : '<span class="bw30-lose">Lose</span>';
+                }
+                html += `<tr><td>${i+1}</td><td class="period-num">${periodShort}</td><td>${premiumShort || '-'}</td><td>${r.number ?? '-'}</td><td class="${bsClass}">${bs || '-'}</td><td>${winLoseHtml}</td></tr>`;
+            });
+            html += '</tbody></table>';
+            wrap.innerHTML = html;
+        }
+
+        function processFirebaseData(data) {
+            const list = data && data.list && Array.isArray(data.list) ? data.list : [];
+            if (list.length === 0) {
+                renderTable([], []);
+                return;
+            }
+            const currentLatestKey = getPeriodKey(list[0]);
+            if (lastSeenLatestPeriodKey === null) {
+                lastSeenLatestPeriodKey = currentLatestKey;
+                displayedHistory = [];
+            } else if (currentLatestKey !== lastSeenLatestPeriodKey && list.length >= 2) {
+                displayedHistory = [list[1]].concat(displayedHistory);
+                lastSeenLatestPeriodKey = currentLatestKey;
+            }
+            renderTable(list, displayedHistory);
+        }
+
+        function connectFirebase() {
+            if (!db && !initFirebase()) return;
+            if (firebaseListener) {
+                db.ref(FIREBASE_PATH).off('value', firebaseListener);
+                firebaseListener = null;
+            }
+            firebaseListener = db.ref(FIREBASE_PATH).on('value', snapshot => {
+                const data = snapshot.val();
+                if (data && data.list && Array.isArray(data.list)) {
+                    currentResults = data.list;
+                    processFirebaseData(data);
+                    const lu = document.getElementById('lastUpdate');
+                    lu.textContent = 'Last: ' + (data.publishedAt ? new Date(data.publishedAt).toLocaleString() : '-');
+                } else {
+                    renderTable([], []);
+                }
+            });
+        }
+
+        document.getElementById('activateBtn').addEventListener('click', activateKey);
+        document.getElementById('keyInput').addEventListener('keyup', e => { if (e.key === 'Enter') activateKey(); });
+
+        if (expireTime && getServerTime() < expireTime && activatedKeyId) {
+            initLoginFirebase();
+            document.getElementById('gate').style.display = 'none';
+            document.getElementById('resultsContainer').classList.add('unlocked');
+            startSession();
+            startKeyMonitoring(activatedKeyId);
+        } else {
+            localStorage.removeItem(STORAGE_PREFIX + 'expireTime');
+            localStorage.removeItem(STORAGE_PREFIX + 'activatedKeyId');
+            activatedKeyId = null;
+            document.getElementById('gate').style.display = 'flex';
+        }
+
+        window.addEventListener('beforeunload', () => {
+            if (firebaseListener && db) db.ref(FIREBASE_PATH).off('value', firebaseListener);
+            if (keyStatusListener && loginDb && activatedKeyId) loginDb.ref('keys/' + activatedKeyId).off('value', keyStatusListener);
+            if (wingoCDInterval) clearInterval(wingoCDInterval);
+            if (predSystemTimeout) clearTimeout(predSystemTimeout);
+        });
+    </script>
+</body>
+</html>

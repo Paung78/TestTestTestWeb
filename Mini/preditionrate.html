@@ -1,0 +1,1905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no" />
+    <title>Ck Lottery WinGo 30 Sec ( Mini 1-1 × Rate )</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        :root {
+            --ck-blue: #6366f1;
+            --ck-blue-hover: #4f46e5;
+            --bigwin-green: #22c55e;
+            --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+            --bg: #f1f5f9;
+            --text: #0f172a;
+            --muted: #475569;
+            --muted-2: #64748b;
+            --neumo-base: #e4e9f0;
+            --neumo-text: #2d3748;
+            --neumo-muted: #718096;
+            --neumo-sh-dark: rgba(163, 177, 198, 0.52);
+            --neumo-sh-light: rgba(255, 255, 255, 0.92);
+            --neumo-accent: #2563eb;
+            --neumo-raise: 6px 6px 12px var(--neumo-sh-dark), -6px -6px 12px var(--neumo-sh-light);
+            --neumo-raise-sm: 4px 4px 8px var(--neumo-sh-dark), -4px -4px 8px var(--neumo-sh-light);
+            --neumo-inset: inset 5px 5px 10px var(--neumo-sh-dark), inset -5px -5px 10px var(--neumo-sh-light);
+            --neumo-inset-sm: inset 3px 3px 6px var(--neumo-sh-dark), inset -3px -3px 6px var(--neumo-sh-light);
+        }
+
+        body.dark-mode {
+            --bg: #0a0a0f;
+            --text: rgba(255, 255, 255, 0.96);
+            --muted: rgba(255, 255, 255, 0.72);
+            --muted-2: rgba(255, 255, 255, 0.5);
+            --neumo-base: #1a1f2e;
+            --neumo-text: rgba(255, 255, 255, 0.92);
+            --neumo-muted: rgba(255, 255, 255, 0.55);
+            --neumo-sh-dark: rgba(0, 0, 0, 0.45);
+            --neumo-sh-light: rgba(255, 255, 255, 0.06);
+        }
+
+        html {
+            height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        body {
+            min-height: 100%;
+            font-family: var(--font-sans);
+            background: var(--bg);
+            color: var(--text);
+            padding: 16px;
+            padding-bottom: calc(28px + env(safe-area-inset-bottom, 0px));
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            overflow-x: hidden;
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .page {
+            width: 100%;
+            max-width: 1180px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .pair-row {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: clamp(10px, 2vw, 24px);
+        }
+
+        .rate-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .title {
+            position: absolute;
+            top: 8px;
+            left: 18px;
+            margin: 0;
+            text-align: left;
+            max-width: calc(100% - 24px);
+        }
+
+        .title h1 {
+            font-size: 0.62rem;
+            letter-spacing: 0.04em;
+            line-height: 1.3;
+            text-transform: uppercase;
+            color: var(--neumo-text);
+            margin: 0;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            width: 100%;
+        }
+
+        .title-main {
+            text-align: left;
+            min-width: 0;
+            overflow-wrap: anywhere;
+        }
+
+        .title-special-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3px 8px;
+            border-radius: 999px;
+            font-size: 0.56rem;
+            font-weight: 800;
+            letter-spacing: 0.06em;
+            text-transform: uppercase;
+            color: #7a4b00;
+            background: linear-gradient(135deg, #ffe082 0%, #ffc107 100%);
+            box-shadow: 0 1px 4px rgba(255, 193, 7, 0.35);
+            line-height: 1;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+
+        .title-free-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 0.56rem;
+            font-weight: 900;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: #ecfdf5;
+            text-shadow: 0 0 6px rgba(255, 255, 255, 0.85);
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 45%, #16a34a 100%);
+            border: 1px solid rgba(187, 247, 208, 0.9);
+            box-shadow:
+                0 0 8px rgba(74, 222, 128, 0.85),
+                0 0 16px rgba(34, 197, 94, 0.45);
+            animation: title-free-badge-glow 1.8s ease-in-out infinite alternate;
+            line-height: 1;
+            flex-shrink: 0;
+            margin-left: auto;
+        }
+
+        @keyframes title-free-badge-glow {
+            from {
+                box-shadow:
+                    0 0 6px rgba(74, 222, 128, 0.75),
+                    0 0 12px rgba(34, 197, 94, 0.4);
+            }
+            to {
+                box-shadow:
+                    0 0 10px rgba(134, 255, 170, 0.95),
+                    0 0 20px rgba(34, 197, 94, 0.55);
+            }
+        }
+
+        .title h2 {
+            margin-top: 6px;
+            font-size: 0.85rem;
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            color: var(--neumo-accent);
+        }
+
+        .card {
+            position: relative;
+            background: var(--neumo-base);
+            border-radius: 22px;
+            padding: 16px 18px;
+            padding-top: 30px;
+            border: none;
+            box-shadow: var(--neumo-raise);
+        }
+
+        .card:hover {
+            box-shadow: var(--neumo-raise);
+        }
+
+        .summary-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 12px;
+        }
+
+        .stat-box {
+            background: var(--neumo-base);
+            border-radius: 16px;
+            padding: 12px 14px;
+            border: none;
+            box-shadow: var(--neumo-inset-sm);
+        }
+
+        .stat-label {
+            font-size: 0.68rem;
+            color: var(--neumo-muted);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            margin-bottom: 6px;
+            font-weight: 600;
+        }
+
+        .stat-main {
+            font-size: 1.12rem;
+            font-weight: 800;
+            color: var(--neumo-text);
+        }
+
+        .stat-sub {
+            font-size: 0.75rem;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .win {
+            color: #15803d;
+        }
+
+        .lose {
+            color: #dc2626;
+        }
+
+        body.dark-mode .win {
+            color: #4ade80;
+        }
+
+        body.dark-mode .lose {
+            color: #fb7185;
+        }
+
+        .rate-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            border-radius: 999px;
+            padding: 4px 10px;
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+        }
+
+        .rate-low {
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.35);
+            color: #b91c1c;
+        }
+
+        .rate-medium {
+            color: #b45309;
+            background: rgba(245, 158, 11, 0.12);
+            border: 1px solid rgba(245, 158, 11, 0.4);
+        }
+
+        .rate-high {
+            color: #15803d;
+            background: rgba(34, 197, 94, 0.12);
+            border: 1px solid rgba(34, 197, 94, 0.4);
+        }
+
+        .footer-note {
+            margin-top: 14px;
+            font-size: 0.72rem;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+
+        .footer-note span {
+            color: var(--neumo-accent);
+            font-weight: 600;
+        }
+
+        .loading-line {
+            width: 100%;
+            height: 3px;
+            border-radius: 999px;
+            margin-top: 6px;
+            background: linear-gradient(90deg,
+                rgba(99, 102, 241, 0.15),
+                rgba(99, 102, 241, 0.75),
+                rgba(99, 102, 241, 0.15)
+            );
+            background-size: 200% 100%;
+            animation: loadingLine 1.2s linear infinite;
+        }
+
+        @keyframes loadingLine {
+            0% { background-position: 0 0; }
+            100% { background-position: -200% 0; }
+        }
+
+        .title-recommend-badge {
+            display: inline-flex;
+            align-items: center;
+            font-size: 0.48rem;
+            padding: 2px 8px;
+            font-weight: 800;
+            letter-spacing: 0.14em;
+            text-transform: uppercase;
+            color: #fff5f5;
+            text-shadow: 0 0 6px rgba(255, 255, 255, 0.75);
+            background: linear-gradient(135deg, #f87171 0%, #ef4444 45%, #dc2626 100%);
+            border: 1px solid rgba(254, 202, 202, 0.95);
+            box-shadow:
+                0 0 8px rgba(248, 113, 113, 0.85),
+                0 0 16px rgba(239, 68, 68, 0.5);
+            animation: title-recommend-badge-glow 1.8s ease-in-out infinite alternate;
+            border-radius: 999px;
+            flex-shrink: 0;
+            margin-left: 4px;
+            line-height: 1;
+        }
+
+        @keyframes title-recommend-badge-glow {
+            from {
+                box-shadow:
+                    0 0 6px rgba(248, 113, 113, 0.75),
+                    0 0 12px rgba(239, 68, 68, 0.4);
+            }
+            to {
+                box-shadow:
+                    0 0 10px rgba(252, 165, 165, 0.95),
+                    0 0 20px rgba(239, 68, 68, 0.6);
+            }
+        }
+
+        .title-recommend-badge[hidden] {
+            display: none !important;
+        }
+
+        .card.card-updating .stat-main,
+        .card.card-updating .stat-main span {
+            opacity: 0.28;
+            transition: opacity 0.2s ease;
+        }
+
+        .card.card-updating .loading-line {
+            display: block !important;
+        }
+
+        .card.card-updating::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            border-radius: 22px;
+            pointer-events: none;
+            background: linear-gradient(
+                105deg,
+                transparent 40%,
+                rgba(99, 102, 241, 0.06) 50%,
+                transparent 60%
+            );
+            background-size: 200% 100%;
+            animation: cardUpdateShimmer 1s ease-in-out infinite;
+        }
+
+        @keyframes cardUpdateShimmer {
+            0% { background-position: 120% 0; }
+            100% { background-position: -80% 0; }
+        }
+
+        .loading,
+        .error {
+            margin-top: 14px;
+            font-size: 0.8rem;
+            padding: 10px 12px;
+            border-radius: 14px;
+        }
+
+        .loading {
+            background: rgba(99, 102, 241, 0.08);
+            border: 1px solid rgba(99, 102, 241, 0.25);
+            color: var(--ck-blue-hover);
+            font-weight: 500;
+        }
+
+        .error {
+            background: rgba(220, 38, 38, 0.08);
+            border: 1px solid rgba(220, 38, 38, 0.25);
+            color: #b91c1c;
+        }
+
+        @media (max-width: 900px) {
+            .pair-row {
+                gap: clamp(8px, 1.8vw, 18px);
+            }
+        }
+
+        @media (max-width: 640px) {
+            body {
+                padding: 12px 10px;
+                padding-bottom: calc(36px + env(safe-area-inset-bottom, 0px));
+            }
+            .page {
+                gap: 14px;
+            }
+            /* Full-width cards on phone — stop side-by-side squeeze */
+            .pair-row {
+                grid-template-columns: 1fr;
+                gap: 12px;
+            }
+            .card {
+                padding: 14px 12px;
+                padding-top: 14px;
+                border-radius: 18px;
+            }
+            /* Title in normal flow so badges never cover Rate Boxes */
+            .title {
+                position: static;
+                left: auto;
+                top: auto;
+                margin: 0 0 12px;
+                max-width: 100%;
+            }
+            .title h1 {
+                font-size: 0.72rem;
+                gap: 6px;
+                flex-wrap: wrap;
+                align-items: center;
+                line-height: 1.35;
+            }
+            .title-main {
+                flex: 1 1 100%;
+                font-size: 0.7rem;
+                letter-spacing: 0.03em;
+            }
+            .title-recommend-badge,
+            .title-special-badge,
+            .title-free-badge {
+                font-size: 0.58rem;
+                padding: 4px 9px;
+                margin-left: 0;
+            }
+            .summary-grid {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 10px;
+            }
+            .stat-box {
+                padding: 12px 10px;
+                border-radius: 14px;
+                min-height: 72px;
+            }
+            .stat-label {
+                font-size: 0.62rem;
+                margin-bottom: 6px;
+                letter-spacing: 0.05em;
+                line-height: 1.25;
+            }
+            .stat-main {
+                font-size: clamp(0.95rem, 4.2vw, 1.15rem);
+                line-height: 1.25;
+            }
+            .stat-sub {
+                font-size: 0.72rem;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .pair-row {
+                gap: 10px;
+            }
+            .title-main {
+                font-size: 0.64rem;
+            }
+            .title-recommend-badge,
+            .title-special-badge,
+            .title-free-badge {
+                font-size: 0.52rem;
+                padding: 3px 7px;
+            }
+            .stat-label {
+                font-size: 0.58rem;
+            }
+            .stat-main {
+                font-size: clamp(0.88rem, 4vw, 1.05rem);
+            }
+            .stat-box {
+                min-height: 68px;
+                padding: 10px 8px;
+            }
+        }
+    </style>
+</head>
+<body class="light-mode">
+    <div class="page">
+        <div id="ratePanelsHost">
+        <!-- Pair 1: Ck1Mini1-1 - Ck1Mini1-2 -->
+        <div class="pair-row">
+            <div class="rate-panel">
+                <!-- CK Lottery WinGo 1 Min (Mini 1-1 × Rate) -->
+                <section class="card" aria-live="polite">
+                    <header class="title">
+                        <h1><span class="title-main">Ck Lottery WinGo 1 Min ( Mini 1-1 × Rate )</span><span class="title-special-badge">Special</span></h1>
+                    </header>
+                    <div class="summary-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">TOTAL MATCH</div>
+                            <div class="stat-main" id="rate1Total">-</div>
+                            <div class="loading-line" id="line1Total"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win / Loss</div>
+                            <div class="stat-main">
+                                <span class="win" id="rate1Win">-</span>
+                                <span>/</span>
+                                <span class="lose" id="rate1Lose">-</span>
+                            </div>
+                            <div class="loading-line" id="line1WL"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win Rate</div>
+                            <div class="stat-main" id="rate1WinRate">-</div>
+                            <div class="loading-line" id="line1Rate"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Streaks (Win / Lose)</div>
+                            <div class="stat-main">
+                                <span class="win" id="rate1WinStreak">-</span>
+                                <span>/</span>
+                                <span class="lose" id="rate1LoseStreak">-</span>
+                            </div>
+                            <div class="loading-line" id="line1Streaks"></div>
+                        </div>
+                    </div>
+
+                    <p class="footer-note"></p>
+
+                    <div id="rate1Loading" class="loading"></div>
+                    <div id="rate1Error" class="error" style="display:none;"></div>
+                </section>
+            </div>
+
+            <div class="rate-panel">
+                <!-- CK Lottery WinGo 1 Min (Mini 1-2 × Rate) -->
+                <section class="card" aria-live="polite">
+                    <header class="title">
+                        <h1><span class="title-main">Ck Lottery WinGo 1 Min ( Mini 1-2 × Rate )</span><span class="title-special-badge">Special</span></h1>
+                    </header>
+                    <div class="summary-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">TOTAL MATCH</div>
+                            <div class="stat-main" id="rate1v2Total">-</div>
+                            <div class="loading-line" id="line1v2Total"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win / Loss</div>
+                            <div class="stat-main">
+                                <span class="win" id="rate1v2Win">-</span>
+                                <span>/</span>
+                                <span class="lose" id="rate1v2Lose">-</span>
+                            </div>
+                            <div class="loading-line" id="line1v2WL"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win Rate</div>
+                            <div class="stat-main" id="rate1v2WinRate">-</div>
+                            <div class="loading-line" id="line1v2Rate"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Streaks (Win / Lose)</div>
+                            <div class="stat-main">
+                                <span class="win" id="rate1v2WinStreak">-</span>
+                                <span>/</span>
+                                <span class="lose" id="rate1v2LoseStreak">-</span>
+                            </div>
+                            <div class="loading-line" id="line1v2Streaks"></div>
+                        </div>
+                    </div>
+
+                    <p class="footer-note"></p>
+
+                    <div id="rate1v2Loading" class="loading"></div>
+                    <div id="rate1v2Error" class="error" style="display:none;"></div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Pair 2: Ck30Mini1-1 - Ck30Mini1-2 -->
+        <div class="pair-row">
+            <div class="rate-panel">
+                <!-- CK Lottery WinGo 30 Sec (Mini 1-1 × Rate) -->
+                <section class="card" aria-live="polite">
+                    <header class="title">
+                        <h1><span class="title-main">Ck Lottery WinGo 30 Sec ( Mini 1-1 × Rate )</span><span class="title-special-badge">Special</span></h1>
+                    </header>
+                    <div class="summary-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">TOTAL MATCH</div>
+                            <div class="stat-main" id="rateTotal">-</div>
+                            <div class="loading-line" id="lineTotal"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win / Loss</div>
+                            <div class="stat-main">
+                                <span class="win" id="rateWin">-</span>
+                                <span>/</span>
+                                <span class="lose" id="rateLose">-</span>
+                            </div>
+                            <div class="loading-line" id="lineWL"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win Rate</div>
+                            <div class="stat-main" id="rateWinRate">-</div>
+                            <div class="loading-line" id="lineRate"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Streaks (Win / Lose)</div>
+                            <div class="stat-main">
+                                <span class="win" id="rateWinStreak">-</span>
+                                <span>/</span>
+                                <span class="lose" id="rateLoseStreak">-</span>
+                            </div>
+                            <div class="loading-line" id="lineStreaks"></div>
+                        </div>
+                    </div>
+
+                    <p class="footer-note"></p>
+
+                    <div id="rateLoading" class="loading"></div>
+                    <div id="rateError" class="error" style="display:none;"></div>
+                </section>
+            </div>
+
+            <div class="rate-panel">
+                <!-- CK Lottery WinGo 30 Sec (Mini 1-2 × Rate) -->
+                <section class="card" aria-live="polite">
+                    <header class="title">
+                        <h1><span class="title-main">Ck Lottery WinGo 30 Sec ( Mini 1-2 × Rate )</span><span class="title-special-badge">Special</span></h1>
+                    </header>
+                    <div class="summary-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">TOTAL MATCH</div>
+                            <div class="stat-main" id="rate30v2Total">-</div>
+                            <div class="loading-line" id="line30v2Total"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win / Loss</div>
+                            <div class="stat-main">
+                                <span class="win" id="rate30v2Win">-</span>
+                                <span>/</span>
+                                <span class="lose" id="rate30v2Lose">-</span>
+                            </div>
+                            <div class="loading-line" id="line30v2WL"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win Rate</div>
+                            <div class="stat-main" id="rate30v2WinRate">-</div>
+                            <div class="loading-line" id="line30v2Rate"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Streaks (Win / Lose)</div>
+                            <div class="stat-main">
+                                <span class="win" id="rate30v2WinStreak">-</span>
+                                <span>/</span>
+                                <span class="lose" id="rate30v2LoseStreak">-</span>
+                            </div>
+                            <div class="loading-line" id="line30v2Streaks"></div>
+                        </div>
+                    </div>
+
+                    <p class="footer-note"></p>
+
+                    <div id="rate30v2Loading" class="loading"></div>
+                    <div id="rate30v2Error" class="error" style="display:none;"></div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Pair 3: BigWin1Mini1-1 - BigWin1Mini1-2 -->
+        <div class="pair-row">
+            <div class="rate-panel">
+                <!-- 777 BigWin WinGo 1 Min (Mini 1-1 × Rate) -->
+                <section class="card" aria-live="polite">
+                    <header class="title">
+                        <h1><span class="title-main">777 BigWin WinGo 1 Min ( Mini 1-1 × Rate )</span><span class="title-special-badge">Special</span></h1>
+                    </header>
+                    <div class="summary-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">TOTAL MATCH</div>
+                            <div class="stat-main" id="bw1Total">-</div>
+                            <div class="loading-line" id="bw1LineTotal"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win / Loss</div>
+                            <div class="stat-main">
+                                <span class="win" id="bw1Win">-</span>
+                                <span>/</span>
+                                <span class="lose" id="bw1Lose">-</span>
+                            </div>
+                            <div class="loading-line" id="bw1LineWL"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win Rate</div>
+                            <div class="stat-main" id="bw1WinRate">-</div>
+                            <div class="loading-line" id="bw1LineRate"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Streaks (Win / Lose)</div>
+                            <div class="stat-main">
+                                <span class="win" id="bw1WinStreak">-</span>
+                                <span>/</span>
+                                <span class="lose" id="bw1LoseStreak">-</span>
+                            </div>
+                            <div class="loading-line" id="bw1LineStreaks"></div>
+                        </div>
+                    </div>
+
+                    <p class="footer-note"></p>
+
+                    <div id="bw1Loading" class="loading"></div>
+                    <div id="bw1Error" class="error" style="display:none;"></div>
+                </section>
+            </div>
+
+            <div class="rate-panel">
+                <!-- 777 BigWin WinGo 1 Min (Mini 1-2 × Rate) -->
+                <section class="card" aria-live="polite">
+                    <header class="title">
+                        <h1><span class="title-main">777 BigWin WinGo 1 Min ( Mini 1-2 × Rate )</span><span class="title-special-badge">Special</span></h1>
+                    </header>
+                    <div class="summary-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">TOTAL MATCH</div>
+                            <div class="stat-main" id="bw1v2Total">-</div>
+                            <div class="loading-line" id="bw1v2LineTotal"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win / Loss</div>
+                            <div class="stat-main">
+                                <span class="win" id="bw1v2Win">-</span>
+                                <span>/</span>
+                                <span class="lose" id="bw1v2Lose">-</span>
+                            </div>
+                            <div class="loading-line" id="bw1v2LineWL"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win Rate</div>
+                            <div class="stat-main" id="bw1v2WinRate">-</div>
+                            <div class="loading-line" id="bw1v2LineRate"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Streaks (Win / Lose)</div>
+                            <div class="stat-main">
+                                <span class="win" id="bw1v2WinStreak">-</span>
+                                <span>/</span>
+                                <span class="lose" id="bw1v2LoseStreak">-</span>
+                            </div>
+                            <div class="loading-line" id="bw1v2LineStreaks"></div>
+                        </div>
+                    </div>
+
+                    <p class="footer-note"></p>
+
+                    <div id="bw1v2Loading" class="loading"></div>
+                    <div id="bw1v2Error" class="error" style="display:none;"></div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Pair 4: BigWin30Mini1-1 - BigWin30Mini1-2 -->
+        <div class="pair-row">
+            <div class="rate-panel">
+                <!-- 777 BigWin WinGo 30 Sec (Mini 1-1 × Rate) -->
+                <section class="card" aria-live="polite">
+                    <header class="title">
+                        <h1><span class="title-main">777 BigWin WinGo 30 Sec ( Mini 1-1 × Rate )</span><span class="title-special-badge">Special</span></h1>
+                    </header>
+                    <div class="summary-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">TOTAL MATCH</div>
+                            <div class="stat-main" id="bw30Total">-</div>
+                            <div class="loading-line" id="bw30LineTotal"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win / Loss</div>
+                            <div class="stat-main">
+                                <span class="win" id="bw30Win">-</span>
+                                <span>/</span>
+                                <span class="lose" id="bw30Lose">-</span>
+                            </div>
+                            <div class="loading-line" id="bw30LineWL"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win Rate</div>
+                            <div class="stat-main" id="bw30WinRate">-</div>
+                            <div class="loading-line" id="bw30LineRate"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Streaks (Win / Lose)</div>
+                            <div class="stat-main">
+                                <span class="win" id="bw30WinStreak">-</span>
+                                <span>/</span>
+                                <span class="lose" id="bw30LoseStreak">-</span>
+                            </div>
+                            <div class="loading-line" id="bw30LineStreaks"></div>
+                        </div>
+                    </div>
+
+                    <p class="footer-note"></p>
+
+                    <div id="bw30Loading" class="loading"></div>
+                    <div id="bw30Error" class="error" style="display:none;"></div>
+                </section>
+            </div>
+
+            <div class="rate-panel">
+                <!-- 777 BigWin WinGo 30 Sec (Mini 1-2 × Rate) -->
+                <section class="card" aria-live="polite">
+                    <header class="title">
+                        <h1><span class="title-main">777 BigWin WinGo 30 Sec ( Mini 1-2 × Rate )</span><span class="title-special-badge">Special</span></h1>
+                    </header>
+                    <div class="summary-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">TOTAL MATCH</div>
+                            <div class="stat-main" id="bw30v2Total">-</div>
+                            <div class="loading-line" id="bw30v2LineTotal"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win / Loss</div>
+                            <div class="stat-main">
+                                <span class="win" id="bw30v2Win">-</span>
+                                <span>/</span>
+                                <span class="lose" id="bw30v2Lose">-</span>
+                            </div>
+                            <div class="loading-line" id="bw30v2LineWL"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win Rate</div>
+                            <div class="stat-main" id="bw30v2WinRate">-</div>
+                            <div class="loading-line" id="bw30v2LineRate"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Streaks (Win / Lose)</div>
+                            <div class="stat-main">
+                                <span class="win" id="bw30v2WinStreak">-</span>
+                                <span>/</span>
+                                <span class="lose" id="bw30v2LoseStreak">-</span>
+                            </div>
+                            <div class="loading-line" id="bw30v2LineStreaks"></div>
+                        </div>
+                    </div>
+
+                    <p class="footer-note"></p>
+
+                    <div id="bw30v2Loading" class="loading"></div>
+                    <div id="bw30v2Error" class="error" style="display:none;"></div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Pair: Mini V1.1 Free — Ck30 & BigWin30 (trend-follow) -->
+        <div class="pair-row">
+            <div class="rate-panel">
+                <section class="card" aria-live="polite">
+                    <header class="title">
+                        <h1><span class="title-main">Ck Lottery WinGo 30 Sec ( Mini 1-1 Free × Rate )</span><span class="title-free-badge">Free</span></h1>
+                    </header>
+                    <div class="summary-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">TOTAL MATCH</div>
+                            <div class="stat-main" id="ck30freeTotal">-</div>
+                            <div class="loading-line" id="ck30freeLineTotal"></div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Win / Loss</div>
+                            <div class="stat-main">
+                                <span class="win" id="ck30freeWin">-</span>
+                                <span>/</span>
+                                <span class="lose" id="ck30freeLose">-</span>
+                            </div>
+                            <div class="loading-line" id="ck30freeLineWL"></div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Win Rate</div>
+                            <div class="stat-main" id="ck30freeWinRate">-</div>
+                            <div class="loading-line" id="ck30freeLineRate"></div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Streaks (Win / Lose)</div>
+                            <div class="stat-main">
+                                <span class="win" id="ck30freeWinStreak">-</span>
+                                <span>/</span>
+                                <span class="lose" id="ck30freeLoseStreak">-</span>
+                            </div>
+                            <div class="loading-line" id="ck30freeLineStreaks"></div>
+                        </div>
+                    </div>
+                    <p class="footer-note"></p>
+                    <div id="ck30freeLoading" class="loading"></div>
+                    <div id="ck30freeError" class="error" style="display:none;"></div>
+                </section>
+            </div>
+            <div class="rate-panel">
+                <section class="card" aria-live="polite">
+                    <header class="title">
+                        <h1><span class="title-main">777 BigWin WinGo 30 Sec ( Mini 1-1 Free × Rate )</span><span class="title-free-badge">Free</span></h1>
+                    </header>
+                    <div class="summary-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">TOTAL MATCH</div>
+                            <div class="stat-main" id="bw30freeTotal">-</div>
+                            <div class="loading-line" id="bw30freeLineTotal"></div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Win / Loss</div>
+                            <div class="stat-main">
+                                <span class="win" id="bw30freeWin">-</span>
+                                <span>/</span>
+                                <span class="lose" id="bw30freeLose">-</span>
+                            </div>
+                            <div class="loading-line" id="bw30freeLineWL"></div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Win Rate</div>
+                            <div class="stat-main" id="bw30freeWinRate">-</div>
+                            <div class="loading-line" id="bw30freeLineRate"></div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-label">Streaks (Win / Lose)</div>
+                            <div class="stat-main">
+                                <span class="win" id="bw30freeWinStreak">-</span>
+                                <span>/</span>
+                                <span class="lose" id="bw30freeLoseStreak">-</span>
+                            </div>
+                            <div class="loading-line" id="bw30freeLineStreaks"></div>
+                        </div>
+                    </div>
+                    <p class="footer-note"></p>
+                    <div id="bw30freeLoading" class="loading"></div>
+                    <div id="bw30freeError" class="error" style="display:none;"></div>
+                </section>
+            </div>
+        </div>
+
+        <!-- Pair 5: Global_Trx1Mini1-1 - Global_Trx1Mini1-2 -->
+        <div class="pair-row">
+            <div class="rate-panel">
+                <!-- Global TRX 1 Min (Mini 1-1 × Rate) -->
+                <section class="card" aria-live="polite">
+                    <header class="title">
+                        <h1><span class="title-main">Global TRX 1 Min ( Mini 1-1 × Rate )</span><span class="title-special-badge">Special</span></h1>
+                    </header>
+                    <div class="summary-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">TOTAL MATCH</div>
+                            <div class="stat-main" id="gtrxTotal">-</div>
+                            <div class="loading-line" id="gtrxLineTotal"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win / Loss</div>
+                            <div class="stat-main">
+                                <span class="win" id="gtrxWin">-</span>
+                                <span>/</span>
+                                <span class="lose" id="gtrxLose">-</span>
+                            </div>
+                            <div class="loading-line" id="gtrxLineWL"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win Rate</div>
+                            <div class="stat-main" id="gtrxWinRate">-</div>
+                            <div class="loading-line" id="gtrxLineRate"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Streaks (Win / Lose)</div>
+                            <div class="stat-main">
+                                <span class="win" id="gtrxWinStreak">-</span>
+                                <span>/</span>
+                                <span class="lose" id="gtrxLoseStreak">-</span>
+                            </div>
+                            <div class="loading-line" id="gtrxLineStreaks"></div>
+                        </div>
+                    </div>
+
+                    <p class="footer-note"></p>
+
+                    <div id="gtrxLoading" class="loading"></div>
+                    <div id="gtrxError" class="error" style="display:none;"></div>
+                </section>
+            </div>
+
+            <div class="rate-panel">
+                <!-- Global TRX 1 Min (Mini 1-2 × Rate) -->
+                <section class="card" aria-live="polite">
+                    <header class="title">
+                        <h1><span class="title-main">Global TRX 1 Min ( Mini 1-2 × Rate )</span><span class="title-special-badge">Special</span></h1>
+                    </header>
+                    <div class="summary-grid">
+                        <div class="stat-box">
+                            <div class="stat-label">TOTAL MATCH</div>
+                            <div class="stat-main" id="gtrxV2Total">-</div>
+                            <div class="loading-line" id="gtrxV2LineTotal"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win / Loss</div>
+                            <div class="stat-main">
+                                <span class="win" id="gtrxV2Win">-</span>
+                                <span>/</span>
+                                <span class="lose" id="gtrxV2Lose">-</span>
+                            </div>
+                            <div class="loading-line" id="gtrxV2LineWL"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Win Rate</div>
+                            <div class="stat-main" id="gtrxV2WinRate">-</div>
+                            <div class="loading-line" id="gtrxV2LineRate"></div>
+                        </div>
+
+                        <div class="stat-box">
+                            <div class="stat-label">Streaks (Win / Lose)</div>
+                            <div class="stat-main">
+                                <span class="win" id="gtrxV2WinStreak">-</span>
+                                <span>/</span>
+                                <span class="lose" id="gtrxV2LoseStreak">-</span>
+                            </div>
+                            <div class="loading-line" id="gtrxV2LineStreaks"></div>
+                        </div>
+                    </div>
+
+                    <p class="footer-note"></p>
+
+                    <div id="gtrxV2Loading" class="loading"></div>
+                    <div id="gtrxV2Error" class="error" style="display:none;"></div>
+                </section>
+            </div>
+        </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <script>
+        // Same Firebase config & path as ck-mini pages
+        const firebaseConfig = {
+            apiKey: "AIzaSyDj6z3O91NnlQ1zVdripiGhqQMsQhR4_ak",
+            authDomain: "ck30-35e97.firebaseapp.com",
+            databaseURL: "https://ck30-35e97-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "ck30-35e97",
+            storageBucket: "ck30-35e97.appspot.com",
+            messagingSenderId: "625630152314",
+            appId: "1:625630152314:web:c035009eec389371b51dc3",
+            measurementId: "G-6Z7DYPKHR2"
+        };
+
+        const FIREBASE_PATH_30 = "ckwingo30/default";
+        const FIREBASE_PATH_1  = "ckwingo1/default";
+        const FIREBASE_PATH_BW30 = "bigwin/default";
+        const FIREBASE_PATH_BW1  = "bigwinwingo1/default";
+        const FIREBASE_PATH_GTRX = "globaltrx/default";
+        const MAX_MATCHES = 100; // compute rate using the latest 100 matches
+
+        let db = null;
+        let firebaseListener = null;    // CK 30 Sec
+        let firebaseListener1 = null;   // CK 1 Min
+        let firebaseListenerBw30 = null; // BigWin 30 Sec
+        let firebaseListenerBw1 = null;  // BigWin 1 Min
+        let firebaseListenerGTrx = null; // Global TRX
+
+        function classifyBigSmall(number) {
+            if (number === null || number === undefined) return null;
+            const num = parseInt(number, 10);
+            if (isNaN(num)) return null;
+            return num >= 5 ? 'BIG' : 'SMALL';
+        }
+
+        function getResultNumber(row) {
+            if (!row) return null;
+            const n = row.number;
+            if (n !== null && n !== undefined && !isNaN(parseInt(n, 10))) return n;
+            return null;
+        }
+
+        function classifyRowBigSmall(row) {
+            return classifyBigSmall(getResultNumber(row));
+        }
+
+        function getPeriodKey(r) {
+            const v = r.issueNumber ?? r.period ?? r.issue ?? r.periodNumber ?? '';
+            return String(v);
+        }
+
+        /**
+         * Win/Lose stats — mirrors each mini app's table logic:
+         * - list[0] = newest; historyBefore = slice(idx+1) = older rounds only
+         * - skip rows when predictFn returns null (same as "-" / WAIT in mini UI)
+         * - streaks computed oldest → newest (chronological)
+         */
+        function computeStatsWithStrategy(fullResults, predictFn, options) {
+            if (!fullResults || !fullResults.length || typeof predictFn !== 'function') {
+                return null;
+            }
+
+            const minHistory = (options && options.minHistory) || 0;
+            const limit = Math.min(fullResults.length, MAX_MATCHES);
+            const evaluated = [];
+
+            for (let idx = 0; idx < limit; idx++) {
+                const row = fullResults[idx];
+                const historyBefore = fullResults.slice(idx + 1);
+                if (minHistory > 0 && historyBefore.length < minHistory) {
+                    continue;
+                }
+
+                const predicted = predictFn(historyBefore);
+                const actualBS = classifyRowBigSmall(row);
+                if (!predicted || !actualBS) {
+                    continue;
+                }
+
+                evaluated.push({
+                    isWin: predicted === actualBS,
+                    idx
+                });
+            }
+
+            if (!evaluated.length) {
+                return null;
+            }
+
+            let wins = 0;
+            let losses = 0;
+            evaluated.forEach((e) => {
+                if (e.isWin) wins++;
+                else losses++;
+            });
+
+            evaluated.sort((a, b) => b.idx - a.idx);
+
+            let currentWinStreak = 0;
+            let maxWinStreak = 0;
+            let currentLoseStreak = 0;
+            let maxLoseStreak = 0;
+
+            evaluated.forEach((e) => {
+                if (e.isWin) {
+                    currentWinStreak++;
+                    maxWinStreak = Math.max(maxWinStreak, currentWinStreak);
+                    currentLoseStreak = 0;
+                } else {
+                    currentLoseStreak++;
+                    maxLoseStreak = Math.max(maxLoseStreak, currentLoseStreak);
+                    currentWinStreak = 0;
+                }
+            });
+
+            const total = wins + losses;
+            const winRate = total ? (wins / total) * 100 : 0;
+
+            return {
+                totalMatches: total,
+                wins,
+                losses,
+                winRate,
+                maxWinStreak,
+                maxLoseStreak
+            };
+        }
+
+        // Mini V1.1 Free — trend-follow (last 3), same as Ck30Mini1-1.html / bigwin30mini1-1.html Free
+        function predictFreeTrendFollow(historyBefore) {
+            if (!historyBefore || historyBefore.length < 2) return null;
+            const recent = historyBefore.slice(0, Math.min(3, historyBefore.length));
+            let bigCount = 0;
+            let smallCount = 0;
+            recent.forEach(item => {
+                const bs = classifyRowBigSmall(item);
+                if (bs === 'BIG') bigCount++;
+                else if (bs === 'SMALL') smallCount++;
+            });
+            if (bigCount > smallCount) return 'BIG';
+            if (smallCount > bigCount) return 'SMALL';
+            return classifyRowBigSmall(recent[0]) || null;
+        }
+
+        // CK30 strategies for Mini 1-1 and Mini 1-2
+        function predictCk30V11(historyBefore) {
+            if (!historyBefore || historyBefore.length < 2) return null;
+            const availableResults = historyBefore.slice(0, Math.min(5, historyBefore.length));
+            let bigCount = 0;
+            let smallCount = 0;
+            availableResults.forEach(item => {
+                const bs = classifyRowBigSmall(item);
+                if (bs === 'BIG') bigCount++;
+                else if (bs === 'SMALL') smallCount++;
+            });
+            return bigCount >= smallCount ? 'SMALL' : 'BIG';
+        }
+
+        function predictCk30V12(historyBefore) {
+            // V1.2: trend + weighted (same as Ck30Mini1-2.html)
+            if (!historyBefore || historyBefore.length < 3) return null;
+            const last3 = historyBefore.slice(0, Math.min(3, historyBefore.length));
+            const bsLast3 = last3.map(item => classifyRowBigSmall(item)).filter(Boolean);
+            if (bsLast3.length === 3 && bsLast3[0] === bsLast3[1] && bsLast3[1] === bsLast3[2]) return bsLast3[0];
+            const windowSize = Math.min(8, historyBefore.length);
+            const recent = historyBefore.slice(0, windowSize);
+            let bigScore = 0, smallScore = 0;
+            for (let i = 0; i < recent.length; i++) {
+                const bs = classifyRowBigSmall(recent[i]);
+                if (!bs) continue;
+                const weight = recent.length - i;
+                if (bs === 'BIG') bigScore += weight; else if (bs === 'SMALL') smallScore += weight;
+            }
+            if (bigScore === 0 && smallScore === 0) return null;
+            return bigScore > smallScore ? 'BIG' : 'SMALL';
+        }
+
+        // CK 1 Min strategies for Mini 1-1 and Mini 1-2
+        function predictCk1V11(historyBefore) {
+            if (!historyBefore || historyBefore.length < 2) return null;
+            const availableResults = historyBefore.slice(0, Math.min(5, historyBefore.length));
+            let bigCount = 0, smallCount = 0;
+            availableResults.forEach(item => {
+                const bs = classifyRowBigSmall(item);
+                if (bs === 'BIG') bigCount++; else if (bs === 'SMALL') smallCount++;
+            });
+            return bigCount >= smallCount ? 'SMALL' : 'BIG';
+        }
+        function predictCk1V12(historyBefore) {
+            if (!historyBefore || historyBefore.length < 3) return null;
+            const last3 = historyBefore.slice(0, Math.min(3, historyBefore.length));
+            const bsLast3 = last3.map(item => classifyRowBigSmall(item)).filter(Boolean);
+            if (bsLast3.length === 3 && bsLast3[0] === bsLast3[1] && bsLast3[1] === bsLast3[2]) return bsLast3[0];
+            const windowSize = Math.min(8, historyBefore.length);
+            const recent = historyBefore.slice(0, windowSize);
+            let bigScore = 0, smallScore = 0;
+            for (let i = 0; i < recent.length; i++) {
+                const bs = classifyRowBigSmall(recent[i]);
+                if (!bs) continue;
+                const weight = recent.length - i;
+                if (bs === 'BIG') bigScore += weight; else if (bs === 'SMALL') smallScore += weight;
+            }
+            if (bigScore === 0 && smallScore === 0) return null;
+            return bigScore > smallScore ? 'BIG' : 'SMALL';
+        }
+
+        // BigWin 30 Sec strategies for Mini 1-1 and Mini 1-2
+        function predictBw30V11(historyBefore) {
+            if (!historyBefore || historyBefore.length < 2) return null;
+            const availableResults = historyBefore.slice(0, Math.min(5, historyBefore.length));
+            let bigCount = 0, smallCount = 0;
+            availableResults.forEach(item => {
+                const bs = classifyRowBigSmall(item);
+                if (bs === 'BIG') bigCount++; else if (bs === 'SMALL') smallCount++;
+            });
+            return bigCount >= smallCount ? 'SMALL' : 'BIG';
+        }
+        function predictBw30V12(historyBefore) {
+            if (!historyBefore || historyBefore.length < 3) return null;
+            const last3 = historyBefore.slice(0, Math.min(3, historyBefore.length));
+            const bsLast3 = last3.map(item => classifyRowBigSmall(item)).filter(Boolean);
+            if (bsLast3.length === 3 && bsLast3[0] === bsLast3[1] && bsLast3[1] === bsLast3[2]) return bsLast3[0];
+            const windowSize = Math.min(8, historyBefore.length);
+            const recent = historyBefore.slice(0, windowSize);
+            let bigScore = 0, smallScore = 0;
+            for (let i = 0; i < recent.length; i++) {
+                const bs = classifyRowBigSmall(recent[i]);
+                if (!bs) continue;
+                const weight = recent.length - i;
+                if (bs === 'BIG') bigScore += weight; else if (bs === 'SMALL') smallScore += weight;
+            }
+            if (bigScore === 0 && smallScore === 0) return null;
+            return bigScore > smallScore ? 'BIG' : 'SMALL';
+        }
+
+        // BigWin 1 Min strategies for Mini 1-1 and Mini 1-2
+        function predictBw1V11(historyBefore) {
+            if (!historyBefore || historyBefore.length < 2) return null;
+            const availableResults = historyBefore.slice(0, Math.min(5, historyBefore.length));
+            let bigCount = 0, smallCount = 0;
+            availableResults.forEach(item => {
+                const bs = classifyRowBigSmall(item);
+                if (bs === 'BIG') bigCount++; else if (bs === 'SMALL') smallCount++;
+            });
+            return bigCount >= smallCount ? 'SMALL' : 'BIG';
+        }
+        function predictBw1V12(historyBefore) {
+            if (!historyBefore || historyBefore.length < 3) return null;
+            const last3 = historyBefore.slice(0, Math.min(3, historyBefore.length));
+            const bsLast3 = last3.map(item => classifyRowBigSmall(item)).filter(Boolean);
+            if (bsLast3.length === 3 && bsLast3[0] === bsLast3[1] && bsLast3[1] === bsLast3[2]) return bsLast3[0];
+            const windowSize = Math.min(8, historyBefore.length);
+            const recent = historyBefore.slice(0, windowSize);
+            let bigScore = 0, smallScore = 0;
+            for (let i = 0; i < recent.length; i++) {
+                const bs = classifyRowBigSmall(recent[i]);
+                if (!bs) continue;
+                const weight = recent.length - i;
+                if (bs === 'BIG') bigScore += weight; else if (bs === 'SMALL') smallScore += weight;
+            }
+            if (bigScore === 0 && smallScore === 0) return null;
+            return bigScore > smallScore ? 'BIG' : 'SMALL';
+        }
+
+        // Global TRX strategies for Mini 1-1 and Mini 1-2
+        function predictGtrxV11(historyBefore) {
+            if (!historyBefore || historyBefore.length < 2) return null;
+            const availableResults = historyBefore.slice(0, Math.min(5, historyBefore.length));
+            let bigCount = 0;
+            let smallCount = 0;
+            availableResults.forEach(item => {
+                const bs = classifyRowBigSmall(item);
+                if (bs === 'BIG') bigCount++;
+                else if (bs === 'SMALL') smallCount++;
+            });
+            if (bigCount === smallCount) return null;
+            return bigCount > smallCount ? 'SMALL' : 'BIG';
+        }
+
+        function predictGtrxV12(historyBefore) {
+            // Stronger V1.2 strategy: trend + weighted recent results
+            if (!historyBefore || historyBefore.length < 3) return null;
+
+            const last3 = historyBefore.slice(0, Math.min(3, historyBefore.length));
+            const bsLast3 = last3
+                .map(item => classifyRowBigSmall(item))
+                .filter(Boolean);
+
+            if (bsLast3.length === 3 &&
+                bsLast3[0] === bsLast3[1] &&
+                bsLast3[1] === bsLast3[2]) {
+                return bsLast3[0];
+            }
+
+            const windowSize = Math.min(8, historyBefore.length);
+            const recent = historyBefore.slice(0, windowSize);
+
+            let bigScore = 0;
+            let smallScore = 0;
+
+            for (let i = 0; i < recent.length; i++) {
+                const item = recent[i];
+                const bs = classifyRowBigSmall(item);
+                if (!bs) continue;
+
+                const weight = recent.length - i;
+                if (bs === 'BIG') bigScore += weight;
+                else if (bs === 'SMALL') smallScore += weight;
+            }
+
+            if (bigScore === 0 && smallScore === 0) return null;
+
+            return bigScore > smallScore ? 'BIG' : 'SMALL';
+        }
+
+        // Currently not used for badges in this minimal design, but kept for possible future use
+        function updateRateBadge(winRate) {
+            const badge = document.getElementById('rateWinRateBadge');
+            const badgeText = document.getElementById('rateWinRateBadgeText');
+            if (!badge || !badgeText) return;
+
+            badge.style.display = 'inline-flex';
+            badge.classList.remove('rate-low', 'rate-medium', 'rate-high');
+
+            if (winRate < 33) {
+                badge.classList.add('rate-low');
+                badgeText.textContent = 'Low';
+            } else if (winRate <= 66) {
+                badge.classList.add('rate-medium');
+                badgeText.textContent = 'Medium';
+            } else {
+                badge.classList.add('rate-high');
+                badgeText.textContent = 'High';
+            }
+        }
+
+        const UPDATE_DELAY_MS = 480;
+        const panelState = {};
+        let resortTimer = null;
+
+        const RATE_PANEL_CONFIG = {
+            rate1: {
+                ids: { total: 'rate1Total', win: 'rate1Win', lose: 'rate1Lose', winRate: 'rate1WinRate', winStreak: 'rate1WinStreak', loseStreak: 'rate1LoseStreak' },
+                lineIds: ['line1Total', 'line1WL', 'line1Rate', 'line1Streaks'],
+                loading: 'rate1Loading', error: 'rate1Error', anchor: 'rate1Total'
+            },
+            rate1v2: {
+                ids: { total: 'rate1v2Total', win: 'rate1v2Win', lose: 'rate1v2Lose', winRate: 'rate1v2WinRate', winStreak: 'rate1v2WinStreak', loseStreak: 'rate1v2LoseStreak' },
+                lineIds: ['line1v2Total', 'line1v2WL', 'line1v2Rate', 'line1v2Streaks'],
+                loading: 'rate1v2Loading', error: 'rate1v2Error', anchor: 'rate1v2Total'
+            },
+            rate: {
+                ids: { total: 'rateTotal', win: 'rateWin', lose: 'rateLose', winRate: 'rateWinRate', winStreak: 'rateWinStreak', loseStreak: 'rateLoseStreak' },
+                lineIds: ['lineTotal', 'lineWL', 'lineRate', 'lineStreaks'],
+                loading: 'rateLoading', error: 'rateError', anchor: 'rateTotal'
+            },
+            rate30v2: {
+                ids: { total: 'rate30v2Total', win: 'rate30v2Win', lose: 'rate30v2Lose', winRate: 'rate30v2WinRate', winStreak: 'rate30v2WinStreak', loseStreak: 'rate30v2LoseStreak' },
+                lineIds: ['line30v2Total', 'line30v2WL', 'line30v2Rate', 'line30v2Streaks'],
+                loading: 'rate30v2Loading', error: 'rate30v2Error', anchor: 'rate30v2Total'
+            },
+            bw1: {
+                ids: { total: 'bw1Total', win: 'bw1Win', lose: 'bw1Lose', winRate: 'bw1WinRate', winStreak: 'bw1WinStreak', loseStreak: 'bw1LoseStreak' },
+                lineIds: ['bw1LineTotal', 'bw1LineWL', 'bw1LineRate', 'bw1LineStreaks'],
+                loading: 'bw1Loading', error: 'bw1Error', anchor: 'bw1Total'
+            },
+            bw1v2: {
+                ids: { total: 'bw1v2Total', win: 'bw1v2Win', lose: 'bw1v2Lose', winRate: 'bw1v2WinRate', winStreak: 'bw1v2WinStreak', loseStreak: 'bw1v2LoseStreak' },
+                lineIds: ['bw1v2LineTotal', 'bw1v2LineWL', 'bw1v2LineRate', 'bw1v2LineStreaks'],
+                loading: 'bw1v2Loading', error: 'bw1v2Error', anchor: 'bw1v2Total'
+            },
+            bw30: {
+                ids: { total: 'bw30Total', win: 'bw30Win', lose: 'bw30Lose', winRate: 'bw30WinRate', winStreak: 'bw30WinStreak', loseStreak: 'bw30LoseStreak' },
+                lineIds: ['bw30LineTotal', 'bw30LineWL', 'bw30LineRate', 'bw30LineStreaks'],
+                loading: 'bw30Loading', error: 'bw30Error', anchor: 'bw30Total'
+            },
+            bw30v2: {
+                ids: { total: 'bw30v2Total', win: 'bw30v2Win', lose: 'bw30v2Lose', winRate: 'bw30v2WinRate', winStreak: 'bw30v2WinStreak', loseStreak: 'bw30v2LoseStreak' },
+                lineIds: ['bw30v2LineTotal', 'bw30v2LineWL', 'bw30v2LineRate', 'bw30v2LineStreaks'],
+                loading: 'bw30v2Loading', error: 'bw30v2Error', anchor: 'bw30v2Total'
+            },
+            ck30free: {
+                ids: { total: 'ck30freeTotal', win: 'ck30freeWin', lose: 'ck30freeLose', winRate: 'ck30freeWinRate', winStreak: 'ck30freeWinStreak', loseStreak: 'ck30freeLoseStreak' },
+                lineIds: ['ck30freeLineTotal', 'ck30freeLineWL', 'ck30freeLineRate', 'ck30freeLineStreaks'],
+                loading: 'ck30freeLoading', error: 'ck30freeError', anchor: 'ck30freeTotal'
+            },
+            bw30free: {
+                ids: { total: 'bw30freeTotal', win: 'bw30freeWin', lose: 'bw30freeLose', winRate: 'bw30freeWinRate', winStreak: 'bw30freeWinStreak', loseStreak: 'bw30freeLoseStreak' },
+                lineIds: ['bw30freeLineTotal', 'bw30freeLineWL', 'bw30freeLineRate', 'bw30freeLineStreaks'],
+                loading: 'bw30freeLoading', error: 'bw30freeError', anchor: 'bw30freeTotal'
+            },
+            gtrx: {
+                ids: { total: 'gtrxTotal', win: 'gtrxWin', lose: 'gtrxLose', winRate: 'gtrxWinRate', winStreak: 'gtrxWinStreak', loseStreak: 'gtrxLoseStreak' },
+                lineIds: ['gtrxLineTotal', 'gtrxLineWL', 'gtrxLineRate', 'gtrxLineStreaks'],
+                loading: 'gtrxLoading', error: 'gtrxError', anchor: 'gtrxTotal'
+            },
+            gtrxV2: {
+                ids: { total: 'gtrxV2Total', win: 'gtrxV2Win', lose: 'gtrxV2Lose', winRate: 'gtrxV2WinRate', winStreak: 'gtrxV2WinStreak', loseStreak: 'gtrxV2LoseStreak' },
+                lineIds: ['gtrxV2LineTotal', 'gtrxV2LineWL', 'gtrxV2LineRate', 'gtrxV2LineStreaks'],
+                loading: 'gtrxV2Loading', error: 'gtrxV2Error', anchor: 'gtrxV2Total'
+            }
+        };
+
+        function statsSignature(stats) {
+            if (!stats || !stats.totalMatches) return '';
+            return [
+                stats.totalMatches,
+                stats.wins,
+                stats.losses,
+                stats.winRate.toFixed(2),
+                stats.maxWinStreak,
+                stats.maxLoseStreak
+            ].join('|');
+        }
+
+        function computePanelScore(stats) {
+            if (!stats || !stats.totalMatches) return -Infinity;
+            const winRate = stats.winRate || 0;
+            const winStreak = stats.maxWinStreak || 0;
+            const loseStreak = stats.maxLoseStreak || 0;
+            const winLossRatio = stats.wins / Math.max(1, stats.losses);
+            return winRate * 10000 + winStreak * 50 - loseStreak * 8 + winLossRatio * 10;
+        }
+
+        function ensureRecommendBadge(panelEl) {
+            const h1 = panelEl.querySelector('.title h1');
+            if (!h1 || h1.querySelector('.title-recommend-badge')) return;
+            const badge = document.createElement('span');
+            badge.className = 'title-recommend-badge';
+            badge.textContent = 'RECOMMEND';
+            badge.hidden = true;
+            const tag = h1.querySelector('.title-special-badge, .title-free-badge');
+            if (tag) h1.insertBefore(badge, tag);
+            else h1.appendChild(badge);
+        }
+
+        function initRatePanels() {
+            Object.keys(RATE_PANEL_CONFIG).forEach((panelId) => {
+                const cfg = RATE_PANEL_CONFIG[panelId];
+                const anchor = document.getElementById(cfg.anchor);
+                const panel = anchor && anchor.closest('.rate-panel');
+                if (!panel) return;
+                panel.dataset.panelId = panelId;
+                ensureRecommendBadge(panel);
+            });
+        }
+
+        function applyPanelStats(panelId, stats) {
+            const cfg = RATE_PANEL_CONFIG[panelId];
+            if (!cfg || !stats || !stats.totalMatches) return;
+            const set = (key, val) => {
+                const el = document.getElementById(cfg.ids[key]);
+                if (el) el.textContent = val;
+            };
+            set('total', stats.totalMatches);
+            set('win', stats.wins);
+            set('lose', stats.losses);
+            set('winRate', stats.winRate.toFixed(2) + '%');
+            set('winStreak', stats.maxWinStreak || '-');
+            set('loseStreak', stats.maxLoseStreak || '-');
+            cfg.lineIds.forEach((id) => {
+                const el = document.getElementById(id);
+                if (el) el.style.display = 'none';
+            });
+            const loadingEl = document.getElementById(cfg.loading);
+            const errorEl = document.getElementById(cfg.error);
+            if (loadingEl) loadingEl.style.display = 'none';
+            if (errorEl) errorEl.style.display = 'none';
+            panelState[panelId] = {
+                stats,
+                sig: statsSignature(stats),
+                ready: true
+            };
+        }
+
+        function showPanelUpdating(panelId) {
+            const panel = document.querySelector('.rate-panel[data-panel-id="' + panelId + '"]');
+            const card = panel && panel.querySelector('.card');
+            const cfg = RATE_PANEL_CONFIG[panelId];
+            if (card) card.classList.add('card-updating');
+            if (cfg) {
+                cfg.lineIds.forEach((id) => {
+                    const el = document.getElementById(id);
+                    if (el) el.style.display = 'block';
+                });
+            }
+        }
+
+        function hidePanelUpdating(panelId) {
+            const panel = document.querySelector('.rate-panel[data-panel-id="' + panelId + '"]');
+            const card = panel && panel.querySelector('.card');
+            if (card) card.classList.remove('card-updating');
+        }
+
+        function renderRatePanel(panelId, stats) {
+            const cfg = RATE_PANEL_CONFIG[panelId];
+            if (!cfg) return;
+
+            const has = stats && stats.totalMatches;
+            if (!has) {
+                const loadingEl = document.getElementById(cfg.loading);
+                const errorEl = document.getElementById(cfg.error);
+                if (loadingEl) loadingEl.style.display = 'none';
+                if (errorEl) errorEl.style.display = 'block';
+                scheduleResortPanels();
+                return;
+            }
+
+            const sig = statsSignature(stats);
+            const prev = panelState[panelId];
+            const isRefresh = prev && prev.ready && prev.sig && prev.sig !== sig;
+
+            const finish = () => {
+                applyPanelStats(panelId, stats);
+                hidePanelUpdating(panelId);
+                if (panelState[panelId]) panelState[panelId].updateTimer = null;
+                scheduleResortPanels();
+            };
+
+            if (isRefresh) {
+                if (prev.updateTimer) clearTimeout(prev.updateTimer);
+                showPanelUpdating(panelId);
+                panelState[panelId] = Object.assign({}, prev, { pendingStats: stats });
+                panelState[panelId].updateTimer = setTimeout(finish, UPDATE_DELAY_MS);
+                return;
+            }
+
+            finish();
+        }
+
+        function scheduleResortPanels() {
+            clearTimeout(resortTimer);
+            resortTimer = setTimeout(() => {
+                resortRatePanels();
+                updateRecommendBadges();
+            }, 60);
+        }
+
+        function resortRatePanels() {
+            const host = document.getElementById('ratePanelsHost');
+            if (!host) return;
+
+            const panels = Array.from(host.querySelectorAll('.rate-panel[data-panel-id]'));
+            const scored = panels.map((el) => {
+                const id = el.dataset.panelId;
+                const st = panelState[id] && panelState[id].stats;
+                return { el, score: computePanelScore(st) };
+            }).sort((a, b) => b.score - a.score);
+
+            host.innerHTML = '';
+            for (let i = 0; i < scored.length; i += 2) {
+                const row = document.createElement('div');
+                row.className = 'pair-row';
+                row.appendChild(scored[i].el);
+                if (scored[i + 1]) row.appendChild(scored[i + 1].el);
+                host.appendChild(row);
+            }
+        }
+
+        function updateRecommendBadges() {
+            const panels = Array.from(document.querySelectorAll('.rate-panel[data-panel-id]'));
+            const ranked = panels.map((el) => {
+                const id = el.dataset.panelId;
+                const stats = panelState[id] && panelState[id].stats;
+                return { el, id, score: computePanelScore(stats), winRate: stats ? stats.winRate : 0 };
+            }).filter((x) => x.score > -Infinity).sort((a, b) => b.score - a.score);
+
+            panels.forEach((el) => {
+                const badge = el.querySelector('.title-recommend-badge');
+                if (badge) badge.hidden = true;
+            });
+
+            const topCount = Math.min(3, ranked.length);
+            ranked.forEach((item, idx) => {
+                const show = idx < topCount;
+                const badge = item.el.querySelector('.title-recommend-badge');
+                if (badge) badge.hidden = !show;
+            });
+        }
+
+        function renderStatsFreePanel(prefix, stats) {
+            renderRatePanel(prefix, stats);
+        }
+
+        function renderStatsCk30(statsV11, statsV12) {
+            renderRatePanel('rate', statsV11);
+            renderRatePanel('rate30v2', statsV12);
+        }
+
+        // Connect for 30 Sec rate
+        function connectFirebaseForRate() {
+            const loadingEl = document.getElementById('rateLoading');
+            const errorEl = document.getElementById('rateError');
+
+            try {
+                if (!db) {
+                    firebase.initializeApp(firebaseConfig);
+                    db = firebase.database();
+                }
+
+                if (firebaseListener) {
+                    db.ref(FIREBASE_PATH_30).off('value', firebaseListener);
+                    firebaseListener = null;
+                }
+
+                firebaseListener = db.ref(FIREBASE_PATH_30).on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (!data || !Array.isArray(data.list) || !data.list.length) {
+                        if (loadingEl) loadingEl.style.display = 'none';
+                        if (errorEl) errorEl.style.display = 'block';
+                        return;
+                    }
+
+                    const fullResults = data.list;
+                    const statsV11 = computeStatsWithStrategy(fullResults, predictCk30V11, { minHistory: 2 });
+                    const statsV12 = computeStatsWithStrategy(fullResults, predictCk30V12, { minHistory: 3 });
+                    const statsFree = computeStatsWithStrategy(fullResults, predictFreeTrendFollow, { minHistory: 2 });
+                    renderStatsCk30(statsV11, statsV12);
+                    renderStatsFreePanel('ck30free', statsFree);
+                }, (err) => {
+                    console.error('Prediction Rate Firebase error:', err);
+                    if (loadingEl) loadingEl.style.display = 'none';
+                    if (errorEl) errorEl.style.display = 'block';
+                });
+            } catch (e) {
+                console.error('Prediction Rate init error:', e);
+                if (loadingEl) loadingEl.style.display = 'none';
+                if (errorEl) errorEl.style.display = 'block';
+            }
+        }
+
+        function renderStats1(statsV11, statsV12) {
+            renderRatePanel('rate1', statsV11);
+            renderRatePanel('rate1v2', statsV12);
+        }
+
+        // Connect for 1 Min rate
+        function connectFirebaseForRate1() {
+            const loadingEl = document.getElementById('rate1Loading');
+            const errorEl = document.getElementById('rate1Error');
+
+            try {
+                if (!db) {
+                    firebase.initializeApp(firebaseConfig);
+                    db = firebase.database();
+                }
+
+                if (firebaseListener1) {
+                    db.ref(FIREBASE_PATH_1).off('value', firebaseListener1);
+                    firebaseListener1 = null;
+                }
+
+                firebaseListener1 = db.ref(FIREBASE_PATH_1).on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (!data || !Array.isArray(data.list) || !data.list.length) {
+                        if (loadingEl) loadingEl.style.display = 'none';
+                        if (errorEl) errorEl.style.display = 'block';
+                        return;
+                    }
+
+                    const fullResults = data.list;
+                    const statsV11 = computeStatsWithStrategy(fullResults, predictCk1V11, { minHistory: 2 });
+                    const statsV12 = computeStatsWithStrategy(fullResults, predictCk1V12, { minHistory: 3 });
+                    renderStats1(statsV11, statsV12);
+                }, (err) => {
+                    console.error('Prediction Rate 1Min Firebase error:', err);
+                    if (loadingEl) loadingEl.style.display = 'none';
+                    if (errorEl) errorEl.style.display = 'block';
+                });
+            } catch (e) {
+                console.error('Prediction Rate 1Min init error:', e);
+                if (loadingEl) loadingEl.style.display = 'none';
+                if (errorEl) errorEl.style.display = 'block';
+            }
+        }
+
+        function renderStatsBw30(statsV11, statsV12) {
+            renderRatePanel('bw30', statsV11);
+            renderRatePanel('bw30v2', statsV12);
+        }
+
+        // Connect for BigWin 30 Sec rate
+        function connectFirebaseForRateBw30() {
+            const loadingEl = document.getElementById('bw30Loading');
+            const errorEl = document.getElementById('bw30Error');
+
+            try {
+                if (!db) {
+                    firebase.initializeApp(firebaseConfig);
+                    db = firebase.database();
+                }
+
+                if (firebaseListenerBw30) {
+                    db.ref(FIREBASE_PATH_BW30).off('value', firebaseListenerBw30);
+                    firebaseListenerBw30 = null;
+                }
+
+                firebaseListenerBw30 = db.ref(FIREBASE_PATH_BW30).on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (!data || !Array.isArray(data.list) || !data.list.length) {
+                        if (loadingEl) loadingEl.style.display = 'none';
+                        if (errorEl) errorEl.style.display = 'block';
+                        return;
+                    }
+
+                    const fullResults = data.list;
+                    const statsV11 = computeStatsWithStrategy(fullResults, predictBw30V11, { minHistory: 2 });
+                    const statsV12 = computeStatsWithStrategy(fullResults, predictBw30V12, { minHistory: 3 });
+                    const statsFree = computeStatsWithStrategy(fullResults, predictFreeTrendFollow, { minHistory: 2 });
+                    renderStatsBw30(statsV11, statsV12);
+                    renderStatsFreePanel('bw30free', statsFree);
+                }, (err) => {
+                    console.error('Prediction Rate BigWin30 Firebase error:', err);
+                    if (loadingEl) loadingEl.style.display = 'none';
+                    if (errorEl) errorEl.style.display = 'block';
+                });
+            } catch (e) {
+                console.error('Prediction Rate BigWin30 init error:', e);
+                if (loadingEl) loadingEl.style.display = 'none';
+                if (errorEl) errorEl.style.display = 'block';
+            }
+        }
+
+        function renderStatsBw1(statsV11, statsV12) {
+            renderRatePanel('bw1', statsV11);
+            renderRatePanel('bw1v2', statsV12);
+        }
+
+        function renderStatsGTrx(statsV11, statsV12) {
+            renderRatePanel('gtrx', statsV11);
+            renderRatePanel('gtrxV2', statsV12);
+        }
+
+        // Connect for Global TRX 1 Min
+        function connectFirebaseForRateGTrx() {
+            const loadingEl = document.getElementById('gtrxLoading');
+            const errorEl = document.getElementById('gtrxError');
+
+            try {
+                if (!db) {
+                    firebase.initializeApp(firebaseConfig);
+                    db = firebase.database();
+                }
+
+                if (firebaseListenerGTrx) {
+                    db.ref(FIREBASE_PATH_GTRX).off('value', firebaseListenerGTrx);
+                    firebaseListenerGTrx = null;
+                }
+
+                firebaseListenerGTrx = db.ref(FIREBASE_PATH_GTRX).on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (!data || !Array.isArray(data.list) || !data.list.length) {
+                        if (loadingEl) loadingEl.style.display = 'none';
+                        if (errorEl) errorEl.style.display = 'block';
+                        return;
+                    }
+
+                    const fullResults = data.list;
+                    const statsV11 = computeStatsWithStrategy(fullResults, predictGtrxV11, { minHistory: 2 });
+                    const statsV12 = computeStatsWithStrategy(fullResults, predictGtrxV12, { minHistory: 3 });
+                    renderStatsGTrx(statsV11, statsV12);
+                }, (err) => {
+                    console.error('Prediction Rate GlobalTRX Firebase error:', err);
+                    if (loadingEl) loadingEl.style.display = 'none';
+                    if (errorEl) errorEl.style.display = 'block';
+                });
+            } catch (e) {
+                console.error('Prediction Rate GlobalTRX init error:', e);
+                if (loadingEl) loadingEl.style.display = 'none';
+                if (errorEl) errorEl.style.display = 'block';
+            }
+        }
+
+        // Connect for BigWin 1 Min rate
+        function connectFirebaseForRateBw1() {
+            const loadingEl = document.getElementById('bw1Loading');
+            const errorEl = document.getElementById('bw1Error');
+
+            try {
+                if (!db) {
+                    firebase.initializeApp(firebaseConfig);
+                    db = firebase.database();
+                }
+
+                if (firebaseListenerBw1) {
+                    db.ref(FIREBASE_PATH_BW1).off('value', firebaseListenerBw1);
+                    firebaseListenerBw1 = null;
+                }
+
+                firebaseListenerBw1 = db.ref(FIREBASE_PATH_BW1).on('value', (snapshot) => {
+                    const data = snapshot.val();
+                    if (!data || !Array.isArray(data.list) || !data.list.length) {
+                        if (loadingEl) loadingEl.style.display = 'none';
+                        if (errorEl) errorEl.style.display = 'block';
+                        return;
+                    }
+
+                    const fullResults = data.list;
+                    const statsV11 = computeStatsWithStrategy(fullResults, predictBw1V11, { minHistory: 2 });
+                    const statsV12 = computeStatsWithStrategy(fullResults, predictBw1V12, { minHistory: 3 });
+                    renderStatsBw1(statsV11, statsV12);
+                }, (err) => {
+                    console.error('Prediction Rate BigWin1 Firebase error:', err);
+                    if (loadingEl) loadingEl.style.display = 'none';
+                    if (errorEl) errorEl.style.display = 'block';
+                });
+            } catch (e) {
+                console.error('Prediction Rate BigWin1 init error:', e);
+                if (loadingEl) loadingEl.style.display = 'none';
+                if (errorEl) errorEl.style.display = 'block';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            initRatePanels();
+            connectFirebaseForRate();   // CK 30 Sec
+            connectFirebaseForRate1();  // CK 1 Min
+            connectFirebaseForRateBw30(); // BigWin 30 Sec
+            connectFirebaseForRateBw1();  // BigWin 1 Min
+            connectFirebaseForRateGTrx(); // Global TRX 1 Min
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+    <title>CK WinGo30 History Chats</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --font-sans: 'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+            --bg: #f1f5f9;
+            --text: #0f172a;
+            --neumo-base: #e4e9f0;
+            --neumo-text: #2d3748;
+            --neumo-muted: #718096;
+            --neumo-sh-dark: rgba(163, 177, 198, 0.52);
+            --neumo-sh-light: rgba(255, 255, 255, 0.92);
+            --neumo-raise: 6px 6px 12px var(--neumo-sh-dark), -6px -6px 12px var(--neumo-sh-light);
+            --neumo-raise-sm: 4px 4px 8px var(--neumo-sh-dark), -4px -4px 8px var(--neumo-sh-light);
+            --neumo-inset-sm: inset 3px 3px 6px var(--neumo-sh-dark), inset -3px -3px 6px var(--neumo-sh-light);
+            --main-color: #6366f1;
+            --main-color-dark: #4338ca;
+            --main-color-alpha-10: rgba(99, 102, 241, 0.12);
+            --main-color-alpha-20: rgba(99, 102, 241, 0.22);
+            --yellow-accent: #ca8a04;
+            --white-bg: #ffffff;
+            --wingo-green: #22c55e;
+            --wingo-red: #ef4444;
+            --wingo-violet: #a855f7;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            padding: clamp(6px, 1.5vw, 20px);
+            padding-top: calc(clamp(6px, 1.5vw, 20px) + env(safe-area-inset-top));
+            padding-bottom: calc(clamp(6px, 1.5vw, 20px) + env(safe-area-inset-bottom));
+            -webkit-text-size-adjust: 100%;
+        }
+
+        .container {
+            max-width: 960px;
+            margin: 0 auto;
+            background: var(--neumo-base);
+            border-radius: clamp(12px, 2vw, 18px);
+            padding: clamp(10px, 2vw, 22px);
+            box-shadow: var(--neumo-raise);
+        }
+
+        .page-header {
+            margin-bottom: clamp(8px, 1.8vw, 16px);
+        }
+
+        .page-title {
+            color: var(--neumo-text);
+            font-size: clamp(0.95rem, 3.2vw, 1.35rem);
+            font-weight: 800;
+            letter-spacing: 0.03em;
+            line-height: 1.2;
+            margin-bottom: 0;
+        }
+
+        .page-subtitle {
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 6px;
+        }
+
+        .realtime-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            background: var(--white-bg);
+            color: var(--main-color);
+            border: 1.5px solid var(--main-color);
+            border-radius: 999px;
+            font-weight: 700;
+            font-size: 0.62rem;
+            letter-spacing: 0.08em;
+        }
+
+        .realtime-indicator::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: var(--main-color);
+            border-radius: 50%;
+            animation: live-pulse 1.4s ease-in-out infinite;
+        }
+
+        @keyframes live-pulse {
+            0%, 100% { opacity: 1; transform: scale(1); }
+            50% { opacity: 0.45; transform: scale(0.85); }
+        }
+
+        .status {
+            padding: 8px 12px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            border: 1.5px solid var(--main-color);
+            background: var(--white-bg);
+            color: var(--main-color);
+        }
+
+        .status.loading::before,
+        .status.success::before,
+        .status.error::before {
+            content: '';
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: var(--main-color);
+            flex-shrink: 0;
+        }
+
+        .status.error {
+            border-color: #ef4444;
+            color: #b91c1c;
+        }
+
+        .status.error::before {
+            background: #ef4444;
+        }
+
+        .history-chat-box {
+            background: var(--white-bg);
+            border-radius: 14px;
+            box-shadow: var(--neumo-inset-sm);
+            overflow: hidden;
+        }
+
+        .history-chat-box-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 8px;
+            padding: 8px 12px;
+            border-bottom: 1px solid var(--main-color-alpha-20);
+            background: linear-gradient(145deg, #f8fafc 0%, #eef2ff 100%);
+        }
+
+        .history-chat-box-header span {
+            font-size: 0.62rem;
+            font-weight: 700;
+            letter-spacing: 0.2em;
+            text-transform: uppercase;
+            color: var(--main-color-dark);
+        }
+
+        .history-chat-body {
+            padding: 0;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: var(--white-bg);
+            table-layout: fixed;
+        }
+
+        thead {
+            background: linear-gradient(145deg, #eef2ff 0%, #e0e7ff 100%);
+        }
+
+        th {
+            padding: 8px 6px;
+            text-align: left;
+            font-weight: 700;
+            font-size: 0.58rem;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--main-color-dark);
+            border-bottom: 1px solid var(--main-color-alpha-20);
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        th:first-child {
+            padding-left: 10px;
+            width: 9%;
+        }
+
+        th.col-period { width: 22%; }
+        th.col-number { width: 11%; }
+        th.col-color { width: 16%; text-align: center; }
+        th.col-bs { width: 16%; }
+        th.col-premium { width: 22%; }
+
+        td {
+            padding: 7px 6px;
+            border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+            font-size: 0.78rem;
+            color: var(--neumo-text);
+            background: var(--white-bg);
+            vertical-align: middle;
+            line-height: 1.15;
+        }
+
+        td:first-child {
+            padding-left: 10px;
+            color: var(--neumo-muted);
+            font-weight: 600;
+            font-size: 0.72rem;
+        }
+
+        td.col-color {
+            text-align: center;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            tbody tr:hover td {
+                background: var(--main-color-alpha-10);
+            }
+        }
+
+        td.period-number,
+        td.number-column {
+            font-weight: 800;
+            color: var(--neumo-text);
+        }
+
+        .result-big {
+            color: var(--yellow-accent);
+            font-weight: 700;
+            font-size: 0.72rem;
+        }
+
+        .result-small {
+            color: var(--main-color-dark);
+            font-weight: 700;
+            font-size: 0.72rem;
+        }
+
+        .premium-code {
+            font-family: var(--font-sans);
+            background: var(--neumo-base);
+            padding: 3px 6px;
+            border-radius: 8px;
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--neumo-text);
+            letter-spacing: 0.12em;
+            text-transform: uppercase;
+            box-shadow: var(--neumo-inset-sm);
+            display: inline-block;
+            max-width: 100%;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            vertical-align: middle;
+        }
+
+        .th-full { display: inline; }
+        .th-short { display: none; }
+
+        /* Colour indicators – CSS only, no emoji */
+        .colour-cell {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .colour-indicator {
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-shadow: var(--neumo-raise-sm);
+        }
+
+        .colour-indicator--green {
+            background: var(--wingo-green);
+        }
+
+        .colour-indicator--red {
+            background: var(--wingo-red);
+        }
+
+        .colour-duo {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+        }
+
+        .colour-duo .colour-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            border: 1.5px solid rgba(255, 255, 255, 0.9);
+            box-shadow: var(--neumo-raise-sm);
+        }
+
+        .colour-dot--violet { background: var(--wingo-violet); }
+        .colour-dot--green { background: var(--wingo-green); }
+        .colour-dot--red { background: var(--wingo-red); }
+
+        .colour-unknown {
+            display: inline-block;
+            min-width: 24px;
+            text-align: center;
+            color: var(--neumo-muted);
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+
+        .no-data {
+            text-align: center;
+            padding: 48px 20px;
+            color: var(--neumo-muted);
+        }
+
+        .no-data svg {
+            width: 72px;
+            height: 72px;
+            margin-bottom: 16px;
+            opacity: 0.35;
+        }
+
+        .no-data p {
+            font-size: 0.9rem;
+            font-weight: 600;
+        }
+
+        .no-data .hint {
+            font-size: 0.78rem;
+            margin-top: 8px;
+            font-weight: 500;
+            opacity: 0.85;
+        }
+
+        .last-update {
+            text-align: center;
+            color: var(--neumo-muted);
+            font-size: 0.68rem;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        @media (max-width: 640px) {
+            .container {
+                padding: 8px;
+                border-radius: 12px;
+            }
+
+            .page-title {
+                font-size: 0.92rem;
+            }
+
+            .history-chat-box {
+                border-radius: 10px;
+            }
+
+            .history-chat-box-header {
+                padding: 6px 10px;
+            }
+
+            .history-chat-box-header span {
+                font-size: 0.58rem;
+                letter-spacing: 0.16em;
+            }
+
+            th {
+                padding: 5px 3px;
+                font-size: 0.52rem;
+                letter-spacing: 0.04em;
+            }
+
+            th:first-child {
+                padding-left: 6px;
+                width: 8%;
+            }
+
+            th.col-period { width: 24%; }
+            th.col-number { width: 10%; }
+            th.col-color { width: 14%; }
+            th.col-bs { width: 14%; }
+            th.col-premium { width: 18%; }
+
+            td {
+                padding: 5px 3px;
+                font-size: 0.68rem;
+            }
+
+            td:first-child {
+                padding-left: 6px;
+                font-size: 0.64rem;
+            }
+
+            .th-full { display: none; }
+            .th-short { display: inline; }
+
+            .result-big,
+            .result-small {
+                font-size: 0.64rem;
+            }
+
+            .premium-code {
+                padding: 2px 4px;
+                font-size: 0.55rem;
+                letter-spacing: 0.06em;
+                border-radius: 6px;
+            }
+
+            td.period-number,
+            td.number-column {
+                font-size: 0.66rem;
+            }
+
+            .colour-indicator {
+                width: 13px;
+                height: 13px;
+            }
+
+            .colour-duo .colour-dot {
+                width: 11px;
+                height: 11px;
+            }
+
+            .colour-duo {
+                gap: 2px;
+            }
+        }
+
+        @media (max-width: 380px) {
+            th.col-premium,
+            td.col-premium {
+                display: none;
+            }
+
+            th.col-period { width: 28%; }
+            th.col-bs { width: 18%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="resultsContainer">
+        <header class="page-header">
+            <h1 class="page-title">CK WinGo30 History Chats</h1>
+        </header>
+
+        <div id="status" class="status" style="display: none;"></div>
+
+        <div class="history-chat-box">
+            <div class="history-chat-box-header">
+                <span>History</span>
+                <span class="realtime-indicator">LIVE</span>
+            </div>
+            <div class="history-chat-body">
+                <div id="resultsTable"></div>
+            </div>
+        </div>
+
+        <div id="lastUpdate" class="last-update" style="display: none;"></div>
+    </div>
+
+    <script>
+        const firebaseConfig = {
+            apiKey: "AIzaSyDj6z3O91NnlQ1zVdripiGhqQMsQhR4_ak",
+            authDomain: "ck30-35e97.firebaseapp.com",
+            databaseURL: "https://ck30-35e97-default-rtdb.europe-west1.firebasedatabase.app",
+            projectId: "ck30-35e97",
+            storageBucket: "ck30-35e97.appspot.com",
+            messagingSenderId: "625630152314",
+            appId: "1:625630152314:web:c035009eec389371b51dc3",
+            measurementId: "G-6Z7DYPKHR2"
+        };
+
+        const FIREBASE_PATH = "ckwingo30/default";
+
+        let db = null;
+        let firebaseListener = null;
+
+        function initializeFirebase() {
+            try {
+                let app = null;
+                try {
+                    app = firebase.app('results');
+                    db = app.database();
+                } catch (e) {
+                    app = firebase.initializeApp(firebaseConfig, 'results');
+                    db = app.database();
+                }
+                return true;
+            } catch (error) {
+                console.error('Firebase initialization error:', error);
+                showStatus('Connection failed: ' + error.message, 'error');
+                return false;
+            }
+        }
+
+        function showStatus(message, type) {
+            const statusEl = document.getElementById('status');
+            statusEl.textContent = message;
+            statusEl.className = 'status ' + type;
+            statusEl.style.display = 'flex';
+        }
+
+        function hideStatus() {
+            document.getElementById('status').style.display = 'none';
+        }
+
+        function classifyBigSmall(number) {
+            if (number === null || number === undefined) return null;
+            const num = parseInt(number, 10);
+            if (isNaN(num)) return null;
+            return num >= 5 ? 'BIG' : 'SMALL';
+        }
+
+        function resolveColour(result) {
+            let colour = (result.colour || result.color || '').toLowerCase().trim();
+            if (colour) return colour;
+
+            const num = parseInt(result.number, 10);
+            if (isNaN(num)) return '';
+            if (num === 0) return 'red,violet';
+            if (num === 5) return 'green,violet';
+            if ([1, 3, 7, 9].includes(num)) return 'green';
+            if ([2, 4, 6, 8].includes(num)) return 'red';
+            return '';
+        }
+
+        function renderColourHtml(colour) {
+            const c = (colour || '').toLowerCase().trim();
+            if (c === 'green') {
+                return '<span class="colour-cell"><span class="colour-indicator colour-indicator--green" title="Green" aria-label="Green"></span></span>';
+            }
+            if (c === 'red') {
+                return '<span class="colour-cell"><span class="colour-indicator colour-indicator--red" title="Red" aria-label="Red"></span></span>';
+            }
+            if (c === 'green,violet' || c === 'violet,green') {
+                return '<span class="colour-cell"><span class="colour-duo" title="Violet + Green" aria-label="Violet and Green"><span class="colour-dot colour-dot--violet"></span><span class="colour-dot colour-dot--green"></span></span></span>';
+            }
+            if (c === 'red,violet' || c === 'violet,red') {
+                return '<span class="colour-cell"><span class="colour-duo" title="Violet + Red" aria-label="Violet and Red"><span class="colour-dot colour-dot--violet"></span><span class="colour-dot colour-dot--red"></span></span></span>';
+            }
+            return '<span class="colour-unknown">-</span>';
+        }
+
+        function formatPeriodNumber(issueNumber) {
+            if (issueNumber === null || issueNumber === undefined || issueNumber === '') return '-';
+            const str = String(issueNumber);
+            return str.length > 5 ? str.slice(-5) : str;
+        }
+
+        function updateLastUpdateTime(timestamp) {
+            const lastUpdateEl = document.getElementById('lastUpdate');
+            if (timestamp) {
+                const date = new Date(timestamp);
+                lastUpdateEl.textContent = 'Last updated: ' + date.toLocaleString();
+                lastUpdateEl.style.display = 'block';
+            } else {
+                lastUpdateEl.style.display = 'none';
+            }
+        }
+
+        function renderTable(results) {
+            const tableContainer = document.getElementById('resultsTable');
+
+            if (!results || results.length === 0) {
+                tableContainer.innerHTML = `
+                    <div class="no-data">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                        </svg>
+                        <p>No history data available</p>
+                        <p class="hint">Waiting for data...</p>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = `
+                <table>
+                    <thead>
+                        <tr>
+                            <th>No.</th>
+                            <th class="col-period"><span class="th-full">Period Number</span><span class="th-short">Period</span></th>
+                            <th class="col-number"><span class="th-full">Number</span><span class="th-short">Num</span></th>
+                            <th class="col-color">Color</th>
+                            <th class="col-bs"><span class="th-full">BIG/SMALL</span><span class="th-short">B/S</span></th>
+                            <th class="col-premium">Premium</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+            `;
+
+            results.forEach((result, index) => {
+                const bigSmall = classifyBigSmall(result.number);
+                const bigSmallClass = bigSmall === 'BIG' ? 'result-big' : 'result-small';
+                const premium = result.premium || '-';
+                const periodNumber = formatPeriodNumber(result.issueNumber);
+                const colourHtml = renderColourHtml(resolveColour(result));
+                const numberDisplay = result.number !== null && result.number !== undefined ? result.number : '-';
+
+                html += `
+                    <tr>
+                        <td>${index + 1}</td>
+                        <td class="period-number col-period">${periodNumber}</td>
+                        <td class="number-column col-number">${numberDisplay}</td>
+                        <td class="col-color">${colourHtml}</td>
+                        <td class="col-bs ${bigSmallClass}">${bigSmall || '-'}</td>
+                        <td class="col-premium"><span class="premium-code">${premium}</span></td>
+                    </tr>
+                `;
+            });
+
+            html += `
+                    </tbody>
+                </table>
+            `;
+
+            tableContainer.innerHTML = html;
+        }
+
+        function connectFirebase() {
+            if (!db && !initializeFirebase()) return;
+
+            showStatus('Connecting...', 'loading');
+
+            try {
+                if (firebaseListener) {
+                    db.ref(FIREBASE_PATH).off('value', firebaseListener);
+                    firebaseListener = null;
+                }
+
+                firebaseListener = db.ref(FIREBASE_PATH).on('value', (snapshot) => {
+                    const data = snapshot.val();
+
+                    if (data && data.list && Array.isArray(data.list)) {
+                        renderTable(data.list);
+                        updateLastUpdateTime(data.publishedAt || Date.now());
+                        showStatus('Connected — ' + data.list.length + ' records', 'success');
+                        setTimeout(hideStatus, 2500);
+                    } else {
+                        showStatus('No data found. Waiting...', 'loading');
+                        renderTable([]);
+                    }
+                }, (error) => {
+                    console.error('Firebase read error:', error);
+                    showStatus('Load error: ' + error.message, 'error');
+                });
+            } catch (error) {
+                console.error('Error connecting to Firebase:', error);
+                showStatus('Connection error: ' + error.message, 'error');
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            if (initializeFirebase()) {
+                setTimeout(connectFirebase, 400);
+            }
+        });
+
+        window.addEventListener('beforeunload', function () {
+            if (firebaseListener && db) {
+                db.ref(FIREBASE_PATH).off('value', firebaseListener);
+            }
+        });
+    </script>
+</body>
+</html>
