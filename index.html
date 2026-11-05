@@ -12,18 +12,17 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --ck-1: #818cf8; --ck-2: #4f46e5; --ck-text: #4338ca;
-    --bigwin-1: #34d399; --bigwin-2: #16a34a; --bigwin-text: #15803d;
-    --sixwin-1: #f87171; --sixwin-2: #dc2626; --sixwin-text: #b91c1c;
+    --ck-1: #818cf8; --ck-2: #4f46e5; --ck-text: #4338ca; --ck-bg: #eef2ff;
+    --bigwin-1: #34d399; --bigwin-2: #16a34a; --bigwin-text: #15803d; --bigwin-bg: #f0fdf4;
+    --sixwin-1: #f87171; --sixwin-2: #dc2626; --sixwin-text: #b91c1c; --sixwin-bg: #fef2f2;
 
-    --bg-page: #f4f7fb;
+    --bg-page: #f8fafc;
     --bg-card: #ffffff;
     --text: #0f172a;
     --text-muted: #64748b;
     --text-subtle: #94a3b8;
-    --border: #e5e9f0;
-    --shadow: 0 4px 24px rgba(15, 23, 42, 0.06);
-
+    --border: #e2e8f0;
+    
     --r-card: 20px;
     --r-btn: 14px;
     --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -36,29 +35,17 @@
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     overscroll-behavior: none;
+    background: var(--bg-page);
   }
 
   body {
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background: var(--bg-page);
     color: var(--text);
     min-height: 100vh;
     overflow-x: hidden;
   }
 
-  button { font-family: inherit; cursor: pointer; border: none; }
-
-  body::before {
-    content: "";
-    position: fixed;
-    top: 0; left: 0; right: 0;
-    height: 320px;
-    background:
-      radial-gradient(ellipse 70% 60% at 30% 0%, rgba(99, 102, 241, 0.08), transparent 65%),
-      radial-gradient(ellipse 60% 60% at 80% 0%, rgba(34, 197, 94, 0.05), transparent 65%);
-    pointer-events: none;
-    z-index: 0;
-  }
+  button { font-family: inherit; cursor: pointer; border: none; outline: none; }
 
   /* ============ INTRO SPLASH ============ */
   #introSplash {
@@ -71,10 +58,7 @@
     justify-content: center;
     transition: opacity 0.7s ease;
   }
-  #introSplash.fade-out {
-    opacity: 0;
-    pointer-events: none;
-  }
+  #introSplash.fade-out { opacity: 0; pointer-events: none; }
   .intro-logo {
     display: inline-flex;
     align-items: center;
@@ -103,8 +87,6 @@
     padding: env(safe-area-inset-top, 0px) 16px 0;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    gap: 12px;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
@@ -112,69 +94,38 @@
     z-index: 1000;
   }
   .header-brand {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 800;
     letter-spacing: -0.02em;
     white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
   .header-brand .red { color: #dc2626; }
   .header-brand .black { color: var(--text); }
-
-  .header-back {
-    display: none;
-    width: 36px;
-    height: 36px;
-    border-radius: 50%;
-    background: var(--bg-page);
-    color: var(--text);
-    align-items: center;
-    justify-content: center;
-    font-size: 14px;
-    flex-shrink: 0;
-    transition: transform 0.18s var(--spring), background 0.2s;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .header-back:active { transform: scale(0.92); background: #e2e8f0; }
-  .header-back.visible { display: flex; }
 
   /* ============ SCREENS ============ */
   .screen {
     display: none;
     min-height: 100vh;
     padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 20px);
-    padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
     position: relative;
     z-index: 1;
     animation: screenFadeIn 0.3s ease;
   }
   .screen.active { display: block; }
 
-  @keyframes screenFadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-  }
+  @keyframes screenFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-  .screen-inner {
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 0 16px;
-  }
+  .screen-inner { max-width: 480px; margin: 0 auto; padding: 0 16px; }
 
   /* ============ HOME ============ */
-  .brand-list {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-  }
+  .brand-list { display: flex; flex-direction: column; gap: 14px; }
 
   .brand-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--r-card);
     padding: 18px 18px 16px;
-    box-shadow: var(--shadow);
     position: relative;
     overflow: hidden;
     animation: staggerIn 0.55s var(--spring) both;
@@ -198,141 +149,110 @@
   .brand-card[data-brand="bigwin"]::before { background: linear-gradient(90deg, var(--bigwin-1), var(--bigwin-2)); }
   .brand-card[data-brand="sixwin"]::before { background: linear-gradient(90deg, var(--sixwin-1), var(--sixwin-2)); }
 
-  .brand-head {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 14px;
-  }
+  .brand-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
 
   .brand-icon {
-    width: 40px;
-    height: 40px;
+    width: 40px; height: 40px;
     border-radius: 12px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 17px;
-    color: #fff;
-    flex-shrink: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 17px; color: #fff; flex-shrink: 0;
   }
-  .brand-card[data-brand="ck"] .brand-icon {
-    background: linear-gradient(135deg, var(--ck-1), var(--ck-2));
-    box-shadow: 0 5px 14px rgba(79, 70, 229, 0.32);
-  }
-  .brand-card[data-brand="bigwin"] .brand-icon {
-    background: linear-gradient(135deg, var(--bigwin-1), var(--bigwin-2));
-    box-shadow: 0 5px 14px rgba(22, 163, 74, 0.32);
-  }
-  .brand-card[data-brand="sixwin"] .brand-icon {
-    background: linear-gradient(135deg, var(--sixwin-1), var(--sixwin-2));
-    box-shadow: 0 5px 14px rgba(220, 38, 38, 0.32);
-  }
+  .brand-card[data-brand="ck"] .brand-icon { background: linear-gradient(135deg, var(--ck-1), var(--ck-2)); }
+  .brand-card[data-brand="bigwin"] .brand-icon { background: linear-gradient(135deg, var(--bigwin-1), var(--bigwin-2)); }
+  .brand-card[data-brand="sixwin"] .brand-icon { background: linear-gradient(135deg, var(--sixwin-1), var(--sixwin-2)); }
 
-  .brand-name {
-    font-size: 17px;
-    font-weight: 800;
-    letter-spacing: -0.015em;
-    line-height: 1.2;
-  }
+  .brand-name { font-size: 17px; font-weight: 800; letter-spacing: -0.015em; }
   .brand-card[data-brand="ck"] .brand-name { color: var(--ck-text); }
   .brand-card[data-brand="bigwin"] .brand-name { color: var(--bigwin-text); }
   .brand-card[data-brand="sixwin"] .brand-name { color: var(--sixwin-text); }
 
-  .brand-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
-    gap: 8px;
-  }
-
+  .brand-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
   .action-btn {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 6px;
-    padding: 12px 6px 10px;
-    border: 1.5px solid var(--border);
-    border-radius: var(--r-btn);
-    background: var(--bg-card);
-    color: var(--text);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 6px; padding: 12px 6px 10px;
+    border: 1.5px solid var(--border); border-radius: var(--r-btn);
+    background: var(--bg-card); color: var(--text);
     transition: transform 0.18s var(--spring), border-color 0.22s, background 0.22s;
     -webkit-tap-highlight-color: transparent;
   }
   .action-btn:active { transform: scale(0.94); }
-
   .action-icon {
-    width: 32px;
-    height: 32px;
-    border-radius: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
+    width: 32px; height: 32px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center; font-size: 13px;
   }
-  .action-label {
-    font-size: 11px;
-    font-weight: 700;
-    color: var(--text-muted);
-  }
+  .action-label { font-size: 11px; font-weight: 700; color: var(--text-muted); }
 
   .brand-card[data-brand="ck"] .action-icon { background: rgba(99, 102, 241, 0.10); color: var(--ck-2); }
   .brand-card[data-brand="bigwin"] .action-icon { background: rgba(34, 197, 94, 0.11); color: var(--bigwin-2); }
   .brand-card[data-brand="sixwin"] .action-icon { background: rgba(239, 68, 68, 0.10); color: var(--sixwin-2); }
 
-  /* ============ BOTTOM NAV ============ */
+  /* ============ FLOATING BOTTOM NAV ============ */
   .bottom-nav {
     position: fixed;
-    bottom: 0; left: 0; right: 0;
-    height: 70px;
-    padding-bottom: env(safe-area-inset-bottom, 0px);
-    background: rgba(255, 255, 255, 0.94);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border-top: 1px solid var(--border);
+    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    left: 50%;
+    transform: translateX(-50%);
+    width: calc(100% - 32px);
+    max-width: 440px;
+    height: 64px;
+    background: #ffffff;
+    border: 1.5px solid var(--border);
+    border-radius: 32px;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    max-width: 480px;
-    margin: 0 auto;
     z-index: 1000;
-    transition: transform 0.35s var(--ease), opacity 0.3s;
-    box-shadow: 0 -6px 28px rgba(15, 23, 42, 0.05);
+    transition: transform 0.4s var(--ease), opacity 0.3s;
+    /* Shadow လုံးဝမပါဝင်ပါ */
   }
   .bottom-nav.hidden {
-    transform: translateY(100%);
+    transform: translate(-50%, 150%);
     opacity: 0;
     pointer-events: none;
   }
 
   .nav-item {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 4px;
-    padding: 8px 0 6px;
-    color: var(--text-subtle);
-    background: none;
-    position: relative;
-    -webkit-tap-highlight-color: transparent;
-    transition: color 0.2s;
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    color: var(--text-subtle); background: none; position: relative;
+    -webkit-tap-highlight-color: transparent; transition: color 0.2s;
   }
   .nav-item i { font-size: 18px; transition: transform 0.3s var(--spring); }
-  .nav-label { font-size: 10.5px; font-weight: 700; letter-spacing: 0.02em; }
-
+  .nav-label { font-size: 10px; font-weight: 700; }
   .nav-item.active { color: var(--ck-2); }
   .nav-item.active i { transform: scale(1.15) translateY(-1px); }
-  .nav-item.active::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 50%;
-    transform: translateX(-50%);
-    width: 32px;
-    height: 3px;
-    border-radius: 0 0 4px 4px;
-    background: linear-gradient(90deg, var(--ck-1), var(--ck-2));
+
+  /* ============ FLOATING BACK BUTTON ============ */
+  .floating-back-btn {
+    position: fixed;
+    bottom: calc(98px + env(safe-area-inset-bottom, 0px));
+    left: calc(50% - 200px); /* Home icon ရဲ့ အပေါ်မှာ တည့်တည့်ရှိအောင် */
+    width: 44px;
+    height: 44px;
+    background: #0f172a; /* အနက်ရောင် */
+    color: #ffffff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    z-index: 1001;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(10px) scale(0.9);
+    transition: all 0.3s var(--spring);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .floating-back-btn.visible {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+  .floating-back-btn:active { transform: scale(0.9); }
+
+  @media (max-width: 480px) {
+    .floating-back-btn {
+      left: calc(50% - (100vw - 32px) / 2 + 20px); /* Mobile မှာ ဘယ်ဘက်အစွန်း Home ရဲ့ အပေါ်မှာ */
+    }
   }
 
   /* ============ SUB-SCREEN ============ */
@@ -354,7 +274,7 @@
   .sub-screen-body {
     flex: 1;
     overflow-y: auto;
-    padding: 20px 16px calc(32px + env(safe-area-inset-bottom, 0px));
+    padding: 20px 16px calc(120px + env(safe-area-inset-bottom, 0px));
     max-width: 480px;
     margin: 0 auto;
     width: 100%;
@@ -362,176 +282,142 @@
   }
 
   .sub-page-header {
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    margin-bottom: 20px;
-    padding: 4px 4px 12px;
+    display: flex; align-items: center; gap: 14px; margin-bottom: 20px;
     animation: stepFadeUp 0.5s var(--spring) 100ms both;
   }
-
   .sub-brand-icon {
-    width: 52px;
-    height: 52px;
-    border-radius: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    color: #fff;
-    flex-shrink: 0;
+    width: 52px; height: 52px; border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; color: #fff; flex-shrink: 0;
   }
-
   .sub-brand-label {
-    font-size: 12px;
-    font-weight: 700;
-    color: var(--text-subtle);
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    margin-bottom: 2px;
+    font-size: 12px; font-weight: 700; color: var(--text-subtle);
+    letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px;
   }
-
-  .sub-page-title {
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    line-height: 1.15;
-  }
+  .sub-page-title { font-size: 22px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.15; }
 
   .register-cta {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    width: 100%;
-    padding: 16px 20px;
-    border-radius: 16px;
-    font-size: 15px;
-    font-weight: 700;
-    color: #fff;
-    text-decoration: none;
-    margin-bottom: 20px;
-    position: relative;
-    overflow: hidden;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    width: 100%; padding: 16px 20px; border-radius: 16px;
+    font-size: 15px; font-weight: 700; color: #fff; text-decoration: none;
+    margin-bottom: 20px; position: relative; overflow: hidden;
     animation: stepFadeUp 0.5s var(--spring) 180ms both;
     transition: transform 0.18s var(--spring);
     -webkit-tap-highlight-color: transparent;
   }
-  .register-cta::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(180deg, rgba(255,255,255,0.15), transparent 55%);
-    pointer-events: none;
-  }
   .register-cta:active { transform: scale(0.97); }
-  .register-cta i { font-size: 13px; }
 
-  .step-list {
-    display: flex;
-    flex-direction: column;
-    gap: 16px;
+  /* ၂ ကော်လံ Grid */
+  .step-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
   }
 
-  .sub-step {
+  .step-card {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 16px;
-    padding: 14px;
-    box-shadow: var(--shadow);
+    padding: 10px;
+    cursor: pointer;
+    transition: transform 0.2s var(--spring);
     animation: stepFadeUp 0.55s var(--spring) both;
   }
+  .step-card:active { transform: scale(0.96); }
+  
+  /* Brand အလိုက် Card နောက်ခံအရောင်ဖျော့ */
+  .step-card[data-brand="ck"] { background: var(--ck-bg); border-color: transparent; }
+  .step-card[data-brand="bigwin"] { background: var(--bigwin-bg); border-color: transparent; }
+  .step-card[data-brand="sixwin"] { background: var(--sixwin-bg); border-color: transparent; }
 
   .step-photo-wrap {
-    width: 100%;
-    border-radius: 12px;
-    overflow: hidden;
-    background: #f8fafc;
-    margin-bottom: 12px;
-    border: 1px solid var(--border);
-    position: relative;
+    width: 100%; aspect-ratio: 4 / 3;
+    border-radius: 10px; overflow: hidden;
+    background: rgba(255, 255, 255, 0.6);
+    margin-bottom: 8px; position: relative;
   }
   .step-photo-wrap::after {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.001);
-    pointer-events: none;
+    content: ""; position: absolute; inset: 0;
+    background: rgba(0, 0, 0, 0.001); pointer-events: none;
   }
-
   .step-photo-wrap img {
-    display: block;
-    width: 100%;
-    height: auto;
-    pointer-events: none;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    user-select: none;
-    -webkit-user-drag: none;
+    display: block; width: 100%; height: 100%; object-fit: cover;
+    pointer-events: none; -webkit-touch-callout: none; -webkit-user-drag: none;
   }
 
   .step-text {
-    font-size: 13.5px;
-    line-height: 1.7;
-    color: var(--text);
-    padding: 2px 4px 4px;
-    letter-spacing: 0.005em;
-    word-break: break-word;
+    font-size: 11px; line-height: 1.45; color: var(--text);
+    padding: 0 2px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
-  @keyframes stepFadeUp {
-    from { opacity: 0; transform: translateY(16px); }
-    to { opacity: 1; transform: translateY(0); }
+  @keyframes stepFadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* ============ MODAL (Pop-up) ============ */
+  .modal-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+  }
+  .modal-overlay.active { opacity: 1; pointer-events: auto; }
+
+  .modal-content {
+    background: #ffffff;
+    width: 100%;
+    max-width: 420px;
+    max-height: 85vh;
+    border-radius: 20px;
+    overflow-y: auto;
+    padding: 16px;
+    position: relative;
+    transform: scale(0.95) translateY(10px);
+    transition: transform 0.3s var(--spring);
+  }
+  .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
+
+  .modal-close {
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 32px; height: 32px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; color: #0f172a;
+    z-index: 2;
+  }
+  .modal-img {
+    width: 100%; border-radius: 12px; margin-bottom: 16px; display: block;
+  }
+  .modal-text {
+    font-size: 14px; line-height: 1.7; color: var(--text); padding-bottom: 10px;
   }
 
   /* ============ TAB PLACEHOLDER ============ */
   .tab-placeholder {
-    max-width: 480px;
-    margin: 0 auto;
-    padding: 60px 24px 40px;
-    text-align: center;
+    max-width: 480px; margin: 0 auto; padding: 60px 24px 40px; text-align: center;
   }
   .tab-placeholder .ph-icon {
-    width: 72px;
-    height: 72px;
-    border-radius: 22px;
-    background: rgba(99, 102, 241, 0.1);
-    color: var(--ck-2);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 28px;
-    margin: 0 auto 20px;
+    width: 72px; height: 72px; border-radius: 22px;
+    background: rgba(99, 102, 241, 0.1); color: var(--ck-2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 28px; margin: 0 auto 20px;
   }
-  .tab-placeholder h2 {
-    font-size: 20px;
-    font-weight: 800;
-    margin-bottom: 8px;
-  }
-  .tab-placeholder p {
-    font-size: 14px;
-    color: var(--text-muted);
-    line-height: 1.55;
-  }
-  .tab-placeholder .hint {
-    display: inline-block;
-    margin-top: 18px;
-    padding: 8px 14px;
-    border-radius: 10px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    font-size: 12px;
-    color: var(--text-muted);
-    font-weight: 600;
-  }
-
-  /* ============ RESPONSIVE ============ */
-  @media (max-width: 375px) {
-    .intro-logo { font-size: 24px; }
-    .brand-name { font-size: 15px; }
-    .action-label { font-size: 10px; }
-    .step-text { font-size: 12.5px; }
-  }
+  .tab-placeholder h2 { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+  .tab-placeholder p { font-size: 14px; color: var(--text-muted); line-height: 1.55; }
 </style>
 </head>
 <body>
@@ -548,9 +434,6 @@
   <div class="header-brand">
     <span class="red">SuperSel</span> <span class="black">Earing</span>
   </div>
-  <button class="header-back" id="headerBack" onclick="goBack()" aria-label="Back">
-    <i class="fa-solid fa-arrow-left"></i>
-  </button>
 </header>
 
 <!-- ============ HOME TAB ============ -->
@@ -632,7 +515,6 @@
     <div class="ph-icon"><i class="fa-solid fa-chart-line"></i></div>
     <h2>Prediction</h2>
     <p>Mini V menus and mini-app iframes go here.</p>
-    <div class="hint">Edit <code>#screen-prediction</code></div>
   </div>
 </div>
 
@@ -642,7 +524,6 @@
     <div class="ph-icon"><i class="fa-regular fa-comment-dots"></i></div>
     <h2>History Chats</h2>
     <p>Chat result iframes and history lists go here.</p>
-    <div class="hint">Edit <code>#screen-chats</code></div>
   </div>
 </div>
 
@@ -652,7 +533,6 @@
     <div class="ph-icon"><i class="fa-solid fa-calculator"></i></div>
     <h2>Tools</h2>
     <p>Bet Size calculator, Prediction Rate, and other utilities go here.</p>
-    <div class="hint">Edit <code>#screen-tools</code></div>
   </div>
 </div>
 
@@ -662,7 +542,6 @@
     <div class="ph-icon"><i class="fa-solid fa-user"></i></div>
     <h2>Profile</h2>
     <p>Premium Activated Time, Signal Channels, and settings go here.</p>
-    <div class="hint">Edit <code>#screen-profile</code></div>
   </div>
 </div>
 
@@ -670,6 +549,11 @@
 <div id="subScreen" class="sub-screen">
   <div class="sub-screen-body" id="subBody"></div>
 </div>
+
+<!-- ============ FLOATING BACK BUTTON ============ -->
+<button class="floating-back-btn" id="floatingBackBtn" onclick="goBack()" aria-label="Back">
+  <i class="fa-solid fa-arrow-left"></i>
+</button>
 
 <!-- ============ BOTTOM NAV ============ -->
 <nav class="bottom-nav" id="bottomNav">
@@ -695,6 +579,15 @@
   </button>
 </nav>
 
+<!-- ============ MODAL POP-UP ============ -->
+<div class="modal-overlay" id="photoModal" onclick="closeModal(event)">
+  <div class="modal-content">
+    <button class="modal-close" onclick="closeModal(event)"><i class="fa-solid fa-xmark"></i></button>
+    <img id="modalImg" class="modal-img" src="" alt="Step Photo">
+    <div id="modalText" class="modal-text"></div>
+  </div>
+</div>
+
 <script>
   // ============ BRAND CONFIG ============
   const BRANDS = {
@@ -703,7 +596,7 @@
     sixwin: { name: 'SixWin',     icon: 'fa-dice',    c1: '#f87171', c2: '#dc2626' }
   };
 
-  // ============ FULL CONTENT (from old index.html) ============
+  // ============ FULL CONTENT ============
   const CONTENT = {
     ck: {
       register: {
@@ -726,7 +619,7 @@
           { img: 'Ck Lottery/Ck Lottery deposite Photo/p6.jpg',  text: '- Full Name မှ ကိုယ် ငွေလွဲရမဲ့ Account Name ပြထားပါတယ်။<br><br>- Account မှ ကိုယ်လွဲရမဲ့ Account Phone Number ပြထားပါတယ်။<br><br>- Balance မှ ကိုယ်လွဲမည်အမောက်ပြထားပါတယ်။<br><br>- Phone Number ကို Copy ယူပြီး ငွေလွဲလိုက်ပါ။' },
           { img: 'Ck Lottery/Ck Lottery deposite Photo/p7.jpg',  text: '- ငွေလွဲပြီးပါက Complete Payment ကိုနိပ်ပါ။<br><br>- ငွေသွင်းအော်ဒါအောင်မြင်ပါပြီး<br><br>- ခဏကြားရင်ကိုယ် Ck Account ထဲကိုကိုယ်လွဲထားတဲ့ငွေ Amount အတိအကျရောက်လာပါလိမ့်မယ်။' },
           { img: 'Ck Lottery/Ck Lottery deposite Photo/p8.jpg',  text: '- E-Wallet ကိုရွေးချယ်ပါ<br><br>- Select Channel မှ ဘယ်ဘက် အပြာနဲ ပြထားတာဟာ Kpay ဖြစ်ပြီး ညာဘက်က အဝါနဲပြထားတာက Wave ဖြစ်ပါတယ်။<br><br>- Kpay Wave တစ်ခုချင်းစီမှ Channel 3ခုစီရှိပါတယ်။ အဆင်ပြေတာရွေးချယ်လိုရပါတယ်။' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p13.jpg', text: '- Channel ရွေးချယ်ပြီးရင် အ ပေါ်ကိုဆွဲတင်ပါ။<br><br>- Deposit Amount မှ ငွေသွင်းမဲ့ငွေအမောက်ကိုရိုက်ထည့်ပါ။<br><br>- Deposit ( Amount ) Button ကိုနိပ်ပါ။' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p13.jpg', text: '- Channel ရွေးချယ်ပြီးရင် အ ပေါ်ကိုဆွဲတင်ပါ။<br><br>- Deposit Amount မှ ငွေသွင်းမဲ့ငွေအမောက်ကိုရိုက်ထည့်ပါ။<br><br>- Deposit ( Amount ) Button ကိုနိုပ်ပါ။' },
           { img: 'Ck Lottery/Ck Lottery deposite Photo/p10.jpg', text: '- QR Code ပါလာရင် Scanner လုပ်ပါ။<br><br>- QR Code မပါခဲ့ရင် Phone Number Copy ယူပြီးငွေလွဲပါ။' },
           { img: 'Ck Lottery/Ck Lottery deposite Photo/p11.jpg', text: '- ငွေလွဲပြီးပါက ငွေလွဲပြေစာရဲ့နောက်ဆုံး ( လုပ်ငန်းစဉ်နံပတ် ) ၆လုံးကိုရိုက်ထည့်ပေးပါ။<br><br>- (တင်ပြပါ)ကိုနိပ်ပါ။' },
           { img: 'Ck Lottery/Ck Lottery deposite Photo/p12.jpg', text: '- အခုလိုမျိူ:(လုပ်ငန်းစဉ် )ကိုစစ်ဆေးနေပါသည်ဆိုတဲ့ Page ရောက်သွားရင် ငွေသွင်းအော်တာ တင်တာအောင်မြင်ပါပြီး။<br><br>- ခဏနေရင် Ck Lottery Account ထဲကိုငွေရောက်လာပါလိမ့်မယ်။' }
@@ -842,7 +735,6 @@
       item.classList.toggle('active', item.dataset.tab === tab);
     });
     document.getElementById('bottomNav').classList.remove('hidden');
-    document.getElementById('headerBack').classList.remove('visible');
     currentTab = tab;
     window.scrollTo(0, 0);
   }
@@ -855,9 +747,8 @@
 
     const body = document.getElementById('subBody');
 
-    // Build header
     let html = '<div class="sub-page-header">' +
-      '<div class="sub-brand-icon" style="background:linear-gradient(135deg,' + brand.c1 + ',' + brand.c2 + ');box-shadow:0 8px 20px ' + brand.c2 + '50;">' +
+      '<div class="sub-brand-icon" style="background:linear-gradient(135deg,' + brand.c1 + ',' + brand.c2 + ');">' +
         '<i class="fa-solid ' + brand.icon + '"></i>' +
       '</div>' +
       '<div>' +
@@ -866,20 +757,19 @@
       '</div>' +
     '</div>';
 
-    // CTA (register only)
     if (content.cta) {
       html += '<a class="register-cta" href="' + content.cta.href + '" target="_blank" rel="noopener noreferrer" ' +
-        'style="background:linear-gradient(135deg,' + brand.c1 + ',' + brand.c2 + ');box-shadow:0 6px 18px ' + brand.c2 + '50;">' +
+        'style="background:linear-gradient(135deg,' + brand.c1 + ',' + brand.c2 + ');">' +
         '<i class="fa-solid fa-arrow-up-right-from-square"></i>' +
         '<span>' + content.cta.text + '</span>' +
       '</a>';
     }
 
-    // Steps
-    html += '<div class="step-list">';
+    html += '<div class="step-grid">';
     content.steps.forEach((step, i) => {
-      const delay = 260 + i * 60;
-      html += '<div class="sub-step" style="animation-delay:' + delay + 'ms;">' +
+      const delay = 200 + i * 50; // 50ms ခြား
+      const safeText = step.text.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      html += '<div class="step-card" data-brand="' + brandKey + '" style="animation-delay:' + delay + 'ms;" onclick="openModal(\'' + step.img + '\', \'' + safeText + '\')">' +
         '<div class="step-photo-wrap">' +
           '<img src="' + step.img + '" alt="Step ' + (i + 1) + '" loading="lazy" />' +
         '</div>' +
@@ -890,11 +780,10 @@
 
     body.innerHTML = html;
 
-    // Show sub-screen
     const subScreen = document.getElementById('subScreen');
     subScreen.classList.add('active');
-    document.getElementById('bottomNav').classList.add('hidden');
-    document.getElementById('headerBack').classList.add('visible');
+    document.getElementById('bottomNav').classList.remove('hidden'); // Menu ကို မဖျောက်တော့ဘူး
+    document.getElementById('floatingBackBtn').classList.add('visible'); // Back button ကို ပေါ်စေမယ်
     body.scrollTop = 0;
 
     currentSub = { brand: brandKey, action: actionKey };
@@ -903,8 +792,7 @@
   // ============ CLOSE SUB ============
   function closeSub() {
     document.getElementById('subScreen').classList.remove('active');
-    document.getElementById('bottomNav').classList.remove('hidden');
-    document.getElementById('headerBack').classList.remove('visible');
+    document.getElementById('floatingBackBtn').classList.remove('visible');
     currentSub = null;
   }
 
@@ -913,9 +801,27 @@
     if (currentSub) closeSub();
   }
 
+  // ============ MODAL ============
+  function openModal(imgSrc, text) {
+    document.getElementById('modalImg').src = imgSrc;
+    document.getElementById('modalText').innerHTML = text;
+    document.getElementById('photoModal').classList.add('active');
+  }
+
+  function closeModal(e) {
+    if (e && e.target !== e.currentTarget && !e.target.closest('.modal-close')) return;
+    document.getElementById('photoModal').classList.remove('active');
+  }
+
   // ============ ESC ============
   document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape' && currentSub) closeSub();
+    if (e.key === 'Escape') {
+      if (document.getElementById('photoModal').classList.contains('active')) {
+        document.getElementById('photoModal').classList.remove('active');
+      } else if (currentSub) {
+        closeSub();
+      }
+    }
   });
 
   // ============ IMAGE LONG-PRESS PROTECTION ============
