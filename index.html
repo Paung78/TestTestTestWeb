@@ -9,7 +9,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
-  /* ============ RESET & TOKENS ============ */
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
@@ -49,7 +48,6 @@
 
   button { font-family: inherit; cursor: pointer; border: none; }
 
-  /* Ambient background */
   body::before {
     content: "";
     position: fixed;
@@ -78,16 +76,16 @@
     pointer-events: none;
   }
   .intro-logo {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 0 0.28em;
     white-space: nowrap;
-    font-size: clamp(28px, 7.5vw, 48px);
+    font-size: clamp(26px, 7.5vw, 48px);
     font-weight: 900;
     letter-spacing: -0.03em;
-    padding: 0 20px;
     animation: introFadeUp 1.2s var(--ease) both;
+    padding: 0 20px;
   }
   .intro-logo .red { color: #dc2626; }
   .intro-logo .black { color: #0f172a; }
@@ -145,7 +143,7 @@
   .screen {
     display: none;
     min-height: 100vh;
-    padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px));
+    padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 20px);
     padding-bottom: calc(80px + env(safe-area-inset-bottom, 0px));
     position: relative;
     z-index: 1;
@@ -161,24 +159,10 @@
   .screen-inner {
     max-width: 480px;
     margin: 0 auto;
-    padding: 20px 16px;
+    padding: 0 16px;
   }
 
   /* ============ HOME ============ */
-  .home-title { padding: 8px 4px 18px; }
-  .home-title h1 {
-    font-size: 22px;
-    font-weight: 800;
-    letter-spacing: -0.025em;
-    color: var(--text);
-    line-height: 1.2;
-  }
-  .home-title p {
-    font-size: 13px;
-    color: var(--text-muted);
-    margin-top: 4px;
-  }
-
   .brand-list {
     display: flex;
     flex-direction: column;
@@ -377,15 +361,16 @@
     -webkit-overflow-scrolling: touch;
   }
 
-  .sub-intro {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--r-card);
-    padding: 20px;
-    margin-bottom: 16px;
-    box-shadow: var(--shadow);
+  .sub-page-header {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 20px;
+    padding: 4px 4px 12px;
+    animation: stepFadeUp 0.5s var(--spring) 100ms both;
   }
-  .sub-intro-icon {
+
+  .sub-brand-icon {
     width: 52px;
     height: 52px;
     border-radius: 16px;
@@ -394,72 +379,116 @@
     justify-content: center;
     font-size: 22px;
     color: #fff;
-    margin-bottom: 14px;
-  }
-  .sub-intro-title {
-    font-size: 19px;
-    font-weight: 800;
-    margin-bottom: 6px;
-    letter-spacing: -0.02em;
-  }
-  .sub-intro-desc {
-    font-size: 13px;
-    color: var(--text-muted);
-    line-height: 1.55;
+    flex-shrink: 0;
   }
 
-  .sub-steps-label {
-    font-size: 11px;
-    font-weight: 800;
-    color: var(--text-muted);
+  .sub-brand-label {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--text-subtle);
+    letter-spacing: 0.06em;
     text-transform: uppercase;
-    letter-spacing: 0.14em;
-    margin: 8px 4px 12px;
+    margin-bottom: 2px;
   }
 
-  .sub-step-list {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+  .sub-page-title {
+    font-size: 22px;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+    line-height: 1.15;
   }
 
-  .sub-step {
-    display: flex;
-    gap: 12px;
-    padding: 14px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 14px;
-  }
-  .sub-step-num {
-    width: 26px;
-    height: 26px;
-    border-radius: 50%;
+  .register-cta {
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 12px;
-    font-weight: 800;
-    color: #fff;
-    flex-shrink: 0;
-    margin-top: 1px;
-  }
-  .sub-step-title {
-    font-size: 13.5px;
+    gap: 8px;
+    width: 100%;
+    padding: 16px 20px;
+    border-radius: 16px;
+    font-size: 15px;
     font-weight: 700;
-    margin-bottom: 3px;
+    color: #fff;
+    text-decoration: none;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    animation: stepFadeUp 0.5s var(--spring) 180ms both;
+    transition: transform 0.18s var(--spring);
+    -webkit-tap-highlight-color: transparent;
   }
-  .sub-step-desc {
-    font-size: 12px;
-    color: var(--text-muted);
-    line-height: 1.55;
+  .register-cta::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0.15), transparent 55%);
+    pointer-events: none;
+  }
+  .register-cta:active { transform: scale(0.97); }
+  .register-cta i { font-size: 13px; }
+
+  .step-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .sub-step {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 14px;
+    box-shadow: var(--shadow);
+    animation: stepFadeUp 0.55s var(--spring) both;
+  }
+
+  .step-photo-wrap {
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+    background: #f8fafc;
+    margin-bottom: 12px;
+    border: 1px solid var(--border);
+    position: relative;
+  }
+  .step-photo-wrap::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.001);
+    pointer-events: none;
+  }
+
+  .step-photo-wrap img {
+    display: block;
+    width: 100%;
+    height: auto;
+    pointer-events: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  .step-text {
+    font-size: 13.5px;
+    line-height: 1.7;
+    color: var(--text);
+    padding: 2px 4px 4px;
+    letter-spacing: 0.005em;
+    word-break: break-word;
+  }
+
+  @keyframes stepFadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
   }
 
   /* ============ TAB PLACEHOLDER ============ */
   .tab-placeholder {
     max-width: 480px;
     margin: 0 auto;
-    padding: 80px 24px 40px;
+    padding: 60px 24px 40px;
     text-align: center;
   }
   .tab-placeholder .ph-icon {
@@ -498,9 +527,10 @@
 
   /* ============ RESPONSIVE ============ */
   @media (max-width: 375px) {
-    .intro-logo { font-size: 26px; }
+    .intro-logo { font-size: 24px; }
     .brand-name { font-size: 15px; }
     .action-label { font-size: 10px; }
+    .step-text { font-size: 12.5px; }
   }
 </style>
 </head>
@@ -509,8 +539,7 @@
 <!-- ============ INTRO SPLASH ============ -->
 <div id="introSplash">
   <div class="intro-logo">
-    <span class="red">SuperSel</span>
-    <span class="black">Earing</span>
+    <span class="red">SuperSel</span> <span class="black">Earing</span>
   </div>
 </div>
 
@@ -527,11 +556,6 @@
 <!-- ============ HOME TAB ============ -->
 <div id="screen-home" class="screen active">
   <div class="screen-inner">
-    <div class="home-title">
-      <h1>Welcome back</h1>
-      <p>Choose a brand to get started.</p>
-    </div>
-
     <div class="brand-list">
       <!-- CK -->
       <div class="brand-card" data-brand="ck">
@@ -607,7 +631,7 @@
   <div class="tab-placeholder">
     <div class="ph-icon"><i class="fa-solid fa-chart-line"></i></div>
     <h2>Prediction</h2>
-    <p>Add your prediction content here. Replace this section with your Mini V menus and mini-app iframes.</p>
+    <p>Mini V menus and mini-app iframes go here.</p>
     <div class="hint">Edit <code>#screen-prediction</code></div>
   </div>
 </div>
@@ -617,7 +641,7 @@
   <div class="tab-placeholder">
     <div class="ph-icon"><i class="fa-regular fa-comment-dots"></i></div>
     <h2>History Chats</h2>
-    <p>Add your history chat content here. Replace this section with your chat result iframes and lists.</p>
+    <p>Chat result iframes and history lists go here.</p>
     <div class="hint">Edit <code>#screen-chats</code></div>
   </div>
 </div>
@@ -627,7 +651,7 @@
   <div class="tab-placeholder">
     <div class="ph-icon"><i class="fa-solid fa-calculator"></i></div>
     <h2>Tools</h2>
-    <p>Add your tools here. Bet Size calculator, Prediction Rate, and other utilities go in this tab.</p>
+    <p>Bet Size calculator, Prediction Rate, and other utilities go here.</p>
     <div class="hint">Edit <code>#screen-tools</code></div>
   </div>
 </div>
@@ -637,22 +661,14 @@
   <div class="tab-placeholder">
     <div class="ph-icon"><i class="fa-solid fa-user"></i></div>
     <h2>Profile</h2>
-    <p>Add your profile content here. Premium Activated Time, Signal Channels, and settings go in this tab.</p>
+    <p>Premium Activated Time, Signal Channels, and settings go here.</p>
     <div class="hint">Edit <code>#screen-profile</code></div>
   </div>
 </div>
 
-<!-- ============ SUB-SCREEN (universal template) ============ -->
+<!-- ============ SUB-SCREEN ============ -->
 <div id="subScreen" class="sub-screen">
-  <div class="sub-screen-body">
-    <div class="sub-intro">
-      <div class="sub-intro-icon" id="subIntroIcon"></div>
-      <div class="sub-intro-title" id="subIntroTitle"></div>
-      <div class="sub-intro-desc" id="subIntroDesc"></div>
-    </div>
-    <div class="sub-steps-label">Quick Steps</div>
-    <div class="sub-step-list" id="subStepList"></div>
-  </div>
+  <div class="sub-screen-body" id="subBody"></div>
 </div>
 
 <!-- ============ BOTTOM NAV ============ -->
@@ -680,51 +696,127 @@
 </nav>
 
 <script>
-  // ============ DATA ============
+  // ============ BRAND CONFIG ============
   const BRANDS = {
-    ck:     { name: 'Ck Lottery', c1: '#818cf8', c2: '#4f46e5' },
-    bigwin: { name: '777 BigWin', c1: '#34d399', c2: '#16a34a' },
-    sixwin: { name: 'SixWin',     c1: '#f87171', c2: '#dc2626' }
+    ck:     { name: 'Ck Lottery', icon: 'fa-diamond', c1: '#818cf8', c2: '#4f46e5' },
+    bigwin: { name: '777 BigWin', icon: 'fa-trophy',  c1: '#34d399', c2: '#16a34a' },
+    sixwin: { name: 'SixWin',     icon: 'fa-dice',    c1: '#f87171', c2: '#dc2626' }
   };
 
-  const ACTIONS = {
-    register: {
-      title: 'Register',
-      icon: 'fa-user-plus',
-      introTitle: 'Create your account',
-      introDesc: 'Follow the steps below to register. Placeholder content — replace with your real steps.',
-      steps: [
-        { title: 'Step 1', desc: 'Open the register page and enter your details.' },
-        { title: 'Step 2', desc: 'Set a password and confirm it matches.' },
-        { title: 'Step 3', desc: 'Enter the invite code provided by your partner.' },
-        { title: 'Step 4', desc: 'Agree to the terms and tap Register to finish.' }
-      ]
+  // ============ FULL CONTENT (from old index.html) ============
+  const CONTENT = {
+    ck: {
+      register: {
+        cta: { href: 'http://www.cklottery.top/#/register?invitationCode=81487219676', text: 'Ck Lottery Register Now' },
+        steps: [
+          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_1.jpg', text: '- Ck Lottery Register Now ကိုနိပ်ပါ။<br><br>- Ck Lottery Register Page ကိုရောက်ရင် Phone Number ရိုက်ထည့်ပါ။<br><br>- Phone Number ထည့်တဲ့နေရာတွင်း 9 တစ်လုံးပဲခံပြီးရေးပါ။ ( ဥပမာ-9123456789)' },
+          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_2.jpg', text: '- Set Password & Confirm Password နေရာတွင် ကိုယ်အသုံးပြုမည် Ck Lottery Account Password ကိုရိုက်ထည့်ပါ။<br><br>- Set / Confirm Password 2ခုတူညီရမည်။ (ဥပမာ - Set Password - Abc11111, Confirm Password - Abc11111)' },
+          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_3.jpg', text: '- Invite Code ရေးနေရာတွင်း ( 81487219676 ) ရိုက်ထည့်ပါ။' },
+          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_4.jpg', text: '- I Have Read And Agree နေရာမှ (အမှန်ခြစ်)တပ်ပါ' },
+          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_5.jpg', text: '- Account Information အပြည်အစုံထည့်ပြီးရင် Register ကိုနိပ်ပါ<br><br>- ဒါဆိုရင် Ck Lottery Account ဖွင့်သွားပါပြီး။' }
+        ]
+      },
+      deposit: {
+        cta: null,
+        steps: [
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p1.jpg',  text: '- Ck Lottery Account ထဲကိုဝင်ပါ' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p2.jpg',  text: '- Deposit ကိုနိပ်ပါ' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p3.jpg',  text: '- Kpay / Wave နဲတိုက်ရိုက်သွင်းရသလို ပုံမှန်ထက်ပိုမြန်ချင်းတယ်ဆိုရင် E-Wallet နဲငွေသွင်းလိုရပါတယ်။<br><br>- Recommend - 10သိန်းအောက်ငွေသွင်းမယ်ဆိုရင် E-Wallet နဲသွင်းပါ။<br><br>- Recommend- 10သိန်းအထက်ငွေသွင်းမယ်ဆိုရင် ပုံမှန် Kpay / Wave နဲတိုက်ရိုက်သွင်းပါ။' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p4.jpg',  text: '- Kpay သို့မဟုတ် Wave ကိုရွေးချယ်ပါ။<br>- Deposit Amount တွင်း ကိုယ်ထည့်မဲ့ ငွေအမောက်ကိုရိုက်ထည့်ပါ။<br>- Deposit ( Amount ) Button ကိုနိပ်ပါ။' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p6.jpg',  text: '- Full Name မှ ကိုယ် ငွေလွဲရမဲ့ Account Name ပြထားပါတယ်။<br><br>- Account မှ ကိုယ်လွဲရမဲ့ Account Phone Number ပြထားပါတယ်။<br><br>- Balance မှ ကိုယ်လွဲမည်အမောက်ပြထားပါတယ်။<br><br>- Phone Number ကို Copy ယူပြီး ငွေလွဲလိုက်ပါ။' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p7.jpg',  text: '- ငွေလွဲပြီးပါက Complete Payment ကိုနိပ်ပါ။<br><br>- ငွေသွင်းအော်ဒါအောင်မြင်ပါပြီး<br><br>- ခဏကြားရင်ကိုယ် Ck Account ထဲကိုကိုယ်လွဲထားတဲ့ငွေ Amount အတိအကျရောက်လာပါလိမ့်မယ်။' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p8.jpg',  text: '- E-Wallet ကိုရွေးချယ်ပါ<br><br>- Select Channel မှ ဘယ်ဘက် အပြာနဲ ပြထားတာဟာ Kpay ဖြစ်ပြီး ညာဘက်က အဝါနဲပြထားတာက Wave ဖြစ်ပါတယ်။<br><br>- Kpay Wave တစ်ခုချင်းစီမှ Channel 3ခုစီရှိပါတယ်။ အဆင်ပြေတာရွေးချယ်လိုရပါတယ်။' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p13.jpg', text: '- Channel ရွေးချယ်ပြီးရင် အ ပေါ်ကိုဆွဲတင်ပါ။<br><br>- Deposit Amount မှ ငွေသွင်းမဲ့ငွေအမောက်ကိုရိုက်ထည့်ပါ။<br><br>- Deposit ( Amount ) Button ကိုနိပ်ပါ။' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p10.jpg', text: '- QR Code ပါလာရင် Scanner လုပ်ပါ။<br><br>- QR Code မပါခဲ့ရင် Phone Number Copy ယူပြီးငွေလွဲပါ။' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p11.jpg', text: '- ငွေလွဲပြီးပါက ငွေလွဲပြေစာရဲ့နောက်ဆုံး ( လုပ်ငန်းစဉ်နံပတ် ) ၆လုံးကိုရိုက်ထည့်ပေးပါ။<br><br>- (တင်ပြပါ)ကိုနိပ်ပါ။' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p12.jpg', text: '- အခုလိုမျိူ:(လုပ်ငန်းစဉ် )ကိုစစ်ဆေးနေပါသည်ဆိုတဲ့ Page ရောက်သွားရင် ငွေသွင်းအော်တာ တင်တာအောင်မြင်ပါပြီး။<br><br>- ခဏနေရင် Ck Lottery Account ထဲကိုငွေရောက်လာပါလိမ့်မယ်။' }
+        ]
+      },
+      withdraw: {
+        cta: null,
+        steps: [
+          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p1.jpg', text: '- Ck Lottery Account ထဲကိုဝင်ပေးပါ။' },
+          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p2.jpg', text: '- Withdrawal ကိုနိပ်ပါ' },
+          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p3.jpg', text: '- Wave သို့မဟုတ် Kpay ငွေထုတ်မဲ့ Wallet ကိုရွေးချယ်ပါ။<br><br>- Add Wallet မလုပ်ရသေးရင် Add (+) ကိုနိပ်ပြီး Wave / Kpay Phone Number Name ရိုက်ထည့်ပါ။' },
+          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p4.jpg', text: '- အခုလိုမျိုးဖြစ်သွားပြီးဆိုရင် စတင်ငွေထုတ်လိုရပါပြီး' },
+          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p5.jpg', text: '- Please Enter The Amount မှ ငွေထုတ်ယူမဲ့ ငွေအမောက်ကိုရိုက်ထည့်ပါ။<br><br>- Withdrawal ကိုနိပ်ပါ။ ဒါဆိုရင် ငွေထုတ်အော်ဒါတင်ချင်းအောင်မြင်ပါပြီး<br>- ခဏကြာရင် Wallet ထဲကိုငွေရောက်လာပါလိမ့်မယ်။' }
+        ]
+      }
     },
-    deposit: {
-      title: 'Deposit',
-      icon: 'fa-arrow-down',
-      introTitle: 'Add funds to your wallet',
-      introDesc: 'Placeholder content — replace with your real deposit steps.',
-      steps: [
-        { title: 'Step 1', desc: 'Log in to your account and tap Deposit.' },
-        { title: 'Step 2', desc: 'Choose Kpay, Wave, or E-Wallet.' },
-        { title: 'Step 3', desc: 'Enter the amount and confirm.' },
-        { title: 'Step 4', desc: 'Complete the transfer and tap Complete Payment.' }
-      ]
+    bigwin: {
+      register: {
+        cta: { href: 'https://www.777bigwingame.vip/#/register?invitationCode=22884102596', text: '777 BigWin Register Now' },
+        steps: [
+          { img: 'BigWin/BigWin Register Photo/b_photos_1.jpg', text: '- 777 BigWin Register Now ကိုနိပ်ပါ။<br><br>- 777 BigWin Register Page ကိုရောက်ရင် Phone Number ရိုက်ထည့်ပါ။<br><br>- Phone Number ထည့်တဲ့နေရာတွင်း 9 တစ်လုံးပဲခံပြီးရေးပါ။ ( ဥပမာ-9123456789)' },
+          { img: 'BigWin/BigWin Register Photo/b_photos_2.jpg', text: '- Set Password & Confirm Password နေရာတွင် ကိုယ်အသုံးပြုမည် 777 BigWin Account Password ကိုရိုက်ထည့်ပါ။<br><br>- Set / Confirm Password 2ခုတူညီရမည်။ (ဥပမာ - Set Password - Abc11111, Confirm Password - Abc11111)' },
+          { img: 'BigWin/BigWin Register Photo/b_photos_3.jpg', text: '- Invite Code ရေးနေရာတွင်း ( 22884102596 ) ရိုက်ထည့်ပါ။' },
+          { img: 'BigWin/BigWin Register Photo/b_photos_4.jpg', text: '- I Have Read And Agree နေရာမှ (အမှန်ခြစ်)တပ်ပါ' },
+          { img: 'BigWin/BigWin Register Photo/b_photos_5.jpg', text: '- Account Information အပြည်အစုံထည့်ပြီးရင် Register ကိုနိပ်ပါ<br><br>- ဒါဆိုရင် 777 BigWin Account ဖွင့်သွားပါပြီး။' }
+        ]
+      },
+      deposit: {
+        cta: null,
+        steps: [
+          { img: 'BigWin/BigWin Deposite Photo/p1.jpg',  text: '- 777 BigWin ထဲကိုဝင်ပါ။' },
+          { img: 'BigWin/BigWin Deposite Photo/p2.jpg',  text: '- Deposit ကိုနိပ်ပါ။' },
+          { img: 'BigWin/BigWin Deposite Photo/p3.jpg',  text: '- Kpay / Wave နဲတိုက်ရိုက်သွင်းရသလို ပုံမှန်ထက်ပိုမြန်ချင်းတယ်ဆိုရင် Online Pay နဲငွေသွင်းလိုရပါတယ်။<br><br>- Recommend - 10သိန်းအောက်ငွေသွင်းမယ်ဆိုရင် Online နဲသွင်းပါ။<br><br>- Recommend- 10သိန်းအထက်ငွေသွင်းမယ်ဆိုရင် ပုံမှန် Kpay / Wave နဲတိုက်ရိုက်သွင်းပါ။' },
+          { img: 'BigWin/BigWin Deposite Photo/p4.jpg',  text: '- Kpay သို့မဟုတ် Wave ကိုရွေးချယ်ပါ။<br><br>- Deposit Amount တွင်း ကိုယ်ထည့်မဲ့ ငွေအမောက်ကိုရိုက်ထည့်ပါ။<br><br>- Deposit ( Amount ) Button ကိုနိပ်ပါ။' },
+          { img: 'BigWin/BigWin Deposite Photo/p5.jpg',  text: '- Full Name မှ ကိုယ် ငွေလွဲရမဲ့ Account Name ပြထားပါတယ်။<br><br>- Account မှ ကိုယ်လွဲရမဲ့ Account Phone Number ပြထားပါတယ်။<br><br>- Balance မှ ကိုယ်လွဲမည်အမောက်ပြထားပါတယ်။<br><br>- Phone Number ကို Copy ယူပြီး ငွေလွဲလိုက်ပါ။' },
+          { img: 'BigWin/BigWin Deposite Photo/p6.jpg',  text: '- ငွေလွဲပြီးပါက Complete Payment ကိုနိပ်ပါ။<br><br>- ငွေသွင်းအော်ဒါအောင်မြင်ပါပြီး<br><br>- ခဏကြားရင်ကိုယ် 777 BigWin Account ထဲကိုကိုယ်လွဲထားတဲ့ငွေ Amount အတိအကျရောက်လာပါလိမ့်မယ်။' },
+          { img: 'BigWin/BigWin Deposite Photo/p7.jpg',  text: '- Online Pay ကိုရွေးချယ်ပါ<br><br>- အဝါနဲပြထားတာဟာ Wave Pay ဖြစ်ပါတယ်။<br><br>- အပြာနဲပြထားတာဟာ Kpay ဖြစ်ပါတယ်။<br><br>- Kpay Wave ကိုသေးသေးခြားခြား Channel Title ကြည်ပြီး ရွေးချယ်ပါ။' },
+          { img: 'BigWin/BigWin Deposite Photo/p8.jpg',  text: '- Kpay Wave Channel ရွေးချယ်ပြီးရင်အပေါ်ကိုဆွဲတင်ပါ။<br><br>- Deposit Amount မှ ငွေသွင်းမဲ့ Amount ကိုရိုက်ထည့်ပါ။<br><br>- Deposit Button ကိုနိပ်ပါ။' },
+          { img: 'BigWin/BigWin Deposite Photo/p9.jpg',  text: '- QR Code ပါလာရင် Scanner လုပ်ပါ။<br><br>- QR Code မပါခဲ့ရင် Phone Number Copy ယူပြီးငွေလွဲပါ။' },
+          { img: 'BigWin/BigWin Deposite Photo/p10.jpg', text: '- ငွေလွဲပြီးပါက ငွေလွဲပြေစာရဲ့နောက်ဆုံး ( လုပ်ငန်းစဉ်နံပတ် ) ၅လုံးကိုရိုက်ထည့်ပေးပါ။<br><br>- (တင်ပြပါ)ကိုနိပ်ပါ။' },
+          { img: 'BigWin/BigWin Deposite Photo/p11.jpg', text: '- အခုလိုဖြစ်သွားရင် ငွေသွင်းအော်ဒါတင်တာအောင်မြင်ပါပြီး<br><br>- ခဏကြာရင် BigWin Account ထဲကိုငွေရောက်လာပါလိမ့်မယ်။' }
+        ]
+      },
+      withdraw: {
+        cta: null,
+        steps: [
+          { img: 'BigWin/BigWin Withdraw Photo/p1.jpg', text: '- 777 BigWin Account ထဲကိုဝင်ပေးပါ။' },
+          { img: 'BigWin/BigWin Withdraw Photo/p2.jpg', text: '- Withdrawal ကိုနိပ်ပါ' },
+          { img: 'BigWin/BigWin Withdraw Photo/p3.jpg', text: '- Wave သို့မဟုတ် Kpay ငွေထုတ်မဲ့ Wallet ကိုရွေးချယ်ပါ။<br><br>- Add Wallet မလုပ်ရသေးရင် Add (+) ကိုနိပ်ပြီး Wave / Kpay Phone Number Name ရိုက်ထည့်ပါ။' },
+          { img: 'BigWin/BigWin Withdraw Photo/p4.jpg', text: '- အခုလိုမျိုးဖြစ်သွားပြီးဆိုရင် စတင်ငွေထုတ်လိုရပါပြီး' },
+          { img: 'BigWin/BigWin Withdraw Photo/p5.jpg', text: '- Please Enter The Amount မှ ငွေထုတ်ယူမဲ့ ငွေအမောက်ကိုရိုက်ထည့်ပါ။<br><br>- Withdrawal ကိုနိပ်ပါ။ ဒါဆိုရင် ငွေထုတ်အော်ဒါတင်ချင်းအောင်မြင်ပါပြီး<br>- ခဏကြာရင် Wallet ထဲကိုငွေရောက်လာပါလိမ့်မယ်။' }
+        ]
+      }
     },
-    withdraw: {
-      title: 'Withdraw',
-      icon: 'fa-arrow-up',
-      introTitle: 'Cash out your winnings',
-      introDesc: 'Placeholder content — replace with your real withdrawal steps.',
-      steps: [
-        { title: 'Step 1', desc: 'Log in and tap Withdrawal.' },
-        { title: 'Step 2', desc: 'Add or select a Wave/Kpay wallet.' },
-        { title: 'Step 3', desc: 'Enter the amount and confirm.' },
-        { title: 'Step 4', desc: 'Tap Withdraw and wait for it to arrive.' }
-      ]
+    sixwin: {
+      register: {
+        cta: { href: 'https://www.6win333.com/#/register?invitationCode=35815623835', text: 'SixWin Register Now' },
+        steps: [
+          { img: 'SixWin/Six Win Register Photo/photo_1.jpg', text: '- SixWin Register Now ကိုနိပ်ပါ။<br><br>- SixWin Register Page ကိုရောက်ရင် Phone Number နေရာတွင်း Account ဖွင့်မဲ့ Phone Number ထည့်သွင်းပါ။<br><br>- Phone Number ထည့်တဲ့နေရာတွင်း ( 09 မခံရ ) 9တစ်လုံးပဲခံပြီး Phone Number ကိုရိုက်ထည့်ပါ။ ဥပမာ - 9123456789' },
+          { img: 'SixWin/Six Win Register Photo/photo_2.jpg', text: '- Set Password & Confirm Password နေရာတွင် ကိုယ်အသုံးပြုမည့် SixWin Account Password ကို ရိုက်ထည့်ပါ။<br><br>- Set / Confirm Password 2ခုတူညီရမည်။ (ဥပမာ - Set Password - Abc11111, Confirm Password - Abc11111)' },
+          { img: 'SixWin/Six Win Register Photo/photo_3.jpg', text: '- Invite Code ရေးနေရာတွင် : ( 35815623835 ) ရိုက်ထည့်ပါ။' },
+          { img: 'SixWin/Six Win Register Photo/photo_4.jpg', text: '- I Have And Agree နေရာမှ (အမှန်ခြစ်) တပ်ပါ' },
+          { img: 'SixWin/Six Win Register Photo/photo_5.jpg', text: '- Account Information အပြည်အစုံ ထည့်ပြီးရင် Register ကို နှိပ်ပါ<br><br>- ဒါဆိုရင် SixWin Account ဖွင့်သွားပါပြီ။' }
+        ]
+      },
+      deposit: {
+        cta: null,
+        steps: [
+          { img: 'SixWin/Six Win Deposite Photo/photo_1.jpg', text: '- SixWin Account ကိုနိပ်ပါ' },
+          { img: 'SixWin/Six Win Deposite Photo/photo_2.jpg', text: '- Deposit ကိုနိပ်ပါ' },
+          { img: 'SixWin/Six Win Deposite Photo/photo_3.jpg', text: '- ငွေသွင်းရန် Kpay Or Wave ကို Select လုပ်ထားပါ' },
+          { img: 'SixWin/Six Win Deposite Photo/photo_4.jpg', text: '- Select Channel မှ Channel တစ်ခုခုကိုရွေးချယ်ပါ။<br><br>- Deposit Amount မှ ကိုယ်ထည့်သွင်းမဲ့ ငွေ Amount ကိုရိုက်ထည့်ပါ။<br><br>- Deposit ( Amount ) ကိုနိပ်ပါ။' },
+          { img: 'SixWin/Six Win Deposite Photo/photo_5.jpg', text: '- အကောင့်နံပတ်ကို Copy လုပ်ပါ။<br><br>- Kpay Or Wave ထဲကိုသွားပြီး Copy ယူလာတဲ့ Phone Number ကို Past လုပ်ပြီး မိမိ ထည့်သွင်းမဲ့ ငွေ Amount အတိုင်း ငွေလွဲပါ။' },
+          { img: 'SixWin/Six Win Deposite Photo/photo_6.jpg', text: '- ငွေလွဲပြေစာမှ လုပ်ငန်းစဉ်အမှတ်နောက်ဆုံး 5လုံးကို ယခုနေရာတွင်းထည့်သွင်းပြီး အတည်ပြုကိုနိပ်ပါ။<br><br>- Sec အနည်းလောက်ကြာရင် ကိုယ် Account ထဲကို Deposit Amount + Bonus ရောက်လာပါလိမ့်မယ်။' }
+        ]
+      },
+      withdraw: {
+        cta: null,
+        steps: [
+          { img: 'SixWin/Six Win Withdraw Photo/photo_1.jpg', text: '- Account ကိုနိပ်ပါ။' },
+          { img: 'SixWin/Six Win Withdraw Photo/photo_2.jpg', text: '- Withdraw ကိုနိပ်ပါ' },
+          { img: 'SixWin/Six Win Withdraw Photo/photo_3.jpg', text: '- KBZ Pay Or Wave မိမိ ငွေထုတ်မဲ့ Payment ကို Select လုပ်ပါ။' },
+          { img: 'SixWin/Six Win Withdraw Photo/photo_4.jpg', text: '- မိမိငွေထုတ်မဲ့ Payment ကိုမိမိငွေလက်ခံမဲ့ Payment Account ချိတ်ထားပါ<br><br>- ငွေထုတ်မဲ့ Amount ကိုရိုက်ထည့်ပြီး Withdraw ကိုနိပ်ပါ' },
+          { img: 'SixWin/Six Win Withdraw Photo/photo_5.jpg', text: '- Security Verification မှ မိမိ Account ဖွင့်ရာမှထည့်သွင်းခဲ့တဲ့ Password ကိုရိုက်ထည့်ပြီး Confirm Withdraw ကိုနိပ်။<br><br>- Sec အနည်းလောက်ကြာရင် ကိုယ် Account ထဲကို မိမိထုတ်လိုက်တဲ့ငွေ Amount လက်ခံရရှိပါလိမ့်မယ်' }
+        ]
+      }
     }
   };
+
+  const ACTION_LABEL = { register: 'Register', deposit: 'Deposit', withdraw: 'Withdraw' };
 
   // ============ STATE ============
   let currentTab = 'home';
@@ -758,33 +850,52 @@
   // ============ OPEN SUB ============
   function openSub(brandKey, actionKey) {
     const brand = BRANDS[brandKey];
-    const action = ACTIONS[actionKey];
-    if (!brand || !action) return;
+    const content = CONTENT[brandKey] && CONTENT[brandKey][actionKey];
+    if (!brand || !content) return;
 
-    const icon = document.getElementById('subIntroIcon');
-    icon.innerHTML = '<i class="fa-solid ' + action.icon + '"></i>';
-    icon.style.background = 'linear-gradient(135deg,' + brand.c1 + ',' + brand.c2 + ')';
-    icon.style.boxShadow = '0 8px 20px ' + brand.c2 + '40';
+    const body = document.getElementById('subBody');
 
-    document.getElementById('subIntroTitle').textContent = brand.name + ' — ' + action.title;
-    document.getElementById('subIntroDesc').textContent = action.introDesc;
+    // Build header
+    let html = '<div class="sub-page-header">' +
+      '<div class="sub-brand-icon" style="background:linear-gradient(135deg,' + brand.c1 + ',' + brand.c2 + ');box-shadow:0 8px 20px ' + brand.c2 + '50;">' +
+        '<i class="fa-solid ' + brand.icon + '"></i>' +
+      '</div>' +
+      '<div>' +
+        '<div class="sub-brand-label">' + brand.name + '</div>' +
+        '<div class="sub-page-title">' + ACTION_LABEL[actionKey] + '</div>' +
+      '</div>' +
+    '</div>';
 
-    const stepList = document.getElementById('subStepList');
-    stepList.innerHTML = action.steps.map((s, i) => (
-      '<div class="sub-step">' +
-        '<div class="sub-step-num" style="background:linear-gradient(135deg,' + brand.c1 + ',' + brand.c2 + ');">' + (i + 1) + '</div>' +
-        '<div>' +
-          '<div class="sub-step-title">' + s.title + '</div>' +
-          '<div class="sub-step-desc">' + s.desc + '</div>' +
+    // CTA (register only)
+    if (content.cta) {
+      html += '<a class="register-cta" href="' + content.cta.href + '" target="_blank" rel="noopener noreferrer" ' +
+        'style="background:linear-gradient(135deg,' + brand.c1 + ',' + brand.c2 + ');box-shadow:0 6px 18px ' + brand.c2 + '50;">' +
+        '<i class="fa-solid fa-arrow-up-right-from-square"></i>' +
+        '<span>' + content.cta.text + '</span>' +
+      '</a>';
+    }
+
+    // Steps
+    html += '<div class="step-list">';
+    content.steps.forEach((step, i) => {
+      const delay = 260 + i * 60;
+      html += '<div class="sub-step" style="animation-delay:' + delay + 'ms;">' +
+        '<div class="step-photo-wrap">' +
+          '<img src="' + step.img + '" alt="Step ' + (i + 1) + '" loading="lazy" />' +
         '</div>' +
-      '</div>'
-    )).join('');
+        '<div class="step-text">' + step.text + '</div>' +
+      '</div>';
+    });
+    html += '</div>';
 
+    body.innerHTML = html;
+
+    // Show sub-screen
     const subScreen = document.getElementById('subScreen');
     subScreen.classList.add('active');
     document.getElementById('bottomNav').classList.add('hidden');
     document.getElementById('headerBack').classList.add('visible');
-    subScreen.querySelector('.sub-screen-body').scrollTop = 0;
+    body.scrollTop = 0;
 
     currentSub = { brand: brandKey, action: actionKey };
   }
@@ -806,6 +917,14 @@
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape' && currentSub) closeSub();
   });
+
+  // ============ IMAGE LONG-PRESS PROTECTION ============
+  document.addEventListener('contextmenu', (e) => {
+    if (e.target && e.target.tagName === 'IMG') e.preventDefault();
+  }, true);
+  document.addEventListener('dragstart', (e) => {
+    if (e.target && e.target.tagName === 'IMG') e.preventDefault();
+  }, true);
 </script>
 
 </body>
