@@ -15,6 +15,7 @@
     --ck-1: #818cf8; --ck-2: #4f46e5; --ck-text: #4338ca; --ck-bg: #eef2ff;
     --bigwin-1: #34d399; --bigwin-2: #16a34a; --bigwin-text: #15803d; --bigwin-bg: #f0fdf4;
     --sixwin-1: #f87171; --sixwin-2: #dc2626; --sixwin-text: #b91c1c; --sixwin-bg: #fef2f2;
+    --shwe-1: #fb923c; --shwe-2: #ea580c; --shwe-text: #c2410c; --shwe-bg: #fff7ed;
 
     --bg-page: #f8fafc;
     --bg-card: #ffffff;
@@ -45,7 +46,6 @@
     overflow-x: hidden;
   }
 
-  /* မြန်မာစာအတွက် Font Size နည်းနည်းချိန်ညှိရန် */
   body.lang-mm .nav-label { font-size: 9px; }
   body.lang-mm .action-label { font-size: 10px; }
   body.lang-mm .step-text { line-height: 1.6; }
@@ -84,9 +84,7 @@
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     border-bottom: 1px solid var(--border); z-index: 1000;
   }
-  .header-brand {
-    font-size: 16px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap;
-  }
+  .header-brand { font-size: 16px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
   .header-brand .red { color: #dc2626; }
   .header-brand .black { color: var(--text); }
 
@@ -104,19 +102,10 @@
     width: 20px; height: 14px; border-radius: 2px; position: relative; overflow: hidden;
     box-shadow: 0 0 1px rgba(0,0,0,0.2); flex-shrink: 0;
   }
-  .flag-us {
-    background: repeating-linear-gradient(to bottom, #bf0a30 0%, #bf0a30 7.69%, #ffffff 7.69%, #ffffff 15.38%);
-  }
-  .flag-us::before {
-    content: ""; position: absolute; top: 0; left: 0; width: 50%; height: 53.8%; background: #002868;
-  }
-  .flag-mm {
-    background: linear-gradient(to bottom, #fecb00 33.33%, #34b233 33.33%, #34b233 66.66%, #ea2839 66.66%);
-  }
-  .flag-mm::before {
-    content: "★"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-    color: white; font-size: 8px; line-height: 1;
-  }
+  .flag-us { background: repeating-linear-gradient(to bottom, #bf0a30 0%, #bf0a30 7.69%, #ffffff 7.69%, #ffffff 15.38%); }
+  .flag-us::before { content: ""; position: absolute; top: 0; left: 0; width: 50%; height: 53.8%; background: #002868; }
+  .flag-mm { background: linear-gradient(to bottom, #fecb00 33.33%, #34b233 33.33%, #34b233 66.66%, #ea2839 66.66%); }
+  .flag-mm::before { content: "★"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 8px; line-height: 1; }
 
   /* ============ SCREENS ============ */
   .screen {
@@ -143,34 +132,35 @@
   .brand-card:nth-child(1) { animation-delay: 0.05s; }
   .brand-card:nth-child(2) { animation-delay: 0.15s; }
   .brand-card:nth-child(3) { animation-delay: 0.25s; }
+  .brand-card:nth-child(4) { animation-delay: 0.35s; }
 
   @keyframes staggerIn {
     from { opacity: 0; transform: translateY(18px) scale(0.98); }
     to { opacity: 1; transform: translateY(0) scale(1); }
   }
 
-  .brand-card::before {
-    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-  }
+  .brand-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
   .brand-card[data-brand="ck"]::before { background: linear-gradient(90deg, var(--ck-1), var(--ck-2)); }
   .brand-card[data-brand="bigwin"]::before { background: linear-gradient(90deg, var(--bigwin-1), var(--bigwin-2)); }
   .brand-card[data-brand="sixwin"]::before { background: linear-gradient(90deg, var(--sixwin-1), var(--sixwin-2)); }
+  .brand-card[data-brand="shwe"]::before { background: linear-gradient(90deg, var(--shwe-1), var(--shwe-2)); }
 
   .brand-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
 
+  /* Squircle Logo Shape */
   .brand-icon {
-    width: 44px; height: 44px; border-radius: 50%;
+    width: 44px; height: 44px;
+    border-radius: 14px; /* Squircle effect */
     overflow: hidden; flex-shrink: 0; background: #fff;
     border: 1.5px solid var(--border);
   }
-  .brand-icon img {
-    width: 100%; height: 100%; object-fit: cover;
-  }
+  .brand-icon img { width: 100%; height: 100%; object-fit: cover; }
 
   .brand-name { font-size: 17px; font-weight: 800; letter-spacing: -0.015em; }
   .brand-card[data-brand="ck"] .brand-name { color: var(--ck-text); }
   .brand-card[data-brand="bigwin"] .brand-name { color: var(--bigwin-text); }
   .brand-card[data-brand="sixwin"] .brand-name { color: var(--sixwin-text); }
+  .brand-card[data-brand="shwe"] .brand-name { color: var(--shwe-text); }
 
   .brand-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
   .action-btn {
@@ -191,6 +181,7 @@
   .brand-card[data-brand="ck"] .action-icon { background: rgba(99, 102, 241, 0.10); color: var(--ck-2); }
   .brand-card[data-brand="bigwin"] .action-icon { background: rgba(34, 197, 94, 0.11); color: var(--bigwin-2); }
   .brand-card[data-brand="sixwin"] .action-icon { background: rgba(239, 68, 68, 0.10); color: var(--sixwin-2); }
+  .brand-card[data-brand="shwe"] .action-icon { background: rgba(249, 115, 22, 0.10); color: var(--shwe-2); }
 
   /* ============ FLOATING BOTTOM NAV ============ */
   .bottom-nav {
@@ -248,8 +239,9 @@
     display: flex; align-items: center; gap: 14px; margin-bottom: 20px;
     animation: stepFadeUp 0.5s var(--spring) 100ms both;
   }
+  /* Squircle Logo Shape */
   .sub-brand-icon {
-    width: 52px; height: 52px; border-radius: 50%; overflow: hidden;
+    width: 52px; height: 52px; border-radius: 16px; overflow: hidden;
     flex-shrink: 0; background: #fff; border: 1.5px solid var(--border);
   }
   .sub-brand-icon img { width: 100%; height: 100%; object-fit: cover; }
@@ -284,6 +276,14 @@
   .step-card[data-brand="ck"] { background: var(--ck-bg); border-color: transparent; }
   .step-card[data-brand="bigwin"] { background: var(--bigwin-bg); border-color: transparent; }
   .step-card[data-brand="sixwin"] { background: var(--sixwin-bg); border-color: transparent; }
+  .step-card[data-brand="shwe"] { background: var(--shwe-bg); border-color: transparent; }
+
+  /* Step Label */
+  .step-label {
+    font-size: 11px; font-weight: 800; color: var(--text-subtle);
+    margin-bottom: 6px; margin-left: 2px; text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
 
   .step-photo-wrap {
     width: 100%; aspect-ratio: 4 / 3; border-radius: 10px; overflow: hidden;
@@ -312,44 +312,31 @@
   }
   .modal-overlay.active { opacity: 1; pointer-events: auto; }
 
-  /* Modal Content Container (Without Scroll) */
   .modal-content {
-    background: #ffffff;
-    width: 100%; max-width: 420px; max-height: 85vh;
-    border-radius: 20px;
-    position: relative;
-    display: flex; flex-direction: column; /* To keep header and scroll separate */
+    background: #ffffff; width: 100%; max-width: 420px; max-height: 85vh;
+    border-radius: 20px; position: relative;
+    display: flex; flex-direction: column;
     transform: scale(0.95) translateY(10px);
-    transition: transform 0.3s var(--spring);
-    overflow: hidden;
+    transition: transform 0.3s var(--spring); overflow: hidden;
   }
   .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
 
-  /* Fixed Close Button */
   .modal-close {
     position: absolute; top: 12px; right: 12px;
     width: 36px; height: 36px;
     background: rgba(255, 255, 255, 0.9); border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 16px; color: #0f172a;
-    z-index: 10; /* Always on top */
+    font-size: 16px; color: #0f172a; z-index: 10;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   }
 
-  /* Scrollable Area */
   .modal-scrollable {
-    padding: 16px;
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    border-radius: 20px; /* For scrollbar clipping */
+    padding: 16px; overflow-y: auto;
+    -webkit-overflow-scrolling: touch; border-radius: 20px;
   }
 
-  .modal-img {
-    width: 100%; border-radius: 12px; margin-bottom: 16px; display: block;
-  }
-  .modal-text {
-    font-size: 14px; line-height: 1.7; color: var(--text); padding-bottom: 10px;
-  }
+  .modal-img { width: 100%; border-radius: 12px; margin-bottom: 16px; display: block; }
+  .modal-text { font-size: 14px; line-height: 1.7; color: var(--text); padding-bottom: 10px; }
 
   /* ============ BOTTOM SHEET (Language) ============ */
   .sheet-overlay {
@@ -368,10 +355,7 @@
   }
   .bottom-sheet.active { transform: translateY(0); }
 
-  .sheet-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 20px;
-  }
+  .sheet-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
   .sheet-title { font-size: 18px; font-weight: 800; }
   .sheet-close {
     width: 32px; height: 32px; border-radius: 50%;
@@ -494,6 +478,29 @@
           </button>
         </div>
       </div>
+
+      <!-- Shwe -->
+      <div class="brand-card" data-brand="shwe">
+        <div class="brand-head">
+          <div class="brand-icon"><img src="Logo/shwe_logo.jpg" alt="Shwe"></div>
+          <div class="brand-name">Shwe</div>
+        </div>
+        <div class="brand-actions">
+          <button class="action-btn" onclick="openSub('shwe','register')">
+            <span class="action-icon"><i class="fa-solid fa-user-plus"></i></span>
+            <span class="action-label" data-t="action_register">Register</span>
+          </button>
+          <button class="action-btn" onclick="openSub('shwe','deposit')">
+            <span class="action-icon"><i class="fa-solid fa-arrow-down"></i></span>
+            <span class="action-label" data-t="action_deposit">Deposit</span>
+          </button>
+          <button class="action-btn" onclick="openSub('shwe','withdraw')">
+            <span class="action-icon"><i class="fa-solid fa-arrow-up"></i></span>
+            <span class="action-label" data-t="action_withdraw">Withdraw</span>
+          </button>
+        </div>
+      </div>
+      
     </div>
   </div>
 </div>
@@ -600,12 +607,12 @@
     en: {
       nav_home: 'Home', nav_prediction: 'Prediction', nav_chats: 'Chats', nav_tools: 'Tools', nav_profile: 'Profile',
       action_register: 'Register', action_deposit: 'Deposit', action_withdraw: 'Withdraw',
-      cta_register: 'Register Now', select_lang: 'Select Language'
+      cta_register: 'Register Now', select_lang: 'Select Language', step_label: 'Step'
     },
     mm: {
       nav_home: 'ပင်မစာမျက်နှာ', nav_prediction: 'ကြိုတင်ခန့်မှန်း', nav_chats: 'ဇယား', nav_tools: 'ကိရိယာများ', nav_profile: 'ကျွန်ုပ်',
       action_register: 'အကောင့်ဖွင့်ရန်', action_deposit: 'ငွေသွင်းရန်', action_withdraw: 'ငွေထုတ်ရန်',
-      cta_register: 'အကောင့်ဖွင့်ရန်နိပ်ပါ', select_lang: 'ဘာသာစကား ရွေးချယ်ပါ'
+      cta_register: 'အကောင့်ဖွင့်ရန်နိပ်ပါ', select_lang: 'ဘာသာစကား ရွေးချယ်ပါ', step_label: 'အဆင့်'
     }
   };
 
@@ -613,7 +620,8 @@
   const BRANDS = {
     ck:     { name: 'Ck Lottery', logo: 'Logo/ck_logo.jpg', c1: '#818cf8', c2: '#4f46e5' },
     bigwin: { name: '777 BigWin', logo: 'Logo/bigwin_logo.jpg', c1: '#34d399', c2: '#16a34a' },
-    sixwin: { name: 'SixWin',     logo: 'Logo/sixwin_logo.jpg', c1: '#f87171', c2: '#dc2626' }
+    sixwin: { name: 'SixWin',     logo: 'Logo/sixwin_logo.jpg', c1: '#f87171', c2: '#dc2626' },
+    shwe:   { name: 'Shwe',       logo: 'Logo/shwe_logo.jpg', c1: '#fb923c', c2: '#ea580c' }
   };
 
   // ============ CONTENT DATA (EN & MM) ============
@@ -726,6 +734,39 @@
           { img: 'SixWin/Six Win Withdraw Photo/photo_5.jpg', text_en: '- Enter your password for Security Verification and confirm.', text_mm: '- Security Verification တွင် Password ရိုက်ထည့်ပြီး Confirm လုပ်ပါ။' }
         ]
       }
+    },
+    shwe: {
+      register: {
+        cta: { href: 'https://www.shwe008.com/#/register?invitationCode=12843101366', text_en: 'Register Now', text_mm: 'အကောင့်ဖွင့်ရန်နိပ်ပါ' },
+        steps: [
+          { img: 'Shwe/Shwe Register Photo/photo_1.jpg', text_en: '- Tap "Register Now". - Enter phone number starting with 9 (no 09).', text_mm: '- Register Now ကိုနိပ်ပါ။<br><br>- Phone Number တွင် (09 မခံရ) 9 တစ်လုံးပဲခံပြီးရေးပါ။' },
+          { img: 'Shwe/Shwe Register Photo/photo_2.jpg', text_en: '- Set and confirm password. Both must match.', text_mm: '- Set Password နှင့် Confirm Password နှစ်ခုတူညီရမည်။' },
+          { img: 'Shwe/Shwe Register Photo/photo_3.jpg', text_en: '- Enter Invite Code: (12843101366).', text_mm: '- Invite Code ရေးနေရာတွင် (12843101366) ရိုက်ထည့်ပါ။' },
+          { img: 'Shwe/Shwe Register Photo/photo_4.jpg', text_en: '- Check the "I Have And Agree" box.', text_mm: '- I Have And Agree နေရာမှ (အမှန်ခြစ်)တပ်ပါ။' },
+          { img: 'Shwe/Shwe Register Photo/photo_5.jpg', text_en: '- Fill in info and tap Register. Account created.', text_mm: '- Account Information ဖြည့်ပြီး Register ကိုနိပ်ပါ။ Account ဖွင့်ပြီးပါပြီ။' }
+        ]
+      },
+      deposit: {
+        cta: null,
+        steps: [
+          { img: 'Shwe/Shwe Deposite Photo/photo_1.jpg', text_en: '- Tap Shwe Account.', text_mm: '- Shwe Account ကိုနိပ်ပါ။' },
+          { img: 'Shwe/Shwe Deposite Photo/photo_2.jpg', text_en: '- Tap Deposit.', text_mm: '- Deposit ကိုနိပ်ပါ။' },
+          { img: 'Shwe/Shwe Deposite Photo/photo_3.jpg', text_en: '- Select Kpay or Wave.', text_mm: '- Kpay သို့မဟုတ် Wave ကို Select လုပ်ပါ။' },
+          { img: 'Shwe/Shwe Deposite Photo/photo_4.jpg', text_en: '- Choose a Channel. Enter Amount and tap Deposit.', text_mm: '- Channel ရွေးပါ။ Amount ရိုက်ထည့်ပြီး Deposit ကိုနိပ်ပါ။' },
+          { img: 'Shwe/Shwe Deposite Photo/photo_5.jpg', text_en: '- Copy Account Number. Transfer the amount via Kpay/Wave.', text_mm: '- Account နံပါတ် Copy ယူပါ။ Kpay/Wave မှတဆင့် ငွေလွဲပါ။' },
+          { img: 'Shwe/Shwe Deposite Photo/photo_6.jpg', text_en: '- Enter last 5 digits of Transaction ID and confirm.', text_mm: '- နောက်ဆုံး 5လုံးကို ရိုက်ထည့်ပြီး အတည်ပြုပါ။' }
+        ]
+      },
+      withdraw: {
+        cta: null,
+        steps: [
+          { img: 'Shwe/Shwe Withdraw Photo/photo_1.jpg', text_en: '- Tap Account.', text_mm: '- Account ကိုနိပ်ပါ။' },
+          { img: 'Shwe/Shwe Withdraw Photo/photo_2.jpg', text_en: '- Tap Withdraw.', text_mm: '- Withdraw ကိုနိပ်ပါ။' },
+          { img: 'Shwe/Shwe Withdraw Photo/photo_3.jpg', text_en: '- Select KBZ Pay or Wave.', text_mm: '- KBZ Pay သို့မဟုတ် Wave ကို Select လုပ်ပါ။' },
+          { img: 'Shwe/Shwe Withdraw Photo/photo_4.jpg', text_en: '- Link your Payment Account. Enter Amount and tap Withdraw.', text_mm: '- Payment Account ချိတ်ပါ။ Amount ရိုက်ထည့်ပြီး Withdraw ကိုနိပ်ပါ။' },
+          { img: 'Shwe/Shwe Withdraw Photo/photo_5.jpg', text_en: '- Enter your password for Security Verification and confirm.', text_mm: '- Security Verification တွင် Password ရိုက်ထည့်ပြီး Confirm လုပ်ပါ။' }
+        ]
+      }
     }
   };
 
@@ -775,14 +816,18 @@
     // Update Active Checkmark in Sheet
     document.getElementById('opt-mm').classList.toggle('active', lang === 'mm');
     document.getElementById('opt-en').classList.toggle('active', lang === 'en');
+
+    // Re-render Sub-page if it is currently open to apply new language instantly
+    if (currentSub) {
+      renderSubPage(currentSub.brand, currentSub.action, true);
+    }
   }
 
+  // No Reload! Just apply language instantly
   function setLanguage(lang) {
     if (lang === currentLang) { closeLangSheet(); return; }
-    localStorage.setItem('appLang', lang);
+    applyLanguage(lang);
     closeLangSheet();
-    // Refresh to apply everywhere cleanly as requested
-    setTimeout(() => { window.location.reload(); }, 300);
   }
 
   // ============ LANGUAGE SHEET ============
@@ -811,6 +856,17 @@
 
   // ============ OPEN SUB ============
   function openSub(brandKey, actionKey) {
+    currentSub = { brand: brandKey, action: actionKey };
+    
+    const subScreen = document.getElementById('subScreen');
+    subScreen.classList.add('active');
+    document.getElementById('bottomNav').classList.remove('hidden');
+    document.getElementById('floatingBackBtn').classList.add('visible');
+    
+    renderSubPage(brandKey, actionKey, false);
+  }
+
+  function renderSubPage(brandKey, actionKey, isSilentRender) {
     const brand = BRANDS[brandKey];
     const content = CONTENT[brandKey] && CONTENT[brandKey][actionKey];
     if (!brand || !content) return;
@@ -844,12 +900,15 @@
 
     html += '<div class="step-grid">';
     content.steps.forEach((step, i) => {
-      const delay = 200 + i * 50;
+      const delay = isSilentRender ? 0 : (200 + i * 50);
       const stepText = currentLang === 'mm' ? step.text_mm : step.text_en;
-      // Escape quotes for onclick attribute
       const safeText = stepText.replace(/'/g, "\\'").replace(/"/g, '&quot;');
       
+      // Added Step Label ("Step 1" / "အဆင့် ၁")
+      const stepLabel = T[currentLang].step_label + ' ' + (i + 1);
+
       html += '<div class="step-card" data-brand="' + brandKey + '" style="animation-delay:' + delay + 'ms;" onclick="openModal(\'' + step.img + '\', \'' + safeText + '\')">' +
+        '<div class="step-label">' + stepLabel + '</div>' +
         '<div class="step-photo-wrap">' +
           '<img src="' + step.img + '" alt="Step ' + (i + 1) + '" loading="lazy" />' +
         '</div>' +
@@ -859,14 +918,7 @@
     html += '</div>';
 
     body.innerHTML = html;
-
-    const subScreen = document.getElementById('subScreen');
-    subScreen.classList.add('active');
-    document.getElementById('bottomNav').classList.remove('hidden');
-    document.getElementById('floatingBackBtn').classList.add('visible');
-    body.scrollTop = 0;
-
-    currentSub = { brand: brandKey, action: actionKey };
+    if (!isSilentRender) body.scrollTop = 0; // Only reset scroll if opening normally
   }
 
   // ============ CLOSE SUB ============
