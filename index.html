@@ -6,7 +6,7 @@
 <title>SuperSel Earing</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -39,37 +39,31 @@
   }
 
   body {
-    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-family: 'Inter', 'Padauk', system-ui, -apple-system, sans-serif;
     color: var(--text);
     min-height: 100vh;
     overflow-x: hidden;
   }
 
+  /* မြန်မာစာအတွက် Font Size နည်းနည်းချိန်ညှိရန် */
+  body.lang-mm .nav-label { font-size: 9px; }
+  body.lang-mm .action-label { font-size: 10px; }
+  body.lang-mm .step-text { line-height: 1.6; }
+
   button { font-family: inherit; cursor: pointer; border: none; outline: none; }
 
   /* ============ INTRO SPLASH ============ */
   #introSplash {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: #ffffff;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    position: fixed; inset: 0; z-index: 9999;
+    background: #ffffff; display: flex; align-items: center; justify-content: center;
     transition: opacity 0.7s ease;
   }
   #introSplash.fade-out { opacity: 0; pointer-events: none; }
   .intro-logo {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 0 0.28em;
-    white-space: nowrap;
-    font-size: clamp(26px, 7.5vw, 48px);
-    font-weight: 900;
-    letter-spacing: -0.03em;
-    animation: introFadeUp 1.2s var(--ease) both;
-    padding: 0 20px;
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: 0 0.28em; white-space: nowrap;
+    font-size: clamp(26px, 7.5vw, 48px); font-weight: 900; letter-spacing: -0.03em;
+    animation: introFadeUp 1.2s var(--ease) both; padding: 0 20px;
   }
   .intro-logo .red { color: #dc2626; }
   .intro-logo .black { color: #0f172a; }
@@ -81,36 +75,55 @@
 
   /* ============ HEADER ============ */
   .app-header {
-    position: fixed;
-    top: 0; left: 0; right: 0;
+    position: fixed; top: 0; left: 0; right: 0;
     height: calc(var(--header-h) + env(safe-area-inset-top, 0px));
     padding: env(safe-area-inset-top, 0px) 16px 0;
-    display: flex;
-    align-items: center;
+    display: flex; align-items: center; justify-content: space-between;
     background: rgba(255, 255, 255, 0.95);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border-bottom: 1px solid var(--border);
-    z-index: 1000;
+    border-bottom: 1px solid var(--border); z-index: 1000;
   }
   .header-brand {
-    font-size: 16px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    white-space: nowrap;
+    font-size: 16px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap;
   }
   .header-brand .red { color: #dc2626; }
   .header-brand .black { color: var(--text); }
 
+  /* Language Selector */
+  .lang-btn {
+    display: flex; align-items: center; gap: 6px;
+    padding: 6px 12px; border-radius: 20px;
+    background: var(--bg-page); border: 1px solid var(--border);
+    font-size: 12px; font-weight: 700; color: var(--text);
+  }
+  .lang-btn:active { transform: scale(0.95); }
+
+  /* CSS Flags */
+  .flag {
+    width: 20px; height: 14px; border-radius: 2px; position: relative; overflow: hidden;
+    box-shadow: 0 0 1px rgba(0,0,0,0.2); flex-shrink: 0;
+  }
+  .flag-us {
+    background: repeating-linear-gradient(to bottom, #bf0a30 0%, #bf0a30 7.69%, #ffffff 7.69%, #ffffff 15.38%);
+  }
+  .flag-us::before {
+    content: ""; position: absolute; top: 0; left: 0; width: 50%; height: 53.8%; background: #002868;
+  }
+  .flag-mm {
+    background: linear-gradient(to bottom, #fecb00 33.33%, #34b233 33.33%, #34b233 66.66%, #ea2839 66.66%);
+  }
+  .flag-mm::before {
+    content: "★"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+    color: white; font-size: 8px; line-height: 1;
+  }
+
   /* ============ SCREENS ============ */
   .screen {
-    display: none;
-    min-height: 100vh;
+    display: none; min-height: 100vh;
     padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 20px);
     padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
-    position: relative;
-    z-index: 1;
-    animation: screenFadeIn 0.3s ease;
+    position: relative; z-index: 1; animation: screenFadeIn 0.3s ease;
   }
   .screen.active { display: block; }
 
@@ -122,12 +135,9 @@
   .brand-list { display: flex; flex-direction: column; gap: 14px; }
 
   .brand-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--r-card);
-    padding: 18px 18px 16px;
-    position: relative;
-    overflow: hidden;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--r-card); padding: 18px 18px 16px;
+    position: relative; overflow: hidden;
     animation: staggerIn 0.55s var(--spring) both;
   }
   .brand-card:nth-child(1) { animation-delay: 0.05s; }
@@ -140,10 +150,7 @@
   }
 
   .brand-card::before {
-    content: "";
-    position: absolute;
-    top: 0; left: 0; right: 0;
-    height: 3px;
+    content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
   }
   .brand-card[data-brand="ck"]::before { background: linear-gradient(90deg, var(--ck-1), var(--ck-2)); }
   .brand-card[data-brand="bigwin"]::before { background: linear-gradient(90deg, var(--bigwin-1), var(--bigwin-2)); }
@@ -152,14 +159,13 @@
   .brand-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
 
   .brand-icon {
-    width: 40px; height: 40px;
-    border-radius: 12px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 17px; color: #fff; flex-shrink: 0;
+    width: 44px; height: 44px; border-radius: 50%;
+    overflow: hidden; flex-shrink: 0; background: #fff;
+    border: 1.5px solid var(--border);
   }
-  .brand-card[data-brand="ck"] .brand-icon { background: linear-gradient(135deg, var(--ck-1), var(--ck-2)); }
-  .brand-card[data-brand="bigwin"] .brand-icon { background: linear-gradient(135deg, var(--bigwin-1), var(--bigwin-2)); }
-  .brand-card[data-brand="sixwin"] .brand-icon { background: linear-gradient(135deg, var(--sixwin-1), var(--sixwin-2)); }
+  .brand-icon img {
+    width: 100%; height: 100%; object-fit: cover;
+  }
 
   .brand-name { font-size: 17px; font-weight: 800; letter-spacing: -0.015em; }
   .brand-card[data-brand="ck"] .brand-name { color: var(--ck-text); }
@@ -180,7 +186,7 @@
     width: 32px; height: 32px; border-radius: 10px;
     display: flex; align-items: center; justify-content: center; font-size: 13px;
   }
-  .action-label { font-size: 11px; font-weight: 700; color: var(--text-muted); }
+  .action-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-align: center; }
 
   .brand-card[data-brand="ck"] .action-icon { background: rgba(99, 102, 241, 0.10); color: var(--ck-2); }
   .brand-card[data-brand="bigwin"] .action-icon { background: rgba(34, 197, 94, 0.11); color: var(--bigwin-2); }
@@ -188,28 +194,14 @@
 
   /* ============ FLOATING BOTTOM NAV ============ */
   .bottom-nav {
-    position: fixed;
-    bottom: calc(20px + env(safe-area-inset-bottom, 0px));
-    left: 50%;
-    transform: translateX(-50%);
-    width: calc(100% - 32px);
-    max-width: 440px;
-    height: 64px;
-    background: #ffffff;
-    border: 1.5px solid var(--border);
-    border-radius: 32px;
-    display: flex;
-    justify-content: space-around;
-    align-items: center;
-    z-index: 1000;
-    transition: transform 0.4s var(--ease), opacity 0.3s;
-    /* Shadow လုံးဝမပါဝင်ပါ */
+    position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    left: 50%; transform: translateX(-50%);
+    width: calc(100% - 32px); max-width: 440px; height: 64px;
+    background: #ffffff; border: 1.5px solid var(--border);
+    border-radius: 32px; display: flex; justify-content: space-around; align-items: center;
+    z-index: 1000; transition: transform 0.4s var(--ease), opacity 0.3s;
   }
-  .bottom-nav.hidden {
-    transform: translate(-50%, 150%);
-    opacity: 0;
-    pointer-events: none;
-  }
+  .bottom-nav.hidden { transform: translate(-50%, 150%); opacity: 0; pointer-events: none; }
 
   .nav-item {
     flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
@@ -223,62 +215,33 @@
 
   /* ============ FLOATING BACK BUTTON ============ */
   .floating-back-btn {
-    position: fixed;
-    bottom: calc(98px + env(safe-area-inset-bottom, 0px));
-    left: calc(50% - 200px); /* Home icon ရဲ့ အပေါ်မှာ တည့်တည့်ရှိအောင် */
-    width: 44px;
-    height: 44px;
-    background: #0f172a; /* အနက်ရောင် */
-    color: #ffffff;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 16px;
-    z-index: 1001;
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(10px) scale(0.9);
-    transition: all 0.3s var(--spring);
+    position: fixed; bottom: calc(98px + env(safe-area-inset-bottom, 0px));
+    left: calc(50% - 200px);
+    width: 44px; height: 44px; background: #0f172a; color: #ffffff;
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; z-index: 1001; opacity: 0; pointer-events: none;
+    transform: translateY(10px) scale(0.9); transition: all 0.3s var(--spring);
     -webkit-tap-highlight-color: transparent;
   }
-  .floating-back-btn.visible {
-    opacity: 1;
-    pointer-events: auto;
-    transform: translateY(0) scale(1);
-  }
+  .floating-back-btn.visible { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
   .floating-back-btn:active { transform: scale(0.9); }
 
   @media (max-width: 480px) {
-    .floating-back-btn {
-      left: calc(50% - (100vw - 32px) / 2 + 20px); /* Mobile မှာ ဘယ်ဘက်အစွန်း Home ရဲ့ အပေါ်မှာ */
-    }
+    .floating-back-btn { left: calc(50% - (100vw - 32px) / 2 + 20px); }
   }
 
   /* ============ SUB-SCREEN ============ */
   .sub-screen {
-    position: fixed;
-    inset: 0;
-    z-index: 900;
-    background: var(--bg-page);
-    transform: translateX(100%);
-    transition: transform 0.55s var(--ease);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px));
-    will-change: transform;
+    position: fixed; inset: 0; z-index: 900; background: var(--bg-page);
+    transform: translateX(100%); transition: transform 0.55s var(--ease);
+    display: flex; flex-direction: column; overflow: hidden;
+    padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px)); will-change: transform;
   }
   .sub-screen.active { transform: translateX(0); }
 
   .sub-screen-body {
-    flex: 1;
-    overflow-y: auto;
-    padding: 20px 16px calc(120px + env(safe-area-inset-bottom, 0px));
-    max-width: 480px;
-    margin: 0 auto;
-    width: 100%;
-    -webkit-overflow-scrolling: touch;
+    flex: 1; overflow-y: auto; padding: 20px 16px calc(120px + env(safe-area-inset-bottom, 0px));
+    max-width: 480px; margin: 0 auto; width: 100%; -webkit-overflow-scrolling: touch;
   }
 
   .sub-page-header {
@@ -286,15 +249,16 @@
     animation: stepFadeUp 0.5s var(--spring) 100ms both;
   }
   .sub-brand-icon {
-    width: 52px; height: 52px; border-radius: 16px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 22px; color: #fff; flex-shrink: 0;
+    width: 52px; height: 52px; border-radius: 50%; overflow: hidden;
+    flex-shrink: 0; background: #fff; border: 1.5px solid var(--border);
   }
+  .sub-brand-icon img { width: 100%; height: 100%; object-fit: cover; }
+
   .sub-brand-label {
     font-size: 12px; font-weight: 700; color: var(--text-subtle);
     letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px;
   }
-  .sub-page-title { font-size: 22px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.15; }
+  .sub-page-title { font-size: 20px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.2; }
 
   .register-cta {
     display: flex; align-items: center; justify-content: center; gap: 8px;
@@ -307,38 +271,23 @@
   }
   .register-cta:active { transform: scale(0.97); }
 
-  /* ၂ ကော်လံ Grid */
-  .step-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-  }
+  .step-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
   .step-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 16px;
-    padding: 10px;
-    cursor: pointer;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 10px; cursor: pointer;
     transition: transform 0.2s var(--spring);
     animation: stepFadeUp 0.55s var(--spring) both;
   }
   .step-card:active { transform: scale(0.96); }
   
-  /* Brand အလိုက် Card နောက်ခံအရောင်ဖျော့ */
   .step-card[data-brand="ck"] { background: var(--ck-bg); border-color: transparent; }
   .step-card[data-brand="bigwin"] { background: var(--bigwin-bg); border-color: transparent; }
   .step-card[data-brand="sixwin"] { background: var(--sixwin-bg); border-color: transparent; }
 
   .step-photo-wrap {
-    width: 100%; aspect-ratio: 4 / 3;
-    border-radius: 10px; overflow: hidden;
-    background: rgba(255, 255, 255, 0.6);
-    margin-bottom: 8px; position: relative;
-  }
-  .step-photo-wrap::after {
-    content: ""; position: absolute; inset: 0;
-    background: rgba(0, 0, 0, 0.001); pointer-events: none;
+    width: 100%; aspect-ratio: 4 / 3; border-radius: 10px; overflow: hidden;
+    background: rgba(255, 255, 255, 0.6); margin-bottom: 8px; position: relative;
   }
   .step-photo-wrap img {
     display: block; width: 100%; height: 100%; object-fit: cover;
@@ -347,58 +296,54 @@
 
   .step-text {
     font-size: 11px; line-height: 1.45; color: var(--text);
-    padding: 0 2px;
-    display: -webkit-box;
-    -webkit-line-clamp: 3;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-    text-overflow: ellipsis;
+    padding: 0 2px; display: -webkit-box;
+    -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+    overflow: hidden; text-overflow: ellipsis;
   }
 
   @keyframes stepFadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
   /* ============ MODAL (Pop-up) ============ */
   .modal-overlay {
-    position: fixed;
-    inset: 0;
-    z-index: 9999;
-    background: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    -webkit-backdrop-filter: blur(4px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.3s ease;
+    position: fixed; inset: 0; z-index: 9999;
+    background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    display: flex; align-items: center; justify-content: center; padding: 20px;
+    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
   }
   .modal-overlay.active { opacity: 1; pointer-events: auto; }
 
+  /* Modal Content Container (Without Scroll) */
   .modal-content {
     background: #ffffff;
-    width: 100%;
-    max-width: 420px;
-    max-height: 85vh;
+    width: 100%; max-width: 420px; max-height: 85vh;
     border-radius: 20px;
-    overflow-y: auto;
-    padding: 16px;
     position: relative;
+    display: flex; flex-direction: column; /* To keep header and scroll separate */
     transform: scale(0.95) translateY(10px);
     transition: transform 0.3s var(--spring);
+    overflow: hidden;
   }
   .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
 
+  /* Fixed Close Button */
   .modal-close {
-    position: absolute;
-    top: 12px; right: 12px;
-    width: 32px; height: 32px;
-    background: rgba(255, 255, 255, 0.9);
-    border-radius: 50%;
+    position: absolute; top: 12px; right: 12px;
+    width: 36px; height: 36px;
+    background: rgba(255, 255, 255, 0.9); border-radius: 50%;
     display: flex; align-items: center; justify-content: center;
-    font-size: 14px; color: #0f172a;
-    z-index: 2;
+    font-size: 16px; color: #0f172a;
+    z-index: 10; /* Always on top */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   }
+
+  /* Scrollable Area */
+  .modal-scrollable {
+    padding: 16px;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 20px; /* For scrollbar clipping */
+  }
+
   .modal-img {
     width: 100%; border-radius: 12px; margin-bottom: 16px; display: block;
   }
@@ -406,10 +351,50 @@
     font-size: 14px; line-height: 1.7; color: var(--text); padding-bottom: 10px;
   }
 
-  /* ============ TAB PLACEHOLDER ============ */
-  .tab-placeholder {
-    max-width: 480px; margin: 0 auto; padding: 60px 24px 40px; text-align: center;
+  /* ============ BOTTOM SHEET (Language) ============ */
+  .sheet-overlay {
+    position: fixed; inset: 0; z-index: 9998;
+    background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(2px);
+    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
   }
+  .sheet-overlay.active { opacity: 1; pointer-events: auto; }
+
+  .bottom-sheet {
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
+    background: #ffffff; border-radius: 24px 24px 0 0;
+    padding: 20px 20px calc(30px + env(safe-area-inset-bottom, 0px));
+    transform: translateY(100%); transition: transform 0.4s var(--ease);
+    max-width: 480px; margin: 0 auto;
+  }
+  .bottom-sheet.active { transform: translateY(0); }
+
+  .sheet-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 20px;
+  }
+  .sheet-title { font-size: 18px; font-weight: 800; }
+  .sheet-close {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--bg-page); display: flex; align-items: center; justify-content: center;
+    font-size: 16px; color: var(--text-muted);
+  }
+
+  .lang-option {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px; border-radius: 14px; border: 1.5px solid var(--border);
+    margin-bottom: 12px; background: var(--bg-card);
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .lang-option:active { background: var(--bg-page); }
+  .lang-option.active { border-color: var(--ck-2); background: var(--ck-bg); }
+  
+  .lang-left { display: flex; align-items: center; gap: 12px; }
+  .lang-left span { font-size: 15px; font-weight: 700; }
+  .lang-check { color: var(--ck-2); font-size: 18px; opacity: 0; transform: scale(0.5); transition: all 0.2s; }
+  .lang-option.active .lang-check { opacity: 1; transform: scale(1); }
+
+  /* ============ TAB PLACEHOLDER ============ */
+  .tab-placeholder { max-width: 480px; margin: 0 auto; padding: 60px 24px 40px; text-align: center; }
   .tab-placeholder .ph-icon {
     width: 72px; height: 72px; border-radius: 22px;
     background: rgba(99, 102, 241, 0.1); color: var(--ck-2);
@@ -434,6 +419,10 @@
   <div class="header-brand">
     <span class="red">SuperSel</span> <span class="black">Earing</span>
   </div>
+  <button class="lang-btn" onclick="openLangSheet()">
+    <div id="currentLangFlag" class="flag flag-us"></div>
+    <span id="currentLangText">English</span>
+  </button>
 </header>
 
 <!-- ============ HOME TAB ============ -->
@@ -443,21 +432,21 @@
       <!-- CK -->
       <div class="brand-card" data-brand="ck">
         <div class="brand-head">
-          <div class="brand-icon"><i class="fa-solid fa-diamond"></i></div>
+          <div class="brand-icon"><img src="Logo/ck_logo.jpg" alt="Ck Lottery"></div>
           <div class="brand-name">Ck Lottery</div>
         </div>
         <div class="brand-actions">
           <button class="action-btn" onclick="openSub('ck','register')">
             <span class="action-icon"><i class="fa-solid fa-user-plus"></i></span>
-            <span class="action-label">Register</span>
+            <span class="action-label" data-t="action_register">Register</span>
           </button>
           <button class="action-btn" onclick="openSub('ck','deposit')">
             <span class="action-icon"><i class="fa-solid fa-arrow-down"></i></span>
-            <span class="action-label">Deposit</span>
+            <span class="action-label" data-t="action_deposit">Deposit</span>
           </button>
           <button class="action-btn" onclick="openSub('ck','withdraw')">
             <span class="action-icon"><i class="fa-solid fa-arrow-up"></i></span>
-            <span class="action-label">Withdraw</span>
+            <span class="action-label" data-t="action_withdraw">Withdraw</span>
           </button>
         </div>
       </div>
@@ -465,21 +454,21 @@
       <!-- BigWin -->
       <div class="brand-card" data-brand="bigwin">
         <div class="brand-head">
-          <div class="brand-icon"><i class="fa-solid fa-trophy"></i></div>
+          <div class="brand-icon"><img src="Logo/bigwin_logo.jpg" alt="777 BigWin"></div>
           <div class="brand-name">777 BigWin</div>
         </div>
         <div class="brand-actions">
           <button class="action-btn" onclick="openSub('bigwin','register')">
             <span class="action-icon"><i class="fa-solid fa-user-plus"></i></span>
-            <span class="action-label">Register</span>
+            <span class="action-label" data-t="action_register">Register</span>
           </button>
           <button class="action-btn" onclick="openSub('bigwin','deposit')">
             <span class="action-icon"><i class="fa-solid fa-arrow-down"></i></span>
-            <span class="action-label">Deposit</span>
+            <span class="action-label" data-t="action_deposit">Deposit</span>
           </button>
           <button class="action-btn" onclick="openSub('bigwin','withdraw')">
             <span class="action-icon"><i class="fa-solid fa-arrow-up"></i></span>
-            <span class="action-label">Withdraw</span>
+            <span class="action-label" data-t="action_withdraw">Withdraw</span>
           </button>
         </div>
       </div>
@@ -487,21 +476,21 @@
       <!-- SixWin -->
       <div class="brand-card" data-brand="sixwin">
         <div class="brand-head">
-          <div class="brand-icon"><i class="fa-solid fa-dice"></i></div>
+          <div class="brand-icon"><img src="Logo/sixwin_logo.jpg" alt="SixWin"></div>
           <div class="brand-name">SixWin</div>
         </div>
         <div class="brand-actions">
           <button class="action-btn" onclick="openSub('sixwin','register')">
             <span class="action-icon"><i class="fa-solid fa-user-plus"></i></span>
-            <span class="action-label">Register</span>
+            <span class="action-label" data-t="action_register">Register</span>
           </button>
           <button class="action-btn" onclick="openSub('sixwin','deposit')">
             <span class="action-icon"><i class="fa-solid fa-arrow-down"></i></span>
-            <span class="action-label">Deposit</span>
+            <span class="action-label" data-t="action_deposit">Deposit</span>
           </button>
           <button class="action-btn" onclick="openSub('sixwin','withdraw')">
             <span class="action-icon"><i class="fa-solid fa-arrow-up"></i></span>
-            <span class="action-label">Withdraw</span>
+            <span class="action-label" data-t="action_withdraw">Withdraw</span>
           </button>
         </div>
       </div>
@@ -509,39 +498,29 @@
   </div>
 </div>
 
-<!-- ============ PREDICTION TAB (placeholder) ============ -->
+<!-- ============ PLACEHOLDER TABS ============ -->
 <div id="screen-prediction" class="screen">
   <div class="tab-placeholder">
     <div class="ph-icon"><i class="fa-solid fa-chart-line"></i></div>
-    <h2>Prediction</h2>
-    <p>Mini V menus and mini-app iframes go here.</p>
+    <h2 data-t="nav_prediction">Prediction</h2>
   </div>
 </div>
-
-<!-- ============ CHATS TAB (placeholder) ============ -->
 <div id="screen-chats" class="screen">
   <div class="tab-placeholder">
     <div class="ph-icon"><i class="fa-regular fa-comment-dots"></i></div>
-    <h2>History Chats</h2>
-    <p>Chat result iframes and history lists go here.</p>
+    <h2 data-t="nav_chats">Chats</h2>
   </div>
 </div>
-
-<!-- ============ TOOLS TAB (placeholder) ============ -->
 <div id="screen-tools" class="screen">
   <div class="tab-placeholder">
     <div class="ph-icon"><i class="fa-solid fa-calculator"></i></div>
-    <h2>Tools</h2>
-    <p>Bet Size calculator, Prediction Rate, and other utilities go here.</p>
+    <h2 data-t="nav_tools">Tools</h2>
   </div>
 </div>
-
-<!-- ============ PROFILE TAB (placeholder) ============ -->
 <div id="screen-profile" class="screen">
   <div class="tab-placeholder">
     <div class="ph-icon"><i class="fa-solid fa-user"></i></div>
-    <h2>Profile</h2>
-    <p>Premium Activated Time, Signal Channels, and settings go here.</p>
+    <h2 data-t="nav_profile">Profile</h2>
   </div>
 </div>
 
@@ -559,23 +538,23 @@
 <nav class="bottom-nav" id="bottomNav">
   <button class="nav-item active" data-tab="home" onclick="switchTab('home')">
     <i class="fa-solid fa-house"></i>
-    <span class="nav-label">Home</span>
+    <span class="nav-label" data-t="nav_home">Home</span>
   </button>
   <button class="nav-item" data-tab="prediction" onclick="switchTab('prediction')">
     <i class="fa-solid fa-chart-line"></i>
-    <span class="nav-label">Prediction</span>
+    <span class="nav-label" data-t="nav_prediction">Prediction</span>
   </button>
   <button class="nav-item" data-tab="chats" onclick="switchTab('chats')">
     <i class="fa-regular fa-comment-dots"></i>
-    <span class="nav-label">Chats</span>
+    <span class="nav-label" data-t="nav_chats">Chats</span>
   </button>
   <button class="nav-item" data-tab="tools" onclick="switchTab('tools')">
     <i class="fa-solid fa-calculator"></i>
-    <span class="nav-label">Tools</span>
+    <span class="nav-label" data-t="nav_tools">Tools</span>
   </button>
   <button class="nav-item" data-tab="profile" onclick="switchTab('profile')">
     <i class="fa-solid fa-user"></i>
-    <span class="nav-label">Profile</span>
+    <span class="nav-label" data-t="nav_profile">Profile</span>
   </button>
 </nav>
 
@@ -583,140 +562,183 @@
 <div class="modal-overlay" id="photoModal" onclick="closeModal(event)">
   <div class="modal-content">
     <button class="modal-close" onclick="closeModal(event)"><i class="fa-solid fa-xmark"></i></button>
-    <img id="modalImg" class="modal-img" src="" alt="Step Photo">
-    <div id="modalText" class="modal-text"></div>
+    <div class="modal-scrollable">
+      <img id="modalImg" class="modal-img" src="" alt="Step Photo">
+      <div id="modalText" class="modal-text"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ BOTTOM SHEET (LANGUAGE) ============ -->
+<div class="sheet-overlay" id="sheetOverlay" onclick="closeLangSheet()"></div>
+<div class="bottom-sheet" id="langSheet">
+  <div class="sheet-header">
+    <div class="sheet-title" data-t="select_lang">Select Language</div>
+    <button class="sheet-close" onclick="closeLangSheet()"><i class="fa-solid fa-xmark"></i></button>
+  </div>
+  
+  <div class="lang-option" id="opt-mm" onclick="setLanguage('mm')">
+    <div class="lang-left">
+      <div class="flag flag-mm"></div>
+      <span>မြန်မာ (Myanmar)</span>
+    </div>
+    <i class="fa-solid fa-check lang-check"></i>
+  </div>
+
+  <div class="lang-option" id="opt-en" onclick="setLanguage('en')">
+    <div class="lang-left">
+      <div class="flag flag-us"></div>
+      <span>English (USA)</span>
+    </div>
+    <i class="fa-solid fa-check lang-check"></i>
   </div>
 </div>
 
 <script>
-  // ============ BRAND CONFIG ============
-  const BRANDS = {
-    ck:     { name: 'Ck Lottery', icon: 'fa-diamond', c1: '#818cf8', c2: '#4f46e5' },
-    bigwin: { name: '777 BigWin', icon: 'fa-trophy',  c1: '#34d399', c2: '#16a34a' },
-    sixwin: { name: 'SixWin',     icon: 'fa-dice',    c1: '#f87171', c2: '#dc2626' }
+  // ============ TRANSLATIONS ============
+  const T = {
+    en: {
+      nav_home: 'Home', nav_prediction: 'Prediction', nav_chats: 'Chats', nav_tools: 'Tools', nav_profile: 'Profile',
+      action_register: 'Register', action_deposit: 'Deposit', action_withdraw: 'Withdraw',
+      cta_register: 'Register Now', select_lang: 'Select Language'
+    },
+    mm: {
+      nav_home: 'ပင်မစာမျက်နှာ', nav_prediction: 'ကြိုတင်ခန့်မှန်း', nav_chats: 'ဇယား', nav_tools: 'ကိရိယာများ', nav_profile: 'ကျွန်ုပ်',
+      action_register: 'အကောင့်ဖွင့်ရန်', action_deposit: 'ငွေသွင်းရန်', action_withdraw: 'ငွေထုတ်ရန်',
+      cta_register: 'အကောင့်ဖွင့်ရန်နိပ်ပါ', select_lang: 'ဘာသာစကား ရွေးချယ်ပါ'
+    }
   };
 
-  // ============ FULL CONTENT ============
+  // ============ BRAND CONFIG ============
+  const BRANDS = {
+    ck:     { name: 'Ck Lottery', logo: 'Logo/ck_logo.jpg', c1: '#818cf8', c2: '#4f46e5' },
+    bigwin: { name: '777 BigWin', logo: 'Logo/bigwin_logo.jpg', c1: '#34d399', c2: '#16a34a' },
+    sixwin: { name: 'SixWin',     logo: 'Logo/sixwin_logo.jpg', c1: '#f87171', c2: '#dc2626' }
+  };
+
+  // ============ CONTENT DATA (EN & MM) ============
   const CONTENT = {
     ck: {
       register: {
-        cta: { href: 'http://www.cklottery.top/#/register?invitationCode=81487219676', text: 'Ck Lottery Register Now' },
+        cta: { href: 'http://www.cklottery.top/#/register?invitationCode=81487219676', text_en: 'Register Now', text_mm: 'အကောင့်ဖွင့်ရန်နိပ်ပါ' },
         steps: [
-          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_1.jpg', text: '- Ck Lottery Register Now ကိုနိပ်ပါ။<br><br>- Ck Lottery Register Page ကိုရောက်ရင် Phone Number ရိုက်ထည့်ပါ။<br><br>- Phone Number ထည့်တဲ့နေရာတွင်း 9 တစ်လုံးပဲခံပြီးရေးပါ။ ( ဥပမာ-9123456789)' },
-          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_2.jpg', text: '- Set Password & Confirm Password နေရာတွင် ကိုယ်အသုံးပြုမည် Ck Lottery Account Password ကိုရိုက်ထည့်ပါ။<br><br>- Set / Confirm Password 2ခုတူညီရမည်။ (ဥပမာ - Set Password - Abc11111, Confirm Password - Abc11111)' },
-          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_3.jpg', text: '- Invite Code ရေးနေရာတွင်း ( 81487219676 ) ရိုက်ထည့်ပါ။' },
-          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_4.jpg', text: '- I Have Read And Agree နေရာမှ (အမှန်ခြစ်)တပ်ပါ' },
-          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_5.jpg', text: '- Account Information အပြည်အစုံထည့်ပြီးရင် Register ကိုနိပ်ပါ<br><br>- ဒါဆိုရင် Ck Lottery Account ဖွင့်သွားပါပြီး။' }
+          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_1.jpg', text_en: '- Tap "Register Now". - Enter your phone number starting with 9 (e.g., 9123456789).', text_mm: '- Register Now ကိုနိပ်ပါ။<br><br>- Phone Number တွင် 9 တစ်လုံးပဲခံပြီးရေးပါ။ (ဥပမာ-9123456789)' },
+          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_2.jpg', text_en: '- Set Password & Confirm Password. Both must match exactly.', text_mm: '- Set Password နှင့် Confirm Password နှစ်ခုတူညီရမည်။ (ဥပမာ - Abc11111)' },
+          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_3.jpg', text_en: '- Enter Invite Code: (81487219676).', text_mm: '- Invite Code ရေးနေရာတွင် (81487219676) ရိုက်ထည့်ပါ။' },
+          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_4.jpg', text_en: '- Check the "I Have Read And Agree" box.', text_mm: '- I Have Read And Agree နေရာမှ (အမှန်ခြစ်)တပ်ပါ။' },
+          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_5.jpg', text_en: '- Fill in Account Information and tap Register. Account created successfully.', text_mm: '- Account Information ဖြည့်ပြီး Register ကိုနိပ်ပါ။ Account ဖွင့်ပြီးပါပြီ။' }
         ]
       },
       deposit: {
         cta: null,
         steps: [
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p1.jpg',  text: '- Ck Lottery Account ထဲကိုဝင်ပါ' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p2.jpg',  text: '- Deposit ကိုနိပ်ပါ' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p3.jpg',  text: '- Kpay / Wave နဲတိုက်ရိုက်သွင်းရသလို ပုံမှန်ထက်ပိုမြန်ချင်းတယ်ဆိုရင် E-Wallet နဲငွေသွင်းလိုရပါတယ်။<br><br>- Recommend - 10သိန်းအောက်ငွေသွင်းမယ်ဆိုရင် E-Wallet နဲသွင်းပါ။<br><br>- Recommend- 10သိန်းအထက်ငွေသွင်းမယ်ဆိုရင် ပုံမှန် Kpay / Wave နဲတိုက်ရိုက်သွင်းပါ။' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p4.jpg',  text: '- Kpay သို့မဟုတ် Wave ကိုရွေးချယ်ပါ။<br>- Deposit Amount တွင်း ကိုယ်ထည့်မဲ့ ငွေအမောက်ကိုရိုက်ထည့်ပါ။<br>- Deposit ( Amount ) Button ကိုနိပ်ပါ။' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p6.jpg',  text: '- Full Name မှ ကိုယ် ငွေလွဲရမဲ့ Account Name ပြထားပါတယ်။<br><br>- Account မှ ကိုယ်လွဲရမဲ့ Account Phone Number ပြထားပါတယ်။<br><br>- Balance မှ ကိုယ်လွဲမည်အမောက်ပြထားပါတယ်။<br><br>- Phone Number ကို Copy ယူပြီး ငွေလွဲလိုက်ပါ။' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p7.jpg',  text: '- ငွေလွဲပြီးပါက Complete Payment ကိုနိပ်ပါ။<br><br>- ငွေသွင်းအော်ဒါအောင်မြင်ပါပြီး<br><br>- ခဏကြားရင်ကိုယ် Ck Account ထဲကိုကိုယ်လွဲထားတဲ့ငွေ Amount အတိအကျရောက်လာပါလိမ့်မယ်။' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p8.jpg',  text: '- E-Wallet ကိုရွေးချယ်ပါ<br><br>- Select Channel မှ ဘယ်ဘက် အပြာနဲ ပြထားတာဟာ Kpay ဖြစ်ပြီး ညာဘက်က အဝါနဲပြထားတာက Wave ဖြစ်ပါတယ်။<br><br>- Kpay Wave တစ်ခုချင်းစီမှ Channel 3ခုစီရှိပါတယ်။ အဆင်ပြေတာရွေးချယ်လိုရပါတယ်။' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p13.jpg', text: '- Channel ရွေးချယ်ပြီးရင် အ ပေါ်ကိုဆွဲတင်ပါ။<br><br>- Deposit Amount မှ ငွေသွင်းမဲ့ငွေအမောက်ကိုရိုက်ထည့်ပါ။<br><br>- Deposit ( Amount ) Button ကိုနိုပ်ပါ။' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p10.jpg', text: '- QR Code ပါလာရင် Scanner လုပ်ပါ။<br><br>- QR Code မပါခဲ့ရင် Phone Number Copy ယူပြီးငွေလွဲပါ။' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p11.jpg', text: '- ငွေလွဲပြီးပါက ငွေလွဲပြေစာရဲ့နောက်ဆုံး ( လုပ်ငန်းစဉ်နံပတ် ) ၆လုံးကိုရိုက်ထည့်ပေးပါ။<br><br>- (တင်ပြပါ)ကိုနိပ်ပါ။' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p12.jpg', text: '- အခုလိုမျိူ:(လုပ်ငန်းစဉ် )ကိုစစ်ဆေးနေပါသည်ဆိုတဲ့ Page ရောက်သွားရင် ငွေသွင်းအော်တာ တင်တာအောင်မြင်ပါပြီး။<br><br>- ခဏနေရင် Ck Lottery Account ထဲကိုငွေရောက်လာပါလိမ့်မယ်။' }
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p1.jpg',  text_en: '- Log in to your Ck Lottery Account.', text_mm: '- Ck Lottery Account ထဲကိုဝင်ပါ။' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p2.jpg',  text_en: '- Tap Deposit.', text_mm: '- Deposit ကိုနိပ်ပါ။' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p3.jpg',  text_en: '- Choose Kpay/Wave or E-Wallet for faster transfer. (Under 1M: E-Wallet, Over 1M: Kpay/Wave).', text_mm: '- Kpay/Wave သို့မဟုတ် ပိုမြန်ချင်ရင် E-Wallet ကိုသုံးပါ။ (10သိန်းအောက် E-Wallet၊ 10သိန်းအထက် Kpay/Wave)' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p4.jpg',  text_en: '- Select Kpay or Wave. Enter Amount and tap Deposit.', text_mm: '- Kpay သို့မဟုတ် Wave ရွေးပါ။ Amount ရိုက်ထည့်ပြီး Deposit ကိုနိပ်ပါ။' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p6.jpg',  text_en: '- Copy the Account Name, Phone Number, and Amount. Transfer the exact amount.', text_mm: '- Account Name, Phone Number နှင့် Amount ကို Copy ယူပြီး ငွေလွဲပါ။' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p7.jpg',  text_en: '- Tap "Complete Payment" after transferring. Funds will arrive shortly.', text_mm: '- ငွေလွဲပြီးပါက Complete Payment ကိုနိပ်ပါ။ ခဏအကြာ ငွေရောက်ပါမည်။' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p8.jpg',  text_en: '- Select E-Wallet. Blue is Kpay, Yellow is Wave. Choose a channel.', text_mm: '- E-Wallet ရွေးပါ။ အပြာက Kpay၊ အဝါက Wave ဖြစ်ပါသည်။' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p13.jpg', text_en: '- Scroll up, enter Deposit Amount, and tap Deposit.', text_mm: '- အပေါ်ကိုဆွဲတင်ပါ။ Amount ရိုက်ထည့်ပြီး Deposit ကိုနိပ်ပါ။' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p10.jpg', text_en: '- Scan the QR Code or copy the Phone Number to transfer.', text_mm: '- QR Code ကို Scan လုပ်ပါ သို့မဟုတ် Phone Number Copy ယူပြီး ငွေလွဲပါ။' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p11.jpg', text_en: '- Enter the last 6 digits of the Transaction ID and submit.', text_mm: '- နောက်ဆုံး (လုပ်ငန်းစဉ်နံပတ်) ၆လုံးကိုရိုက်ထည့်ပြီး တင်ပြပါ။' },
+          { img: 'Ck Lottery/Ck Lottery deposite Photo/p12.jpg', text_en: '- Wait for the transaction check to complete. Funds will appear in your account.', text_mm: '- စစ်ဆေးနေသည့် Page ပြီးဆုံးရင် Account ထဲသို့ ငွေရောက်ပါမည်။' }
         ]
       },
       withdraw: {
         cta: null,
         steps: [
-          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p1.jpg', text: '- Ck Lottery Account ထဲကိုဝင်ပေးပါ။' },
-          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p2.jpg', text: '- Withdrawal ကိုနိပ်ပါ' },
-          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p3.jpg', text: '- Wave သို့မဟုတ် Kpay ငွေထုတ်မဲ့ Wallet ကိုရွေးချယ်ပါ။<br><br>- Add Wallet မလုပ်ရသေးရင် Add (+) ကိုနိပ်ပြီး Wave / Kpay Phone Number Name ရိုက်ထည့်ပါ။' },
-          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p4.jpg', text: '- အခုလိုမျိုးဖြစ်သွားပြီးဆိုရင် စတင်ငွေထုတ်လိုရပါပြီး' },
-          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p5.jpg', text: '- Please Enter The Amount မှ ငွေထုတ်ယူမဲ့ ငွေအမောက်ကိုရိုက်ထည့်ပါ။<br><br>- Withdrawal ကိုနိပ်ပါ။ ဒါဆိုရင် ငွေထုတ်အော်ဒါတင်ချင်းအောင်မြင်ပါပြီး<br>- ခဏကြာရင် Wallet ထဲကိုငွေရောက်လာပါလိမ့်မယ်။' }
+          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p1.jpg', text_en: '- Log in to your Ck Lottery Account.', text_mm: '- Ck Lottery Account ထဲကိုဝင်ပါ။' },
+          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p2.jpg', text_en: '- Tap Withdrawal.', text_mm: '- Withdrawal ကိုနိပ်ပါ။' },
+          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p3.jpg', text_en: '- Select Wave or Kpay. Add wallet if not linked.', text_mm: '- Wave သို့မဟုတ် Kpay ရွေးပါ။ မရှိသေးရင် Add (+) ကိုနိပ်ပြီး ဖြည့်ပါ။' },
+          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p4.jpg', text_en: '- You are now ready to withdraw.', text_mm: '- ယခုငွေထုတ်ရန် အသင့်ဖြစ်ပါပြီ။' },
+          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p5.jpg', text_en: '- Enter the Amount and tap Withdrawal. Funds will arrive shortly.', text_mm: '- ငွေပမာဏရိုက်ထည့်ပြီး Withdrawal ကိုနိပ်ပါ။ ခဏအကြာ ငွေရောက်ပါမည်။' }
         ]
       }
     },
     bigwin: {
       register: {
-        cta: { href: 'https://www.777bigwingame.vip/#/register?invitationCode=22884102596', text: '777 BigWin Register Now' },
+        cta: { href: 'https://www.777bigwingame.vip/#/register?invitationCode=22884102596', text_en: 'Register Now', text_mm: 'အကောင့်ဖွင့်ရန်နိပ်ပါ' },
         steps: [
-          { img: 'BigWin/BigWin Register Photo/b_photos_1.jpg', text: '- 777 BigWin Register Now ကိုနိပ်ပါ။<br><br>- 777 BigWin Register Page ကိုရောက်ရင် Phone Number ရိုက်ထည့်ပါ။<br><br>- Phone Number ထည့်တဲ့နေရာတွင်း 9 တစ်လုံးပဲခံပြီးရေးပါ။ ( ဥပမာ-9123456789)' },
-          { img: 'BigWin/BigWin Register Photo/b_photos_2.jpg', text: '- Set Password & Confirm Password နေရာတွင် ကိုယ်အသုံးပြုမည် 777 BigWin Account Password ကိုရိုက်ထည့်ပါ။<br><br>- Set / Confirm Password 2ခုတူညီရမည်။ (ဥပမာ - Set Password - Abc11111, Confirm Password - Abc11111)' },
-          { img: 'BigWin/BigWin Register Photo/b_photos_3.jpg', text: '- Invite Code ရေးနေရာတွင်း ( 22884102596 ) ရိုက်ထည့်ပါ။' },
-          { img: 'BigWin/BigWin Register Photo/b_photos_4.jpg', text: '- I Have Read And Agree နေရာမှ (အမှန်ခြစ်)တပ်ပါ' },
-          { img: 'BigWin/BigWin Register Photo/b_photos_5.jpg', text: '- Account Information အပြည်အစုံထည့်ပြီးရင် Register ကိုနိပ်ပါ<br><br>- ဒါဆိုရင် 777 BigWin Account ဖွင့်သွားပါပြီး။' }
+          { img: 'BigWin/BigWin Register Photo/b_photos_1.jpg', text_en: '- Tap "Register Now". - Enter your phone number starting with 9.', text_mm: '- Register Now ကိုနိပ်ပါ။<br><br>- Phone Number တွင် 9 တစ်လုံးပဲခံပြီးရေးပါ။' },
+          { img: 'BigWin/BigWin Register Photo/b_photos_2.jpg', text_en: '- Set and confirm your password. Both must match.', text_mm: '- Set Password နှင့် Confirm Password နှစ်ခုတူညီရမည်။' },
+          { img: 'BigWin/BigWin Register Photo/b_photos_3.jpg', text_en: '- Enter Invite Code: (22884102596).', text_mm: '- Invite Code ရေးနေရာတွင် (22884102596) ရိုက်ထည့်ပါ။' },
+          { img: 'BigWin/BigWin Register Photo/b_photos_4.jpg', text_en: '- Check the "I Have Read And Agree" box.', text_mm: '- I Have Read And Agree နေရာမှ (အမှန်ခြစ်)တပ်ပါ။' },
+          { img: 'BigWin/BigWin Register Photo/b_photos_5.jpg', text_en: '- Fill in info and tap Register. Account created.', text_mm: '- Account Information ဖြည့်ပြီး Register ကိုနိပ်ပါ။ Account ဖွင့်ပြီးပါပြီ။' }
         ]
       },
       deposit: {
         cta: null,
         steps: [
-          { img: 'BigWin/BigWin Deposite Photo/p1.jpg',  text: '- 777 BigWin ထဲကိုဝင်ပါ။' },
-          { img: 'BigWin/BigWin Deposite Photo/p2.jpg',  text: '- Deposit ကိုနိပ်ပါ။' },
-          { img: 'BigWin/BigWin Deposite Photo/p3.jpg',  text: '- Kpay / Wave နဲတိုက်ရိုက်သွင်းရသလို ပုံမှန်ထက်ပိုမြန်ချင်းတယ်ဆိုရင် Online Pay နဲငွေသွင်းလိုရပါတယ်။<br><br>- Recommend - 10သိန်းအောက်ငွေသွင်းမယ်ဆိုရင် Online နဲသွင်းပါ။<br><br>- Recommend- 10သိန်းအထက်ငွေသွင်းမယ်ဆိုရင် ပုံမှန် Kpay / Wave နဲတိုက်ရိုက်သွင်းပါ။' },
-          { img: 'BigWin/BigWin Deposite Photo/p4.jpg',  text: '- Kpay သို့မဟုတ် Wave ကိုရွေးချယ်ပါ။<br><br>- Deposit Amount တွင်း ကိုယ်ထည့်မဲ့ ငွေအမောက်ကိုရိုက်ထည့်ပါ။<br><br>- Deposit ( Amount ) Button ကိုနိပ်ပါ။' },
-          { img: 'BigWin/BigWin Deposite Photo/p5.jpg',  text: '- Full Name မှ ကိုယ် ငွေလွဲရမဲ့ Account Name ပြထားပါတယ်။<br><br>- Account မှ ကိုယ်လွဲရမဲ့ Account Phone Number ပြထားပါတယ်။<br><br>- Balance မှ ကိုယ်လွဲမည်အမောက်ပြထားပါတယ်။<br><br>- Phone Number ကို Copy ယူပြီး ငွေလွဲလိုက်ပါ။' },
-          { img: 'BigWin/BigWin Deposite Photo/p6.jpg',  text: '- ငွေလွဲပြီးပါက Complete Payment ကိုနိပ်ပါ။<br><br>- ငွေသွင်းအော်ဒါအောင်မြင်ပါပြီး<br><br>- ခဏကြားရင်ကိုယ် 777 BigWin Account ထဲကိုကိုယ်လွဲထားတဲ့ငွေ Amount အတိအကျရောက်လာပါလိမ့်မယ်။' },
-          { img: 'BigWin/BigWin Deposite Photo/p7.jpg',  text: '- Online Pay ကိုရွေးချယ်ပါ<br><br>- အဝါနဲပြထားတာဟာ Wave Pay ဖြစ်ပါတယ်။<br><br>- အပြာနဲပြထားတာဟာ Kpay ဖြစ်ပါတယ်။<br><br>- Kpay Wave ကိုသေးသေးခြားခြား Channel Title ကြည်ပြီး ရွေးချယ်ပါ။' },
-          { img: 'BigWin/BigWin Deposite Photo/p8.jpg',  text: '- Kpay Wave Channel ရွေးချယ်ပြီးရင်အပေါ်ကိုဆွဲတင်ပါ။<br><br>- Deposit Amount မှ ငွေသွင်းမဲ့ Amount ကိုရိုက်ထည့်ပါ။<br><br>- Deposit Button ကိုနိပ်ပါ။' },
-          { img: 'BigWin/BigWin Deposite Photo/p9.jpg',  text: '- QR Code ပါလာရင် Scanner လုပ်ပါ။<br><br>- QR Code မပါခဲ့ရင် Phone Number Copy ယူပြီးငွေလွဲပါ။' },
-          { img: 'BigWin/BigWin Deposite Photo/p10.jpg', text: '- ငွေလွဲပြီးပါက ငွေလွဲပြေစာရဲ့နောက်ဆုံး ( လုပ်ငန်းစဉ်နံပတ် ) ၅လုံးကိုရိုက်ထည့်ပေးပါ။<br><br>- (တင်ပြပါ)ကိုနိပ်ပါ။' },
-          { img: 'BigWin/BigWin Deposite Photo/p11.jpg', text: '- အခုလိုဖြစ်သွားရင် ငွေသွင်းအော်ဒါတင်တာအောင်မြင်ပါပြီး<br><br>- ခဏကြာရင် BigWin Account ထဲကိုငွေရောက်လာပါလိမ့်မယ်။' }
+          { img: 'BigWin/BigWin Deposite Photo/p1.jpg',  text_en: '- Log in to your 777 BigWin Account.', text_mm: '- 777 BigWin Account ထဲကိုဝင်ပါ။' },
+          { img: 'BigWin/BigWin Deposite Photo/p2.jpg',  text_en: '- Tap Deposit.', text_mm: '- Deposit ကိုနိပ်ပါ။' },
+          { img: 'BigWin/BigWin Deposite Photo/p3.jpg',  text_en: '- Choose Kpay/Wave or Online Pay. (Under 1M: Online Pay, Over 1M: Kpay/Wave).', text_mm: '- Kpay/Wave သို့မဟုတ် Online Pay ကိုသုံးပါ။ (10သိန်းအောက် Online၊ 10သိန်းအထက် Kpay/Wave)' },
+          { img: 'BigWin/BigWin Deposite Photo/p4.jpg',  text_en: '- Select Kpay or Wave. Enter amount and tap Deposit.', text_mm: '- Kpay သို့မဟုတ် Wave ရွေးပါ။ Amount ရိုက်ထည့်ပြီး Deposit ကိုနိပ်ပါ။' },
+          { img: 'BigWin/BigWin Deposite Photo/p5.jpg',  text_en: '- Copy the Account details and transfer the exact amount.', text_mm: '- Account အချက်အလက်များကို Copy ယူပြီး ငွေလွဲပါ။' },
+          { img: 'BigWin/BigWin Deposite Photo/p6.jpg',  text_en: '- Tap Complete Payment after transfer.', text_mm: '- ငွေလွဲပြီးပါက Complete Payment ကိုနိပ်ပါ။' },
+          { img: 'BigWin/BigWin Deposite Photo/p7.jpg',  text_en: '- Select Online Pay (Yellow=Wave, Blue=Kpay). Choose a channel.', text_mm: '- Online Pay ရွေးပါ။ အဝါက Wave၊ အပြာက Kpay ဖြစ်ပါသည်။' },
+          { img: 'BigWin/BigWin Deposite Photo/p8.jpg',  text_en: '- Scroll up, enter amount, and tap Deposit.', text_mm: '- အပေါ်ကိုဆွဲတင်ပါ။ Amount ရိုက်ထည့်ပြီး Deposit ကိုနိပ်ပါ။' },
+          { img: 'BigWin/BigWin Deposite Photo/p9.jpg',  text_en: '- Scan QR Code or copy phone number to transfer.', text_mm: '- QR Code ကို Scan လုပ်ပါ သို့မဟုတ် Phone Number Copy ယူပါ။' },
+          { img: 'BigWin/BigWin Deposite Photo/p10.jpg', text_en: '- Enter the last 5 digits of the Transaction ID and submit.', text_mm: '- နောက်ဆုံး (လုပ်ငန်းစဉ်နံပတ်) ၅လုံးကိုရိုက်ထည့်ပြီး တင်ပြပါ။' },
+          { img: 'BigWin/BigWin Deposite Photo/p11.jpg', text_en: '- Transaction submitted. Funds will arrive shortly.', text_mm: '- ငွေသွင်းအော်ဒါ တင်ပြီးပါပြီ။ ခဏအကြာ ငွေရောက်ပါမည်။' }
         ]
       },
       withdraw: {
         cta: null,
         steps: [
-          { img: 'BigWin/BigWin Withdraw Photo/p1.jpg', text: '- 777 BigWin Account ထဲကိုဝင်ပေးပါ။' },
-          { img: 'BigWin/BigWin Withdraw Photo/p2.jpg', text: '- Withdrawal ကိုနိပ်ပါ' },
-          { img: 'BigWin/BigWin Withdraw Photo/p3.jpg', text: '- Wave သို့မဟုတ် Kpay ငွေထုတ်မဲ့ Wallet ကိုရွေးချယ်ပါ။<br><br>- Add Wallet မလုပ်ရသေးရင် Add (+) ကိုနိပ်ပြီး Wave / Kpay Phone Number Name ရိုက်ထည့်ပါ။' },
-          { img: 'BigWin/BigWin Withdraw Photo/p4.jpg', text: '- အခုလိုမျိုးဖြစ်သွားပြီးဆိုရင် စတင်ငွေထုတ်လိုရပါပြီး' },
-          { img: 'BigWin/BigWin Withdraw Photo/p5.jpg', text: '- Please Enter The Amount မှ ငွေထုတ်ယူမဲ့ ငွေအမောက်ကိုရိုက်ထည့်ပါ။<br><br>- Withdrawal ကိုနိပ်ပါ။ ဒါဆိုရင် ငွေထုတ်အော်ဒါတင်ချင်းအောင်မြင်ပါပြီး<br>- ခဏကြာရင် Wallet ထဲကိုငွေရောက်လာပါလိမ့်မယ်။' }
+          { img: 'BigWin/BigWin Withdraw Photo/p1.jpg', text_en: '- Log in to your 777 BigWin Account.', text_mm: '- 777 BigWin Account ထဲကိုဝင်ပါ။' },
+          { img: 'BigWin/BigWin Withdraw Photo/p2.jpg', text_en: '- Tap Withdrawal.', text_mm: '- Withdrawal ကိုနိပ်ပါ။' },
+          { img: 'BigWin/BigWin Withdraw Photo/p3.jpg', text_en: '- Select Wave or Kpay. Add wallet if needed.', text_mm: '- Wave သို့မဟုတ် Kpay ရွေးပါ။ မရှိသေးရင် Add (+) ကိုနိပ်ပါ။' },
+          { img: 'BigWin/BigWin Withdraw Photo/p4.jpg', text_en: '- Ready to withdraw.', text_mm: '- ယခုငွေထုတ်ရန် အသင့်ဖြစ်ပါပြီ။' },
+          { img: 'BigWin/BigWin Withdraw Photo/p5.jpg', text_en: '- Enter Amount and tap Withdrawal.', text_mm: '- ငွေပမာဏရိုက်ထည့်ပြီး Withdrawal ကိုနိပ်ပါ။' }
         ]
       }
     },
     sixwin: {
       register: {
-        cta: { href: 'https://www.6win333.com/#/register?invitationCode=35815623835', text: 'SixWin Register Now' },
+        cta: { href: 'https://www.6win333.com/#/register?invitationCode=35815623835', text_en: 'Register Now', text_mm: 'အကောင့်ဖွင့်ရန်နိပ်ပါ' },
         steps: [
-          { img: 'SixWin/Six Win Register Photo/photo_1.jpg', text: '- SixWin Register Now ကိုနိပ်ပါ။<br><br>- SixWin Register Page ကိုရောက်ရင် Phone Number နေရာတွင်း Account ဖွင့်မဲ့ Phone Number ထည့်သွင်းပါ။<br><br>- Phone Number ထည့်တဲ့နေရာတွင်း ( 09 မခံရ ) 9တစ်လုံးပဲခံပြီး Phone Number ကိုရိုက်ထည့်ပါ။ ဥပမာ - 9123456789' },
-          { img: 'SixWin/Six Win Register Photo/photo_2.jpg', text: '- Set Password & Confirm Password နေရာတွင် ကိုယ်အသုံးပြုမည့် SixWin Account Password ကို ရိုက်ထည့်ပါ။<br><br>- Set / Confirm Password 2ခုတူညီရမည်။ (ဥပမာ - Set Password - Abc11111, Confirm Password - Abc11111)' },
-          { img: 'SixWin/Six Win Register Photo/photo_3.jpg', text: '- Invite Code ရေးနေရာတွင် : ( 35815623835 ) ရိုက်ထည့်ပါ။' },
-          { img: 'SixWin/Six Win Register Photo/photo_4.jpg', text: '- I Have And Agree နေရာမှ (အမှန်ခြစ်) တပ်ပါ' },
-          { img: 'SixWin/Six Win Register Photo/photo_5.jpg', text: '- Account Information အပြည်အစုံ ထည့်ပြီးရင် Register ကို နှိပ်ပါ<br><br>- ဒါဆိုရင် SixWin Account ဖွင့်သွားပါပြီ။' }
+          { img: 'SixWin/Six Win Register Photo/photo_1.jpg', text_en: '- Tap "Register Now". - Enter phone number starting with 9 (no 09).', text_mm: '- Register Now ကိုနိပ်ပါ။<br><br>- Phone Number တွင် (09 မခံရ) 9 တစ်လုံးပဲခံပြီးရေးပါ။' },
+          { img: 'SixWin/Six Win Register Photo/photo_2.jpg', text_en: '- Set and confirm password. Both must match.', text_mm: '- Set Password နှင့် Confirm Password နှစ်ခုတူညီရမည်။' },
+          { img: 'SixWin/Six Win Register Photo/photo_3.jpg', text_en: '- Enter Invite Code: (35815623835).', text_mm: '- Invite Code ရေးနေရာတွင် (35815623835) ရိုက်ထည့်ပါ။' },
+          { img: 'SixWin/Six Win Register Photo/photo_4.jpg', text_en: '- Check the "I Have And Agree" box.', text_mm: '- I Have And Agree နေရာမှ (အမှန်ခြစ်)တပ်ပါ။' },
+          { img: 'SixWin/Six Win Register Photo/photo_5.jpg', text_en: '- Fill in info and tap Register. Account created.', text_mm: '- Account Information ဖြည့်ပြီး Register ကိုနိပ်ပါ။ Account ဖွင့်ပြီးပါပြီ။' }
         ]
       },
       deposit: {
         cta: null,
         steps: [
-          { img: 'SixWin/Six Win Deposite Photo/photo_1.jpg', text: '- SixWin Account ကိုနိပ်ပါ' },
-          { img: 'SixWin/Six Win Deposite Photo/photo_2.jpg', text: '- Deposit ကိုနိပ်ပါ' },
-          { img: 'SixWin/Six Win Deposite Photo/photo_3.jpg', text: '- ငွေသွင်းရန် Kpay Or Wave ကို Select လုပ်ထားပါ' },
-          { img: 'SixWin/Six Win Deposite Photo/photo_4.jpg', text: '- Select Channel မှ Channel တစ်ခုခုကိုရွေးချယ်ပါ။<br><br>- Deposit Amount မှ ကိုယ်ထည့်သွင်းမဲ့ ငွေ Amount ကိုရိုက်ထည့်ပါ။<br><br>- Deposit ( Amount ) ကိုနိပ်ပါ။' },
-          { img: 'SixWin/Six Win Deposite Photo/photo_5.jpg', text: '- အကောင့်နံပတ်ကို Copy လုပ်ပါ။<br><br>- Kpay Or Wave ထဲကိုသွားပြီး Copy ယူလာတဲ့ Phone Number ကို Past လုပ်ပြီး မိမိ ထည့်သွင်းမဲ့ ငွေ Amount အတိုင်း ငွေလွဲပါ။' },
-          { img: 'SixWin/Six Win Deposite Photo/photo_6.jpg', text: '- ငွေလွဲပြေစာမှ လုပ်ငန်းစဉ်အမှတ်နောက်ဆုံး 5လုံးကို ယခုနေရာတွင်းထည့်သွင်းပြီး အတည်ပြုကိုနိပ်ပါ။<br><br>- Sec အနည်းလောက်ကြာရင် ကိုယ် Account ထဲကို Deposit Amount + Bonus ရောက်လာပါလိမ့်မယ်။' }
+          { img: 'SixWin/Six Win Deposite Photo/photo_1.jpg', text_en: '- Tap SixWin Account.', text_mm: '- SixWin Account ကိုနိပ်ပါ။' },
+          { img: 'SixWin/Six Win Deposite Photo/photo_2.jpg', text_en: '- Tap Deposit.', text_mm: '- Deposit ကိုနိပ်ပါ။' },
+          { img: 'SixWin/Six Win Deposite Photo/photo_3.jpg', text_en: '- Select Kpay or Wave.', text_mm: '- Kpay သို့မဟုတ် Wave ကို Select လုပ်ပါ။' },
+          { img: 'SixWin/Six Win Deposite Photo/photo_4.jpg', text_en: '- Choose a Channel. Enter Amount and tap Deposit.', text_mm: '- Channel ရွေးပါ။ Amount ရိုက်ထည့်ပြီး Deposit ကိုနိပ်ပါ။' },
+          { img: 'SixWin/Six Win Deposite Photo/photo_5.jpg', text_en: '- Copy Account Number. Transfer the amount via Kpay/Wave.', text_mm: '- Account နံပါတ် Copy ယူပါ။ Kpay/Wave မှတဆင့် ငွေလွဲပါ။' },
+          { img: 'SixWin/Six Win Deposite Photo/photo_6.jpg', text_en: '- Enter last 5 digits of Transaction ID and confirm.', text_mm: '- နောက်ဆုံး 5လုံးကို ရိုက်ထည့်ပြီး အတည်ပြုပါ။' }
         ]
       },
       withdraw: {
         cta: null,
         steps: [
-          { img: 'SixWin/Six Win Withdraw Photo/photo_1.jpg', text: '- Account ကိုနိပ်ပါ။' },
-          { img: 'SixWin/Six Win Withdraw Photo/photo_2.jpg', text: '- Withdraw ကိုနိပ်ပါ' },
-          { img: 'SixWin/Six Win Withdraw Photo/photo_3.jpg', text: '- KBZ Pay Or Wave မိမိ ငွေထုတ်မဲ့ Payment ကို Select လုပ်ပါ။' },
-          { img: 'SixWin/Six Win Withdraw Photo/photo_4.jpg', text: '- မိမိငွေထုတ်မဲ့ Payment ကိုမိမိငွေလက်ခံမဲ့ Payment Account ချိတ်ထားပါ<br><br>- ငွေထုတ်မဲ့ Amount ကိုရိုက်ထည့်ပြီး Withdraw ကိုနိပ်ပါ' },
-          { img: 'SixWin/Six Win Withdraw Photo/photo_5.jpg', text: '- Security Verification မှ မိမိ Account ဖွင့်ရာမှထည့်သွင်းခဲ့တဲ့ Password ကိုရိုက်ထည့်ပြီး Confirm Withdraw ကိုနိပ်။<br><br>- Sec အနည်းလောက်ကြာရင် ကိုယ် Account ထဲကို မိမိထုတ်လိုက်တဲ့ငွေ Amount လက်ခံရရှိပါလိမ့်မယ်' }
+          { img: 'SixWin/Six Win Withdraw Photo/photo_1.jpg', text_en: '- Tap Account.', text_mm: '- Account ကိုနိပ်ပါ။' },
+          { img: 'SixWin/Six Win Withdraw Photo/photo_2.jpg', text_en: '- Tap Withdraw.', text_mm: '- Withdraw ကိုနိပ်ပါ။' },
+          { img: 'SixWin/Six Win Withdraw Photo/photo_3.jpg', text_en: '- Select KBZ Pay or Wave.', text_mm: '- KBZ Pay သို့မဟုတ် Wave ကို Select လုပ်ပါ။' },
+          { img: 'SixWin/Six Win Withdraw Photo/photo_4.jpg', text_en: '- Link your Payment Account. Enter Amount and tap Withdraw.', text_mm: '- Payment Account ချိတ်ပါ။ Amount ရိုက်ထည့်ပြီး Withdraw ကိုနိပ်ပါ။' },
+          { img: 'SixWin/Six Win Withdraw Photo/photo_5.jpg', text_en: '- Enter your password for Security Verification and confirm.', text_mm: '- Security Verification တွင် Password ရိုက်ထည့်ပြီး Confirm လုပ်ပါ။' }
         ]
       }
     }
   };
 
-  const ACTION_LABEL = { register: 'Register', deposit: 'Deposit', withdraw: 'Withdraw' };
-
-  // ============ STATE ============
+  // ============ STATE & INIT ============
+  let currentLang = localStorage.getItem('appLang') || 'en';
   let currentTab = 'home';
   let currentSub = null;
 
-  // ============ INTRO ============
-  window.addEventListener('load', () => {
+  document.addEventListener('DOMContentLoaded', () => {
+    // 1. Apply Language
+    applyLanguage(currentLang);
+    
+    // 2. Intro Splash
     setTimeout(() => {
       const intro = document.getElementById('introSplash');
       if (!intro) return;
@@ -724,6 +746,54 @@
       setTimeout(() => { intro.style.display = 'none'; }, 750);
     }, 3200);
   });
+
+  function applyLanguage(lang) {
+    currentLang = lang;
+    localStorage.setItem('appLang', lang);
+    
+    // Update Body Class for Font Tweaks
+    if (lang === 'mm') document.body.classList.add('lang-mm');
+    else document.body.classList.remove('lang-mm');
+
+    // Update Text Elements
+    document.querySelectorAll('[data-t]').forEach(el => {
+      const key = el.getAttribute('data-t');
+      if (T[lang][key]) el.textContent = T[lang][key];
+    });
+
+    // Update Header Button
+    const flag = document.getElementById('currentLangFlag');
+    const text = document.getElementById('currentLangText');
+    if (lang === 'mm') {
+      flag.className = 'flag flag-mm';
+      text.textContent = 'Myanmar';
+    } else {
+      flag.className = 'flag flag-us';
+      text.textContent = 'English';
+    }
+
+    // Update Active Checkmark in Sheet
+    document.getElementById('opt-mm').classList.toggle('active', lang === 'mm');
+    document.getElementById('opt-en').classList.toggle('active', lang === 'en');
+  }
+
+  function setLanguage(lang) {
+    if (lang === currentLang) { closeLangSheet(); return; }
+    localStorage.setItem('appLang', lang);
+    closeLangSheet();
+    // Refresh to apply everywhere cleanly as requested
+    setTimeout(() => { window.location.reload(); }, 300);
+  }
+
+  // ============ LANGUAGE SHEET ============
+  function openLangSheet() {
+    document.getElementById('sheetOverlay').classList.add('active');
+    document.getElementById('langSheet').classList.add('active');
+  }
+  function closeLangSheet() {
+    document.getElementById('sheetOverlay').classList.remove('active');
+    document.getElementById('langSheet').classList.remove('active');
+  }
 
   // ============ TAB SWITCH ============
   function switchTab(tab) {
@@ -746,34 +816,44 @@
     if (!brand || !content) return;
 
     const body = document.getElementById('subBody');
+    
+    // Dynamic Translation for Sub Page
+    let actionLabel = T[currentLang]['action_' + actionKey];
+    if (actionKey === 'register') actionLabel = currentLang === 'mm' ? 'အကောင့်ဖွင့်ရန်နည်းလမ်းများ' : 'Register Steps';
+    if (actionKey === 'deposit') actionLabel = currentLang === 'mm' ? 'ငွေသွင်းရန်နည်းလမ်းများ' : 'Deposit Steps';
+    if (actionKey === 'withdraw') actionLabel = currentLang === 'mm' ? 'ငွေထုတ်ရန်နည်းလမ်းများ' : 'Withdraw Steps';
 
     let html = '<div class="sub-page-header">' +
-      '<div class="sub-brand-icon" style="background:linear-gradient(135deg,' + brand.c1 + ',' + brand.c2 + ');">' +
-        '<i class="fa-solid ' + brand.icon + '"></i>' +
+      '<div class="sub-brand-icon">' +
+        '<img src="' + brand.logo + '" alt="' + brand.name + '">' +
       '</div>' +
       '<div>' +
         '<div class="sub-brand-label">' + brand.name + '</div>' +
-        '<div class="sub-page-title">' + ACTION_LABEL[actionKey] + '</div>' +
+        '<div class="sub-page-title">' + actionLabel + '</div>' +
       '</div>' +
     '</div>';
 
     if (content.cta) {
+      const ctaText = currentLang === 'mm' ? content.cta.text_mm : content.cta.text_en;
       html += '<a class="register-cta" href="' + content.cta.href + '" target="_blank" rel="noopener noreferrer" ' +
         'style="background:linear-gradient(135deg,' + brand.c1 + ',' + brand.c2 + ');">' +
         '<i class="fa-solid fa-arrow-up-right-from-square"></i>' +
-        '<span>' + content.cta.text + '</span>' +
+        '<span>' + ctaText + '</span>' +
       '</a>';
     }
 
     html += '<div class="step-grid">';
     content.steps.forEach((step, i) => {
-      const delay = 200 + i * 50; // 50ms ခြား
-      const safeText = step.text.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      const delay = 200 + i * 50;
+      const stepText = currentLang === 'mm' ? step.text_mm : step.text_en;
+      // Escape quotes for onclick attribute
+      const safeText = stepText.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+      
       html += '<div class="step-card" data-brand="' + brandKey + '" style="animation-delay:' + delay + 'ms;" onclick="openModal(\'' + step.img + '\', \'' + safeText + '\')">' +
         '<div class="step-photo-wrap">' +
           '<img src="' + step.img + '" alt="Step ' + (i + 1) + '" loading="lazy" />' +
         '</div>' +
-        '<div class="step-text">' + step.text + '</div>' +
+        '<div class="step-text">' + stepText + '</div>' +
       '</div>';
     });
     html += '</div>';
@@ -782,8 +862,8 @@
 
     const subScreen = document.getElementById('subScreen');
     subScreen.classList.add('active');
-    document.getElementById('bottomNav').classList.remove('hidden'); // Menu ကို မဖျောက်တော့ဘူး
-    document.getElementById('floatingBackBtn').classList.add('visible'); // Back button ကို ပေါ်စေမယ်
+    document.getElementById('bottomNav').classList.remove('hidden');
+    document.getElementById('floatingBackBtn').classList.add('visible');
     body.scrollTop = 0;
 
     currentSub = { brand: brandKey, action: actionKey };
@@ -801,7 +881,7 @@
     if (currentSub) closeSub();
   }
 
-  // ============ MODAL ============
+  // ============ MODAL (POP-UP) ============
   function openModal(imgSrc, text) {
     document.getElementById('modalImg').src = imgSrc;
     document.getElementById('modalText').innerHTML = text;
@@ -818,6 +898,8 @@
     if (e.key === 'Escape') {
       if (document.getElementById('photoModal').classList.contains('active')) {
         document.getElementById('photoModal').classList.remove('active');
+      } else if (document.getElementById('langSheet').classList.contains('active')) {
+        closeLangSheet();
       } else if (currentSub) {
         closeSub();
       }
