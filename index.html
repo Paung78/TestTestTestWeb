@@ -12,17 +12,26 @@
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
-    --ck-1: #818cf8; --ck-2: #4f46e5; --ck-text: #4338ca; --ck-bg: #eef2ff;
-    --bigwin-1: #34d399; --bigwin-2: #16a34a; --bigwin-text: #15803d; --bigwin-bg: #f0fdf4;
-    --sixwin-1: #f87171; --sixwin-2: #dc2626; --sixwin-text: #b91c1c; --sixwin-bg: #fef2f2;
-    --shwe-1: #fb923c; --shwe-2: #ea580c; --shwe-text: #c2410c; --shwe-bg: #fff7ed;
-
+    /* Light Theme */
     --bg-page: #f8fafc;
     --bg-card: #ffffff;
-    --text: #0f172a;
+    --bg-input: #f8fafc;
+    --text-main: #0f172a;
     --text-muted: #64748b;
     --text-subtle: #94a3b8;
     --border: #e2e8f0;
+    --border-focus: #4f46e5;
+    
+    --ck-1: #818cf8; --ck-2: #4f46e5;
+    --bigwin-1: #34d399; --bigwin-2: #16a34a;
+    --sixwin-1: #f87171; --sixwin-2: #dc2626;
+    --shwe-1: #fb923c; --shwe-2: #ea580c;
+    
+    --header-bg: rgba(255, 255, 255, 0.95);
+    --nav-bg: #ffffff;
+
+    --shadow-card: 0 4px 24px rgba(15, 23, 42, 0.06);
+    --shadow-btn: 0 4px 12px rgba(0, 0, 0, 0.05);
     
     --r-card: 20px;
     --r-btn: 14px;
@@ -31,31 +40,49 @@
     --header-h: 56px;
   }
 
+  body.dark-mode {
+    /* Dark Theme */
+    --bg-page: #0a0a0f;
+    --bg-card: #14141f;
+    --bg-input: #1e1e2d;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-subtle: #64748b;
+    --border: #2e2e42;
+    --border-focus: #818cf8;
+    
+    --header-bg: rgba(20, 20, 31, 0.95);
+    --nav-bg: #14141f;
+    
+    --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
+    --shadow-btn: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  body { transition: background-color 0.3s ease, color 0.3s ease; }
+
   html, body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    text-rendering: optimizeLegibility;
     overscroll-behavior: none;
     background: var(--bg-page);
   }
 
   body {
     font-family: 'Inter', 'Padauk', system-ui, -apple-system, sans-serif;
-    color: var(--text);
+    color: var(--text-main);
     min-height: 100vh;
     overflow-x: hidden;
   }
 
   body.lang-mm .nav-label { font-size: 9px; }
   body.lang-mm .action-label { font-size: 10px; }
-  body.lang-mm .step-text { line-height: 1.6; }
 
   button { font-family: inherit; cursor: pointer; border: none; outline: none; }
 
   /* ============ INTRO SPLASH ============ */
   #introSplash {
     position: fixed; inset: 0; z-index: 9999;
-    background: #ffffff; display: flex; align-items: center; justify-content: center;
+    background: var(--bg-page); display: flex; align-items: center; justify-content: center;
     transition: opacity 0.7s ease;
   }
   #introSplash.fade-out { opacity: 0; pointer-events: none; }
@@ -66,7 +93,7 @@
     animation: introFadeUp 1.2s var(--ease) both; padding: 0 20px;
   }
   .intro-logo .red { color: #dc2626; }
-  .intro-logo .black { color: #0f172a; }
+  .intro-logo .black { color: var(--text-main); }
 
   @keyframes introFadeUp {
     from { opacity: 0; transform: translateY(12px); }
@@ -79,33 +106,41 @@
     height: calc(var(--header-h) + env(safe-area-inset-top, 0px));
     padding: env(safe-area-inset-top, 0px) 16px 0;
     display: flex; align-items: center; justify-content: space-between;
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--header-bg);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     border-bottom: 1px solid var(--border); z-index: 1000;
   }
   .header-brand { font-size: 16px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
   .header-brand .red { color: #dc2626; }
-  .header-brand .black { color: var(--text); }
+  .header-brand .black { color: var(--text-main); transition: color 0.3s; }
 
-  /* Language Selector */
+  /* Header Actions */
+  .header-actions { display: flex; align-items: center; gap: 10px; }
+  
+  .icon-btn {
+    width: 34px; height: 34px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--bg-input); border: 1px solid var(--border);
+    color: var(--text-main); font-size: 14px;
+    transition: transform 0.3s var(--spring), background 0.3s;
+  }
+  .icon-btn:active { transform: scale(0.9); }
+  
   .lang-btn {
     display: flex; align-items: center; gap: 6px;
     padding: 6px 12px; border-radius: 20px;
-    background: var(--bg-page); border: 1px solid var(--border);
-    font-size: 12px; font-weight: 700; color: var(--text);
+    background: var(--bg-input); border: 1px solid var(--border);
+    font-size: 12px; font-weight: 700; color: var(--text-main);
   }
   .lang-btn:active { transform: scale(0.95); }
 
   /* CSS Flags */
-  .flag {
-    width: 20px; height: 14px; border-radius: 2px; position: relative; overflow: hidden;
-    box-shadow: 0 0 1px rgba(0,0,0,0.2); flex-shrink: 0;
-  }
+  .flag { width: 18px; height: 12px; border-radius: 2px; position: relative; overflow: hidden; box-shadow: 0 0 1px rgba(0,0,0,0.2); flex-shrink: 0; }
   .flag-us { background: repeating-linear-gradient(to bottom, #bf0a30 0%, #bf0a30 7.69%, #ffffff 7.69%, #ffffff 15.38%); }
   .flag-us::before { content: ""; position: absolute; top: 0; left: 0; width: 50%; height: 53.8%; background: #002868; }
   .flag-mm { background: linear-gradient(to bottom, #fecb00 33.33%, #34b233 33.33%, #34b233 66.66%, #ea2839 66.66%); }
-  .flag-mm::before { content: "★"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 8px; line-height: 1; }
+  .flag-mm::before { content: "★"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 7px; line-height: 1; }
 
   /* ============ SCREENS ============ */
   .screen {
@@ -115,19 +150,18 @@
     position: relative; z-index: 1; animation: screenFadeIn 0.3s ease;
   }
   .screen.active { display: block; }
-
   @keyframes screenFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
   .screen-inner { max-width: 480px; margin: 0 auto; padding: 0 16px; }
 
   /* ============ HOME ============ */
   .brand-list { display: flex; flex-direction: column; gap: 14px; }
-
   .brand-card {
     background: var(--bg-card); border: 1px solid var(--border);
     border-radius: var(--r-card); padding: 18px 18px 16px;
     position: relative; overflow: hidden;
     animation: staggerIn 0.55s var(--spring) both;
+    box-shadow: var(--shadow-card);
   }
   .brand-card:nth-child(1) { animation-delay: 0.05s; }
   .brand-card:nth-child(2) { animation-delay: 0.15s; }
@@ -146,30 +180,23 @@
   .brand-card[data-brand="shwe"]::before { background: linear-gradient(90deg, var(--shwe-1), var(--shwe-2)); }
 
   .brand-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-
-  /* Squircle Logo Shape */
   .brand-icon {
     width: 44px; height: 44px;
-    border-radius: 14px; /* Squircle effect */
+    border-radius: 14px; /* Squircle */
     overflow: hidden; flex-shrink: 0; background: #fff;
     border: 1.5px solid var(--border);
   }
   .brand-icon img { width: 100%; height: 100%; object-fit: cover; }
 
-  .brand-name { font-size: 17px; font-weight: 800; letter-spacing: -0.015em; }
-  .brand-card[data-brand="ck"] .brand-name { color: var(--ck-text); }
-  .brand-card[data-brand="bigwin"] .brand-name { color: var(--bigwin-text); }
-  .brand-card[data-brand="sixwin"] .brand-name { color: var(--sixwin-text); }
-  .brand-card[data-brand="shwe"] .brand-name { color: var(--shwe-text); }
+  .brand-name { font-size: 17px; font-weight: 800; letter-spacing: -0.015em; color: var(--text-main); }
 
   .brand-actions { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
   .action-btn {
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     gap: 6px; padding: 12px 6px 10px;
     border: 1.5px solid var(--border); border-radius: var(--r-btn);
-    background: var(--bg-card); color: var(--text);
+    background: var(--bg-card); color: var(--text-main);
     transition: transform 0.18s var(--spring), border-color 0.22s, background 0.22s;
-    -webkit-tap-highlight-color: transparent;
   }
   .action-btn:active { transform: scale(0.94); }
   .action-icon {
@@ -178,50 +205,31 @@
   }
   .action-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-align: center; }
 
-  .brand-card[data-brand="ck"] .action-icon { background: rgba(99, 102, 241, 0.10); color: var(--ck-2); }
-  .brand-card[data-brand="bigwin"] .action-icon { background: rgba(34, 197, 94, 0.11); color: var(--bigwin-2); }
-  .brand-card[data-brand="sixwin"] .action-icon { background: rgba(239, 68, 68, 0.10); color: var(--sixwin-2); }
-  .brand-card[data-brand="shwe"] .action-icon { background: rgba(249, 115, 22, 0.10); color: var(--shwe-2); }
+  .brand-card[data-brand="ck"] .action-icon { background: rgba(99, 102, 241, 0.1); color: var(--ck-2); }
+  .brand-card[data-brand="bigwin"] .action-icon { background: rgba(34, 197, 94, 0.1); color: var(--bigwin-2); }
+  .brand-card[data-brand="sixwin"] .action-icon { background: rgba(239, 68, 68, 0.1); color: var(--sixwin-2); }
+  .brand-card[data-brand="shwe"] .action-icon { background: rgba(249, 115, 22, 0.1); color: var(--shwe-2); }
 
-  /* ============ FLOATING BOTTOM NAV ============ */
-  .bottom-nav {
-    position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px));
-    left: 50%; transform: translateX(-50%);
-    width: calc(100% - 32px); max-width: 440px; height: 64px;
-    background: #ffffff; border: 1.5px solid var(--border);
-    border-radius: 32px; display: flex; justify-content: space-around; align-items: center;
-    z-index: 1000; transition: transform 0.4s var(--ease), opacity 0.3s;
+  /* ============ TOOLS PAGE ============ */
+  .tool-card {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--r-card); padding: 20px;
+    box-shadow: var(--shadow-card); cursor: pointer;
+    transition: transform 0.2s var(--spring);
+    animation: staggerIn 0.5s var(--spring) both;
   }
-  .bottom-nav.hidden { transform: translate(-50%, 150%); opacity: 0; pointer-events: none; }
-
-  .nav-item {
-    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
-    color: var(--text-subtle); background: none; position: relative;
-    -webkit-tap-highlight-color: transparent; transition: color 0.2s;
+  .tool-card:active { transform: scale(0.96); }
+  .tool-info { display: flex; align-items: center; gap: 14px; }
+  .tool-icon {
+    width: 46px; height: 46px; border-radius: 14px;
+    background: linear-gradient(135deg, var(--ck-1), var(--ck-2));
+    color: #fff; display: flex; align-items: center; justify-content: center; font-size: 20px;
   }
-  .nav-item i { font-size: 18px; transition: transform 0.3s var(--spring); }
-  .nav-label { font-size: 10px; font-weight: 700; }
-  .nav-item.active { color: var(--ck-2); }
-  .nav-item.active i { transform: scale(1.15) translateY(-1px); }
+  .tool-name { font-size: 16px; font-weight: 800; color: var(--text-main); }
+  .tool-arrow { color: var(--text-subtle); font-size: 14px; }
 
-  /* ============ FLOATING BACK BUTTON ============ */
-  .floating-back-btn {
-    position: fixed; bottom: calc(98px + env(safe-area-inset-bottom, 0px));
-    left: calc(50% - 200px);
-    width: 44px; height: 44px; background: #0f172a; color: #ffffff;
-    border-radius: 50%; display: flex; align-items: center; justify-content: center;
-    font-size: 16px; z-index: 1001; opacity: 0; pointer-events: none;
-    transform: translateY(10px) scale(0.9); transition: all 0.3s var(--spring);
-    -webkit-tap-highlight-color: transparent;
-  }
-  .floating-back-btn.visible { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
-  .floating-back-btn:active { transform: scale(0.9); }
-
-  @media (max-width: 480px) {
-    .floating-back-btn { left: calc(50% - (100vw - 32px) / 2 + 20px); }
-  }
-
-  /* ============ SUB-SCREEN ============ */
+  /* ============ BET SIZE (SUB PAGE) ============ */
   .sub-screen {
     position: fixed; inset: 0; z-index: 900; background: var(--bg-page);
     transform: translateX(100%); transition: transform 0.55s var(--ease);
@@ -231,7 +239,7 @@
   .sub-screen.active { transform: translateX(0); }
 
   .sub-screen-body {
-    flex: 1; overflow-y: auto; padding: 20px 16px calc(120px + env(safe-area-inset-bottom, 0px));
+    flex: 1; overflow-y: auto; padding: 20px 16px calc(32px + env(safe-area-inset-bottom, 0px));
     max-width: 480px; margin: 0 auto; width: 100%; -webkit-overflow-scrolling: touch;
   }
 
@@ -239,196 +247,217 @@
     display: flex; align-items: center; gap: 14px; margin-bottom: 20px;
     animation: stepFadeUp 0.5s var(--spring) 100ms both;
   }
-  /* Squircle Logo Shape */
   .sub-brand-icon {
     width: 52px; height: 52px; border-radius: 16px; overflow: hidden;
     flex-shrink: 0; background: #fff; border: 1.5px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
   }
   .sub-brand-icon img { width: 100%; height: 100%; object-fit: cover; }
-
-  .sub-brand-label {
-    font-size: 12px; font-weight: 700; color: var(--text-subtle);
-    letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px;
+  .sub-brand-icon .icon-wrap {
+    width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--ck-1), var(--ck-2)); color: #fff; font-size: 22px;
   }
-  .sub-page-title { font-size: 20px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.2; }
 
-  .register-cta {
-    display: flex; align-items: center; justify-content: center; gap: 8px;
-    width: 100%; padding: 16px 20px; border-radius: 16px;
-    font-size: 15px; font-weight: 700; color: #fff; text-decoration: none;
-    margin-bottom: 20px; position: relative; overflow: hidden;
-    animation: stepFadeUp 0.5s var(--spring) 180ms both;
-    transition: transform 0.18s var(--spring);
-    -webkit-tap-highlight-color: transparent;
-  }
-  .register-cta:active { transform: scale(0.97); }
+  .sub-brand-label { font-size: 12px; font-weight: 700; color: var(--text-subtle); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px; }
+  .sub-page-title { font-size: 20px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.2; color: var(--text-main); }
 
-  .step-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
-  .step-card {
+  /* Bet Size Form */
+  .betsize-card {
     background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: 16px; padding: 10px; cursor: pointer;
-    transition: transform 0.2s var(--spring);
-    animation: stepFadeUp 0.55s var(--spring) both;
+    border-radius: 18px; padding: 16px; margin-bottom: 16px;
+    box-shadow: var(--shadow-card);
+    animation: stepFadeUp 0.5s var(--spring) both;
   }
-  .step-card:active { transform: scale(0.96); }
   
-  .step-card[data-brand="ck"] { background: var(--ck-bg); border-color: transparent; }
-  .step-card[data-brand="bigwin"] { background: var(--bigwin-bg); border-color: transparent; }
-  .step-card[data-brand="sixwin"] { background: var(--sixwin-bg); border-color: transparent; }
-  .step-card[data-brand="shwe"] { background: var(--shwe-bg); border-color: transparent; }
+  .betsize-label {
+    display: block; font-size: 13px; font-weight: 800; color: var(--text-main); margin-bottom: 8px;
+  }
+  
+  .betsize-input {
+    width: 100%; min-height: 48px; border: 1.5px solid var(--border);
+    border-radius: 12px; background: var(--bg-input); padding: 12px 14px;
+    font-size: 16px; font-weight: 700; color: var(--text-main);
+    outline: none; font-family: inherit; transition: border-color 0.2s;
+  }
+  .betsize-input:focus { border-color: var(--border-focus); }
+  .betsize-error { margin-top: 6px; font-size: 12px; color: #dc2626; font-weight: 700; display: none; }
+  .betsize-error.show { display: block; }
 
-  /* Step Label */
-  .step-label {
-    font-size: 11px; font-weight: 800; color: var(--text-subtle);
-    margin-bottom: 6px; margin-left: 2px; text-transform: uppercase;
-    letter-spacing: 0.05em;
+  .betsize-select-btn {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; min-height: 48px; border: 1.5px solid var(--border);
+    border-radius: 12px; padding: 12px 14px; font-size: 15px; font-weight: 700;
+    color: var(--text-main); background: var(--bg-input); cursor: pointer;
+    transition: border-color 0.2s;
+  }
+  .betsize-select-btn[aria-expanded="true"] { border-color: var(--border-focus); }
+  .betsize-chevron { font-size: 12px; color: var(--text-muted); transition: transform 0.2s; }
+  .betsize-select-btn[aria-expanded="true"] .betsize-chevron { transform: rotate(180deg); }
+
+  .betsize-options {
+    display: none; margin-top: 10px; max-height: 200px; overflow-y: auto;
+    padding: 8px; border-radius: 12px; background: var(--bg-input);
+    border: 1px solid var(--border); grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); gap: 8px;
+  }
+  .betsize-options.open { display: grid; }
+  .betsize-option {
+    min-height: 36px; border: 1px solid var(--border); border-radius: 8px;
+    background: var(--bg-card); color: var(--text-main); font-size: 13px; font-weight: 700;
+    cursor: pointer; display: flex; align-items: center; justify-content: center;
+    transition: all 0.2s;
+  }
+  .betsize-option:hover { border-color: var(--ck-2); color: var(--ck-2); }
+  .betsize-option.selected { background: var(--ck-2); color: #fff; border-color: var(--ck-2); }
+
+  .betsize-calc-btn {
+    width: 100%; min-height: 50px; border: none; border-radius: 14px;
+    margin-bottom: 16px; font-size: 16px; font-weight: 800; color: #fff;
+    background: linear-gradient(135deg, var(--ck-1), var(--ck-2));
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.3); transition: transform 0.2s;
+  }
+  .betsize-calc-btn:active { transform: scale(0.96); }
+  .betsize-calc-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+
+  /* Bet Size Result */
+  .betsize-result { display: none; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-card); }
+  .betsize-result.show { display: block; }
+  .betsize-table { width: 100%; border-collapse: collapse; }
+  .betsize-table th, .betsize-table td { padding: 12px 10px; text-align: center; font-size: 13px; border-bottom: 1px solid var(--border); }
+  .betsize-table th { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); background: var(--bg-input); }
+  .betsize-table td { font-weight: 700; color: var(--text-main); }
+  .betsize-table tfoot td { border-bottom: none; border-top: 2px solid var(--border); background: var(--bg-input); color: var(--text-main); font-weight: 800; }
+  .betsize-copy-btn {
+    background: var(--ck-2); color: #fff; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700;
   }
 
-  .step-photo-wrap {
-    width: 100%; aspect-ratio: 4 / 3; border-radius: 10px; overflow: hidden;
-    background: rgba(255, 255, 255, 0.6); margin-bottom: 8px; position: relative;
+  /* Bottom Nav */
+  .bottom-nav {
+    position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px));
+    left: 50%; transform: translateX(-50%);
+    width: calc(100% - 32px); max-width: 440px; height: 64px;
+    background: var(--nav-bg); border: 1.5px solid var(--border);
+    border-radius: 32px; display: flex; justify-content: space-around; align-items: center;
+    z-index: 1000; transition: transform 0.4s var(--ease), opacity 0.3s, background 0.3s;
   }
-  .step-photo-wrap img {
-    display: block; width: 100%; height: 100%; object-fit: cover;
-    pointer-events: none; -webkit-touch-callout: none; -webkit-user-drag: none;
+  .bottom-nav.hidden { transform: translate(-50%, 150%); opacity: 0; pointer-events: none; }
+
+  .nav-item {
+    flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
+    color: var(--text-subtle); background: none; position: relative;
+    transition: color 0.2s;
   }
+  .nav-item i { font-size: 18px; transition: transform 0.3s var(--spring); }
+  .nav-label { font-size: 10px; font-weight: 700; }
+  .nav-item.active { color: var(--ck-2); }
+  .nav-item.active i { transform: scale(1.15) translateY(-1px); }
 
-  .step-text {
-    font-size: 11px; line-height: 1.45; color: var(--text);
-    padding: 0 2px; display: -webkit-box;
-    -webkit-line-clamp: 3; -webkit-box-orient: vertical;
-    overflow: hidden; text-overflow: ellipsis;
+  /* Floating Back */
+  .floating-back-btn {
+    position: fixed; bottom: calc(98px + env(safe-area-inset-bottom, 0px));
+    left: calc(50% - 200px);
+    width: 44px; height: 44px; background: var(--text-main); color: var(--bg-page);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: 16px; z-index: 1001; opacity: 0; pointer-events: none;
+    transform: translateY(10px) scale(0.9); transition: all 0.3s var(--spring);
   }
+  .floating-back-btn.visible { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
+  @media (max-width: 480px) { .floating-back-btn { left: calc(50% - (100vw - 32px) / 2 + 20px); } }
 
-  @keyframes stepFadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
-
-  /* ============ MODAL (Pop-up) ============ */
+  /* Modal / Sheet */
   .modal-overlay {
     position: fixed; inset: 0; z-index: 9999;
-    background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px);
+    background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px);
     display: flex; align-items: center; justify-content: center; padding: 20px;
     opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
   }
   .modal-overlay.active { opacity: 1; pointer-events: auto; }
-
   .modal-content {
-    background: #ffffff; width: 100%; max-width: 420px; max-height: 85vh;
-    border-radius: 20px; position: relative;
-    display: flex; flex-direction: column;
-    transform: scale(0.95) translateY(10px);
-    transition: transform 0.3s var(--spring); overflow: hidden;
+    background: var(--bg-card); width: 100%; max-width: 420px; max-height: 85vh;
+    border-radius: 20px; position: relative; display: flex; flex-direction: column;
+    transform: scale(0.95) translateY(10px); transition: transform 0.3s var(--spring); overflow: hidden;
   }
   .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
-
   .modal-close {
-    position: absolute; top: 12px; right: 12px;
-    width: 36px; height: 36px;
-    background: rgba(255, 255, 255, 0.9); border-radius: 50%;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px; color: #0f172a; z-index: 10;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+    position: absolute; top: 12px; right: 12px; width: 36px; height: 36px;
+    background: var(--bg-input); border-radius: 50%; color: var(--text-main);
+    display: flex; align-items: center; justify-content: center; font-size: 16px; z-index: 10;
   }
-
-  .modal-scrollable {
-    padding: 16px; overflow-y: auto;
-    -webkit-overflow-scrolling: touch; border-radius: 20px;
-  }
-
+  .modal-scrollable { padding: 16px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
   .modal-img { width: 100%; border-radius: 12px; margin-bottom: 16px; display: block; }
-  .modal-text { font-size: 14px; line-height: 1.7; color: var(--text); padding-bottom: 10px; }
+  .modal-text { font-size: 14px; line-height: 1.7; color: var(--text-main); padding-bottom: 10px; }
 
-  /* ============ BOTTOM SHEET (Language) ============ */
-  .sheet-overlay {
-    position: fixed; inset: 0; z-index: 9998;
-    background: rgba(0, 0, 0, 0.4); backdrop-filter: blur(2px);
-    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-  }
+  /* Lang Sheet */
+  .sheet-overlay { position: fixed; inset: 0; z-index: 9998; background: rgba(0,0,0,0.4); opacity: 0; pointer-events: none; transition: opacity 0.3s; }
   .sheet-overlay.active { opacity: 1; pointer-events: auto; }
-
   .bottom-sheet {
-    position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
-    background: #ffffff; border-radius: 24px 24px 0 0;
-    padding: 20px 20px calc(30px + env(safe-area-inset-bottom, 0px));
-    transform: translateY(100%); transition: transform 0.4s var(--ease);
-    max-width: 480px; margin: 0 auto;
+    position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999; background: var(--bg-card);
+    border-radius: 24px 24px 0 0; padding: 20px 20px calc(30px + env(safe-area-inset-bottom, 0px));
+    transform: translateY(100%); transition: transform 0.4s var(--ease); max-width: 480px; margin: 0 auto;
   }
   .bottom-sheet.active { transform: translateY(0); }
-
   .sheet-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-  .sheet-title { font-size: 18px; font-weight: 800; }
-  .sheet-close {
-    width: 32px; height: 32px; border-radius: 50%;
-    background: var(--bg-page); display: flex; align-items: center; justify-content: center;
-    font-size: 16px; color: var(--text-muted);
-  }
-
+  .sheet-title { font-size: 18px; font-weight: 800; color: var(--text-main); }
+  .sheet-close { width: 32px; height: 32px; border-radius: 50%; background: var(--bg-input); display: flex; align-items: center; justify-content: center; font-size: 16px; color: var(--text-muted); }
   .lang-option {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 16px; border-radius: 14px; border: 1.5px solid var(--border);
-    margin-bottom: 12px; background: var(--bg-card);
+    display: flex; align-items: center; justify-content: space-between; padding: 16px;
+    border-radius: 14px; border: 1.5px solid var(--border); margin-bottom: 12px; background: var(--bg-card);
     transition: background 0.2s, border-color 0.2s;
   }
-  .lang-option:active { background: var(--bg-page); }
-  .lang-option.active { border-color: var(--ck-2); background: var(--ck-bg); }
-  
+  .lang-option:active { background: var(--bg-input); }
+  .lang-option.active { border-color: var(--ck-2); background: rgba(79, 70, 229, 0.05); }
   .lang-left { display: flex; align-items: center; gap: 12px; }
-  .lang-left span { font-size: 15px; font-weight: 700; }
+  .lang-left span { font-size: 15px; font-weight: 700; color: var(--text-main); }
   .lang-check { color: var(--ck-2); font-size: 18px; opacity: 0; transform: scale(0.5); transition: all 0.2s; }
   .lang-option.active .lang-check { opacity: 1; transform: scale(1); }
 
-  /* ============ TAB PLACEHOLDER ============ */
-  .tab-placeholder { max-width: 480px; margin: 0 auto; padding: 60px 24px 40px; text-align: center; }
-  .tab-placeholder .ph-icon {
-    width: 72px; height: 72px; border-radius: 22px;
-    background: rgba(99, 102, 241, 0.1); color: var(--ck-2);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 28px; margin: 0 auto 20px;
-  }
-  .tab-placeholder h2 { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
-  .tab-placeholder p { font-size: 14px; color: var(--text-muted); line-height: 1.55; }
+  @keyframes stepFadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
 
-<!-- ============ INTRO SPLASH ============ -->
+<!-- INTRO SPLASH -->
 <div id="introSplash">
   <div class="intro-logo">
     <span class="red">SuperSel</span> <span class="black">Earing</span>
   </div>
 </div>
 
-<!-- ============ HEADER ============ -->
+<!-- HEADER -->
 <header class="app-header">
   <div class="header-brand">
     <span class="red">SuperSel</span> <span class="black">Earing</span>
   </div>
-  <button class="lang-btn" onclick="openLangSheet()">
-    <div id="currentLangFlag" class="flag flag-us"></div>
-    <span id="currentLangText">English</span>
-  </button>
+  <div class="header-actions">
+    <button class="icon-btn" id="themeToggleBtn" onclick="toggleTheme()" aria-label="Toggle Theme">
+      <i class="fa-solid fa-moon" id="themeIcon"></i>
+    </button>
+    <button class="lang-btn" onclick="openLangSheet()">
+      <div id="currentLangFlag" class="flag flag-us"></div>
+      <span id="currentLangText">English</span>
+    </button>
+  </div>
 </header>
 
-<!-- ============ HOME TAB ============ -->
+<!-- HOME TAB -->
 <div id="screen-home" class="screen active">
   <div class="screen-inner">
     <div class="brand-list">
-      <!-- CK -->
+      <!-- Ck -->
       <div class="brand-card" data-brand="ck">
         <div class="brand-head">
-          <div class="brand-icon"><img src="Logo/ck_logo.jpg" alt="Ck Lottery"></div>
+          <div class="brand-icon"><img src="Logo/ck_logo.jpg" alt="Ck"></div>
           <div class="brand-name">Ck Lottery</div>
         </div>
         <div class="brand-actions">
-          <button class="action-btn" onclick="openSub('ck','register')">
+          <button class="action-btn" onclick="openBrandAction('ck','register')">
             <span class="action-icon"><i class="fa-solid fa-user-plus"></i></span>
             <span class="action-label" data-t="action_register">Register</span>
           </button>
-          <button class="action-btn" onclick="openSub('ck','deposit')">
+          <button class="action-btn" onclick="openBrandAction('ck','deposit')">
             <span class="action-icon"><i class="fa-solid fa-arrow-down"></i></span>
             <span class="action-label" data-t="action_deposit">Deposit</span>
           </button>
-          <button class="action-btn" onclick="openSub('ck','withdraw')">
+          <button class="action-btn" onclick="openBrandAction('ck','withdraw')">
             <span class="action-icon"><i class="fa-solid fa-arrow-up"></i></span>
             <span class="action-label" data-t="action_withdraw">Withdraw</span>
           </button>
@@ -438,19 +467,19 @@
       <!-- BigWin -->
       <div class="brand-card" data-brand="bigwin">
         <div class="brand-head">
-          <div class="brand-icon"><img src="Logo/bigwin_logo.jpg" alt="777 BigWin"></div>
+          <div class="brand-icon"><img src="Logo/bigwin_logo.jpg" alt="BigWin"></div>
           <div class="brand-name">777 BigWin</div>
         </div>
         <div class="brand-actions">
-          <button class="action-btn" onclick="openSub('bigwin','register')">
+          <button class="action-btn" onclick="openBrandAction('bigwin','register')">
             <span class="action-icon"><i class="fa-solid fa-user-plus"></i></span>
             <span class="action-label" data-t="action_register">Register</span>
           </button>
-          <button class="action-btn" onclick="openSub('bigwin','deposit')">
+          <button class="action-btn" onclick="openBrandAction('bigwin','deposit')">
             <span class="action-icon"><i class="fa-solid fa-arrow-down"></i></span>
             <span class="action-label" data-t="action_deposit">Deposit</span>
           </button>
-          <button class="action-btn" onclick="openSub('bigwin','withdraw')">
+          <button class="action-btn" onclick="openBrandAction('bigwin','withdraw')">
             <span class="action-icon"><i class="fa-solid fa-arrow-up"></i></span>
             <span class="action-label" data-t="action_withdraw">Withdraw</span>
           </button>
@@ -464,15 +493,15 @@
           <div class="brand-name">SixWin</div>
         </div>
         <div class="brand-actions">
-          <button class="action-btn" onclick="openSub('sixwin','register')">
+          <button class="action-btn" onclick="openBrandAction('sixwin','register')">
             <span class="action-icon"><i class="fa-solid fa-user-plus"></i></span>
             <span class="action-label" data-t="action_register">Register</span>
           </button>
-          <button class="action-btn" onclick="openSub('sixwin','deposit')">
+          <button class="action-btn" onclick="openBrandAction('sixwin','deposit')">
             <span class="action-icon"><i class="fa-solid fa-arrow-down"></i></span>
             <span class="action-label" data-t="action_deposit">Deposit</span>
           </button>
-          <button class="action-btn" onclick="openSub('sixwin','withdraw')">
+          <button class="action-btn" onclick="openBrandAction('sixwin','withdraw')">
             <span class="action-icon"><i class="fa-solid fa-arrow-up"></i></span>
             <span class="action-label" data-t="action_withdraw">Withdraw</span>
           </button>
@@ -486,62 +515,123 @@
           <div class="brand-name">Shwe</div>
         </div>
         <div class="brand-actions">
-          <button class="action-btn" onclick="openSub('shwe','register')">
+          <button class="action-btn" onclick="openBrandAction('shwe','register')">
             <span class="action-icon"><i class="fa-solid fa-user-plus"></i></span>
             <span class="action-label" data-t="action_register">Register</span>
           </button>
-          <button class="action-btn" onclick="openSub('shwe','deposit')">
+          <button class="action-btn" onclick="openBrandAction('shwe','deposit')">
             <span class="action-icon"><i class="fa-solid fa-arrow-down"></i></span>
             <span class="action-label" data-t="action_deposit">Deposit</span>
           </button>
-          <button class="action-btn" onclick="openSub('shwe','withdraw')">
+          <button class="action-btn" onclick="openBrandAction('shwe','withdraw')">
             <span class="action-icon"><i class="fa-solid fa-arrow-up"></i></span>
             <span class="action-label" data-t="action_withdraw">Withdraw</span>
           </button>
         </div>
       </div>
-      
     </div>
   </div>
 </div>
 
-<!-- ============ PLACEHOLDER TABS ============ -->
+<!-- TOOLS TAB -->
+<div id="screen-tools" class="screen">
+  <div class="screen-inner">
+    <div class="tool-card" onclick="openBetSizePage()">
+      <div class="tool-info">
+        <div class="tool-icon"><i class="fa-solid fa-calculator"></i></div>
+        <div class="tool-name" data-t="tool_betsize_btn">Bet Size Customize</div>
+      </div>
+      <i class="fa-solid fa-chevron-right tool-arrow"></i>
+    </div>
+  </div>
+</div>
+
+<!-- OTHER PLACEHOLDER TABS -->
 <div id="screen-prediction" class="screen">
-  <div class="tab-placeholder">
-    <div class="ph-icon"><i class="fa-solid fa-chart-line"></i></div>
+  <div class="screen-inner" style="text-align:center; padding-top: 40px;">
     <h2 data-t="nav_prediction">Prediction</h2>
   </div>
 </div>
 <div id="screen-chats" class="screen">
-  <div class="tab-placeholder">
-    <div class="ph-icon"><i class="fa-regular fa-comment-dots"></i></div>
+  <div class="screen-inner" style="text-align:center; padding-top: 40px;">
     <h2 data-t="nav_chats">Chats</h2>
   </div>
 </div>
-<div id="screen-tools" class="screen">
-  <div class="tab-placeholder">
-    <div class="ph-icon"><i class="fa-solid fa-calculator"></i></div>
-    <h2 data-t="nav_tools">Tools</h2>
-  </div>
-</div>
 <div id="screen-profile" class="screen">
-  <div class="tab-placeholder">
-    <div class="ph-icon"><i class="fa-solid fa-user"></i></div>
+  <div class="screen-inner" style="text-align:center; padding-top: 40px;">
     <h2 data-t="nav_profile">Profile</h2>
   </div>
 </div>
 
-<!-- ============ SUB-SCREEN ============ -->
-<div id="subScreen" class="sub-screen">
-  <div class="sub-screen-body" id="subBody"></div>
+<!-- BET SIZE PAGE (Slide-in) -->
+<div id="subScreenBetSize" class="sub-screen">
+  <div class="sub-screen-body">
+    
+    <div class="sub-page-header">
+      <div class="sub-brand-icon">
+        <div class="icon-wrap"><i class="fa-solid fa-calculator"></i></div>
+      </div>
+      <div>
+        <div class="sub-brand-label" data-t="tool_label">Tools</div>
+        <div class="sub-page-title" data-t="bs_title">Bet Size</div>
+      </div>
+    </div>
+
+    <div class="betsize-card" style="animation-delay: 150ms;">
+      <label class="betsize-label" for="betSizeFirstAmount" data-t="bs_first_amount">First Bet Amount</label>
+      <input id="betSizeFirstAmount" class="betsize-input" type="text" inputmode="numeric" autocomplete="off" placeholder="Enter Amount" maxlength="15" />
+      <p class="betsize-error" id="betSizeAmountError"></p>
+    </div>
+
+    <div class="betsize-card" style="animation-delay: 200ms;">
+      <span class="betsize-label" data-t="bs_profit">Profit ×</span>
+      <button type="button" class="betsize-select-btn" id="betSizeProfitBtn" aria-expanded="false" onclick="toggleBetSizePicker('profit')">
+        <span id="betSizeProfitLabel">1×</span>
+        <span class="betsize-chevron"><i class="fa-solid fa-chevron-down"></i></span>
+      </button>
+      <div class="betsize-options" id="betSizeProfitOptions" role="listbox"></div>
+    </div>
+
+    <div class="betsize-card" style="animation-delay: 250ms;">
+      <span class="betsize-label" data-t="bs_count">Bet Count</span>
+      <button type="button" class="betsize-select-btn" id="betSizeCountBtn" aria-expanded="false" onclick="toggleBetSizePicker('count')">
+        <span id="betSizeCountLabel">6</span>
+        <span class="betsize-chevron"><i class="fa-solid fa-chevron-down"></i></span>
+      </button>
+      <div class="betsize-options" id="betSizeCountOptions" role="listbox"></div>
+    </div>
+
+    <button type="button" class="betsize-calc-btn" id="betSizeCalcBtn" onclick="runBetSizeCalculator()" data-t="bs_calc_btn" style="animation-delay: 300ms;">Calculator</button>
+
+    <div class="betsize-result" id="betSizeResult" style="animation-delay: 350ms;">
+      <table class="betsize-table">
+        <thead>
+          <tr>
+            <th data-t="bs_no">No.</th>
+            <th data-t="bs_amount">Amount</th>
+            <th data-t="bs_profits">Profits</th>
+          </tr>
+        </thead>
+        <tbody id="betSizeResultBody"></tbody>
+        <tfoot>
+          <tr>
+            <td data-t="bs_total">Total</td>
+            <td id="betSizeTotalAmount">-</td>
+            <td><button type="button" class="betsize-copy-btn" id="betSizeCopyBtn" onclick="copyBetSizeResult()" data-t="bs_copy">Copy</button></td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+
+  </div>
 </div>
 
-<!-- ============ FLOATING BACK BUTTON ============ -->
-<button class="floating-back-btn" id="floatingBackBtn" onclick="goBack()" aria-label="Back">
+<!-- FLOATING BACK BTN -->
+<button class="floating-back-btn" id="floatingBackBtn" onclick="closeBetSizePage()" aria-label="Back">
   <i class="fa-solid fa-arrow-left"></i>
 </button>
 
-<!-- ============ BOTTOM NAV ============ -->
+<!-- BOTTOM NAV -->
 <nav class="bottom-nav" id="bottomNav">
   <button class="nav-item active" data-tab="home" onclick="switchTab('home')">
     <i class="fa-solid fa-house"></i>
@@ -565,38 +655,19 @@
   </button>
 </nav>
 
-<!-- ============ MODAL POP-UP ============ -->
-<div class="modal-overlay" id="photoModal" onclick="closeModal(event)">
-  <div class="modal-content">
-    <button class="modal-close" onclick="closeModal(event)"><i class="fa-solid fa-xmark"></i></button>
-    <div class="modal-scrollable">
-      <img id="modalImg" class="modal-img" src="" alt="Step Photo">
-      <div id="modalText" class="modal-text"></div>
-    </div>
-  </div>
-</div>
-
-<!-- ============ BOTTOM SHEET (LANGUAGE) ============ -->
+<!-- LANG SHEET -->
 <div class="sheet-overlay" id="sheetOverlay" onclick="closeLangSheet()"></div>
 <div class="bottom-sheet" id="langSheet">
   <div class="sheet-header">
     <div class="sheet-title" data-t="select_lang">Select Language</div>
     <button class="sheet-close" onclick="closeLangSheet()"><i class="fa-solid fa-xmark"></i></button>
   </div>
-  
   <div class="lang-option" id="opt-mm" onclick="setLanguage('mm')">
-    <div class="lang-left">
-      <div class="flag flag-mm"></div>
-      <span>မြန်မာ (Myanmar)</span>
-    </div>
+    <div class="lang-left"><div class="flag flag-mm"></div><span>မြန်မာ (Myanmar)</span></div>
     <i class="fa-solid fa-check lang-check"></i>
   </div>
-
   <div class="lang-option" id="opt-en" onclick="setLanguage('en')">
-    <div class="lang-left">
-      <div class="flag flag-us"></div>
-      <span>English (USA)</span>
-    </div>
+    <div class="lang-left"><div class="flag flag-us"></div><span>English (USA)</span></div>
     <i class="fa-solid fa-check lang-check"></i>
   </div>
 </div>
@@ -607,202 +678,88 @@
     en: {
       nav_home: 'Home', nav_prediction: 'Prediction', nav_chats: 'Chats', nav_tools: 'Tools', nav_profile: 'Profile',
       action_register: 'Register', action_deposit: 'Deposit', action_withdraw: 'Withdraw',
-      cta_register: 'Register Now', select_lang: 'Select Language', step_label: 'Step'
+      select_lang: 'Select Language',
+      tool_label: 'Tools', tool_betsize_btn: 'Bet Size Customize',
+      bs_title: 'Bet Size', bs_first_amount: 'First Bet Amount', bs_profit: 'Profit ×', bs_count: 'Bet Count',
+      bs_calc_btn: 'Calculator', bs_no: 'No.', bs_amount: 'Amount', bs_profits: 'Profits', bs_total: 'Total', bs_copy: 'Copy'
     },
     mm: {
       nav_home: 'ပင်မစာမျက်နှာ', nav_prediction: 'ကြိုတင်ခန့်မှန်း', nav_chats: 'ဇယား', nav_tools: 'ကိရိယာများ', nav_profile: 'ကျွန်ုပ်',
       action_register: 'အကောင့်ဖွင့်ရန်', action_deposit: 'ငွေသွင်းရန်', action_withdraw: 'ငွေထုတ်ရန်',
-      cta_register: 'အကောင့်ဖွင့်ရန်နိပ်ပါ', select_lang: 'ဘာသာစကား ရွေးချယ်ပါ', step_label: 'အဆင့်'
+      select_lang: 'ဘာသာစကား ရွေးချယ်ပါ',
+      tool_label: 'ကိရိယာများ', tool_betsize_btn: 'လောင်းကြေးတွက်ချက်ရန်',
+      bs_title: 'လောင်းကြေးပမာဏ', bs_first_amount: 'ပထမဆုံးလောင်းကြေးပမာဏ', bs_profit: 'အမြတ်×', bs_count: 'လောင်းကြေးအကြိမ်ရေ',
+      bs_calc_btn: 'တွက်ချက်ရန်', bs_no: 'နံပါတ်', bs_amount: 'ပမာဏ', bs_profits: 'အမြတ်ငွေများ', bs_total: 'စုစုပေါင်း', bs_copy: 'ကူးယူရန်'
     }
   };
 
-  // ============ BRAND CONFIG ============
-  const BRANDS = {
-    ck:     { name: 'Ck Lottery', logo: 'Logo/ck_logo.jpg', c1: '#818cf8', c2: '#4f46e5' },
-    bigwin: { name: '777 BigWin', logo: 'Logo/bigwin_logo.jpg', c1: '#34d399', c2: '#16a34a' },
-    sixwin: { name: 'SixWin',     logo: 'Logo/sixwin_logo.jpg', c1: '#f87171', c2: '#dc2626' },
-    shwe:   { name: 'Shwe',       logo: 'Logo/shwe_logo.jpg', c1: '#fb923c', c2: '#ea580c' }
-  };
+  // ============ MYANMAR NUMBERS CONVERTER ============
+  const mmDigits = ['၀','၁','၂','၃','၄','၅','၆','၇','၈','၉'];
+  const enDigits = ['0','1','2','3','4','5','6','7','8','9'];
 
-  // ============ CONTENT DATA (EN & MM) ============
-  const CONTENT = {
-    ck: {
-      register: {
-        cta: { href: 'http://www.cklottery.top/#/register?invitationCode=81487219676', text_en: 'Register Now', text_mm: 'အကောင့်ဖွင့်ရန်နိပ်ပါ' },
-        steps: [
-          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_1.jpg', text_en: '- Tap "Register Now". - Enter your phone number starting with 9 (e.g., 9123456789).', text_mm: '- Register Now ကိုနိပ်ပါ။<br><br>- Phone Number တွင် 9 တစ်လုံးပဲခံပြီးရေးပါ။ (ဥပမာ-9123456789)' },
-          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_2.jpg', text_en: '- Set Password & Confirm Password. Both must match exactly.', text_mm: '- Set Password နှင့် Confirm Password နှစ်ခုတူညီရမည်။ (ဥပမာ - Abc11111)' },
-          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_3.jpg', text_en: '- Enter Invite Code: (81487219676).', text_mm: '- Invite Code ရေးနေရာတွင် (81487219676) ရိုက်ထည့်ပါ။' },
-          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_4.jpg', text_en: '- Check the "I Have Read And Agree" box.', text_mm: '- I Have Read And Agree နေရာမှ (အမှန်ခြစ်)တပ်ပါ။' },
-          { img: 'Ck Lottery/Ck Lottery Register Photo/photo_5.jpg', text_en: '- Fill in Account Information and tap Register. Account created successfully.', text_mm: '- Account Information ဖြည့်ပြီး Register ကိုနိပ်ပါ။ Account ဖွင့်ပြီးပါပြီ။' }
-        ]
-      },
-      deposit: {
-        cta: null,
-        steps: [
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p1.jpg',  text_en: '- Log in to your Ck Lottery Account.', text_mm: '- Ck Lottery Account ထဲကိုဝင်ပါ။' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p2.jpg',  text_en: '- Tap Deposit.', text_mm: '- Deposit ကိုနိပ်ပါ။' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p3.jpg',  text_en: '- Choose Kpay/Wave or E-Wallet for faster transfer. (Under 1M: E-Wallet, Over 1M: Kpay/Wave).', text_mm: '- Kpay/Wave သို့မဟုတ် ပိုမြန်ချင်ရင် E-Wallet ကိုသုံးပါ။ (10သိန်းအောက် E-Wallet၊ 10သိန်းအထက် Kpay/Wave)' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p4.jpg',  text_en: '- Select Kpay or Wave. Enter Amount and tap Deposit.', text_mm: '- Kpay သို့မဟုတ် Wave ရွေးပါ။ Amount ရိုက်ထည့်ပြီး Deposit ကိုနိပ်ပါ။' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p6.jpg',  text_en: '- Copy the Account Name, Phone Number, and Amount. Transfer the exact amount.', text_mm: '- Account Name, Phone Number နှင့် Amount ကို Copy ယူပြီး ငွေလွဲပါ။' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p7.jpg',  text_en: '- Tap "Complete Payment" after transferring. Funds will arrive shortly.', text_mm: '- ငွေလွဲပြီးပါက Complete Payment ကိုနိပ်ပါ။ ခဏအကြာ ငွေရောက်ပါမည်။' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p8.jpg',  text_en: '- Select E-Wallet. Blue is Kpay, Yellow is Wave. Choose a channel.', text_mm: '- E-Wallet ရွေးပါ။ အပြာက Kpay၊ အဝါက Wave ဖြစ်ပါသည်။' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p13.jpg', text_en: '- Scroll up, enter Deposit Amount, and tap Deposit.', text_mm: '- အပေါ်ကိုဆွဲတင်ပါ။ Amount ရိုက်ထည့်ပြီး Deposit ကိုနိပ်ပါ။' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p10.jpg', text_en: '- Scan the QR Code or copy the Phone Number to transfer.', text_mm: '- QR Code ကို Scan လုပ်ပါ သို့မဟုတ် Phone Number Copy ယူပြီး ငွေလွဲပါ။' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p11.jpg', text_en: '- Enter the last 6 digits of the Transaction ID and submit.', text_mm: '- နောက်ဆုံး (လုပ်ငန်းစဉ်နံပတ်) ၆လုံးကိုရိုက်ထည့်ပြီး တင်ပြပါ။' },
-          { img: 'Ck Lottery/Ck Lottery deposite Photo/p12.jpg', text_en: '- Wait for the transaction check to complete. Funds will appear in your account.', text_mm: '- စစ်ဆေးနေသည့် Page ပြီးဆုံးရင် Account ထဲသို့ ငွေရောက်ပါမည်။' }
-        ]
-      },
-      withdraw: {
-        cta: null,
-        steps: [
-          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p1.jpg', text_en: '- Log in to your Ck Lottery Account.', text_mm: '- Ck Lottery Account ထဲကိုဝင်ပါ။' },
-          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p2.jpg', text_en: '- Tap Withdrawal.', text_mm: '- Withdrawal ကိုနိပ်ပါ။' },
-          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p3.jpg', text_en: '- Select Wave or Kpay. Add wallet if not linked.', text_mm: '- Wave သို့မဟုတ် Kpay ရွေးပါ။ မရှိသေးရင် Add (+) ကိုနိပ်ပြီး ဖြည့်ပါ။' },
-          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p4.jpg', text_en: '- You are now ready to withdraw.', text_mm: '- ယခုငွေထုတ်ရန် အသင့်ဖြစ်ပါပြီ။' },
-          { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p5.jpg', text_en: '- Enter the Amount and tap Withdrawal. Funds will arrive shortly.', text_mm: '- ငွေပမာဏရိုက်ထည့်ပြီး Withdrawal ကိုနိပ်ပါ။ ခဏအကြာ ငွေရောက်ပါမည်။' }
-        ]
-      }
-    },
-    bigwin: {
-      register: {
-        cta: { href: 'https://www.777bigwingame.vip/#/register?invitationCode=22884102596', text_en: 'Register Now', text_mm: 'အကောင့်ဖွင့်ရန်နိပ်ပါ' },
-        steps: [
-          { img: 'BigWin/BigWin Register Photo/b_photos_1.jpg', text_en: '- Tap "Register Now". - Enter your phone number starting with 9.', text_mm: '- Register Now ကိုနိပ်ပါ။<br><br>- Phone Number တွင် 9 တစ်လုံးပဲခံပြီးရေးပါ။' },
-          { img: 'BigWin/BigWin Register Photo/b_photos_2.jpg', text_en: '- Set and confirm your password. Both must match.', text_mm: '- Set Password နှင့် Confirm Password နှစ်ခုတူညီရမည်။' },
-          { img: 'BigWin/BigWin Register Photo/b_photos_3.jpg', text_en: '- Enter Invite Code: (22884102596).', text_mm: '- Invite Code ရေးနေရာတွင် (22884102596) ရိုက်ထည့်ပါ။' },
-          { img: 'BigWin/BigWin Register Photo/b_photos_4.jpg', text_en: '- Check the "I Have Read And Agree" box.', text_mm: '- I Have Read And Agree နေရာမှ (အမှန်ခြစ်)တပ်ပါ။' },
-          { img: 'BigWin/BigWin Register Photo/b_photos_5.jpg', text_en: '- Fill in info and tap Register. Account created.', text_mm: '- Account Information ဖြည့်ပြီး Register ကိုနိပ်ပါ။ Account ဖွင့်ပြီးပါပြီ။' }
-        ]
-      },
-      deposit: {
-        cta: null,
-        steps: [
-          { img: 'BigWin/BigWin Deposite Photo/p1.jpg',  text_en: '- Log in to your 777 BigWin Account.', text_mm: '- 777 BigWin Account ထဲကိုဝင်ပါ။' },
-          { img: 'BigWin/BigWin Deposite Photo/p2.jpg',  text_en: '- Tap Deposit.', text_mm: '- Deposit ကိုနိပ်ပါ။' },
-          { img: 'BigWin/BigWin Deposite Photo/p3.jpg',  text_en: '- Choose Kpay/Wave or Online Pay. (Under 1M: Online Pay, Over 1M: Kpay/Wave).', text_mm: '- Kpay/Wave သို့မဟုတ် Online Pay ကိုသုံးပါ။ (10သိန်းအောက် Online၊ 10သိန်းအထက် Kpay/Wave)' },
-          { img: 'BigWin/BigWin Deposite Photo/p4.jpg',  text_en: '- Select Kpay or Wave. Enter amount and tap Deposit.', text_mm: '- Kpay သို့မဟုတ် Wave ရွေးပါ။ Amount ရိုက်ထည့်ပြီး Deposit ကိုနိပ်ပါ။' },
-          { img: 'BigWin/BigWin Deposite Photo/p5.jpg',  text_en: '- Copy the Account details and transfer the exact amount.', text_mm: '- Account အချက်အလက်များကို Copy ယူပြီး ငွေလွဲပါ။' },
-          { img: 'BigWin/BigWin Deposite Photo/p6.jpg',  text_en: '- Tap Complete Payment after transfer.', text_mm: '- ငွေလွဲပြီးပါက Complete Payment ကိုနိပ်ပါ။' },
-          { img: 'BigWin/BigWin Deposite Photo/p7.jpg',  text_en: '- Select Online Pay (Yellow=Wave, Blue=Kpay). Choose a channel.', text_mm: '- Online Pay ရွေးပါ။ အဝါက Wave၊ အပြာက Kpay ဖြစ်ပါသည်။' },
-          { img: 'BigWin/BigWin Deposite Photo/p8.jpg',  text_en: '- Scroll up, enter amount, and tap Deposit.', text_mm: '- အပေါ်ကိုဆွဲတင်ပါ။ Amount ရိုက်ထည့်ပြီး Deposit ကိုနိပ်ပါ။' },
-          { img: 'BigWin/BigWin Deposite Photo/p9.jpg',  text_en: '- Scan QR Code or copy phone number to transfer.', text_mm: '- QR Code ကို Scan လုပ်ပါ သို့မဟုတ် Phone Number Copy ယူပါ။' },
-          { img: 'BigWin/BigWin Deposite Photo/p10.jpg', text_en: '- Enter the last 5 digits of the Transaction ID and submit.', text_mm: '- နောက်ဆုံး (လုပ်ငန်းစဉ်နံပတ်) ၅လုံးကိုရိုက်ထည့်ပြီး တင်ပြပါ။' },
-          { img: 'BigWin/BigWin Deposite Photo/p11.jpg', text_en: '- Transaction submitted. Funds will arrive shortly.', text_mm: '- ငွေသွင်းအော်ဒါ တင်ပြီးပါပြီ။ ခဏအကြာ ငွေရောက်ပါမည်။' }
-        ]
-      },
-      withdraw: {
-        cta: null,
-        steps: [
-          { img: 'BigWin/BigWin Withdraw Photo/p1.jpg', text_en: '- Log in to your 777 BigWin Account.', text_mm: '- 777 BigWin Account ထဲကိုဝင်ပါ။' },
-          { img: 'BigWin/BigWin Withdraw Photo/p2.jpg', text_en: '- Tap Withdrawal.', text_mm: '- Withdrawal ကိုနိပ်ပါ။' },
-          { img: 'BigWin/BigWin Withdraw Photo/p3.jpg', text_en: '- Select Wave or Kpay. Add wallet if needed.', text_mm: '- Wave သို့မဟုတ် Kpay ရွေးပါ။ မရှိသေးရင် Add (+) ကိုနိပ်ပါ။' },
-          { img: 'BigWin/BigWin Withdraw Photo/p4.jpg', text_en: '- Ready to withdraw.', text_mm: '- ယခုငွေထုတ်ရန် အသင့်ဖြစ်ပါပြီ။' },
-          { img: 'BigWin/BigWin Withdraw Photo/p5.jpg', text_en: '- Enter Amount and tap Withdrawal.', text_mm: '- ငွေပမာဏရိုက်ထည့်ပြီး Withdrawal ကိုနိပ်ပါ။' }
-        ]
-      }
-    },
-    sixwin: {
-      register: {
-        cta: { href: 'https://www.6win333.com/#/register?invitationCode=35815623835', text_en: 'Register Now', text_mm: 'အကောင့်ဖွင့်ရန်နိပ်ပါ' },
-        steps: [
-          { img: 'SixWin/Six Win Register Photo/photo_1.jpg', text_en: '- Tap "Register Now". - Enter phone number starting with 9 (no 09).', text_mm: '- Register Now ကိုနိပ်ပါ။<br><br>- Phone Number တွင် (09 မခံရ) 9 တစ်လုံးပဲခံပြီးရေးပါ။' },
-          { img: 'SixWin/Six Win Register Photo/photo_2.jpg', text_en: '- Set and confirm password. Both must match.', text_mm: '- Set Password နှင့် Confirm Password နှစ်ခုတူညီရမည်။' },
-          { img: 'SixWin/Six Win Register Photo/photo_3.jpg', text_en: '- Enter Invite Code: (35815623835).', text_mm: '- Invite Code ရေးနေရာတွင် (35815623835) ရိုက်ထည့်ပါ။' },
-          { img: 'SixWin/Six Win Register Photo/photo_4.jpg', text_en: '- Check the "I Have And Agree" box.', text_mm: '- I Have And Agree နေရာမှ (အမှန်ခြစ်)တပ်ပါ။' },
-          { img: 'SixWin/Six Win Register Photo/photo_5.jpg', text_en: '- Fill in info and tap Register. Account created.', text_mm: '- Account Information ဖြည့်ပြီး Register ကိုနိပ်ပါ။ Account ဖွင့်ပြီးပါပြီ။' }
-        ]
-      },
-      deposit: {
-        cta: null,
-        steps: [
-          { img: 'SixWin/Six Win Deposite Photo/photo_1.jpg', text_en: '- Tap SixWin Account.', text_mm: '- SixWin Account ကိုနိပ်ပါ။' },
-          { img: 'SixWin/Six Win Deposite Photo/photo_2.jpg', text_en: '- Tap Deposit.', text_mm: '- Deposit ကိုနိပ်ပါ။' },
-          { img: 'SixWin/Six Win Deposite Photo/photo_3.jpg', text_en: '- Select Kpay or Wave.', text_mm: '- Kpay သို့မဟုတ် Wave ကို Select လုပ်ပါ။' },
-          { img: 'SixWin/Six Win Deposite Photo/photo_4.jpg', text_en: '- Choose a Channel. Enter Amount and tap Deposit.', text_mm: '- Channel ရွေးပါ။ Amount ရိုက်ထည့်ပြီး Deposit ကိုနိပ်ပါ။' },
-          { img: 'SixWin/Six Win Deposite Photo/photo_5.jpg', text_en: '- Copy Account Number. Transfer the amount via Kpay/Wave.', text_mm: '- Account နံပါတ် Copy ယူပါ။ Kpay/Wave မှတဆင့် ငွေလွဲပါ။' },
-          { img: 'SixWin/Six Win Deposite Photo/photo_6.jpg', text_en: '- Enter last 5 digits of Transaction ID and confirm.', text_mm: '- နောက်ဆုံး 5လုံးကို ရိုက်ထည့်ပြီး အတည်ပြုပါ။' }
-        ]
-      },
-      withdraw: {
-        cta: null,
-        steps: [
-          { img: 'SixWin/Six Win Withdraw Photo/photo_1.jpg', text_en: '- Tap Account.', text_mm: '- Account ကိုနိပ်ပါ။' },
-          { img: 'SixWin/Six Win Withdraw Photo/photo_2.jpg', text_en: '- Tap Withdraw.', text_mm: '- Withdraw ကိုနိပ်ပါ။' },
-          { img: 'SixWin/Six Win Withdraw Photo/photo_3.jpg', text_en: '- Select KBZ Pay or Wave.', text_mm: '- KBZ Pay သို့မဟုတ် Wave ကို Select လုပ်ပါ။' },
-          { img: 'SixWin/Six Win Withdraw Photo/photo_4.jpg', text_en: '- Link your Payment Account. Enter Amount and tap Withdraw.', text_mm: '- Payment Account ချိတ်ပါ။ Amount ရိုက်ထည့်ပြီး Withdraw ကိုနိပ်ပါ။' },
-          { img: 'SixWin/Six Win Withdraw Photo/photo_5.jpg', text_en: '- Enter your password for Security Verification and confirm.', text_mm: '- Security Verification တွင် Password ရိုက်ထည့်ပြီး Confirm လုပ်ပါ။' }
-        ]
-      }
-    },
-    shwe: {
-      register: {
-        cta: { href: 'https://www.shwe008.com/#/register?invitationCode=12843101366', text_en: 'Register Now', text_mm: 'အကောင့်ဖွင့်ရန်နိပ်ပါ' },
-        steps: [
-          { img: 'Shwe/Shwe Register Photo/photo_1.jpg', text_en: '- Tap "Register Now". - Enter phone number starting with 9 (no 09).', text_mm: '- Register Now ကိုနိပ်ပါ။<br><br>- Phone Number တွင် (09 မခံရ) 9 တစ်လုံးပဲခံပြီးရေးပါ။' },
-          { img: 'Shwe/Shwe Register Photo/photo_2.jpg', text_en: '- Set and confirm password. Both must match.', text_mm: '- Set Password နှင့် Confirm Password နှစ်ခုတူညီရမည်။' },
-          { img: 'Shwe/Shwe Register Photo/photo_3.jpg', text_en: '- Enter Invite Code: (12843101366).', text_mm: '- Invite Code ရေးနေရာတွင် (12843101366) ရိုက်ထည့်ပါ။' },
-          { img: 'Shwe/Shwe Register Photo/photo_4.jpg', text_en: '- Check the "I Have And Agree" box.', text_mm: '- I Have And Agree နေရာမှ (အမှန်ခြစ်)တပ်ပါ။' },
-          { img: 'Shwe/Shwe Register Photo/photo_5.jpg', text_en: '- Fill in info and tap Register. Account created.', text_mm: '- Account Information ဖြည့်ပြီး Register ကိုနိပ်ပါ။ Account ဖွင့်ပြီးပါပြီ။' }
-        ]
-      },
-      deposit: {
-        cta: null,
-        steps: [
-          { img: 'Shwe/Shwe Deposite Photo/photo_1.jpg', text_en: '- Tap Shwe Account.', text_mm: '- Shwe Account ကိုနိပ်ပါ။' },
-          { img: 'Shwe/Shwe Deposite Photo/photo_2.jpg', text_en: '- Tap Deposit.', text_mm: '- Deposit ကိုနိပ်ပါ။' },
-          { img: 'Shwe/Shwe Deposite Photo/photo_3.jpg', text_en: '- Select Kpay or Wave.', text_mm: '- Kpay သို့မဟုတ် Wave ကို Select လုပ်ပါ။' },
-          { img: 'Shwe/Shwe Deposite Photo/photo_4.jpg', text_en: '- Choose a Channel. Enter Amount and tap Deposit.', text_mm: '- Channel ရွေးပါ။ Amount ရိုက်ထည့်ပြီး Deposit ကိုနိပ်ပါ။' },
-          { img: 'Shwe/Shwe Deposite Photo/photo_5.jpg', text_en: '- Copy Account Number. Transfer the amount via Kpay/Wave.', text_mm: '- Account နံပါတ် Copy ယူပါ။ Kpay/Wave မှတဆင့် ငွေလွဲပါ။' },
-          { img: 'Shwe/Shwe Deposite Photo/photo_6.jpg', text_en: '- Enter last 5 digits of Transaction ID and confirm.', text_mm: '- နောက်ဆုံး 5လုံးကို ရိုက်ထည့်ပြီး အတည်ပြုပါ။' }
-        ]
-      },
-      withdraw: {
-        cta: null,
-        steps: [
-          { img: 'Shwe/Shwe Withdraw Photo/photo_1.jpg', text_en: '- Tap Account.', text_mm: '- Account ကိုနိပ်ပါ။' },
-          { img: 'Shwe/Shwe Withdraw Photo/photo_2.jpg', text_en: '- Tap Withdraw.', text_mm: '- Withdraw ကိုနိပ်ပါ။' },
-          { img: 'Shwe/Shwe Withdraw Photo/photo_3.jpg', text_en: '- Select KBZ Pay or Wave.', text_mm: '- KBZ Pay သို့မဟုတ် Wave ကို Select လုပ်ပါ။' },
-          { img: 'Shwe/Shwe Withdraw Photo/photo_4.jpg', text_en: '- Link your Payment Account. Enter Amount and tap Withdraw.', text_mm: '- Payment Account ချိတ်ပါ။ Amount ရိုက်ထည့်ပြီး Withdraw ကိုနိပ်ပါ။' },
-          { img: 'Shwe/Shwe Withdraw Photo/photo_5.jpg', text_en: '- Enter your password for Security Verification and confirm.', text_mm: '- Security Verification တွင် Password ရိုက်ထည့်ပြီး Confirm လုပ်ပါ။' }
-        ]
-      }
+  function toMMNumber(num) {
+    if (num === null || num === undefined) return '';
+    return num.toString().replace(/[0-9]/g, d => mmDigits[d]);
+  }
+  function toENNumber(str) {
+    if (!str) return '';
+    let res = str.toString();
+    for (let i = 0; i < 10; i++) {
+      res = res.split(mmDigits[i]).join(enDigits[i]);
     }
-  };
+    return res;
+  }
+  function formatNumber(val, lang) {
+    const num = Number(val);
+    if (isNaN(num)) return val;
+    const formatted = num.toLocaleString('en-US');
+    return lang === 'mm' ? toMMNumber(formatted) : formatted;
+  }
 
   // ============ STATE & INIT ============
   let currentLang = localStorage.getItem('appLang') || 'en';
-  let currentTab = 'home';
+  let currentTheme = localStorage.getItem('appTheme') || 'light';
   let currentSub = null;
 
   document.addEventListener('DOMContentLoaded', () => {
-    // 1. Apply Language
+    applyTheme(currentTheme);
     applyLanguage(currentLang);
+    initBetSizePage();
     
-    // 2. Intro Splash
     setTimeout(() => {
       const intro = document.getElementById('introSplash');
-      if (!intro) return;
-      intro.classList.add('fade-out');
-      setTimeout(() => { intro.style.display = 'none'; }, 750);
+      if (intro) { intro.classList.add('fade-out'); setTimeout(() => { intro.style.display = 'none'; }, 750); }
     }, 3200);
   });
+
+  function applyTheme(theme) {
+    currentTheme = theme;
+    localStorage.setItem('appTheme', theme);
+    if (theme === 'dark') {
+      document.body.classList.add('dark-mode');
+      document.getElementById('themeIcon').className = 'fa-solid fa-sun';
+    } else {
+      document.body.classList.remove('dark-mode');
+      document.getElementById('themeIcon').className = 'fa-solid fa-moon';
+    }
+  }
+
+  function toggleTheme() {
+    applyTheme(currentTheme === 'light' ? 'dark' : 'light');
+  }
 
   function applyLanguage(lang) {
     currentLang = lang;
     localStorage.setItem('appLang', lang);
     
-    // Update Body Class for Font Tweaks
     if (lang === 'mm') document.body.classList.add('lang-mm');
     else document.body.classList.remove('lang-mm');
 
-    // Update Text Elements
     document.querySelectorAll('[data-t]').forEach(el => {
       const key = el.getAttribute('data-t');
       if (T[lang][key]) el.textContent = T[lang][key];
     });
 
-    // Update Header Button
     const flag = document.getElementById('currentLangFlag');
     const text = document.getElementById('currentLangText');
     if (lang === 'mm') {
@@ -813,158 +770,211 @@
       text.textContent = 'English';
     }
 
-    // Update Active Checkmark in Sheet
     document.getElementById('opt-mm').classList.toggle('active', lang === 'mm');
     document.getElementById('opt-en').classList.toggle('active', lang === 'en');
 
-    // Re-render Sub-page if it is currently open to apply new language instantly
-    if (currentSub) {
-      renderSubPage(currentSub.brand, currentSub.action, true);
-    }
+    // Update Bet size inputs/buttons if already rendered
+    const profitLabel = document.getElementById('betSizeProfitLabel');
+    if(profitLabel) profitLabel.textContent = (lang==='mm'?toMMNumber(betSizeState.profitMult):betSizeState.profitMult) + '×';
+    const countLabel = document.getElementById('betSizeCountLabel');
+    if(countLabel) countLabel.textContent = lang==='mm'?toMMNumber(betSizeState.betCount):betSizeState.betCount;
+    
+    // Update picker options if open
+    buildBetSizePickerOptions('profit', true);
+    buildBetSizePickerOptions('count', true);
   }
 
-  // No Reload! Just apply language instantly
   function setLanguage(lang) {
     if (lang === currentLang) { closeLangSheet(); return; }
     applyLanguage(lang);
     closeLangSheet();
   }
 
-  // ============ LANGUAGE SHEET ============
-  function openLangSheet() {
-    document.getElementById('sheetOverlay').classList.add('active');
-    document.getElementById('langSheet').classList.add('active');
-  }
-  function closeLangSheet() {
-    document.getElementById('sheetOverlay').classList.remove('active');
-    document.getElementById('langSheet').classList.remove('active');
-  }
+  // ============ SHEET ============
+  function openLangSheet() { document.getElementById('sheetOverlay').classList.add('active'); document.getElementById('langSheet').classList.add('active'); }
+  function closeLangSheet() { document.getElementById('sheetOverlay').classList.remove('active'); document.getElementById('langSheet').classList.remove('active'); }
 
-  // ============ TAB SWITCH ============
+  // ============ TABS ============
   function switchTab(tab) {
-    if (currentSub) closeSub();
+    closeBetSizePage(true);
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    const target = document.getElementById('screen-' + tab);
-    if (target) target.classList.add('active');
-    document.querySelectorAll('.nav-item').forEach(item => {
-      item.classList.toggle('active', item.dataset.tab === tab);
-    });
+    document.getElementById('screen-' + tab).classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.tab === tab));
     document.getElementById('bottomNav').classList.remove('hidden');
-    currentTab = tab;
+    document.getElementById('floatingBackBtn').classList.remove('visible');
     window.scrollTo(0, 0);
   }
 
-  // ============ OPEN SUB ============
-  function openSub(brandKey, actionKey) {
-    currentSub = { brand: brandKey, action: actionKey };
-    
-    const subScreen = document.getElementById('subScreen');
-    subScreen.classList.add('active');
-    document.getElementById('bottomNav').classList.remove('hidden');
+  // ============ BET SIZE SUB-PAGE ============
+  function openBetSizePage() {
+    document.getElementById('subScreenBetSize').classList.add('active');
     document.getElementById('floatingBackBtn').classList.add('visible');
-    
-    renderSubPage(brandKey, actionKey, false);
+    currentSub = 'betSize';
   }
 
-  function renderSubPage(brandKey, actionKey, isSilentRender) {
-    const brand = BRANDS[brandKey];
-    const content = CONTENT[brandKey] && CONTENT[brandKey][actionKey];
-    if (!brand || !content) return;
-
-    const body = document.getElementById('subBody');
-    
-    // Dynamic Translation for Sub Page
-    let actionLabel = T[currentLang]['action_' + actionKey];
-    if (actionKey === 'register') actionLabel = currentLang === 'mm' ? 'အကောင့်ဖွင့်ရန်နည်းလမ်းများ' : 'Register Steps';
-    if (actionKey === 'deposit') actionLabel = currentLang === 'mm' ? 'ငွေသွင်းရန်နည်းလမ်းများ' : 'Deposit Steps';
-    if (actionKey === 'withdraw') actionLabel = currentLang === 'mm' ? 'ငွေထုတ်ရန်နည်းလမ်းများ' : 'Withdraw Steps';
-
-    let html = '<div class="sub-page-header">' +
-      '<div class="sub-brand-icon">' +
-        '<img src="' + brand.logo + '" alt="' + brand.name + '">' +
-      '</div>' +
-      '<div>' +
-        '<div class="sub-brand-label">' + brand.name + '</div>' +
-        '<div class="sub-page-title">' + actionLabel + '</div>' +
-      '</div>' +
-    '</div>';
-
-    if (content.cta) {
-      const ctaText = currentLang === 'mm' ? content.cta.text_mm : content.cta.text_en;
-      html += '<a class="register-cta" href="' + content.cta.href + '" target="_blank" rel="noopener noreferrer" ' +
-        'style="background:linear-gradient(135deg,' + brand.c1 + ',' + brand.c2 + ');">' +
-        '<i class="fa-solid fa-arrow-up-right-from-square"></i>' +
-        '<span>' + ctaText + '</span>' +
-      '</a>';
+  function closeBetSizePage(silent = false) {
+    if (!silent) {
+      document.getElementById('subScreenBetSize').classList.remove('active');
+      document.getElementById('floatingBackBtn').classList.remove('visible');
+    } else {
+      document.getElementById('subScreenBetSize').classList.remove('active');
+      document.getElementById('floatingBackBtn').classList.remove('visible');
     }
-
-    html += '<div class="step-grid">';
-    content.steps.forEach((step, i) => {
-      const delay = isSilentRender ? 0 : (200 + i * 50);
-      const stepText = currentLang === 'mm' ? step.text_mm : step.text_en;
-      const safeText = stepText.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-      
-      // Added Step Label ("Step 1" / "အဆင့် ၁")
-      const stepLabel = T[currentLang].step_label + ' ' + (i + 1);
-
-      html += '<div class="step-card" data-brand="' + brandKey + '" style="animation-delay:' + delay + 'ms;" onclick="openModal(\'' + step.img + '\', \'' + safeText + '\')">' +
-        '<div class="step-label">' + stepLabel + '</div>' +
-        '<div class="step-photo-wrap">' +
-          '<img src="' + step.img + '" alt="Step ' + (i + 1) + '" loading="lazy" />' +
-        '</div>' +
-        '<div class="step-text">' + stepText + '</div>' +
-      '</div>';
-    });
-    html += '</div>';
-
-    body.innerHTML = html;
-    if (!isSilentRender) body.scrollTop = 0; // Only reset scroll if opening normally
-  }
-
-  // ============ CLOSE SUB ============
-  function closeSub() {
-    document.getElementById('subScreen').classList.remove('active');
-    document.getElementById('floatingBackBtn').classList.remove('visible');
     currentSub = null;
   }
 
-  // ============ BACK ============
-  function goBack() {
-    if (currentSub) closeSub();
-  }
+  // ============ BET SIZE LOGIC ============
+  const betSizeState = { profitMult: 1, betCount: 6, openPicker: null, lastResult: null };
 
-  // ============ MODAL (POP-UP) ============
-  function openModal(imgSrc, text) {
-    document.getElementById('modalImg').src = imgSrc;
-    document.getElementById('modalText').innerHTML = text;
-    document.getElementById('photoModal').classList.add('active');
-  }
-
-  function closeModal(e) {
-    if (e && e.target !== e.currentTarget && !e.target.closest('.modal-close')) return;
-    document.getElementById('photoModal').classList.remove('active');
-  }
-
-  // ============ ESC ============
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      if (document.getElementById('photoModal').classList.contains('active')) {
-        document.getElementById('photoModal').classList.remove('active');
-      } else if (document.getElementById('langSheet').classList.contains('active')) {
-        closeLangSheet();
-      } else if (currentSub) {
-        closeSub();
-      }
+  function buildBetSizePickerOptions(type, forceRebuild = false) {
+    const hostId = type === 'profit' ? 'betSizeProfitOptions' : 'betSizeCountOptions';
+    const host = document.getElementById(hostId);
+    if (!host) return;
+    if (host.dataset.ready === '1' && !forceRebuild) return;
+    
+    host.innerHTML = '';
+    const start = type === 'profit' ? 1 : 6;
+    const end = type === 'profit' ? 20 : 15;
+    const selected = type === 'profit' ? betSizeState.profitMult : betSizeState.betCount;
+    
+    for (let i = start; i <= end; i++) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'betsize-option' + (i === selected ? ' selected' : '');
+      btn.textContent = type === 'profit' ? (currentLang==='mm'?toMMNumber(i):i) + '×' : (currentLang==='mm'?toMMNumber(i):i);
+      btn.onclick = () => selectBetSizeOption(type, i);
+      host.appendChild(btn);
     }
-  });
+    host.dataset.ready = '1';
+  }
 
-  // ============ IMAGE LONG-PRESS PROTECTION ============
-  document.addEventListener('contextmenu', (e) => {
-    if (e.target && e.target.tagName === 'IMG') e.preventDefault();
-  }, true);
-  document.addEventListener('dragstart', (e) => {
-    if (e.target && e.target.tagName === 'IMG') e.preventDefault();
-  }, true);
+  function toggleBetSizePicker(type) {
+    const options = document.getElementById(type === 'profit' ? 'betSizeProfitOptions' : 'betSizeCountOptions');
+    const btn = document.getElementById(type === 'profit' ? 'betSizeProfitBtn' : 'betSizeCountBtn');
+    if (!options || !btn) return;
+    const willOpen = !options.classList.contains('open');
+    closeBetSizePickers();
+    if (willOpen) {
+      options.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+      betSizeState.openPicker = type;
+    }
+  }
+
+  function closeBetSizePickers() {
+    ['profit', 'count'].forEach(type => {
+      document.getElementById(type === 'profit' ? 'betSizeProfitOptions' : 'betSizeCountOptions').classList.remove('open');
+      document.getElementById(type === 'profit' ? 'betSizeProfitBtn' : 'betSizeCountBtn').setAttribute('aria-expanded', 'false');
+    });
+    betSizeState.openPicker = null;
+  }
+
+  function selectBetSizeOption(type, value) {
+    if (type === 'profit') {
+      betSizeState.profitMult = value;
+      document.getElementById('betSizeProfitLabel').textContent = (currentLang==='mm'?toMMNumber(value):value) + '×';
+    } else {
+      betSizeState.betCount = value;
+      document.getElementById('betSizeCountLabel').textContent = currentLang==='mm'?toMMNumber(value):value;
+    }
+    document.querySelectorAll(`#${type==='profit'?'betSizeProfitOptions':'betSizeCountOptions'} .betsize-option`).forEach((el, idx) => {
+      const i = type === 'profit' ? (idx+1) : (idx+6);
+      el.classList.toggle('selected', i === value);
+    });
+    closeBetSizePickers();
+  }
+
+  function parseAmount(raw) {
+    const enStr = toENNumber(String(raw).replace(/,/g, '').trim());
+    if (!enStr) return { ok: false, msg: currentLang==='mm'?'ပမာဏထည့်ပါ။':'Enter amount.' };
+    if (!/^\d+$/.test(enStr)) return { ok: false, msg: currentLang==='mm'?'ဂဏန်းများသာ ရိုက်ပါ။':'Numbers only.' };
+    const value = Number(enStr);
+    if (value < 100) return { ok: false, msg: currentLang==='mm'?'အနည်းဆုံး ၁၀၀ ထည့်ပါ။':'Min 100.' };
+    if (value % 100 !== 0) return { ok: false, msg: currentLang==='mm'?'ဆယ်ဂဏန်း မပါရပါ။':'No tens.' };
+    return { ok: true, value };
+  }
+
+  function runBetSizeCalculator() {
+    const input = document.getElementById('betSizeFirstAmount');
+    const parsed = parseAmount(input.value);
+    const errEl = document.getElementById('betSizeAmountError');
+    
+    if (!parsed.ok) {
+      errEl.textContent = parsed.msg;
+      errEl.classList.add('show');
+      return;
+    }
+    errEl.classList.remove('show');
+    closeBetSizePickers();
+    document.getElementById('betSizeResult').classList.remove('show');
+    
+    const btn = document.getElementById('betSizeCalcBtn');
+    btn.disabled = true;
+    
+    setTimeout(() => {
+      const rows = [];
+      let total = 0, running = 0;
+      for (let i = 1; i <= betSizeState.betCount; i++) {
+        const profit = parsed.value * (1 + (i - 1) * betSizeState.profitMult);
+        const amount = i === 1 ? parsed.value : (running + profit);
+        rows.push({ no: i, amount, profit });
+        running += amount;
+        total += amount;
+      }
+      
+      const body = document.getElementById('betSizeResultBody');
+      body.innerHTML = rows.map(r => `
+        <tr>
+          <td>${currentLang==='mm'?toMMNumber(r.no):r.no}</td>
+          <td>${formatNumber(r.amount, currentLang)}</td>
+          <td>${formatNumber(r.profit, currentLang)}</td>
+        </tr>
+      `).join('');
+      
+      document.getElementById('betSizeTotalAmount').textContent = formatNumber(total, currentLang);
+      document.getElementById('betSizeResult').classList.add('show');
+      betSizeState.lastResult = { rows, total };
+      
+      btn.disabled = false;
+    }, 400);
+  }
+
+  function copyBetSizeResult() {
+    if (!betSizeState.lastResult) return;
+    const res = betSizeState.lastResult;
+    let text = `No.\tAmount\tProfits\n`;
+    res.rows.forEach(r => {
+      text += `${currentLang==='mm'?toMMNumber(r.no):r.no}\t${formatNumber(r.amount, currentLang)}\t${formatNumber(r.profit, currentLang)}\n`;
+    });
+    text += `Total\t${formatNumber(res.total, currentLang)}`;
+    
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.getElementById('betSizeCopyBtn');
+      const orig = btn.textContent;
+      btn.textContent = currentLang==='mm'?'ပြီးပါပြီ':'Copied';
+      setTimeout(() => btn.textContent = orig, 1500);
+    });
+  }
+
+  function initBetSizePage() {
+    const input = document.getElementById('betSizeFirstAmount');
+    if (input) {
+      input.addEventListener('input', function() {
+        let val = this.value;
+        // Allow English, Myanmar digits, and commas
+        val = val.replace(/[^0-9၀-၉,]/g, ''); 
+        this.value = val;
+        document.getElementById('betSizeAmountError').classList.remove('show');
+      });
+    }
+  }
+
+  // ============ BRAND ACTIONS (Placeholder Logic) ============
+  function openBrandAction(brand, action) {
+    // This is where your existing logic goes for showing register/deposit/withdraw
+    // For now, it just alerts so you can test the navigation
+    alert(`Opening ${brand} -> ${action}`);
+  }
 </script>
 
 </body>
