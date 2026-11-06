@@ -229,7 +229,18 @@
   .tool-name { font-size: 16px; font-weight: 800; color: var(--text-main); }
   .tool-arrow { color: var(--text-subtle); font-size: 14px; }
 
-  /* ============ BET SIZE (SUB PAGE) ============ */
+  /* ============ CHATS MENU ============ */
+  .chats-menu-list { display: flex; flex-direction: column; gap: 12px; }
+  .chats-menu-item {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--r-btn);
+    padding: 16px; font-size: 15px; font-weight: 700; color: var(--text-main);
+    display: flex; justify-content: space-between; align-items: center;
+    box-shadow: var(--shadow-btn); transition: transform 0.2s;
+  }
+  .chats-menu-item:active { transform: scale(0.97); }
+  .chats-menu-item i { color: var(--text-muted); }
+
+  /* ============ SUB SCREEN (Bet Size) ============ */
   .sub-screen {
     position: fixed; inset: 0; z-index: 900; background: var(--bg-page);
     transform: translateX(100%); transition: transform 0.55s var(--ease);
@@ -237,7 +248,6 @@
     padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px)); will-change: transform;
   }
   .sub-screen.active { transform: translateX(0); }
-
   .sub-screen-body {
     flex: 1; overflow-y: auto; padding: 20px 16px calc(32px + env(safe-area-inset-bottom, 0px));
     max-width: 480px; margin: 0 auto; width: 100%; -webkit-overflow-scrolling: touch;
@@ -252,27 +262,19 @@
     flex-shrink: 0; background: #fff; border: 1.5px solid var(--border);
     display: flex; align-items: center; justify-content: center;
   }
-  .sub-brand-icon img { width: 100%; height: 100%; object-fit: cover; }
   .sub-brand-icon .icon-wrap {
     width: 100%; height: 100%; display: flex; align-items: center; justify-content: center;
     background: linear-gradient(135deg, var(--ck-1), var(--ck-2)); color: #fff; font-size: 22px;
   }
-
   .sub-brand-label { font-size: 12px; font-weight: 700; color: var(--text-subtle); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px; }
   .sub-page-title { font-size: 20px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.2; color: var(--text-main); }
 
-  /* Bet Size Form */
   .betsize-card {
     background: var(--bg-card); border: 1px solid var(--border);
     border-radius: 18px; padding: 16px; margin-bottom: 16px;
-    box-shadow: var(--shadow-card);
-    animation: stepFadeUp 0.5s var(--spring) both;
+    box-shadow: var(--shadow-card); animation: stepFadeUp 0.5s var(--spring) both;
   }
-  
-  .betsize-label {
-    display: block; font-size: 13px; font-weight: 800; color: var(--text-main); margin-bottom: 8px;
-  }
-  
+  .betsize-label { display: block; font-size: 13px; font-weight: 800; color: var(--text-main); margin-bottom: 8px; }
   .betsize-input {
     width: 100%; min-height: 48px; border: 1.5px solid var(--border);
     border-radius: 12px; background: var(--bg-input); padding: 12px 14px;
@@ -303,8 +305,7 @@
   .betsize-option {
     min-height: 36px; border: 1px solid var(--border); border-radius: 8px;
     background: var(--bg-card); color: var(--text-main); font-size: 13px; font-weight: 700;
-    cursor: pointer; display: flex; align-items: center; justify-content: center;
-    transition: all 0.2s;
+    cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s;
   }
   .betsize-option:hover { border-color: var(--ck-2); color: var(--ck-2); }
   .betsize-option.selected { background: var(--ck-2); color: #fff; border-color: var(--ck-2); }
@@ -318,7 +319,6 @@
   .betsize-calc-btn:active { transform: scale(0.96); }
   .betsize-calc-btn:disabled { opacity: 0.7; cursor: not-allowed; }
 
-  /* Bet Size Result */
   .betsize-result { display: none; background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; overflow: hidden; box-shadow: var(--shadow-card); }
   .betsize-result.show { display: block; }
   .betsize-table { width: 100%; border-collapse: collapse; }
@@ -326,9 +326,60 @@
   .betsize-table th { font-size: 11px; font-weight: 800; text-transform: uppercase; color: var(--text-muted); background: var(--bg-input); }
   .betsize-table td { font-weight: 700; color: var(--text-main); }
   .betsize-table tfoot td { border-bottom: none; border-top: 2px solid var(--border); background: var(--bg-input); color: var(--text-main); font-weight: 800; }
-  .betsize-copy-btn {
-    background: var(--ck-2); color: #fff; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700;
+  .betsize-copy-btn { background: var(--ck-2); color: #fff; border: none; padding: 6px 12px; border-radius: 8px; font-size: 12px; font-weight: 700; }
+
+  /* ============ FULL ACTION SCREENS (From old Index) ============ */
+  .brand-action-active {
+    display: block !important;
+    position: fixed !important;
+    top: calc(var(--header-h) + env(safe-area-inset-top, 0px));
+    left: 0; right: 0; bottom: 0;
+    z-index: 1500;
+    overflow-y: auto;
+    background: var(--bg-page);
+    padding: 16px 16px 40px;
+    animation: slideInFromRight 0.55s cubic-bezier(0.32, 0.72, 0, 1);
   }
+  .brand-action-active.is-closing { animation: slideOutToRight 0.4s var(--ease) forwards; }
+  @keyframes slideInFromRight { from { transform: translateX(100%); } to { transform: translateX(0); } }
+  @keyframes slideOutToRight { from { transform: translateX(0); } to { transform: translateX(100%); } }
+
+  .action-content-wrapper { max-width: 480px; margin: 0 auto; }
+  .action-title { font-size: 22px; font-weight: 800; color: var(--text-main); margin-bottom: 6px; text-align: center; }
+  .action-intro { font-size: 13px; color: var(--text-muted); text-align: center; margin-bottom: 20px; }
+  
+  .photos-grid-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  
+  .register-step-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 12px; box-shadow: var(--shadow-card);
+    display: flex; flex-direction: column;
+  }
+  .step-photo-container {
+    width: 100%; border-radius: 10px; overflow: hidden; margin-bottom: 10px;
+    background: var(--bg-input); border: 1px solid var(--border);
+  }
+  .step-photo { width: 100%; height: auto; display: block; object-fit: cover; }
+  
+  .register-now-btn {
+    display: block; width: 100%; padding: 14px; border-radius: 12px;
+    font-size: 15px; font-weight: 700; text-align: center; color: #fff; text-decoration: none;
+    margin-bottom: 12px; background: linear-gradient(135deg, #818cf8, #4f46e5);
+  }
+  .register-now-btn.ck-btn { background: linear-gradient(135deg, #818cf8, #4f46e5); }
+  .register-now-btn.bigwin-btn { background: linear-gradient(135deg, #34d399, #16a34a); }
+  .register-now-btn.sixwin-btn { background: linear-gradient(135deg, #f87171, #dc2626); }
+  .register-now-btn.shwe-btn { background: linear-gradient(135deg, #fb923c, #ea580c); }
+
+  .description-text {
+    font-size: 12px; line-height: 1.6; color: var(--text-main);
+    padding: 12px; border-radius: 10px; background: var(--bg-input);
+    border-left: 3px solid var(--ck-2);
+  }
+  .brand-ck .description-text { border-left-color: var(--ck-2); }
+  .brand-bigwin .description-text { border-left-color: var(--bigwin-2); }
+  .brand-sixwin .description-text { border-left-color: var(--sixwin-2); }
+  .brand-shwe .description-text { border-left-color: var(--shwe-2); }
 
   /* Bottom Nav */
   .bottom-nav {
@@ -343,8 +394,7 @@
 
   .nav-item {
     flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
-    color: var(--text-subtle); background: none; position: relative;
-    transition: color 0.2s;
+    color: var(--text-subtle); background: none; position: relative; transition: color 0.2s;
   }
   .nav-item i { font-size: 18px; transition: transform 0.3s var(--spring); }
   .nav-label { font-size: 10px; font-weight: 700; }
@@ -362,29 +412,6 @@
   }
   .floating-back-btn.visible { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
   @media (max-width: 480px) { .floating-back-btn { left: calc(50% - (100vw - 32px) / 2 + 20px); } }
-
-  /* Modal / Sheet */
-  .modal-overlay {
-    position: fixed; inset: 0; z-index: 9999;
-    background: rgba(0, 0, 0, 0.6); backdrop-filter: blur(4px);
-    display: flex; align-items: center; justify-content: center; padding: 20px;
-    opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
-  }
-  .modal-overlay.active { opacity: 1; pointer-events: auto; }
-  .modal-content {
-    background: var(--bg-card); width: 100%; max-width: 420px; max-height: 85vh;
-    border-radius: 20px; position: relative; display: flex; flex-direction: column;
-    transform: scale(0.95) translateY(10px); transition: transform 0.3s var(--spring); overflow: hidden;
-  }
-  .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
-  .modal-close {
-    position: absolute; top: 12px; right: 12px; width: 36px; height: 36px;
-    background: var(--bg-input); border-radius: 50%; color: var(--text-main);
-    display: flex; align-items: center; justify-content: center; font-size: 16px; z-index: 10;
-  }
-  .modal-scrollable { padding: 16px; overflow-y: auto; -webkit-overflow-scrolling: touch; }
-  .modal-img { width: 100%; border-radius: 12px; margin-bottom: 16px; display: block; }
-  .modal-text { font-size: 14px; line-height: 1.7; color: var(--text-main); padding-bottom: 10px; }
 
   /* Lang Sheet */
   .sheet-overlay { position: fixed; inset: 0; z-index: 9998; background: rgba(0,0,0,0.4); opacity: 0; pointer-events: none; transition: opacity 0.3s; }
@@ -438,7 +465,7 @@
   </div>
 </header>
 
-<!-- HOME TAB -->
+<!-- ============ HOME TAB ============ -->
 <div id="screen-home" class="screen active">
   <div class="screen-inner">
     <div class="brand-list">
@@ -533,7 +560,29 @@
   </div>
 </div>
 
-<!-- TOOLS TAB -->
+<!-- ============ PREDICTION TAB ============ -->
+<div id="screen-prediction" class="screen">
+  <div class="screen-inner" style="text-align: center; padding-top: 40px;">
+    <!-- Placeholder for Prediction if needed, but Menu is triggered via JS -->
+    <button class="chats-menu-item" onclick="showMiniPage('ck30Mini1-1')">WinGo 30 Sec (Test)</button>
+  </div>
+</div>
+
+<!-- ============ CHATS TAB ============ -->
+<div id="screen-chats" class="screen">
+  <div class="screen-inner">
+    <div class="chats-menu-list">
+      <button class="chats-menu-item" onclick="openMiniPage('ck30HistoryChats')">Ck WinGo 30 Sec <i class="fa-solid fa-chevron-right"></i></button>
+      <button class="chats-menu-item" onclick="openMiniPage('ck1HistoryChats')">Ck WinGo 1 Min <i class="fa-solid fa-chevron-right"></i></button>
+      <button class="chats-menu-item" onclick="openMiniPage('bigWin30HistoryChats')">777 BigWin WinGo 30 Sec <i class="fa-solid fa-chevron-right"></i></button>
+      <button class="chats-menu-item" onclick="openMiniPage('bigWin1HistoryChats')">777 BigWin WinGo 1 Min <i class="fa-solid fa-chevron-right"></i></button>
+      <button class="chats-menu-item" onclick="openMiniPage('sixWin30HistoryChats')">SixWin WinGo 30 Sec <i class="fa-solid fa-chevron-right"></i></button>
+      <button class="chats-menu-item" onclick="openMiniPage('sixWin1HistoryChats')">SixWin WinGo 1 Min <i class="fa-solid fa-chevron-right"></i></button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ TOOLS TAB ============ -->
 <div id="screen-tools" class="screen">
   <div class="screen-inner">
     <div class="tool-card" onclick="openBetSizePage()">
@@ -546,27 +595,60 @@
   </div>
 </div>
 
-<!-- OTHER PLACEHOLDER TABS -->
-<div id="screen-prediction" class="screen">
-  <div class="screen-inner" style="text-align:center; padding-top: 40px;">
-    <h2 data-t="nav_prediction">Prediction</h2>
-  </div>
-</div>
-<div id="screen-chats" class="screen">
-  <div class="screen-inner" style="text-align:center; padding-top: 40px;">
-    <h2 data-t="nav_chats">Chats</h2>
-  </div>
-</div>
+<!-- ============ PROFILE TAB ============ -->
 <div id="screen-profile" class="screen">
-  <div class="screen-inner" style="text-align:center; padding-top: 40px;">
+  <div class="screen-inner" style="text-align: center; padding-top: 40px;">
     <h2 data-t="nav_profile">Profile</h2>
   </div>
 </div>
 
-<!-- BET SIZE PAGE (Slide-in) -->
+<!-- ============ FULL ACTION SCREENS (Register/Deposit/Withdraw) ============ -->
+
+<!-- Ck Action -->
+<div id="action-ck" class="screen" data-brand="ck">
+  <div class="action-content-wrapper brand-ck">
+    <h1 class="action-title" id="ck-action-title">Ck Register</h1>
+    <div class="photos-grid-row" id="ck-action-content"></div>
+  </div>
+</div>
+
+<!-- BigWin Action -->
+<div id="action-bigwin" class="screen" data-brand="bigwin">
+  <div class="action-content-wrapper brand-bigwin">
+    <h1 class="action-title" id="bigwin-action-title">BigWin Register</h1>
+    <div class="photos-grid-row" id="bigwin-action-content"></div>
+  </div>
+</div>
+
+<!-- SixWin Action -->
+<div id="action-sixwin" class="screen" data-brand="sixwin">
+  <div class="action-content-wrapper brand-sixwin">
+    <h1 class="action-title" id="sixwin-action-title">SixWin Register</h1>
+    <div class="photos-grid-row" id="sixwin-action-content"></div>
+  </div>
+</div>
+
+<!-- Shwe Action -->
+<div id="action-shwe" class="screen" data-brand="shwe">
+  <div class="action-content-wrapper brand-shwe">
+    <h1 class="action-title" id="shwe-action-title">Shwe Register</h1>
+    <div class="photos-grid-row" id="shwe-action-content"></div>
+  </div>
+</div>
+
+<!-- ============ MINI PAGES (Iframes) ============ -->
+<div id="ck30Mini1-1" class="mini-page" style="position:fixed; inset:0; z-index:2000; background:#fff; display:none;">
+  <iframe src="Mini/CkMini/ck30mini1-1.html" style="width:100%; height:100%; border:none;"></iframe>
+</div>
+<!-- (Add other mini-pages here if needed, but for full integration, they map to your iframe paths) -->
+<!-- We will just put the History Chat iframes for demonstration -->
+<div id="ck30HistoryChats" class="mini-page" style="position:fixed; inset:0; z-index:2000; background:#fff; display:none;">
+  <iframe src="History%20Chat/Ck%20WinGo%2030/ck30results.html" style="width:100%; height:100%; border:none;"></iframe>
+</div>
+
+<!-- ============ BET SIZE SUB-SCREEN ============ -->
 <div id="subScreenBetSize" class="sub-screen">
   <div class="sub-screen-body">
-    
     <div class="sub-page-header">
       <div class="sub-brand-icon">
         <div class="icon-wrap"><i class="fa-solid fa-calculator"></i></div>
@@ -622,12 +704,11 @@
         </tfoot>
       </table>
     </div>
-
   </div>
 </div>
 
 <!-- FLOATING BACK BTN -->
-<button class="floating-back-btn" id="floatingBackBtn" onclick="closeBetSizePage()" aria-label="Back">
+<button class="floating-back-btn" id="floatingBackBtn" onclick="handleBack()" aria-label="Back">
   <i class="fa-solid fa-arrow-left"></i>
 </button>
 
@@ -719,7 +800,8 @@
   // ============ STATE & INIT ============
   let currentLang = localStorage.getItem('appLang') || 'en';
   let currentTheme = localStorage.getItem('appTheme') || 'light';
-  let currentSub = null;
+  let activeActionScreen = null;
+  let isBetSizeOpen = false;
 
   document.addEventListener('DOMContentLoaded', () => {
     applyTheme(currentTheme);
@@ -773,13 +855,12 @@
     document.getElementById('opt-mm').classList.toggle('active', lang === 'mm');
     document.getElementById('opt-en').classList.toggle('active', lang === 'en');
 
-    // Update Bet size inputs/buttons if already rendered
+    // Update Bet size labels if page is active
     const profitLabel = document.getElementById('betSizeProfitLabel');
     if(profitLabel) profitLabel.textContent = (lang==='mm'?toMMNumber(betSizeState.profitMult):betSizeState.profitMult) + '×';
     const countLabel = document.getElementById('betSizeCountLabel');
     if(countLabel) countLabel.textContent = lang==='mm'?toMMNumber(betSizeState.betCount):betSizeState.betCount;
     
-    // Update picker options if open
     buildBetSizePickerOptions('profit', true);
     buildBetSizePickerOptions('count', true);
   }
@@ -790,37 +871,151 @@
     closeLangSheet();
   }
 
-  // ============ SHEET ============
+  // ============ LANG SHEET ============
   function openLangSheet() { document.getElementById('sheetOverlay').classList.add('active'); document.getElementById('langSheet').classList.add('active'); }
   function closeLangSheet() { document.getElementById('sheetOverlay').classList.remove('active'); document.getElementById('langSheet').classList.remove('active'); }
 
-  // ============ TABS ============
+  // ============ NAVIGATION TABS ============
   function switchTab(tab) {
+    // Close sub pages first
     closeBetSizePage(true);
+    closeBrandAction(true);
+
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById('screen-' + tab).classList.add('active');
+    
     document.querySelectorAll('.nav-item').forEach(item => item.classList.toggle('active', item.dataset.tab === tab));
     document.getElementById('bottomNav').classList.remove('hidden');
     document.getElementById('floatingBackBtn').classList.remove('visible');
     window.scrollTo(0, 0);
   }
 
+  // ============ BRAND ACTION (REGISTER/DEPOSIT/WITHDRAW) ============
+  // This uses the raw HTML from your old file
+  const actionData = {
+    ck: {
+      register: {
+        title: "Ck Lottery Register",
+        html: `<div class="register-step-card"><div class="step-photo-container"><img src="Ck Lottery/Ck Lottery Register Photo/photo_1.jpg" class="step-photo"></div><a href="http://www.cklottery.top/#/register?invitationCode=81487219676" target="_blank" class="register-now-btn ck-btn">Register Now</a><div class="description-text">- Ck Lottery Register Now ကိုနိပ်ပါ။</div></div>
+               <div class="register-step-card"><div class="step-photo-container"><img src="Ck Lottery/Ck Lottery Register Photo/photo_2.jpg" class="step-photo"></div><div class="description-text">- Set Password & Confirm Password။</div></div>`
+      },
+      deposit: {
+        title: "Ck Lottery Deposit",
+        html: `<div class="register-step-card"><div class="step-photo-container"><img src="Ck Lottery/Ck Lottery deposite Photo/p1.jpg" class="step-photo"></div><div class="description-text">- Ck Lottery Account ထဲကိုဝင်ပါ။</div></div>
+               <div class="register-step-card"><div class="step-photo-container"><img src="Ck Lottery/Ck Lottery deposite Photo/p2.jpg" class="step-photo"></div><div class="description-text">- Deposit ကိုနိပ်ပါ။</div></div>`
+      },
+      withdraw: {
+        title: "Ck Lottery Withdraw",
+        html: `<div class="register-step-card"><div class="step-photo-container"><img src="Ck Lottery/Ck Lottery Withdraw Photo/p1.jpg" class="step-photo"></div><div class="description-text">- Account ထဲကိုဝင်ပါ။</div></div>`
+      }
+    },
+    bigwin: {
+      register: {
+        title: "777 BigWin Register",
+        html: `<div class="register-step-card"><div class="step-photo-container"><img src="BigWin/BigWin Register Photo/b_photos_1.jpg" class="step-photo"></div><a href="https://www.777bigwingame.vip/#/register?invitationCode=22884102596" target="_blank" class="register-now-btn bigwin-btn">Register Now</a><div class="description-text">- 777 BigWin Register Now ကိုနိပ်ပါ။</div></div>`
+      },
+      deposit: { title: "777 BigWin Deposit", html: `<div class="register-step-card"><div class="step-photo-container"><img src="BigWin/BigWin Deposite Photo/p1.jpg" class="step-photo"></div><div class="description-text">- 777 BigWin ထဲကိုဝင်ပါ။</div></div>` },
+      withdraw: { title: "777 BigWin Withdraw", html: `<div class="register-step-card"><div class="step-photo-container"><img src="BigWin/BigWin Withdraw Photo/p1.jpg" class="step-photo"></div><div class="description-text">- 777 BigWin Account ထဲကိုဝင်ပါ။</div></div>` }
+    },
+    sixwin: {
+      register: {
+        title: "SixWin Register",
+        html: `<div class="register-step-card"><div class="step-photo-container"><img src="SixWin/Six Win Register Photo/photo_1.jpg" class="step-photo"></div><a href="https://www.6win333.com/#/register?invitationCode=35815623835" target="_blank" class="register-now-btn sixwin-btn">Register Now</a><div class="description-text">- SixWin Register Now ကိုနိပ်ပါ။</div></div>`
+      },
+      deposit: { title: "SixWin Deposit", html: `<div class="register-step-card"><div class="step-photo-container"><img src="SixWin/Six Win Deposite Photo/photo_1.jpg" class="step-photo"></div><div class="description-text">- SixWin Account ကိုနိပ်ပါ။</div></div>` },
+      withdraw: { title: "SixWin Withdraw", html: `<div class="register-step-card"><div class="step-photo-container"><img src="SixWin/Six Win Withdraw Photo/photo_1.jpg" class="step-photo"></div><div class="description-text">- Account ကိုနိပ်ပါ။</div></div>` }
+    },
+    shwe: {
+      register: {
+        title: "Shwe Register",
+        html: `<div class="register-step-card"><div class="step-photo-container"><img src="Shwe/Shwe Register Photo/photo_1.jpg" class="step-photo"></div><a href="https://www.shwe008.com/#/register?invitationCode=12843101366" target="_blank" class="register-now-btn shwe-btn">Register Now</a><div class="description-text">- Shwe Register Now ကိုနိပ်ပါ။</div></div>`
+      },
+      deposit: { title: "Shwe Deposit", html: `<div class="register-step-card"><div class="step-photo-container"><img src="Shwe/Shwe Deposite Photo/photo_1.jpg" class="step-photo"></div><div class="description-text">- Shwe Account ကိုနိပ်ပါ။</div></div>` },
+      withdraw: { title: "Shwe Withdraw", html: `<div class="register-step-card"><div class="step-photo-container"><img src="Shwe/Shwe Withdraw Photo/photo_1.jpg" class="step-photo"></div><div class="description-text">- Account ကိုနိပ်ပါ။</div></div>` }
+    }
+  };
+
+  function openBrandAction(brand, action) {
+    const data = actionData[brand][action];
+    if(!data) return;
+
+    // Close bet size if open
+    closeBetSizePage(true);
+
+    const targetScreen = document.getElementById('action-' + brand);
+    const titleEl = document.getElementById(brand + '-action-title');
+    const contentEl = document.getElementById(brand + '-action-content');
+
+    titleEl.textContent = data.title;
+    // Add the HTML content (We wrap in the grid layout, or just insert raw HTML)
+    contentEl.innerHTML = data.html;
+
+    // Hide other screens
+    document.querySelectorAll('.screen').forEach(s => {
+      s.classList.remove('active', 'brand-action-active', 'is-closing');
+      if(s.id !== 'action-' + brand) s.style.display = 'none';
+    });
+
+    // Show target screen
+    targetScreen.style.display = 'block';
+    targetScreen.classList.add('brand-action-active');
+    activeActionScreen = targetScreen;
+
+    document.getElementById('bottomNav').classList.add('hidden');
+    document.getElementById('floatingBackBtn').classList.add('visible');
+  }
+
+  function closeBrandAction(silent = false) {
+    if (!activeActionScreen) return;
+    const screen = activeActionScreen;
+    activeActionScreen = null;
+
+    if (!silent) {
+      screen.classList.add('is-closing');
+      setTimeout(() => {
+        screen.classList.remove('brand-action-active', 'is-closing');
+        screen.style.display = 'none';
+        document.getElementById('floatingBackBtn').classList.remove('visible');
+        document.getElementById('bottomNav').classList.remove('hidden');
+      }, 400);
+    } else {
+      screen.classList.remove('brand-action-active', 'is-closing');
+      screen.style.display = 'none';
+      document.getElementById('floatingBackBtn').classList.remove('visible');
+    }
+  }
+
+  // ============ MINI PAGES (Iframes) ============
+  function openMiniPage(pageId) {
+    const page = document.getElementById(pageId);
+    if(page) {
+      page.style.display = 'block';
+      document.getElementById('floatingBackBtn').classList.add('visible');
+      document.getElementById('bottomNav').classList.add('hidden');
+      activeActionScreen = page; // Reuse closeBrandAction logic for closing mini pages
+    }
+  }
+
   // ============ BET SIZE SUB-PAGE ============
   function openBetSizePage() {
     document.getElementById('subScreenBetSize').classList.add('active');
     document.getElementById('floatingBackBtn').classList.add('visible');
-    currentSub = 'betSize';
+    document.getElementById('bottomNav').classList.add('hidden');
+    isBetSizeOpen = true;
   }
 
   function closeBetSizePage(silent = false) {
-    if (!silent) {
-      document.getElementById('subScreenBetSize').classList.remove('active');
-      document.getElementById('floatingBackBtn').classList.remove('visible');
-    } else {
-      document.getElementById('subScreenBetSize').classList.remove('active');
-      document.getElementById('floatingBackBtn').classList.remove('visible');
-    }
-    currentSub = null;
+    if (!isBetSizeOpen) return;
+    document.getElementById('subScreenBetSize').classList.remove('active');
+    document.getElementById('floatingBackBtn').classList.remove('visible');
+    document.getElementById('bottomNav').classList.remove('hidden');
+    isBetSizeOpen = false;
+  }
+
+  // ============ BACK BUTTON HANDLER ============
+  function handleBack() {
+    if (isBetSizeOpen) closeBetSizePage();
+    else if (activeActionScreen) closeBrandAction();
   }
 
   // ============ BET SIZE LOGIC ============
@@ -909,7 +1104,9 @@
     document.getElementById('betSizeResult').classList.remove('show');
     
     const btn = document.getElementById('betSizeCalcBtn');
+    const originalText = btn.textContent;
     btn.disabled = true;
+    btn.textContent = currentLang==='mm'?'တွက်ချက်နေသည်...':'Calculating...';
     
     setTimeout(() => {
       const rows = [];
@@ -936,17 +1133,20 @@
       betSizeState.lastResult = { rows, total };
       
       btn.disabled = false;
+      btn.textContent = originalText;
     }, 400);
   }
 
   function copyBetSizeResult() {
     if (!betSizeState.lastResult) return;
     const res = betSizeState.lastResult;
-    let text = `No.\tAmount\tProfits\n`;
+    const header = currentLang === 'mm' ? 'နံပါတ်\tပမာဏ\tအမြတ်ငွေများ\n' : 'No.\tAmount\tProfits\n';
+    let text = header;
+    
     res.rows.forEach(r => {
       text += `${currentLang==='mm'?toMMNumber(r.no):r.no}\t${formatNumber(r.amount, currentLang)}\t${formatNumber(r.profit, currentLang)}\n`;
     });
-    text += `Total\t${formatNumber(res.total, currentLang)}`;
+    text += `${currentLang==='mm'?'စုစုပေါင်း':'Total'}\t${formatNumber(res.total, currentLang)}`;
     
     navigator.clipboard.writeText(text).then(() => {
       const btn = document.getElementById('betSizeCopyBtn');
@@ -961,19 +1161,11 @@
     if (input) {
       input.addEventListener('input', function() {
         let val = this.value;
-        // Allow English, Myanmar digits, and commas
         val = val.replace(/[^0-9၀-၉,]/g, ''); 
         this.value = val;
         document.getElementById('betSizeAmountError').classList.remove('show');
       });
     }
-  }
-
-  // ============ BRAND ACTIONS (Placeholder Logic) ============
-  function openBrandAction(brand, action) {
-    // This is where your existing logic goes for showing register/deposit/withdraw
-    // For now, it just alerts so you can test the navigation
-    alert(`Opening ${brand} -> ${action}`);
   }
 </script>
 
