@@ -943,6 +943,17 @@
   };
 
   // ============ HISTORY CHATS CONFIG ============
+  // Shared Firebase config (all chats use the same ck30-35e97 project)
+  const FIREBASE_PROJECT = {
+    apiKey: "AIzaSyDj6z3O91NnlQ1zVdripiGhqQMsQhR4_ak",
+    authDomain: "ck30-35e97.firebaseapp.com",
+    databaseURL: "https://ck30-35e97-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "ck30-35e97",
+    storageBucket: "ck30-35e97.appspot.com",
+    messagingSenderId: "625630152314",
+    appId: "1:625630152314:web:c035009eec389371b51dc3"
+  };
+
   const HISTORY_CHATS = [
     {
       id: 'ck30',
@@ -951,19 +962,71 @@
       title_mm: 'Ck WinGo 30 မှတ်တမ်း',
       logo: 'Logo/ck_logo.jpg',
       src: 'History%20Chat/Ck%20WinGo%2030/ck30results.html',
-      firebase: {
-        apiKey: "AIzaSyDj6z3O91NnlQ1zVdripiGhqQMsQhR4_ak",
-        authDomain: "ck30-35e97.firebaseapp.com",
-        databaseURL: "https://ck30-35e97-default-rtdb.europe-west1.firebasedatabase.app",
-        projectId: "ck30-35e97",
-        storageBucket: "ck30-35e97.appspot.com",
-        messagingSenderId: "625630152314",
-        appId: "1:625630152314:web:c035009eec389371b51dc3",
-        path: "ckwingo30/default"
-      }
+      firebase: Object.assign({}, FIREBASE_PROJECT, { path: "ckwingo30/default" })
+    },
+    {
+      id: 'ck1',
+      brand: 'ck',
+      title_en: 'Ck WinGo 1 History',
+      title_mm: 'Ck WinGo 1 မှတ်တမ်း',
+      logo: 'Logo/ck_logo.jpg',
+      src: 'History%20Chat/Ck%20WinGo%201/ck1result.html',
+      firebase: Object.assign({}, FIREBASE_PROJECT, { path: "ckwingo1/default" })
+    },
+    {
+      id: 'bigwin30',
+      brand: 'bigwin',
+      title_en: 'BigWin WinGo 30 History',
+      title_mm: 'BigWin WinGo 30 မှတ်တမ်း',
+      logo: 'Logo/bigwin_logo.jpg',
+      src: 'History%20Chat/BigWin%20WinGo%2030/bigwin30results.html',
+      firebase: Object.assign({}, FIREBASE_PROJECT, { path: "bigwin/default" })
+    },
+    {
+      id: 'bigwin1',
+      brand: 'bigwin',
+      title_en: 'BigWin WinGo 1 History',
+      title_mm: 'BigWin WinGo 1 မှတ်တမ်း',
+      logo: 'Logo/bigwin_logo.jpg',
+      src: 'History%20Chat/BigWin%20WinGo%201/bigwin1results.html',
+      firebase: Object.assign({}, FIREBASE_PROJECT, { path: "bigwinwingo1/default" })
+    },
+    {
+      id: 'sixwin30',
+      brand: 'sixwin',
+      title_en: 'SixWin WinGo 30 History',
+      title_mm: 'SixWin WinGo 30 မှတ်တမ်း',
+      logo: 'Logo/sixwin_logo.jpg',
+      src: 'History%20Chat/SixWin%20WinGo%2030/6_30results.html',
+      firebase: Object.assign({}, FIREBASE_PROJECT, { path: "6wingo30/default" })
+    },
+    {
+      id: 'sixwin1',
+      brand: 'sixwin',
+      title_en: 'SixWin WinGo 1 History',
+      title_mm: 'SixWin WinGo 1 မှတ်တမ်း',
+      logo: 'Logo/sixwin_logo.jpg',
+      src: 'History%20Chat/SixWin%20WinGo%201/6_1result.html',
+      firebase: Object.assign({}, FIREBASE_PROJECT, { path: "6wingo1/default" })
+    },
+    {
+      id: 'shwe30',
+      brand: 'shwe',
+      title_en: 'Shwe WinGo 30 History',
+      title_mm: 'Shwe WinGo 30 မှတ်တမ်း',
+      logo: 'Logo/shwe_logo.jpg',
+      src: 'History%20Chat/Shwe%20WinGo%2030/shwe30results.html',
+      firebase: Object.assign({}, FIREBASE_PROJECT, { path: "shwewingo30/default" })
+    },
+    {
+      id: 'shwe1',
+      brand: 'shwe',
+      title_en: 'Shwe WinGo 1 History',
+      title_mm: 'Shwe WinGo 1 မှတ်တမ်း',
+      logo: 'Logo/shwe_logo.jpg',
+      src: 'History%20Chat/Shwe%20WinGo%201/shwe1results.html',
+      firebase: Object.assign({}, FIREBASE_PROJECT, { path: "shwewingo1/default" })
     }
-    // နောက်ထပ် ထပ်ထည့်ရန်:
-    // { id: 'ck1', brand: 'ck', title_en: '...', title_mm: '...', icon: 'fa-clock-rotate-left', src: '...', firebase: { ...config, path: '...' } }
   ];
 
   // ============ CONTENT DATA ============
