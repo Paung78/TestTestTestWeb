@@ -18,6 +18,7 @@
     --bigwin-1: #34d399; --bigwin-2: #16a34a; --bigwin-text: #15803d; --bigwin-bg: #f0fdf4;
     --sixwin-1: #f87171; --sixwin-2: #dc2626; --sixwin-text: #b91c1c; --sixwin-bg: #fef2f2;
     --shwe-1: #fb923c; --shwe-2: #ea580c; --shwe-text: #c2410c; --shwe-bg: #fff7ed;
+    --globaltrx-1: #c084fc; --globaltrx-2: #a855f7; --globaltrx-text: #9333ea; --globaltrx-bg: #faf5ff;
 
     --bg-page: #f8fafc;
     --bg-card: #ffffff;
@@ -44,6 +45,10 @@
     --bigwin-text: #86efac;
     --sixwin-text: #fca5a5;
     --shwe-text: #fdba74;
+    --globaltrx-bg: rgba(168, 85, 247, 0.14);
+    --globaltrx-text: #d8b4fe;
+    --globaltrx-bg: rgba(168, 85, 247, 0.14);
+    --globaltrx-text: #d8b4fe;
 
     --bg-page: #0f172a;
     --bg-card: #1e293b;
@@ -581,6 +586,18 @@
     animation: recordBadgePulse 0.5s ease-in-out;
   }
 
+  /* Global Trx (ခရမ်းရောင်) */
+  .history-chat-card[data-brand="globaltrx"] { background: var(--globaltrx-bg); border-color: transparent; }
+  .history-chat-card[data-brand="globaltrx"] .tool-card-icon { background: rgba(168, 85, 247, 0.15); color: var(--globaltrx-2); }
+  .history-chat-card[data-brand="globaltrx"] .tool-card-title { color: var(--globaltrx-text); }
+  body.dark .history-chat-card[data-brand="globaltrx"] .tool-card-icon { background: rgba(192, 132, 252, 0.20); color: #d8b4fe; }
+
+  /* Global Trx (ခရမ်းရောင်) */
+  .history-chat-card[data-brand="globaltrx"] { background: var(--globaltrx-bg); border-color: transparent; }
+  .history-chat-card[data-brand="globaltrx"] .tool-card-icon { background: rgba(168, 85, 247, 0.15); color: var(--globaltrx-2); }
+  .history-chat-card[data-brand="globaltrx"] .tool-card-title { color: var(--globaltrx-text); }
+  body.dark .history-chat-card[data-brand="globaltrx"] .tool-card-icon { background: rgba(192, 132, 252, 0.20); color: #d8b4fe; }
+
   /* ============ BET SIZE PAGE ============ */
   .betsize-page { display: flex; flex-direction: column; gap: 14px; }
   .betsize-card {
@@ -996,6 +1013,15 @@
   };
 
   const HISTORY_CHATS = [
+    {
+      id: 'globaltrx1',
+      brand: 'globaltrx',
+      title_en: 'Global Trx / Trx Win 1 History',
+      title_mm: 'Global Trx / Trx Win 1 မှတ်တမ်း',
+      logo: 'Logo/trxwin_logo.jpg',
+      src: 'History%20Chat/Global_Trx%201/global_trx1results.html',
+      firebase: Object.assign({}, FIREBASE_PROJECT, { path: "globaltrx/default" })
+    },
     {
       id: 'ck30',
       brand: 'ck',
