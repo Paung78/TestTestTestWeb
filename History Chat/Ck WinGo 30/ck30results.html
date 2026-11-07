@@ -30,7 +30,6 @@
     --text-subtle: #94a3b8;
     --border: #e2e8f0;
     --border-soft: #f1f5f9;
-    --shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
     --shadow-card: 0 4px 20px rgba(15, 23, 42, 0.05);
   }
 
@@ -46,7 +45,6 @@
     --border-soft: #263449;
     --ck-text: #a5b4fc;
     --yellow: #fbbf24;
-    --shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
     --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.25);
   }
 
@@ -101,6 +99,17 @@
     text-transform: uppercase;
     letter-spacing: 0.08em;
     color: var(--ck-text);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  body.lang-mm .card-title {
+    font-size: 12.5px;
+    letter-spacing: 0.02em;
+    text-transform: none;
   }
 
   .live-badge {
@@ -116,6 +125,16 @@
     letter-spacing: 0.08em;
     text-transform: uppercase;
     color: var(--ck-text);
+    flex-shrink: 0;
+    white-space: nowrap;
+  }
+
+  body.lang-mm .live-badge {
+    font-size: 9px;
+    letter-spacing: 0.02em;
+    text-transform: none;
+    padding: 4px 8px;
+    gap: 5px;
   }
 
   .live-dot {
@@ -172,6 +191,12 @@
     text-overflow: ellipsis;
   }
 
+  body.lang-mm th {
+    font-size: 10px;
+    letter-spacing: 0.02em;
+    text-transform: none;
+  }
+
   th.col-no { width: 8%; padding-left: 14px; }
   th.col-period { width: 20%; }
   th.col-num { width: 12%; text-align: center; }
@@ -213,15 +238,40 @@
 
   td.col-color { text-align: center; }
   td.col-bs { text-align: center; }
-
-  td.col-premium {
-    padding-right: 14px;
-  }
+  td.col-premium { padding-right: 14px; }
 
   tbody tr:last-child td { border-bottom: none; }
 
   @media (hover: hover) and (pointer: fine) {
     tbody tr:hover td { background: var(--bg-hover); }
+  }
+
+  /* ============ ROW ANIMATIONS ============ */
+  @keyframes rowSlideIn {
+    from { opacity: 0; transform: translateY(-14px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes rowHighlightFlash {
+    0%   { background-color: rgba(34, 197, 94, 0.28); }
+    60%  { background-color: rgba(34, 197, 94, 0.14); }
+    100% { background-color: transparent; }
+  }
+
+  tr.row-initial {
+    animation: rowSlideIn 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  tr.row-new {
+    animation: rowSlideIn 0.55s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  }
+
+  tr.row-new td {
+    animation: rowHighlightFlash 2.2s ease-out;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    tr.row-initial, tr.row-new, tr.row-new td { animation: none; }
   }
 
   /* ============ COLORS ============ */
@@ -284,6 +334,12 @@
     color: var(--ck-text);
   }
 
+  body.lang-mm .badge {
+    font-size: 10px;
+    letter-spacing: 0.01em;
+    text-transform: none;
+  }
+
   .premium-code {
     display: inline-block;
     padding: 4px 8px;
@@ -335,6 +391,11 @@
     font-weight: 600;
     letter-spacing: 0.02em;
     padding: 2px 0;
+  }
+
+  body.lang-mm .last-update {
+    font-size: 11.5px;
+    letter-spacing: 0;
   }
 
   /* ============ TOAST ============ */
@@ -395,9 +456,12 @@
     .app { gap: 10px; }
     .card { border-radius: 12px; }
     .card-header { padding: 10px 12px; }
-    .card-title { font-size: 12px; }
+    .card-title { font-size: 11.5px; letter-spacing: 0.06em; }
+    body.lang-mm .card-title { font-size: 11px; }
     .live-badge { font-size: 9px; padding: 3px 8px; }
+    body.lang-mm .live-badge { font-size: 8.5px; padding: 3px 7px; }
     th { padding: 8px 6px; font-size: 9.5px; }
+    body.lang-mm th { font-size: 9px; }
     td { padding: 9px 6px; font-size: 12px; }
     td.col-no { font-size: 11px; }
     td.col-num { font-size: 13px; }
@@ -407,6 +471,7 @@
     .colour-dot { width: 13px; height: 13px; }
     .colour-duo .colour-dot { width: 11px; height: 11px; }
     .badge { font-size: 10px; padding: 2px 6px; }
+    body.lang-mm .badge { font-size: 9px; }
     .premium-code { font-size: 10px; padding: 3px 6px; }
   }
 
@@ -422,7 +487,7 @@
 <div class="app">
   <div class="card">
     <div class="card-header">
-      <span class="card-title" data-en="History" data-mm="မှတ်တမ်း">History</span>
+      <span class="card-title" data-en="CK WINGO 30 HISTORY" data-mm="CK WINGO 30 မှတ်တမ်း">CK WINGO 30 HISTORY</span>
       <span class="live-badge">
         <span class="live-dot state-connecting" id="liveDot"></span>
         <span data-en="LIVE" data-mm="တိုက်ရိုက်ထုတ်လွှင့်မှု">LIVE</span>
@@ -458,12 +523,15 @@
   let currentLang = localStorage.getItem(LANG_KEY) || 'en';
   let lastResults = null;
   let lastTimestamp = null;
+  let lastIssueSet = new Set();
+  let hasRenderedOnce = false;
   let connectionState = 'connecting';
+  let lastToastCount = null;
+  let connectedToastTimer = null;
 
   // ============ TRANSLATIONS ============
   const T = {
     en: {
-      connecting: 'Connecting...',
       connected: 'Connected — {n} records',
       noData: 'No data found. Waiting...',
       loadError: 'Load error: ',
@@ -475,7 +543,6 @@
       small: 'SMALL'
     },
     mm: {
-      connecting: 'ချိတ်ဆက်နေသည်...',
       connected: 'ချိတ်ဆက်ပြီး — စရင်း {n} ခု',
       noData: 'ဒေတာမတွေ့ပါ။ စောင့်ဆိုင်းနေသည်...',
       loadError: 'ဖွင့်မရပါ: ',
@@ -515,41 +582,52 @@
     }, 2400);
   }
 
+  // Debounced "connected" toast — only fires once per burst, and only if count changed
+  function scheduleConnectedToast(count) {
+    if (connectedToastTimer) clearTimeout(connectedToastTimer);
+    connectedToastTimer = setTimeout(() => {
+      if (count !== lastToastCount && count > 0) {
+        const msg = T[currentLang].connected.replace('{n}', num(count));
+        showToast(msg, 'success');
+        lastToastCount = count;
+      }
+      connectedToastTimer = null;
+    }, 800);
+  }
+
   // ============ CONNECTION STATE ============
   function setConnectionState(state) {
     connectionState = state;
     const dot = document.getElementById('liveDot');
-    if (dot) {
-      dot.className = 'live-dot state-' + state;
-    }
+    if (dot) dot.className = 'live-dot state-' + state;
   }
 
-  // ============ THEME / LANGUAGE ============
+  // ============ THEME ============
   function applyTheme(theme) {
     document.body.classList.toggle('dark-mode', theme === 'dark');
   }
 
+  // ============ LANGUAGE ============
   function applyLanguage(lang) {
     currentLang = lang;
     localStorage.setItem(LANG_KEY, lang);
     document.documentElement.lang = lang === 'mm' ? 'my' : 'en';
+    document.body.classList.toggle('lang-mm', lang === 'mm');
 
-    // Update static elements with data-en / data-mm
     document.querySelectorAll('[data-en][data-mm]').forEach(el => {
       const txt = el.getAttribute(lang === 'mm' ? 'data-mm' : 'data-en');
       if (txt !== null) el.textContent = txt;
     });
 
-    // Re-render dynamic content
     if (lastResults !== null) {
-      renderTable(lastResults);
+      renderTable(lastResults, true);
     }
     if (lastTimestamp) {
       updateLastUpdateTime(lastTimestamp);
     }
   }
 
-  // ============ BOOT (localStorage) ============
+  // ============ BOOT ============
   function boot() {
     const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
     applyTheme(savedTheme);
@@ -557,7 +635,7 @@
   }
 
   // ============ RECEIVE FROM PARENT ============
-  window.addEventListener('message', function(event) {
+  window.addEventListener('message', function (event) {
     const data = event.data;
     if (!data || typeof data !== 'object') return;
     if (data.type !== 'app-sync') return;
@@ -571,7 +649,7 @@
     }
   });
 
-  window.addEventListener('storage', function(e) {
+  window.addEventListener('storage', function (e) {
     if (e.key === THEME_KEY && e.newValue) applyTheme(e.newValue);
     if (e.key === LANG_KEY && e.newValue) applyLanguage(e.newValue);
   });
@@ -659,7 +737,8 @@
     el.style.display = 'block';
   }
 
-  function renderTable(results) {
+  // ============ RENDER TABLE (with animations) ============
+  function renderTable(results, skipAnimation) {
     lastResults = results;
     const container = document.getElementById('tableContainer');
     if (!container) return;
@@ -676,11 +755,24 @@
           <p class="empty-hint">${t.emptyHint}</p>
         </div>
       `;
+      lastIssueSet = new Set();
+      hasRenderedOnce = false;
       return;
     }
 
+    // Detect new rows (only if we had prior data)
+    const currentSet = new Set(results.map(r => String(r.issueNumber)));
+    const newRows = new Set();
+    const isFirstRender = !hasRenderedOnce;
+    if (!isFirstRender && lastIssueSet.size > 0) {
+      results.forEach(r => {
+        const id = String(r.issueNumber);
+        if (!lastIssueSet.has(id)) newRows.add(id);
+      });
+    }
+
     const th = currentLang === 'mm'
-      ? { no: 'နံပါတ်', period: 'ကာလနံပတ်', num: 'နံပါတ်', color: 'အရောင်', bs: 'အကြီး/အသေး', premium: 'ပရီမီယံ' }
+      ? { no: 'နံပတ်', period: 'ကာလနံပတ်', num: 'နံပတ်', color: 'အရောင်', bs: 'အကြီး/အသေး', premium: 'ပရီမီယံ' }
       : { no: 'No.', period: 'Period', num: 'Num', color: 'Color', bs: 'B/S', premium: 'Premium' };
 
     let html = '<div class="table-scroll"><table><thead><tr>' +
@@ -701,7 +793,24 @@
       const numberDisplay = (result.number !== null && result.number !== undefined) ? result.number : '-';
       const colourHtml = renderColourHtml(resolveColour(result));
 
-      html += '<tr>' +
+      const issueId = String(result.issueNumber);
+
+      let rowClass = '';
+      let rowStyle = '';
+
+      if (!skipAnimation) {
+        if (isFirstRender) {
+          rowClass = 'row-initial';
+          rowStyle = 'animation-delay:' + Math.min(index * 28, 700) + 'ms';
+        } else if (newRows.has(issueId)) {
+          rowClass = 'row-new';
+        }
+      }
+
+      const classAttr = rowClass ? ' class="' + rowClass + '"' : '';
+      const styleAttr = rowStyle ? ' style="' + rowStyle + '"' : '';
+
+      html += '<tr' + classAttr + styleAttr + '>' +
         '<td class="col-no">' + num(index + 1) + '</td>' +
         '<td class="col-period">' + num(periodNumber) + '</td>' +
         '<td class="col-num">' + num(numberDisplay) + '</td>' +
@@ -713,8 +822,12 @@
 
     html += '</tbody></table></div>';
     container.innerHTML = html;
+
+    lastIssueSet = currentSet;
+    hasRenderedOnce = true;
   }
 
+  // ============ CONNECT ============
   function connectFirebase() {
     if (!db && !initializeFirebase()) return;
 
@@ -730,14 +843,12 @@
         const data = snapshot.val();
 
         if (data && data.list && Array.isArray(data.list)) {
-          renderTable(data.list);
+          renderTable(data.list, false);
           updateLastUpdateTime(data.publishedAt || Date.now());
           setConnectionState('connected');
-          const msg = T[currentLang].connected.replace('{n}', num(data.list.length));
-          showToast(msg, 'success');
+          scheduleConnectedToast(data.list.length);
         } else {
           setConnectionState('connecting');
-          showToast(T[currentLang].noData, 'info');
           renderTable([]);
         }
       }, (error) => {
@@ -752,16 +863,16 @@
     }
   }
 
-  // ============ BOOT ============
+  // ============ INIT ============
   boot();
 
-  document.addEventListener('DOMContentLoaded', function() {
+  document.addEventListener('DOMContentLoaded', function () {
     if (initializeFirebase()) {
-      setTimeout(connectFirebase, 400);
+      setTimeout(connectFirebase, 300);
     }
   });
 
-  window.addEventListener('beforeunload', function() {
+  window.addEventListener('beforeunload', function () {
     if (firebaseListener && db) {
       db.ref(FIREBASE_PATH).off('value', firebaseListener);
     }
