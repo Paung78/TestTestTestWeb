@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -23,12 +25,40 @@
     --text-muted: #64748b;
     --text-subtle: #94a3b8;
     --border: #e2e8f0;
-    
+    --header-bg: rgba(255, 255, 255, 0.95);
+    --nav-bg: #ffffff;
+
     --r-card: 20px;
     --r-btn: 14px;
     --spring: cubic-bezier(0.34, 1.56, 0.64, 1);
     --ease: cubic-bezier(0.32, 0.72, 0, 1);
     --header-h: 56px;
+  }
+
+  body.dark {
+    --ck-bg: rgba(99, 102, 241, 0.14);
+    --bigwin-bg: rgba(34, 197, 94, 0.14);
+    --sixwin-bg: rgba(239, 68, 68, 0.14);
+    --shwe-bg: rgba(249, 115, 22, 0.14);
+    --ck-text: #a5b4fc;
+    --bigwin-text: #86efac;
+    --sixwin-text: #fca5a5;
+    --shwe-text: #fdba74;
+
+    --bg-page: #0f172a;
+    --bg-card: #1e293b;
+    --text: #f1f5f9;
+    --text-muted: #94a3b8;
+    --text-subtle: #64748b;
+    --border: #334155;
+    --header-bg: rgba(15, 23, 42, 0.95);
+    --nav-bg: #1e293b;
+  }
+
+  body.theme-switching *,
+  body.theme-switching *::before,
+  body.theme-switching *::after {
+    transition: background-color 0.35s ease, color 0.35s ease, border-color 0.35s ease, box-shadow 0.35s ease !important;
   }
 
   html, body {
@@ -55,7 +85,7 @@
   /* ============ INTRO SPLASH ============ */
   #introSplash {
     position: fixed; inset: 0; z-index: 9999;
-    background: #ffffff; display: flex; align-items: center; justify-content: center;
+    background: var(--bg-page); display: flex; align-items: center; justify-content: center;
     transition: opacity 0.7s ease;
   }
   #introSplash.fade-out { opacity: 0; pointer-events: none; }
@@ -66,8 +96,8 @@
     animation: introFadeUp 1.2s var(--ease) both; padding: 0 20px;
   }
   .intro-logo .red { color: #dc2626; }
-  .intro-logo .black { color: #0f172a; }
-
+  .intro-logo .black { color: var(--text); }
+  body.dark .intro-logo .black { color: #ffffff; }
   @keyframes introFadeUp {
     from { opacity: 0; transform: translateY(12px); }
     to { opacity: 1; transform: translateY(0); }
@@ -79,7 +109,7 @@
     height: calc(var(--header-h) + env(safe-area-inset-top, 0px));
     padding: env(safe-area-inset-top, 0px) 16px 0;
     display: flex; align-items: center; justify-content: space-between;
-    background: rgba(255, 255, 255, 0.95);
+    background: var(--header-bg);
     backdrop-filter: saturate(180%) blur(20px);
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     border-bottom: 1px solid var(--border); z-index: 1000;
@@ -87,21 +117,38 @@
   .header-brand { font-size: 16px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
   .header-brand .red { color: #dc2626; }
   .header-brand .black { color: var(--text); }
+  body.dark .header-brand .black { color: #ffffff; }
 
-  /* Language Selector */
+  .header-actions { display: flex; align-items: center; gap: 8px; }
+
+  .theme-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--bg-card); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+    transition: transform 0.18s var(--spring), color 0.25s, background 0.25s, border-color 0.25s;
+    -webkit-tap-highlight-color: transparent;
+    color: #6366f1;
+  }
+  body.dark .theme-btn { color: #fbbf24; }
+  .theme-btn:active { transform: scale(0.9); }
+  .theme-btn.spin i { animation: themeSpin 0.42s var(--spring); }
+  @keyframes themeSpin {
+    0% { transform: rotate(0deg) scale(1); }
+    50% { transform: rotate(180deg) scale(0.75); }
+    100% { transform: rotate(360deg) scale(1); }
+  }
+
   .lang-btn {
     display: flex; align-items: center; gap: 6px;
     padding: 6px 12px; border-radius: 20px;
-    background: var(--bg-page); border: 1px solid var(--border);
+    background: var(--bg-card); border: 1px solid var(--border);
     font-size: 12px; font-weight: 700; color: var(--text);
+    transition: transform 0.18s var(--spring);
   }
   .lang-btn:active { transform: scale(0.95); }
 
-  /* CSS Flags */
-  .flag {
-    width: 20px; height: 14px; border-radius: 2px; position: relative; overflow: hidden;
-    box-shadow: 0 0 1px rgba(0,0,0,0.2); flex-shrink: 0;
-  }
+  .flag { width: 20px; height: 14px; border-radius: 2px; position: relative; overflow: hidden; box-shadow: 0 0 1px rgba(0,0,0,0.2); flex-shrink: 0; }
   .flag-us { background: repeating-linear-gradient(to bottom, #bf0a30 0%, #bf0a30 7.69%, #ffffff 7.69%, #ffffff 15.38%); }
   .flag-us::before { content: ""; position: absolute; top: 0; left: 0; width: 50%; height: 53.8%; background: #002868; }
   .flag-mm { background: linear-gradient(to bottom, #fecb00 33.33%, #34b233 33.33%, #34b233 66.66%, #ea2839 66.66%); }
@@ -115,14 +162,12 @@
     position: relative; z-index: 1; animation: screenFadeIn 0.3s ease;
   }
   .screen.active { display: block; }
-
   @keyframes screenFadeIn { from { opacity: 0; } to { opacity: 1; } }
 
   .screen-inner { max-width: 480px; margin: 0 auto; padding: 0 16px; }
 
   /* ============ HOME ============ */
   .brand-list { display: flex; flex-direction: column; gap: 14px; }
-
   .brand-card {
     background: var(--bg-card); border: 1px solid var(--border);
     border-radius: var(--r-card); padding: 18px 18px 16px;
@@ -133,12 +178,10 @@
   .brand-card:nth-child(2) { animation-delay: 0.15s; }
   .brand-card:nth-child(3) { animation-delay: 0.25s; }
   .brand-card:nth-child(4) { animation-delay: 0.35s; }
-
   @keyframes staggerIn {
     from { opacity: 0; transform: translateY(18px) scale(0.98); }
     to { opacity: 1; transform: translateY(0) scale(1); }
   }
-
   .brand-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; }
   .brand-card[data-brand="ck"]::before { background: linear-gradient(90deg, var(--ck-1), var(--ck-2)); }
   .brand-card[data-brand="bigwin"]::before { background: linear-gradient(90deg, var(--bigwin-1), var(--bigwin-2)); }
@@ -146,16 +189,8 @@
   .brand-card[data-brand="shwe"]::before { background: linear-gradient(90deg, var(--shwe-1), var(--shwe-2)); }
 
   .brand-head { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; }
-
-  /* Squircle Logo Shape */
-  .brand-icon {
-    width: 44px; height: 44px;
-    border-radius: 14px; /* Squircle effect */
-    overflow: hidden; flex-shrink: 0; background: #fff;
-    border: 1.5px solid var(--border);
-  }
+  .brand-icon { width: 44px; height: 44px; border-radius: 14px; overflow: hidden; flex-shrink: 0; background: var(--bg-card); border: 1.5px solid var(--border); }
   .brand-icon img { width: 100%; height: 100%; object-fit: cover; }
-
   .brand-name { font-size: 17px; font-weight: 800; letter-spacing: -0.015em; }
   .brand-card[data-brand="ck"] .brand-name { color: var(--ck-text); }
   .brand-card[data-brand="bigwin"] .brand-name { color: var(--bigwin-text); }
@@ -172,28 +207,27 @@
     -webkit-tap-highlight-color: transparent;
   }
   .action-btn:active { transform: scale(0.94); }
-  .action-icon {
-    width: 32px; height: 32px; border-radius: 10px;
-    display: flex; align-items: center; justify-content: center; font-size: 13px;
-  }
+  .action-icon { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 13px; }
   .action-label { font-size: 11px; font-weight: 700; color: var(--text-muted); text-align: center; }
-
   .brand-card[data-brand="ck"] .action-icon { background: rgba(99, 102, 241, 0.10); color: var(--ck-2); }
   .brand-card[data-brand="bigwin"] .action-icon { background: rgba(34, 197, 94, 0.11); color: var(--bigwin-2); }
   .brand-card[data-brand="sixwin"] .action-icon { background: rgba(239, 68, 68, 0.10); color: var(--sixwin-2); }
   .brand-card[data-brand="shwe"] .action-icon { background: rgba(249, 115, 22, 0.10); color: var(--shwe-2); }
+  body.dark .brand-card[data-brand="ck"] .action-icon { background: rgba(129,140,248,0.15); color: #a5b4fc; }
+  body.dark .brand-card[data-brand="bigwin"] .action-icon { background: rgba(52,211,153,0.15); color: #86efac; }
+  body.dark .brand-card[data-brand="sixwin"] .action-icon { background: rgba(248,113,113,0.15); color: #fca5a5; }
+  body.dark .brand-card[data-brand="shwe"] .action-icon { background: rgba(251,146,60,0.15); color: #fdba74; }
 
   /* ============ FLOATING BOTTOM NAV ============ */
   .bottom-nav {
     position: fixed; bottom: calc(20px + env(safe-area-inset-bottom, 0px));
     left: 50%; transform: translateX(-50%);
     width: calc(100% - 32px); max-width: 440px; height: 64px;
-    background: #ffffff; border: 1.5px solid var(--border);
+    background: var(--nav-bg); border: 1.5px solid var(--border);
     border-radius: 32px; display: flex; justify-content: space-around; align-items: center;
     z-index: 1000; transition: transform 0.4s var(--ease), opacity 0.3s;
   }
   .bottom-nav.hidden { transform: translate(-50%, 150%); opacity: 0; pointer-events: none; }
-
   .nav-item {
     flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px;
     color: var(--text-subtle); background: none; position: relative;
@@ -202,6 +236,7 @@
   .nav-item i { font-size: 18px; transition: transform 0.3s var(--spring); }
   .nav-label { font-size: 10px; font-weight: 700; }
   .nav-item.active { color: var(--ck-2); }
+  body.dark .nav-item.active { color: #818cf8; }
   .nav-item.active i { transform: scale(1.15) translateY(-1px); }
 
   /* ============ FLOATING BACK BUTTON ============ */
@@ -214,9 +249,9 @@
     transform: translateY(10px) scale(0.9); transition: all 0.3s var(--spring);
     -webkit-tap-highlight-color: transparent;
   }
+  body.dark .floating-back-btn { background: #f1f5f9; color: #0f172a; }
   .floating-back-btn.visible { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
   .floating-back-btn:active { transform: scale(0.9); }
-
   @media (max-width: 480px) {
     .floating-back-btn { left: calc(50% - (100vw - 32px) / 2 + 20px); }
   }
@@ -229,27 +264,44 @@
     padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px)); will-change: transform;
   }
   .sub-screen.active { transform: translateX(0); }
-
   .sub-screen-body {
     flex: 1; overflow-y: auto; padding: 20px 16px calc(120px + env(safe-area-inset-bottom, 0px));
     max-width: 480px; margin: 0 auto; width: 100%; -webkit-overflow-scrolling: touch;
+  }
+
+  /* === Sub-screen: iframe mode === */
+  .sub-screen-body.sub-screen-body--iframe {
+    padding: 0 0 calc(90px + env(safe-area-inset-bottom, 0px)) 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    margin: 0;
+  }
+  .sub-screen-body.sub-screen-body--iframe > iframe {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    border: none;
+    display: block;
+    background: var(--bg-page);
   }
 
   .sub-page-header {
     display: flex; align-items: center; gap: 14px; margin-bottom: 20px;
     animation: stepFadeUp 0.5s var(--spring) 100ms both;
   }
-  /* Squircle Logo Shape */
   .sub-brand-icon {
     width: 52px; height: 52px; border-radius: 16px; overflow: hidden;
-    flex-shrink: 0; background: #fff; border: 1.5px solid var(--border);
+    flex-shrink: 0; background: var(--bg-card); border: 1.5px solid var(--border);
   }
   .sub-brand-icon img { width: 100%; height: 100%; object-fit: cover; }
-
-  .sub-brand-label {
-    font-size: 12px; font-weight: 700; color: var(--text-subtle);
-    letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px;
+  .sub-brand-icon.bet-size-icon {
+    display: flex; align-items: center; justify-content: center;
+    background: linear-gradient(135deg, var(--ck-1), var(--ck-2));
+    color: #ffffff; font-size: 22px; border: none;
   }
+  .sub-brand-label { font-size: 12px; font-weight: 700; color: var(--text-subtle); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 2px; }
   .sub-page-title { font-size: 20px; font-weight: 800; letter-spacing: -0.025em; line-height: 1.2; }
 
   .register-cta {
@@ -264,7 +316,6 @@
   .register-cta:active { transform: scale(0.97); }
 
   .step-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-
   .step-card {
     background: var(--bg-card); border: 1px solid var(--border);
     border-radius: 16px; padding: 10px; cursor: pointer;
@@ -272,35 +323,22 @@
     animation: stepFadeUp 0.55s var(--spring) both;
   }
   .step-card:active { transform: scale(0.96); }
-  
   .step-card[data-brand="ck"] { background: var(--ck-bg); border-color: transparent; }
   .step-card[data-brand="bigwin"] { background: var(--bigwin-bg); border-color: transparent; }
   .step-card[data-brand="sixwin"] { background: var(--sixwin-bg); border-color: transparent; }
   .step-card[data-brand="shwe"] { background: var(--shwe-bg); border-color: transparent; }
-
-  /* Step Label */
-  .step-label {
-    font-size: 11px; font-weight: 800; color: var(--text-subtle);
-    margin-bottom: 6px; margin-left: 2px; text-transform: uppercase;
-    letter-spacing: 0.05em;
-  }
-
+  .step-label { font-size: 11px; font-weight: 800; color: var(--text-subtle); margin-bottom: 6px; margin-left: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
   .step-photo-wrap {
     width: 100%; aspect-ratio: 4 / 3; border-radius: 10px; overflow: hidden;
     background: rgba(255, 255, 255, 0.6); margin-bottom: 8px; position: relative;
   }
-  .step-photo-wrap img {
-    display: block; width: 100%; height: 100%; object-fit: cover;
-    pointer-events: none; -webkit-touch-callout: none; -webkit-user-drag: none;
-  }
-
+  body.dark .step-photo-wrap { background: rgba(255,255,255,0.06); }
+  .step-photo-wrap img { display: block; width: 100%; height: 100%; object-fit: cover; pointer-events: none; -webkit-touch-callout: none; -webkit-user-drag: none; }
   .step-text {
-    font-size: 11px; line-height: 1.45; color: var(--text);
-    padding: 0 2px; display: -webkit-box;
-    -webkit-line-clamp: 3; -webkit-box-orient: vertical;
+    font-size: 11px; line-height: 1.45; color: var(--text); padding: 0 2px;
+    display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical;
     overflow: hidden; text-overflow: ellipsis;
   }
-
   @keyframes stepFadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
   /* ============ MODAL (Pop-up) ============ */
@@ -311,16 +349,14 @@
     opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
   }
   .modal-overlay.active { opacity: 1; pointer-events: auto; }
-
   .modal-content {
-    background: #ffffff; width: 100%; max-width: 420px; max-height: 85vh;
+    background: var(--bg-card); width: 100%; max-width: 420px; max-height: 85vh;
     border-radius: 20px; position: relative;
     display: flex; flex-direction: column;
     transform: scale(0.95) translateY(10px);
     transition: transform 0.3s var(--spring); overflow: hidden;
   }
   .modal-overlay.active .modal-content { transform: scale(1) translateY(0); }
-
   .modal-close {
     position: absolute; top: 12px; right: 12px;
     width: 36px; height: 36px;
@@ -329,12 +365,8 @@
     font-size: 16px; color: #0f172a; z-index: 10;
     box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   }
-
-  .modal-scrollable {
-    padding: 16px; overflow-y: auto;
-    -webkit-overflow-scrolling: touch; border-radius: 20px;
-  }
-
+  body.dark .modal-close { background: rgba(30, 41, 59, 0.9); color: #f1f5f9; }
+  .modal-scrollable { padding: 16px; overflow-y: auto; -webkit-overflow-scrolling: touch; border-radius: 20px; }
   .modal-img { width: 100%; border-radius: 12px; margin-bottom: 16px; display: block; }
   .modal-text { font-size: 14px; line-height: 1.7; color: var(--text); padding-bottom: 10px; }
 
@@ -345,16 +377,14 @@
     opacity: 0; pointer-events: none; transition: opacity 0.3s ease;
   }
   .sheet-overlay.active { opacity: 1; pointer-events: auto; }
-
   .bottom-sheet {
     position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999;
-    background: #ffffff; border-radius: 24px 24px 0 0;
+    background: var(--bg-card); border-radius: 24px 24px 0 0;
     padding: 20px 20px calc(30px + env(safe-area-inset-bottom, 0px));
     transform: translateY(100%); transition: transform 0.4s var(--ease);
     max-width: 480px; margin: 0 auto;
   }
   .bottom-sheet.active { transform: translateY(0); }
-
   .sheet-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
   .sheet-title { font-size: 18px; font-weight: 800; }
   .sheet-close {
@@ -362,7 +392,6 @@
     background: var(--bg-page); display: flex; align-items: center; justify-content: center;
     font-size: 16px; color: var(--text-muted);
   }
-
   .lang-option {
     display: flex; align-items: center; justify-content: space-between;
     padding: 16px; border-radius: 14px; border: 1.5px solid var(--border);
@@ -371,13 +400,13 @@
   }
   .lang-option:active { background: var(--bg-page); }
   .lang-option.active { border-color: var(--ck-2); background: var(--ck-bg); }
-  
   .lang-left { display: flex; align-items: center; gap: 12px; }
   .lang-left span { font-size: 15px; font-weight: 700; }
   .lang-check { color: var(--ck-2); font-size: 18px; opacity: 0; transform: scale(0.5); transition: all 0.2s; }
+  body.dark .lang-check { color: #a5b4fc; }
   .lang-option.active .lang-check { opacity: 1; transform: scale(1); }
 
-  /* ============ TAB PLACEHOLDER ============ */
+  /* ============ TAB PLACEHOLDER / TOOLS ============ */
   .tab-placeholder { max-width: 480px; margin: 0 auto; padding: 60px 24px 40px; text-align: center; }
   .tab-placeholder .ph-icon {
     width: 72px; height: 72px; border-radius: 22px;
@@ -385,35 +414,280 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 28px; margin: 0 auto 20px;
   }
+  body.dark .tab-placeholder .ph-icon { background: rgba(129,140,248,0.15); color: #a5b4fc; }
   .tab-placeholder h2 { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
   .tab-placeholder p { font-size: 14px; color: var(--text-muted); line-height: 1.55; }
+
+  .tools-header { text-align: center; padding: 24px 0 28px; animation: stepFadeUp 0.5s var(--spring) both; }
+  .tools-header h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
+  .tools-list { display: flex; flex-direction: column; gap: 12px; }
+
+  .tool-card {
+    display: flex; align-items: center; gap: 14px;
+    padding: 16px 18px;
+    background: var(--bg-card); border: 1.5px solid var(--border);
+    border-radius: var(--r-card);
+    text-align: left; width: 100%;
+    transition: transform 0.18s var(--spring), border-color 0.22s, background 0.22s;
+    -webkit-tap-highlight-color: transparent;
+    animation: stepFadeUp 0.55s var(--spring) 100ms both;
+  }
+  .tool-card:active { transform: scale(0.97); }
+  .tool-card-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: rgba(99, 102, 241, 0.10); color: var(--ck-2);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  body.dark .tool-card-icon { background: rgba(129,140,248,0.15); color: #a5b4fc; }
+  .tool-card-body { flex: 1; min-width: 0; }
+  .tool-card-title { font-size: 15px; font-weight: 800; color: var(--text); line-height: 1.3; }
+  .tool-card-arrow { color: var(--text-subtle); font-size: 13px; flex-shrink: 0; }
+
+  /* Logo variant (image icon — overrides brand colors) */
+  .tool-card-icon.tool-card-icon--logo {
+    padding: 0 !important;
+    overflow: hidden;
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border);
+    font-size: 0 !important;
+    color: transparent !important;
+  }
+  .tool-card-icon.tool-card-icon--logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: inherit;
+  }
+
+  /* Logo variant (image icon — overrides brand colors) */
+  .tool-card-icon.tool-card-icon--logo {
+    padding: 0 !important;
+    overflow: hidden;
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border);
+    font-size: 0 !important;
+    color: transparent !important;
+  }
+  .tool-card-icon.tool-card-icon--logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: inherit;
+  }
+
+  /* ============ RECORD BADGE (history chats) ============ */
+  .record-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(34, 197, 94, 0.12);
+    color: #15803d;
+    font-size: 11px;
+    font-weight: 800;
+    flex-shrink: 0;
+    transition: background 0.2s, color 0.2s;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+  body.dark .record-badge {
+    background: rgba(52, 211, 153, 0.15);
+    color: #86efac;
+  }
+  .record-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #16a34a;
+    animation: recordDotPulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  body.dark .record-dot { background: #34d399; }
+  @keyframes recordDotPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.45; transform: scale(0.85); }
+  }
+  .record-badge.loading {
+    background: rgba(100, 116, 139, 0.12);
+    color: var(--text-muted);
+  }
+  body.dark .record-badge.loading { background: rgba(148, 163, 184, 0.12); }
+  .record-badge.loading .record-dot {
+    background: var(--text-muted);
+    animation: none;
+    opacity: 0.6;
+  }
+  .record-badge.error { display: none; }
+
+  /* ============ HISTORY CHAT CARDS ============ */
+  .history-chat-card[data-brand="ck"] { background: var(--ck-bg); border-color: transparent; }
+  .history-chat-card[data-brand="ck"] .tool-card-icon { background: rgba(99, 102, 241, 0.15); color: var(--ck-2); }
+  .history-chat-card[data-brand="ck"] .tool-card-title { color: var(--ck-text); }
+
+  .history-chat-card[data-brand="bigwin"] { background: var(--bigwin-bg); border-color: transparent; }
+  .history-chat-card[data-brand="bigwin"] .tool-card-icon { background: rgba(34, 197, 94, 0.15); color: var(--bigwin-2); }
+  .history-chat-card[data-brand="bigwin"] .tool-card-title { color: var(--bigwin-text); }
+
+  .history-chat-card[data-brand="sixwin"] { background: var(--sixwin-bg); border-color: transparent; }
+  .history-chat-card[data-brand="sixwin"] .tool-card-icon { background: rgba(239, 68, 68, 0.15); color: var(--sixwin-2); }
+  .history-chat-card[data-brand="sixwin"] .tool-card-title { color: var(--sixwin-text); }
+
+  body.dark .history-chat-card[data-brand="ck"] .tool-card-icon { background: rgba(129,140,248,0.20); color: #a5b4fc; }
+  body.dark .history-chat-card[data-brand="bigwin"] .tool-card-icon { background: rgba(52,211,153,0.20); color: #86efac; }
+  body.dark .history-chat-card[data-brand="sixwin"] .tool-card-icon { background: rgba(248,113,113,0.20); color: #fca5a5; }
+
+  /* ============ BET SIZE PAGE ============ */
+  .betsize-page { display: flex; flex-direction: column; gap: 14px; }
+  .betsize-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 16px; padding: 14px;
+    animation: stepFadeUp 0.5s var(--spring) both;
+  }
+  .betsize-card:nth-child(1) { animation-delay: 150ms; }
+  .betsize-card:nth-child(2) { animation-delay: 200ms; }
+  .betsize-card:nth-child(3) { animation-delay: 250ms; }
+  .betsize-field-label { display: block; font-size: 13px; font-weight: 800; color: var(--text); margin-bottom: 10px; letter-spacing: 0.01em; }
+  .betsize-input {
+    width: 100%; min-height: 48px;
+    border: 1.5px solid var(--border); border-radius: 12px;
+    background: var(--bg-page); padding: 12px 14px;
+    font-size: 16px; font-weight: 700; color: var(--text);
+    outline: none; font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .betsize-input::placeholder { color: var(--text-subtle); font-weight: 600; }
+  .betsize-input:focus { border-color: var(--ck-2); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
+  body.dark .betsize-input:focus { box-shadow: 0 0 0 3px rgba(129,140,248,0.2); }
+  .betsize-error { margin-top: 8px; font-size: 12px; color: #dc2626; font-weight: 700; display: none; line-height: 1.4; }
+  body.dark .betsize-error { color: #fca5a5; }
+  .betsize-error.show { display: block; }
+  .betsize-select-btn {
+    display: flex; align-items: center; justify-content: space-between;
+    width: 100%; min-height: 48px;
+    border: 1.5px solid var(--border); border-radius: 12px;
+    padding: 12px 16px; background: var(--bg-page);
+    font-size: 15px; font-weight: 800; color: var(--text);
+    cursor: pointer; font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .betsize-select-btn:active { transform: scale(0.98); }
+  .betsize-select-btn[aria-expanded="true"] { border-color: var(--ck-2); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
+  body.dark .betsize-select-btn[aria-expanded="true"] { box-shadow: 0 0 0 3px rgba(129, 140, 248, 0.2); }
+  .betsize-chevron { font-size: 11px; opacity: 0.7; transition: transform 0.2s ease; }
+  .betsize-select-btn[aria-expanded="true"] .betsize-chevron { transform: rotate(180deg); }
+  .betsize-options {
+    display: none; margin-top: 10px;
+    max-height: 220px; overflow-y: auto;
+    padding: 8px; border-radius: 12px;
+    background: var(--bg-page);
+    grid-template-columns: repeat(auto-fill, minmax(56px, 1fr));
+    gap: 6px; -webkit-overflow-scrolling: touch;
+  }
+  .betsize-options.open { display: grid; }
+  .betsize-option {
+    min-height: 42px;
+    border: 1px solid var(--border); border-radius: 10px;
+    background: var(--bg-card); color: var(--text);
+    font-size: 13.5px; font-weight: 800; cursor: pointer;
+    font-family: inherit;
+    transition: border-color 0.15s, color 0.15s, background 0.15s, transform 0.1s;
+  }
+  .betsize-option:hover { border-color: var(--ck-2); color: var(--ck-2); }
+  body.dark .betsize-option:hover { border-color: #a5b4fc; color: #a5b4fc; }
+  .betsize-option:active { transform: scale(0.95); }
+  .betsize-option.selected { background: linear-gradient(135deg, var(--ck-1), var(--ck-2)); border-color: transparent; color: #ffffff; }
+  .betsize-calc-btn {
+    display: flex; align-items: center; justify-content: center;
+    width: 100%; min-height: 52px;
+    border: none; border-radius: 14px; margin-top: 4px;
+    font-size: 16px; font-weight: 800; color: #ffffff;
+    cursor: pointer; font-family: inherit;
+    background: linear-gradient(135deg, var(--ck-1), var(--ck-2));
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.32);
+    transition: transform 0.18s var(--spring), box-shadow 0.2s;
+    animation: stepFadeUp 0.5s var(--spring) 300ms both;
+  }
+  .betsize-calc-btn:active { transform: scale(0.97); }
+  .betsize-calc-btn:disabled { opacity: 0.75; cursor: wait; }
+  .betsize-loading { display: none; text-align: center; padding: 16px; color: var(--text-muted); font-weight: 700; font-size: 13px; }
+  .betsize-loading.show { display: block; }
+  .betsize-loading-spinner {
+    width: 26px; height: 26px; margin: 0 auto 8px;
+    border-radius: 50%;
+    border: 3px solid rgba(99, 102, 241, 0.2);
+    border-top-color: var(--ck-2);
+    animation: betsizeSpin 0.7s linear infinite;
+  }
+  @keyframes betsizeSpin { to { transform: rotate(360deg); } }
+  .betsize-result {
+    display: none; overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: 14px;
+    background: var(--bg-card); border: 1px solid var(--border);
+    padding: 4px;
+    animation: stepFadeUp 0.4s var(--spring) both;
+  }
+  .betsize-result.show { display: block; }
+  .betsize-table { width: 100%; border-collapse: collapse; min-width: 260px; }
+  .betsize-table th, .betsize-table td { padding: 10px 8px; text-align: center; font-size: 13px; border-bottom: 1px solid var(--border); }
+  .betsize-table th { font-size: 11px; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase; color: var(--text-subtle); }
+  .betsize-table td { font-weight: 700; color: var(--text); }
+  .betsize-table tbody tr:last-child td { border-bottom: none; }
+  .betsize-table tfoot td { border-bottom: none; border-top: 2px solid var(--ck-2); font-weight: 800; color: var(--ck-text); padding-top: 12px; }
+  body.dark .betsize-table tfoot td { color: #a5b4fc; }
+  .betsize-table tfoot td:last-child { text-align: right; width: 1%; white-space: nowrap; }
+  .betsize-copy-btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-height: 34px; padding: 6px 12px;
+    border: none; border-radius: 8px;
+    font-size: 12px; font-weight: 800; color: #ffffff;
+    cursor: pointer; font-family: inherit;
+    background: linear-gradient(135deg, var(--ck-1), var(--ck-2));
+    transition: transform 0.15s ease, background 0.2s;
+  }
+  .betsize-copy-btn:active { transform: scale(0.96); }
+  .betsize-copy-btn.copied { background: linear-gradient(135deg, #34d399, #16a34a); }
+  @media (max-width: 480px) {
+    .betsize-card { padding: 12px; }
+    .betsize-table th, .betsize-table td { padding: 8px 6px; font-size: 12.5px; }
+    .betsize-options { grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); max-height: 180px; }
+  }
 </style>
 </head>
 <body>
 
-<!-- ============ INTRO SPLASH ============ -->
+<!-- INTRO SPLASH -->
 <div id="introSplash">
   <div class="intro-logo">
     <span class="red">SuperSel</span> <span class="black">Earing</span>
   </div>
 </div>
 
-<!-- ============ HEADER ============ -->
+<!-- HEADER -->
 <header class="app-header">
   <div class="header-brand">
     <span class="red">SuperSel</span> <span class="black">Earing</span>
   </div>
-  <button class="lang-btn" onclick="openLangSheet()">
-    <div id="currentLangFlag" class="flag flag-us"></div>
-    <span id="currentLangText">English</span>
-  </button>
+  <div class="header-actions">
+    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme">
+      <i class="fa-solid fa-sun" id="themeIcon"></i>
+    </button>
+    <button class="lang-btn" onclick="openLangSheet()">
+      <div id="currentLangFlag" class="flag flag-us"></div>
+      <span id="currentLangText">English</span>
+    </button>
+  </div>
 </header>
 
-<!-- ============ HOME TAB ============ -->
+<!-- HOME -->
 <div id="screen-home" class="screen active">
   <div class="screen-inner">
     <div class="brand-list">
-      <!-- CK -->
       <div class="brand-card" data-brand="ck">
         <div class="brand-head">
           <div class="brand-icon"><img src="Logo/ck_logo.jpg" alt="Ck Lottery"></div>
@@ -435,7 +709,6 @@
         </div>
       </div>
 
-      <!-- BigWin -->
       <div class="brand-card" data-brand="bigwin">
         <div class="brand-head">
           <div class="brand-icon"><img src="Logo/bigwin_logo.jpg" alt="777 BigWin"></div>
@@ -457,7 +730,6 @@
         </div>
       </div>
 
-      <!-- SixWin -->
       <div class="brand-card" data-brand="sixwin">
         <div class="brand-head">
           <div class="brand-icon"><img src="Logo/sixwin_logo.jpg" alt="SixWin"></div>
@@ -479,7 +751,6 @@
         </div>
       </div>
 
-      <!-- Shwe -->
       <div class="brand-card" data-brand="shwe">
         <div class="brand-head">
           <div class="brand-icon"><img src="Logo/shwe_logo.jpg" alt="Shwe"></div>
@@ -500,30 +771,41 @@
           </button>
         </div>
       </div>
-      
     </div>
   </div>
 </div>
 
-<!-- ============ PLACEHOLDER TABS ============ -->
+<!-- PREDICTION PLACEHOLDER -->
 <div id="screen-prediction" class="screen">
   <div class="tab-placeholder">
     <div class="ph-icon"><i class="fa-solid fa-chart-line"></i></div>
     <h2 data-t="nav_prediction">Prediction</h2>
   </div>
 </div>
+
+<!-- CHATS -->
 <div id="screen-chats" class="screen">
-  <div class="tab-placeholder">
-    <div class="ph-icon"><i class="fa-regular fa-comment-dots"></i></div>
-    <h2 data-t="nav_chats">Chats</h2>
+  <div class="screen-inner">
+    <div class="tools-list" id="historyChatsList"></div>
   </div>
 </div>
+
+<!-- TOOLS -->
 <div id="screen-tools" class="screen">
-  <div class="tab-placeholder">
-    <div class="ph-icon"><i class="fa-solid fa-calculator"></i></div>
-    <h2 data-t="nav_tools">Tools</h2>
+  <div class="screen-inner">
+    <div class="tools-list">
+      <button class="tool-card" onclick="openBetSizePage()">
+        <div class="tool-card-icon"><i class="fa-solid fa-calculator"></i></div>
+        <div class="tool-card-body">
+          <div class="tool-card-title" data-t="bet_size_customize_btn">Bet Size Customize</div>
+        </div>
+        <i class="fa-solid fa-chevron-right tool-card-arrow"></i>
+      </button>
+    </div>
   </div>
 </div>
+
+<!-- PROFILE PLACEHOLDER -->
 <div id="screen-profile" class="screen">
   <div class="tab-placeholder">
     <div class="ph-icon"><i class="fa-solid fa-user"></i></div>
@@ -531,17 +813,17 @@
   </div>
 </div>
 
-<!-- ============ SUB-SCREEN ============ -->
+<!-- SUB-SCREEN -->
 <div id="subScreen" class="sub-screen">
   <div class="sub-screen-body" id="subBody"></div>
 </div>
 
-<!-- ============ FLOATING BACK BUTTON ============ -->
+<!-- FLOATING BACK BUTTON -->
 <button class="floating-back-btn" id="floatingBackBtn" onclick="goBack()" aria-label="Back">
   <i class="fa-solid fa-arrow-left"></i>
 </button>
 
-<!-- ============ BOTTOM NAV ============ -->
+<!-- BOTTOM NAV -->
 <nav class="bottom-nav" id="bottomNav">
   <button class="nav-item active" data-tab="home" onclick="switchTab('home')">
     <i class="fa-solid fa-house"></i>
@@ -565,7 +847,7 @@
   </button>
 </nav>
 
-<!-- ============ MODAL POP-UP ============ -->
+<!-- MODAL -->
 <div class="modal-overlay" id="photoModal" onclick="closeModal(event)">
   <div class="modal-content">
     <button class="modal-close" onclick="closeModal(event)"><i class="fa-solid fa-xmark"></i></button>
@@ -576,14 +858,13 @@
   </div>
 </div>
 
-<!-- ============ BOTTOM SHEET (LANGUAGE) ============ -->
+<!-- LANGUAGE SHEET -->
 <div class="sheet-overlay" id="sheetOverlay" onclick="closeLangSheet()"></div>
 <div class="bottom-sheet" id="langSheet">
   <div class="sheet-header">
     <div class="sheet-title" data-t="select_lang">Select Language</div>
     <button class="sheet-close" onclick="closeLangSheet()"><i class="fa-solid fa-xmark"></i></button>
   </div>
-  
   <div class="lang-option" id="opt-mm" onclick="setLanguage('mm')">
     <div class="lang-left">
       <div class="flag flag-mm"></div>
@@ -591,7 +872,6 @@
     </div>
     <i class="fa-solid fa-check lang-check"></i>
   </div>
-
   <div class="lang-option" id="opt-en" onclick="setLanguage('en')">
     <div class="lang-left">
       <div class="flag flag-us"></div>
@@ -607,12 +887,50 @@
     en: {
       nav_home: 'Home', nav_prediction: 'Prediction', nav_chats: 'Chats', nav_tools: 'Tools', nav_profile: 'Profile',
       action_register: 'Register', action_deposit: 'Deposit', action_withdraw: 'Withdraw',
-      cta_register: 'Register Now', select_lang: 'Select Language', step_label: 'Step'
+      cta_register: 'Register Now', select_lang: 'Select Language', step_label: 'Step',
+      chats_title: 'History Chats',
+      bet_size_title: 'Bet Size',
+      bet_size_first_amount: 'First Bet Amount',
+      bet_size_profits: 'Profits ×',
+      bet_size_count: 'Bet Count',
+      bet_size_no: 'No.',
+      bet_size_amount: 'Amount',
+      bet_size_profits_col: 'Profits',
+      bet_size_total: 'Total',
+      bet_size_copy: 'Copy',
+      bet_size_copied: 'Copied',
+      bet_size_calc: 'Calculator',
+      bet_size_loading: 'Calculator Loading...',
+      bet_size_placeholder: 'Enter First Bet Amount',
+      bet_size_customize_btn: 'Bet Size Customize',
+      bet_size_error_empty: 'Please enter First Bet Amount.',
+      bet_size_error_digits: 'Please enter numbers only.',
+      bet_size_error_min: 'Minimum amount is 100.',
+      bet_size_error_round: 'No tens digit. Example: 100, 1000, 2000 only.'
     },
     mm: {
       nav_home: 'ပင်မစာမျက်နှာ', nav_prediction: 'ကြိုတင်ခန့်မှန်း', nav_chats: 'ဇယား', nav_tools: 'ကိရိယာများ', nav_profile: 'ကျွန်ုပ်',
       action_register: 'အကောင့်ဖွင့်ရန်', action_deposit: 'ငွေသွင်းရန်', action_withdraw: 'ငွေထုတ်ရန်',
-      cta_register: 'အကောင့်ဖွင့်ရန်နိပ်ပါ', select_lang: 'ဘာသာစကား ရွေးချယ်ပါ', step_label: 'အဆင့်'
+      cta_register: 'အကောင့်ဖွင့်ရန်နိပ်ပါ', select_lang: 'ဘာသာစကား ရွေးချယ်ပါ', step_label: 'အဆင့်',
+      chats_title: 'မှတ်တမ်းဇယားများ',
+      bet_size_title: 'လောင်းကြေးပမာဏ',
+      bet_size_first_amount: 'ပထမဆုံးလောင်းကြေးပမာဏ',
+      bet_size_profits: 'အမြတ်×',
+      bet_size_count: 'လောင်းကြေးအကြိမ်ရေ',
+      bet_size_no: 'နံပါတ်',
+      bet_size_amount: 'ငွေပမာဏ',
+      bet_size_profits_col: 'အမြတ်ငွေများ',
+      bet_size_total: 'စုစုပေါင်း',
+      bet_size_copy: 'ကူးယူရန်',
+      bet_size_copied: 'ကူးယူပြီး',
+      bet_size_calc: 'တွက်ချက်ရန်',
+      bet_size_loading: 'တွက်ချက်နေသည်...',
+      bet_size_placeholder: 'ပထမဆုံးလောင်းကြေးပမာဏ ထည့်ပါ',
+      bet_size_customize_btn: 'လောင်းကြေးတွက်ချက်ရန်',
+      bet_size_error_empty: 'ပထမဆုံးလောင်းကြေးပမာဏ ထည့်ပါ။',
+      bet_size_error_digits: 'ဂဏန်းများသာ ရိုက်ထည့်ပါ။',
+      bet_size_error_min: 'အနည်းဆုံး ၁၀၀ ထည့်ရပါမယ်။',
+      bet_size_error_round: 'ဆယ်ဂဏန်းမပါရပါ။ ဥပမာ ၁၀၀, ၁၀၀၀, ၂၀၀၀ သာ။'
     }
   };
 
@@ -624,7 +942,31 @@
     shwe:   { name: 'Shwe',       logo: 'Logo/shwe_logo.jpg', c1: '#fb923c', c2: '#ea580c' }
   };
 
-  // ============ CONTENT DATA (EN & MM) ============
+  // ============ HISTORY CHATS CONFIG ============
+  const HISTORY_CHATS = [
+    {
+      id: 'ck30',
+      brand: 'ck',
+      title_en: 'Ck WinGo 30 History',
+      title_mm: 'Ck WinGo 30 မှတ်တမ်း',
+      logo: 'Logo/ck_logo.jpg',
+      src: 'History%20Chat/Ck%20WinGo%2030/ck30results.html',
+      firebase: {
+        apiKey: "AIzaSyDj6z3O91NnlQ1zVdripiGhqQMsQhR4_ak",
+        authDomain: "ck30-35e97.firebaseapp.com",
+        databaseURL: "https://ck30-35e97-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "ck30-35e97",
+        storageBucket: "ck30-35e97.appspot.com",
+        messagingSenderId: "625630152314",
+        appId: "1:625630152314:web:c035009eec389371b51dc3",
+        path: "ckwingo30/default"
+      }
+    }
+    // နောက်ထပ် ထပ်ထည့်ရန်:
+    // { id: 'ck1', brand: 'ck', title_en: '...', title_mm: '...', icon: 'fa-clock-rotate-left', src: '...', firebase: { ...config, path: '...' } }
+  ];
+
+  // ============ CONTENT DATA ============
   const CONTENT = {
     ck: {
       register: {
@@ -687,7 +1029,7 @@
           { img: 'BigWin/BigWin Deposite Photo/p7.jpg',  text_en: '- Select Online Pay (Yellow=Wave, Blue=Kpay). Choose a channel.', text_mm: '- Online Pay ရွေးပါ။ အဝါက Wave၊ အပြာက Kpay ဖြစ်ပါသည်။' },
           { img: 'BigWin/BigWin Deposite Photo/p8.jpg',  text_en: '- Scroll up, enter amount, and tap Deposit.', text_mm: '- အပေါ်ကိုဆွဲတင်ပါ။ Amount ရိုက်ထည့်ပြီး Deposit ကိုနိပ်ပါ။' },
           { img: 'BigWin/BigWin Deposite Photo/p9.jpg',  text_en: '- Scan QR Code or copy phone number to transfer.', text_mm: '- QR Code ကို Scan လုပ်ပါ သို့မဟုတ် Phone Number Copy ယူပါ။' },
-          { img: 'BigWin/BigWin Deposite Photo/p10.jpg', text_en: '- Enter the last 5 digits of the Transaction ID and submit.', text_mm: '- နောက်ဆုံး (လုပ်ငန်းစဉ်နံပတ်) ၅လုံးကိုရိုက်ထည့်ပြီး တင်ပြပါ။' },
+          { img: 'BigWin/BigWin Deposite Photo/p10.jpg', text_en: '- Enter the last 5 digits of the Transaction ID and submit.', text_mm: '- နောက်ဆုံး (လုပ်ငန်းစဉ်နံပါတ်) ၅လုံးကိုရိုက်ထည့်ပြီး တင်ပြပါ။' },
           { img: 'BigWin/BigWin Deposite Photo/p11.jpg', text_en: '- Transaction submitted. Funds will arrive shortly.', text_mm: '- ငွေသွင်းအော်ဒါ တင်ပြီးပါပြီ။ ခဏအကြာ ငွေရောက်ပါမည်။' }
         ]
       },
@@ -739,72 +1081,58 @@
       register: {
         cta: { href: 'https://www.shwe008.com/#/register?invitationCode=12843101366', text_en: 'Register Now', text_mm: 'အကောင့်ဖွင့်ရန်နိပ်ပါ' },
         steps: [
-<<<<<<< HEAD
           { img: 'Shwe/Shwe Register Photo/photo_1.jpg', text_en: '- Tap "Register Now". - Enter phone number starting with 9 (no 09).', text_mm: '- Register Now ကိုနိပ်ပါ။<br><br>- Phone Number တွင် (09 မခံရ) 9 တစ်လုံးပဲခံပြီးရေးပါ။' },
           { img: 'Shwe/Shwe Register Photo/photo_2.jpg', text_en: '- Set and confirm password. Both must match.', text_mm: '- Set Password နှင့် Confirm Password နှစ်ခုတူညီရမည်။' },
           { img: 'Shwe/Shwe Register Photo/photo_3.jpg', text_en: '- Enter Invite Code: (12843101366).', text_mm: '- Invite Code ရေးနေရာတွင် (12843101366) ရိုက်ထည့်ပါ။' },
           { img: 'Shwe/Shwe Register Photo/photo_4.jpg', text_en: '- Check the "I Have And Agree" box.', text_mm: '- I Have And Agree နေရာမှ (အမှန်ခြစ်)တပ်ပါ။' },
           { img: 'Shwe/Shwe Register Photo/photo_5.jpg', text_en: '- Fill in info and tap Register. Account created.', text_mm: '- Account Information ဖြည့်ပြီး Register ကိုနိပ်ပါ။ Account ဖွင့်ပြီးပါပြီ။' }
-=======
-          { img: 'Shwe/Shwe Register Photo/Photo_1.jpg', text_en: '- Tap "Register Now". - Enter phone number starting with 9 (no 09).', text_mm: '- Register Now ကိုနိပ်ပါ။<br><br>- Phone Number တွင် (09 မခံရ) 9 တစ်လုံးပဲခံပြီးရေးပါ။' },
-          { img: 'Shwe/Shwe Register Photo/Photo_2.jpg', text_en: '- Set and confirm password. Both must match.', text_mm: '- Set Password နှင့် Confirm Password နှစ်ခုတူညီရမည်။' },
-          { img: 'Shwe/Shwe Register Photo/Photo_3.jpg', text_en: '- Enter Invite Code: (12843101366).', text_mm: '- Invite Code ရေးနေရာတွင် (12843101366) ရိုက်ထည့်ပါ။' },
-          { img: 'Shwe/Shwe Register Photo/Photo_4.jpg', text_en: '- Check the "I Have And Agree" box.', text_mm: '- I Have And Agree နေရာမှ (အမှန်ခြစ်)တပ်ပါ။' },
-          { img: 'Shwe/Shwe Register Photo/Photo_5.jpg', text_en: '- Fill in info and tap Register. Account created.', text_mm: '- Account Information ဖြည့်ပြီး Register ကိုနိပ်ပါ။ Account ဖွင့်ပြီးပါပြီ။' }
->>>>>>> 1a7c50621c2d97901cb4b937b35fe26c3ac96e21
         ]
       },
       deposit: {
         cta: null,
         steps: [
-<<<<<<< HEAD
           { img: 'Shwe/Shwe Deposite Photo/photo_1.jpg', text_en: '- Tap Shwe Account.', text_mm: '- Shwe Account ကိုနိပ်ပါ။' },
           { img: 'Shwe/Shwe Deposite Photo/photo_2.jpg', text_en: '- Tap Deposit.', text_mm: '- Deposit ကိုနိပ်ပါ။' },
           { img: 'Shwe/Shwe Deposite Photo/photo_3.jpg', text_en: '- Select Kpay or Wave.', text_mm: '- Kpay သို့မဟုတ် Wave ကို Select လုပ်ပါ။' },
           { img: 'Shwe/Shwe Deposite Photo/photo_4.jpg', text_en: '- Choose a Channel. Enter Amount and tap Deposit.', text_mm: '- Channel ရွေးပါ။ Amount ရိုက်ထည့်ပြီး Deposit ကိုနိပ်ပါ။' },
           { img: 'Shwe/Shwe Deposite Photo/photo_5.jpg', text_en: '- Copy Account Number. Transfer the amount via Kpay/Wave.', text_mm: '- Account နံပါတ် Copy ယူပါ။ Kpay/Wave မှတဆင့် ငွေလွဲပါ။' },
           { img: 'Shwe/Shwe Deposite Photo/photo_6.jpg', text_en: '- Enter last 5 digits of Transaction ID and confirm.', text_mm: '- နောက်ဆုံး 5လုံးကို ရိုက်ထည့်ပြီး အတည်ပြုပါ။' }
-=======
-          { img: 'Shwe/Shwe Deposite Photo/Photo_1.jpg', text_en: '- Tap Shwe Account.', text_mm: '- Shwe Account ကိုနိပ်ပါ။' },
-          { img: 'Shwe/Shwe Deposite Photo/Photo_2.jpg', text_en: '- Tap Deposit.', text_mm: '- Deposit ကိုနိပ်ပါ။' },
-          { img: 'Shwe/Shwe Deposite Photo/Photo_3.jpg', text_en: '- Select Kpay or Wave.', text_mm: '- Kpay သို့မဟုတ် Wave ကို Select လုပ်ပါ။' },
-          { img: 'Shwe/Shwe Deposite Photo/Photo_4.jpg', text_en: '- Choose a Channel. Enter Amount and tap Deposit.', text_mm: '- Channel ရွေးပါ။ Amount ရိုက်ထည့်ပြီး Deposit ကိုနိပ်ပါ။' },
-          { img: 'Shwe/Shwe Deposite Photo/Photo_5.jpg', text_en: '- Copy Account Number. Transfer the amount via Kpay/Wave.', text_mm: '- Account နံပါတ် Copy ယူပါ။ Kpay/Wave မှတဆင့် ငွေလွဲပါ။' },
-          { img: 'Shwe/Shwe Deposite Photo/Photo_6.jpg', text_en: '- Enter last 5 digits of Transaction ID and confirm.', text_mm: '- နောက်ဆုံး 5လုံးကို ရိုက်ထည့်ပြီး အတည်ပြုပါ။' }
->>>>>>> 1a7c50621c2d97901cb4b937b35fe26c3ac96e21
         ]
       },
       withdraw: {
         cta: null,
         steps: [
-<<<<<<< HEAD
           { img: 'Shwe/Shwe Withdraw Photo/photo_1.jpg', text_en: '- Tap Account.', text_mm: '- Account ကိုနိပ်ပါ။' },
           { img: 'Shwe/Shwe Withdraw Photo/photo_2.jpg', text_en: '- Tap Withdraw.', text_mm: '- Withdraw ကိုနိပ်ပါ။' },
           { img: 'Shwe/Shwe Withdraw Photo/photo_3.jpg', text_en: '- Select KBZ Pay or Wave.', text_mm: '- KBZ Pay သို့မဟုတ် Wave ကို Select လုပ်ပါ။' },
           { img: 'Shwe/Shwe Withdraw Photo/photo_4.jpg', text_en: '- Link your Payment Account. Enter Amount and tap Withdraw.', text_mm: '- Payment Account ချိတ်ပါ။ Amount ရိုက်ထည့်ပြီး Withdraw ကိုနိပ်ပါ။' },
           { img: 'Shwe/Shwe Withdraw Photo/photo_5.jpg', text_en: '- Enter your password for Security Verification and confirm.', text_mm: '- Security Verification တွင် Password ရိုက်ထည့်ပြီး Confirm လုပ်ပါ။' }
-=======
-          { img: 'Shwe/Shwe Withdraw Photo/Photo_1.jpg', text_en: '- Tap Account.', text_mm: '- Account ကိုနိပ်ပါ။' },
-          { img: 'Shwe/Shwe Withdraw Photo/Photo_2.jpg', text_en: '- Tap Withdraw.', text_mm: '- Withdraw ကိုနိပ်ပါ။' },
-          { img: 'Shwe/Shwe Withdraw Photo/Photo_3.jpg', text_en: '- Select KBZ Pay or Wave.', text_mm: '- KBZ Pay သို့မဟုတ် Wave ကို Select လုပ်ပါ။' },
-          { img: 'Shwe/Shwe Withdraw Photo/Photo_4.jpg', text_en: '- Link your Payment Account. Enter Amount and tap Withdraw.', text_mm: '- Payment Account ချိတ်ပါ။ Amount ရိုက်ထည့်ပြီး Withdraw ကိုနိပ်ပါ။' },
-          { img: 'Shwe/Shwe Withdraw Photo/Photo_5.jpg', text_en: '- Enter your password for Security Verification and confirm.', text_mm: '- Security Verification တွင် Password ရိုက်ထည့်ပြီး Confirm လုပ်ပါ။' }
->>>>>>> 1a7c50621c2d97901cb4b937b35fe26c3ac96e21
         ]
       }
     }
   };
 
-  // ============ STATE & INIT ============
+  // ============ STATE ============
   let currentLang = localStorage.getItem('appLang') || 'en';
   let currentTab = 'home';
   let currentSub = null;
 
+  const recordCounts = {};   // { [id]: { state: 'loading'|'success'|'error', count: number|null } }
+  const lastFetchTime = {};  // { [id]: timestamp }
+  const fetchInFlight = {};  // { [id]: Promise }
+
+  // ============ INIT ============
   document.addEventListener('DOMContentLoaded', () => {
-    // 1. Apply Language
+    const savedTheme = localStorage.getItem('appTheme');
+    const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const initTheme = savedTheme || (prefersDark ? 'dark' : 'light');
+    applyTheme(initTheme, false);
+
     applyLanguage(currentLang);
-    
-    // 2. Intro Splash
+
+    // Initial fetch: force
+    HISTORY_CHATS.forEach(chat => fetchRecordCount(chat, true));
+
     setTimeout(() => {
       const intro = document.getElementById('introSplash');
       if (!intro) return;
@@ -813,21 +1141,137 @@
     }, 3200);
   });
 
+  // ============ RECORD COUNT FETCH ============
+  function fetchRecordCount(chat, force) {
+    if (!chat.firebase) {
+      recordCounts[chat.id] = { state: 'error', count: null };
+      renderHistoryChats();
+      return Promise.resolve();
+    }
+
+    if (!force) {
+      const now = Date.now();
+      if (lastFetchTime[chat.id] && now - lastFetchTime[chat.id] < 10000) {
+        return Promise.resolve();
+      }
+    }
+    lastFetchTime[chat.id] = Date.now();
+
+    if (fetchInFlight[chat.id]) return fetchInFlight[chat.id];
+
+    recordCounts[chat.id] = { state: 'loading', count: null };
+    renderHistoryChats();
+
+    fetchInFlight[chat.id] = new Promise((resolve) => {
+      try {
+        const appName = 'countApp_' + chat.id;
+        let app;
+        try { app = firebase.app(appName); }
+        catch (e) { app = firebase.initializeApp(chat.firebase, appName); }
+
+        const db = app.database();
+        db.ref(chat.firebase.path).once('value')
+          .then((snap) => {
+            const data = snap.val();
+            const count = (data && data.list && Array.isArray(data.list)) ? data.list.length : 0;
+            recordCounts[chat.id] = { state: 'success', count };
+            fetchInFlight[chat.id] = null;
+            renderHistoryChats();
+            resolve();
+          })
+          .catch((err) => {
+            console.error('Count fetch error for', chat.id, err);
+            recordCounts[chat.id] = { state: 'error', count: null };
+            fetchInFlight[chat.id] = null;
+            renderHistoryChats();
+            resolve();
+          });
+      } catch (err) {
+        console.error('Count init error for', chat.id, err);
+        recordCounts[chat.id] = { state: 'error', count: null };
+        fetchInFlight[chat.id] = null;
+        renderHistoryChats();
+        resolve();
+      }
+    });
+
+    return fetchInFlight[chat.id];
+  }
+
+  // ============ THEME ============
+  function applyTheme(theme, animate) {
+    if (animate) {
+      document.body.classList.add('theme-switching');
+      setTimeout(() => document.body.classList.remove('theme-switching'), 400);
+    }
+    if (theme === 'dark') {
+      document.body.classList.add('dark');
+      const icon = document.getElementById('themeIcon');
+      if (icon) icon.className = 'fa-solid fa-moon';
+    } else {
+      document.body.classList.remove('dark');
+      const icon = document.getElementById('themeIcon');
+      if (icon) icon.className = 'fa-solid fa-sun';
+    }
+    localStorage.setItem('appTheme', theme);
+    broadcastToIframes();
+  }
+
+  function toggleTheme() {
+    const btn = document.getElementById('themeBtn');
+    if (btn) {
+      btn.classList.remove('spin');
+      void btn.offsetWidth;
+      btn.classList.add('spin');
+      setTimeout(() => btn.classList.remove('spin'), 480);
+    }
+    const isDark = document.body.classList.contains('dark');
+    applyTheme(isDark ? 'light' : 'dark', true);
+  }
+
+  // ============ BROADCAST ============
+  function broadcastToIframes() {
+    const theme = document.body.classList.contains('dark') ? 'dark' : 'light';
+    document.querySelectorAll('iframe').forEach((iframe) => {
+      try {
+        if (iframe.contentWindow) {
+          iframe.contentWindow.postMessage({ type: 'app-sync', theme, language: currentLang }, '*');
+        }
+      } catch (e) {}
+    });
+  }
+
+  function pushStateToIframe(iframe) {
+    try {
+      if (!iframe.contentWindow) return;
+      const theme = document.body.classList.contains('dark') ? 'dark' : 'light';
+      iframe.contentWindow.postMessage({ type: 'app-sync', theme, language: currentLang }, '*');
+    } catch (e) {}
+  }
+
+  // ============ MYANMAR NUMERALS ============
+  const MM_DIGITS = ['၀','၁','၂','၃','၄','၅','၆','၇','၈','၉'];
+  function toMmNum(str) {
+    return String(str).replace(/[0-9]/g, d => MM_DIGITS[+d]);
+  }
+  function formatNum(n) {
+    const s = Number(n).toLocaleString('en-US');
+    return currentLang === 'mm' ? toMmNum(s) : s;
+  }
+
+  // ============ LANGUAGE ============
   function applyLanguage(lang) {
     currentLang = lang;
     localStorage.setItem('appLang', lang);
-    
-    // Update Body Class for Font Tweaks
+
     if (lang === 'mm') document.body.classList.add('lang-mm');
     else document.body.classList.remove('lang-mm');
 
-    // Update Text Elements
     document.querySelectorAll('[data-t]').forEach(el => {
       const key = el.getAttribute('data-t');
       if (T[lang][key]) el.textContent = T[lang][key];
     });
 
-    // Update Header Button
     const flag = document.getElementById('currentLangFlag');
     const text = document.getElementById('currentLangText');
     if (lang === 'mm') {
@@ -838,17 +1282,29 @@
       text.textContent = 'English';
     }
 
-    // Update Active Checkmark in Sheet
     document.getElementById('opt-mm').classList.toggle('active', lang === 'mm');
     document.getElementById('opt-en').classList.toggle('active', lang === 'en');
 
-    // Re-render Sub-page if it is currently open to apply new language instantly
+    renderHistoryChats();
+
     if (currentSub) {
-      renderSubPage(currentSub.brand, currentSub.action, true);
+      if (currentSub.brand === 'tools' && currentSub.action === 'betsize') {
+        renderBetSizePage(true);
+      } else if (currentSub.brand !== 'history') {
+        renderSubPage(currentSub.brand, currentSub.action, true);
+      } else {
+        // Update iframe title
+        const historyIframe = document.getElementById('historyIframe');
+        if (historyIframe) {
+          const chat = HISTORY_CHATS.find(c => c.id === currentSub.action);
+          if (chat) historyIframe.title = lang === 'mm' ? chat.title_mm : chat.title_en;
+        }
+      }
     }
+
+    broadcastToIframes();
   }
 
-  // No Reload! Just apply language instantly
   function setLanguage(lang) {
     if (lang === currentLang) { closeLangSheet(); return; }
     applyLanguage(lang);
@@ -865,40 +1321,110 @@
     document.getElementById('langSheet').classList.remove('active');
   }
 
-  // ============ TAB SWITCH ============
-  function switchTab(tab) {
-    if (currentSub) closeSub();
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    const target = document.getElementById('screen-' + tab);
-    if (target) target.classList.add('active');
-    document.querySelectorAll('.nav-item').forEach(item => {
-      item.classList.toggle('active', item.dataset.tab === tab);
-    });
-    document.getElementById('bottomNav').classList.remove('hidden');
-    currentTab = tab;
-    window.scrollTo(0, 0);
+  // ============ HISTORY CHATS RENDER ============
+  function renderHistoryChats() {
+    const list = document.getElementById('historyChatsList');
+    if (!list) return;
+
+    list.innerHTML = HISTORY_CHATS.map((chat, i) => {
+      const title = currentLang === 'mm' ? chat.title_mm : chat.title_en;
+      const rc = recordCounts[chat.id];
+      let badgeHtml = '';
+
+      if (!rc || rc.state === 'loading') {
+        badgeHtml = '<span class="record-badge loading"><span class="record-dot"></span><span>...</span></span>';
+      } else if (rc.state === 'success' && rc.count !== null) {
+        const countStr = currentLang === 'mm' ? toMmNum(String(rc.count)) : String(rc.count);
+        badgeHtml = '<span class="record-badge" title="' + rc.count + ' Records">' +
+          '<span class="record-dot"></span><span>' + countStr + '</span></span>';
+      }
+      // error → no badge
+
+      const iconHtml = chat.logo
+        ? '<div class="tool-card-icon tool-card-icon--logo"><img src="' + chat.logo + '" alt="' + escapeHtml(title) + '" loading="lazy" /></div>'
+        : '<div class="tool-card-icon"><i class="fa-solid ' + (chat.icon || 'fa-clock-rotate-left') + '"></i></div>';
+
+      return '<button class="tool-card history-chat-card" data-brand="' + chat.brand + '" ' +
+        'onclick="openHistoryChat(\'' + chat.id + '\')" ' +
+        'style="animation-delay:' + (i * 60 + 100) + 'ms">' +
+          iconHtml +
+          '<div class="tool-card-body">' +
+            '<div class="tool-card-title">' + escapeHtml(title) + '</div>' +
+          '</div>' +
+          badgeHtml +
+          '<i class="fa-solid fa-chevron-right tool-card-arrow"></i>' +
+        '</button>';
+    }).join('');
   }
 
-  // ============ OPEN SUB ============
-  function openSub(brandKey, actionKey) {
-    currentSub = { brand: brandKey, action: actionKey };
-    
+  function escapeHtml(str) {
+    return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+
+  // ============ OPEN HISTORY CHAT (sub-screen + iframe) ============
+  function openHistoryChat(chatId) {
+    const chat = HISTORY_CHATS.find(c => c.id === chatId);
+    if (!chat) return;
+
+    if (currentSub) closeSub();
+
+    currentSub = { brand: 'history', action: chatId };
+
     const subScreen = document.getElementById('subScreen');
+    const subBody = document.getElementById('subBody');
+
+    subBody.classList.add('sub-screen-body--iframe');
+    subBody.innerHTML = '';
+
+    const iframe = document.createElement('iframe');
+    iframe.id = 'historyIframe';
+    iframe.src = chat.src;
+    iframe.title = currentLang === 'mm' ? chat.title_mm : chat.title_en;
+    iframe.addEventListener('load', () => pushStateToIframe(iframe));
+    subBody.appendChild(iframe);
+
     subScreen.classList.add('active');
     document.getElementById('bottomNav').classList.remove('hidden');
     document.getElementById('floatingBackBtn').classList.add('visible');
-    
+
+    try { history.pushState({ historyChat: true }, ''); } catch (e) {}
+  }
+
+  // ============ SUB PAGE ============
+  function openSub(brandKey, actionKey) {
+    currentSub = { brand: brandKey, action: actionKey };
+    const subScreen = document.getElementById('subScreen');
+    const subBody = document.getElementById('subBody');
+    subBody.classList.remove('sub-screen-body--iframe');
+    subScreen.classList.add('active');
+    document.getElementById('bottomNav').classList.remove('hidden');
+    document.getElementById('floatingBackBtn').classList.add('visible');
     renderSubPage(brandKey, actionKey, false);
   }
 
+  function openBetSizePage() {
+    currentSub = { brand: 'tools', action: 'betsize' };
+    const subScreen = document.getElementById('subScreen');
+    const subBody = document.getElementById('subBody');
+    subBody.classList.remove('sub-screen-body--iframe');
+    subScreen.classList.add('active');
+    document.getElementById('bottomNav').classList.remove('hidden');
+    document.getElementById('floatingBackBtn').classList.add('visible');
+    renderBetSizePage(false);
+  }
+
   function renderSubPage(brandKey, actionKey, isSilentRender) {
+    if (brandKey === 'tools' && actionKey === 'betsize') {
+      renderBetSizePage(isSilentRender);
+      return;
+    }
     const brand = BRANDS[brandKey];
     const content = CONTENT[brandKey] && CONTENT[brandKey][actionKey];
     if (!brand || !content) return;
 
     const body = document.getElementById('subBody');
-    
-    // Dynamic Translation for Sub Page
+    body.classList.remove('sub-screen-body--iframe');
+
     let actionLabel = T[currentLang]['action_' + actionKey];
     if (actionKey === 'register') actionLabel = currentLang === 'mm' ? 'အကောင့်ဖွင့်ရန်နည်းလမ်းများ' : 'Register Steps';
     if (actionKey === 'deposit') actionLabel = currentLang === 'mm' ? 'ငွေသွင်းရန်နည်းလမ်းများ' : 'Deposit Steps';
@@ -928,9 +1454,7 @@
       const delay = isSilentRender ? 0 : (200 + i * 50);
       const stepText = currentLang === 'mm' ? step.text_mm : step.text_en;
       const safeText = stepText.replace(/'/g, "\\'").replace(/"/g, '&quot;');
-      
-      // Added Step Label ("Step 1" / "အဆင့် ၁")
-      const stepLabel = T[currentLang].step_label + ' ' + (i + 1);
+      const stepLabel = T[currentLang].step_label + ' ' + (currentLang === 'mm' ? toMmNum(i + 1) : (i + 1));
 
       html += '<div class="step-card" data-brand="' + brandKey + '" style="animation-delay:' + delay + 'ms;" onclick="openModal(\'' + step.img + '\', \'' + safeText + '\')">' +
         '<div class="step-label">' + stepLabel + '</div>' +
@@ -943,28 +1467,352 @@
     html += '</div>';
 
     body.innerHTML = html;
-    if (!isSilentRender) body.scrollTop = 0; // Only reset scroll if opening normally
+    if (!isSilentRender) body.scrollTop = 0;
+  }
+
+  // ============ BET SIZE STATE ============
+  const betSizeState = {
+    profitMult: 1, betCount: 6, openPicker: null, lastResult: null,
+    copyTimer: null, calcTimer: null, inputValue: ''
+  };
+
+  function escapeHtmlAttr(str) {
+    return String(str || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+  }
+
+  function renderBetSizePage(isSilentRender) {
+    const body = document.getElementById('subBody');
+    if (!body) return;
+    body.classList.remove('sub-screen-body--iframe');
+
+    const existingInput = document.getElementById('betSizeFirstAmount');
+    if (existingInput) betSizeState.inputValue = existingInput.value;
+
+    const wasResultShown = (document.getElementById('betSizeResult') || {}).classList
+      ? document.getElementById('betSizeResult').classList.contains('show')
+      : false;
+    const savedResult = betSizeState.lastResult;
+    const t = T[currentLang];
+    const profitLabel = (currentLang === 'mm' ? toMmNum(betSizeState.profitMult) : betSizeState.profitMult) + '×';
+    const countLabel = currentLang === 'mm' ? toMmNum(betSizeState.betCount) : String(betSizeState.betCount);
+
+    let html = '' +
+      '<div class="sub-page-header">' +
+        '<div class="sub-brand-icon bet-size-icon"><i class="fa-solid fa-calculator"></i></div>' +
+        '<div>' +
+          '<div class="sub-brand-label">' + (currentLang === 'mm' ? 'ကိရိယာများ' : 'Tools') + '</div>' +
+          '<div class="sub-page-title">' + t.bet_size_title + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="betsize-page">' +
+        '<div class="betsize-card">' +
+          '<label class="betsize-field-label" for="betSizeFirstAmount">' + t.bet_size_first_amount + '</label>' +
+          '<input id="betSizeFirstAmount" class="betsize-input" type="text" inputmode="numeric" autocomplete="off" placeholder="' + escapeHtmlAttr(t.bet_size_placeholder) + '" maxlength="12" value="' + escapeHtmlAttr(betSizeState.inputValue) + '" />' +
+          '<p class="betsize-error" id="betSizeAmountError"></p>' +
+        '</div>' +
+        '<div class="betsize-card">' +
+          '<span class="betsize-field-label">' + t.bet_size_profits + '</span>' +
+          '<button type="button" class="betsize-select-btn" id="betSizeProfitBtn" aria-expanded="false" onclick="toggleBetSizePicker(\'profit\')">' +
+            '<span id="betSizeProfitLabel">' + profitLabel + '</span>' +
+            '<span class="betsize-chevron">▼</span>' +
+          '</button>' +
+          '<div class="betsize-options" id="betSizeProfitOptions" role="listbox"></div>' +
+        '</div>' +
+        '<div class="betsize-card">' +
+          '<span class="betsize-field-label">' + t.bet_size_count + '</span>' +
+          '<button type="button" class="betsize-select-btn" id="betSizeCountBtn" aria-expanded="false" onclick="toggleBetSizePicker(\'count\')">' +
+            '<span id="betSizeCountLabel">' + countLabel + '</span>' +
+            '<span class="betsize-chevron">▼</span>' +
+          '</button>' +
+          '<div class="betsize-options" id="betSizeCountOptions" role="listbox"></div>' +
+        '</div>' +
+        '<button type="button" class="betsize-calc-btn" id="betSizeCalcBtn" onclick="runBetSizeCalculator()">' + t.bet_size_calc + '</button>' +
+        '<div class="betsize-loading" id="betSizeLoading">' +
+          '<div class="betsize-loading-spinner"></div>' + t.bet_size_loading +
+        '</div>' +
+        '<div class="betsize-result" id="betSizeResult">' +
+          '<table class="betsize-table">' +
+            '<thead><tr><th>' + t.bet_size_no + '</th><th>' + t.bet_size_amount + '</th><th>' + t.bet_size_profits_col + '</th></tr></thead>' +
+            '<tbody id="betSizeResultBody"></tbody>' +
+            '<tfoot><tr><td>' + t.bet_size_total + '</td><td id="betSizeTotalAmount">-</td><td><button type="button" class="betsize-copy-btn" id="betSizeCopyBtn" onclick="copyBetSizeResult()">' + t.bet_size_copy + '</button></td></tr></tfoot>' +
+          '</table>' +
+        '</div>' +
+      '</div>';
+
+    body.innerHTML = html;
+    buildBetSizeOptions('profit', betSizeState.profitMult);
+    buildBetSizeOptions('count', betSizeState.betCount);
+
+    const newInput = document.getElementById('betSizeFirstAmount');
+    if (newInput) {
+      newInput.addEventListener('input', () => {
+        const digitsOnly = newInput.value.replace(/[^\d]/g, '');
+        if (newInput.value !== digitsOnly) newInput.value = digitsOnly;
+        betSizeState.inputValue = newInput.value;
+        setBetSizeAmountError('');
+      });
+      newInput.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter') { e.preventDefault(); runBetSizeCalculator(); }
+      });
+    }
+
+    if (savedResult && wasResultShown) renderBetSizeResult(savedResult);
+    if (!isSilentRender) body.scrollTop = 0;
+  }
+
+  function buildBetSizeOptions(type, selectedVal) {
+    const hostId = type === 'profit' ? 'betSizeProfitOptions' : 'betSizeCountOptions';
+    const host = document.getElementById(hostId);
+    if (!host) return;
+    host.innerHTML = '';
+    const start = type === 'profit' ? 1 : 6;
+    const end = type === 'profit' ? 20 : 15;
+    for (let i = start; i <= end; i++) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'betsize-option' + (i === selectedVal ? ' selected' : '');
+      const display = currentLang === 'mm' ? toMmNum(i) : String(i);
+      btn.textContent = type === 'profit' ? (display + '×') : display;
+      btn.setAttribute('role', 'option');
+      btn.setAttribute('aria-selected', i === selectedVal ? 'true' : 'false');
+      btn.dataset.value = i;
+      btn.onclick = function () { selectBetSizeOption(type, i); };
+      host.appendChild(btn);
+    }
+  }
+
+  function closeBetSizePickers() {
+    ['profit', 'count'].forEach(function (type) {
+      const options = document.getElementById(type === 'profit' ? 'betSizeProfitOptions' : 'betSizeCountOptions');
+      const btn = document.getElementById(type === 'profit' ? 'betSizeProfitBtn' : 'betSizeCountBtn');
+      if (options) options.classList.remove('open');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+    });
+    betSizeState.openPicker = null;
+  }
+
+  function toggleBetSizePicker(type) {
+    const options = document.getElementById(type === 'profit' ? 'betSizeProfitOptions' : 'betSizeCountOptions');
+    const btn = document.getElementById(type === 'profit' ? 'betSizeProfitBtn' : 'betSizeCountBtn');
+    if (!options || !btn) return;
+    const willOpen = !options.classList.contains('open');
+    closeBetSizePickers();
+    if (willOpen) {
+      options.classList.add('open');
+      btn.setAttribute('aria-expanded', 'true');
+      betSizeState.openPicker = type;
+    }
+  }
+
+  function selectBetSizeOption(type, value) {
+    if (type === 'profit') {
+      betSizeState.profitMult = value;
+      const label = document.getElementById('betSizeProfitLabel');
+      if (label) {
+        const d = currentLang === 'mm' ? toMmNum(value) : String(value);
+        label.textContent = d + '×';
+      }
+    } else {
+      betSizeState.betCount = value;
+      const label = document.getElementById('betSizeCountLabel');
+      if (label) {
+        label.textContent = currentLang === 'mm' ? toMmNum(value) : String(value);
+      }
+    }
+    const host = document.getElementById(type === 'profit' ? 'betSizeProfitOptions' : 'betSizeCountOptions');
+    if (host) {
+      host.querySelectorAll('.betsize-option').forEach(function (el) {
+        const isSel = Number(el.dataset.value) === value;
+        el.classList.toggle('selected', isSel);
+        el.setAttribute('aria-selected', isSel ? 'true' : 'false');
+      });
+    }
+    closeBetSizePickers();
+  }
+
+  function parseBetSizeAmount(raw) {
+    const t = T[currentLang];
+    const cleaned = String(raw || '').replace(/,/g, '').trim();
+    if (!cleaned) return { ok: false, message: t.bet_size_error_empty };
+    if (!/^\d+$/.test(cleaned)) return { ok: false, message: t.bet_size_error_digits };
+    const value = Number(cleaned);
+    if (!Number.isFinite(value) || value < 100) return { ok: false, message: t.bet_size_error_min };
+    if (value % 100 !== 0) return { ok: false, message: t.bet_size_error_round };
+    return { ok: true, value: value };
+  }
+
+  function setBetSizeAmountError(message) {
+    const el = document.getElementById('betSizeAmountError');
+    if (!el) return;
+    if (message) { el.textContent = message; el.classList.add('show'); }
+    else { el.textContent = ''; el.classList.remove('show'); }
+  }
+
+  function computeBetSizeRows(firstBet, multiplier, betCount) {
+    const rows = []; let runningSum = 0; let total = 0;
+    for (let n = 1; n <= betCount; n++) {
+      const profits = firstBet * (1 + (n - 1) * multiplier);
+      const amount = n === 1 ? firstBet : (runningSum + profits);
+      rows.push({ no: n, amount: amount, profits: profits });
+      runningSum += amount; total += amount;
+    }
+    return { rows: rows, total: total };
+  }
+
+  function renderBetSizeResult(result) {
+    const bodyEl = document.getElementById('betSizeResultBody');
+    const totalEl = document.getElementById('betSizeTotalAmount');
+    const wrap = document.getElementById('betSizeResult');
+    const copyBtn = document.getElementById('betSizeCopyBtn');
+    if (!bodyEl || !totalEl || !wrap) return;
+    betSizeState.lastResult = result;
+    bodyEl.innerHTML = result.rows.map(function (row) {
+      return '<tr><td>' + formatNum(row.no) + '</td><td>' + formatNum(row.amount) + '</td><td>' + formatNum(row.profits) + '</td></tr>';
+    }).join('');
+    totalEl.textContent = formatNum(result.total);
+    if (copyBtn) {
+      copyBtn.textContent = T[currentLang].bet_size_copy;
+      copyBtn.classList.remove('copied');
+    }
+    wrap.classList.add('show');
+  }
+
+  function buildBetSizeCopyText(result) {
+    const t = T[currentLang];
+    const lines = [t.bet_size_no + '\t' + t.bet_size_amount + '\t' + t.bet_size_profits_col];
+    result.rows.forEach(function (row) {
+      lines.push(formatNum(row.no) + '\t' + formatNum(row.amount) + '\t' + formatNum(row.profits));
+    });
+    lines.push(t.bet_size_total + '\t' + formatNum(result.total));
+    return lines.join('\n');
+  }
+
+  function copyBetSizeResult() {
+    const result = betSizeState.lastResult;
+    const copyBtn = document.getElementById('betSizeCopyBtn');
+    if (!result) return;
+    const text = buildBetSizeCopyText(result);
+    function markCopied() {
+      if (!copyBtn) return;
+      copyBtn.textContent = T[currentLang].bet_size_copied;
+      copyBtn.classList.add('copied');
+      if (betSizeState.copyTimer) clearTimeout(betSizeState.copyTimer);
+      betSizeState.copyTimer = setTimeout(function () {
+        copyBtn.textContent = T[currentLang].bet_size_copy;
+        copyBtn.classList.remove('copied');
+      }, 1500);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(markCopied).catch(function () { fallbackCopyBetSizeText(text, markCopied); });
+    } else {
+      fallbackCopyBetSizeText(text, markCopied);
+    }
+  }
+
+  function fallbackCopyBetSizeText(text, onDone) {
+    try {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      ta.setAttribute('readonly', '');
+      ta.style.position = 'fixed';
+      ta.style.left = '-9999px';
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      if (onDone) onDone();
+    } catch (_) {}
+  }
+
+  function runBetSizeCalculator() {
+    const input = document.getElementById('betSizeFirstAmount');
+    const calcBtn = document.getElementById('betSizeCalcBtn');
+    const loading = document.getElementById('betSizeLoading');
+    const resultWrap = document.getElementById('betSizeResult');
+    const parsed = parseBetSizeAmount(input ? input.value : '');
+    if (!parsed.ok) {
+      setBetSizeAmountError(parsed.message);
+      if (input) input.focus();
+      return;
+    }
+    setBetSizeAmountError('');
+    closeBetSizePickers();
+    if (resultWrap) resultWrap.classList.remove('show');
+    if (loading) loading.classList.add('show');
+    if (calcBtn) calcBtn.disabled = true;
+    if (betSizeState.calcTimer) clearTimeout(betSizeState.calcTimer);
+    betSizeState.calcTimer = setTimeout(function () {
+      const result = computeBetSizeRows(parsed.value, betSizeState.profitMult, betSizeState.betCount);
+      renderBetSizeResult(result);
+      if (loading) loading.classList.remove('show');
+      if (calcBtn) calcBtn.disabled = false;
+    }, 650);
   }
 
   // ============ CLOSE SUB ============
   function closeSub() {
+    closeBetSizePickers();
+    const subBody = document.getElementById('subBody');
+    const wasHistory = currentSub && currentSub.brand === 'history';
+
+    subBody.classList.remove('sub-screen-body--iframe');
+    if (wasHistory) subBody.innerHTML = '';
+
     document.getElementById('subScreen').classList.remove('active');
     document.getElementById('floatingBackBtn').classList.remove('visible');
     currentSub = null;
+
+    // Refresh count after closing history (force)
+    if (wasHistory) {
+      HISTORY_CHATS.forEach(chat => fetchRecordCount(chat, true));
+      if (history.state && history.state.historyChat) {
+        try { history.back(); } catch (e) {}
+      }
+    }
   }
 
-  // ============ BACK ============
   function goBack() {
     if (currentSub) closeSub();
   }
 
-  // ============ MODAL (POP-UP) ============
+  // ============ HARDWARE BACK ============
+  window.addEventListener('popstate', function () {
+    if (currentSub && currentSub.brand === 'history') {
+      const subBody = document.getElementById('subBody');
+      subBody.classList.remove('sub-screen-body--iframe');
+      subBody.innerHTML = '';
+      document.getElementById('subScreen').classList.remove('active');
+      document.getElementById('floatingBackBtn').classList.remove('visible');
+      currentSub = null;
+      HISTORY_CHATS.forEach(chat => fetchRecordCount(chat, true));
+    }
+  });
+
+  // ============ TAB SWITCH ============
+  function switchTab(tab) {
+    if (currentSub) closeSub();
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById('screen-' + tab);
+    if (target) target.classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.classList.toggle('active', item.dataset.tab === tab);
+    });
+    document.getElementById('bottomNav').classList.remove('hidden');
+    currentTab = tab;
+    window.scrollTo(0, 0);
+
+    // Refresh counts when viewing chats (throttled)
+    if (tab === 'chats') {
+      HISTORY_CHATS.forEach(chat => fetchRecordCount(chat, false));
+    }
+  }
+
+  // ============ MODAL ============
   function openModal(imgSrc, text) {
     document.getElementById('modalImg').src = imgSrc;
     document.getElementById('modalText').innerHTML = text;
     document.getElementById('photoModal').classList.add('active');
   }
-
   function closeModal(e) {
     if (e && e.target !== e.currentTarget && !e.target.closest('.modal-close')) return;
     document.getElementById('photoModal').classList.remove('active');
@@ -983,7 +1831,7 @@
     }
   });
 
-  // ============ IMAGE LONG-PRESS PROTECTION ============
+  // ============ IMAGE PROTECTION ============
   document.addEventListener('contextmenu', (e) => {
     if (e.target && e.target.tagName === 'IMG') e.preventDefault();
   }, true);
