@@ -8,6 +8,8 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -96,7 +98,6 @@
   .intro-logo .red { color: #dc2626; }
   .intro-logo .black { color: var(--text); }
   body.dark .intro-logo .black { color: #ffffff; }
-
   @keyframes introFadeUp {
     from { opacity: 0; transform: translateY(12px); }
     to { opacity: 1; transform: translateY(0); }
@@ -268,6 +269,24 @@
     max-width: 480px; margin: 0 auto; width: 100%; -webkit-overflow-scrolling: touch;
   }
 
+  /* === Sub-screen: iframe mode === */
+  .sub-screen-body.sub-screen-body--iframe {
+    padding: 0 0 calc(90px + env(safe-area-inset-bottom, 0px)) 0;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    max-width: 100%;
+    margin: 0;
+  }
+  .sub-screen-body.sub-screen-body--iframe > iframe {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    border: none;
+    display: block;
+    background: var(--bg-page);
+  }
+
   .sub-page-header {
     display: flex; align-items: center; gap: 14px; margin-bottom: 20px;
     animation: stepFadeUp 0.5s var(--spring) 100ms both;
@@ -400,10 +419,9 @@
   .tab-placeholder p { font-size: 14px; color: var(--text-muted); line-height: 1.55; }
 
   .tools-header { text-align: center; padding: 24px 0 28px; animation: stepFadeUp 0.5s var(--spring) both; }
-  .tools-header .ph-icon { margin: 0 auto 18px; }
-  .tools-header h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 6px; }
-  .tools-header p { font-size: 13px; color: var(--text-muted); }
+  .tools-header h2 { font-size: 22px; font-weight: 800; letter-spacing: -0.02em; }
   .tools-list { display: flex; flex-direction: column; gap: 12px; }
+
   .tool-card {
     display: flex; align-items: center; gap: 14px;
     padding: 16px 18px;
@@ -423,9 +441,53 @@
   }
   body.dark .tool-card-icon { background: rgba(129,140,248,0.15); color: #a5b4fc; }
   .tool-card-body { flex: 1; min-width: 0; }
-  .tool-card-title { font-size: 15px; font-weight: 800; color: var(--text); margin-bottom: 2px; line-height: 1.3; }
-  .tool-card-sub { font-size: 12px; color: var(--text-muted); line-height: 1.35; }
+  .tool-card-title { font-size: 15px; font-weight: 800; color: var(--text); line-height: 1.3; }
   .tool-card-arrow { color: var(--text-subtle); font-size: 13px; flex-shrink: 0; }
+
+  /* ============ RECORD BADGE (history chats) ============ */
+  .record-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(34, 197, 94, 0.12);
+    color: #15803d;
+    font-size: 11px;
+    font-weight: 800;
+    flex-shrink: 0;
+    transition: background 0.2s, color 0.2s;
+    line-height: 1.2;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: 0.02em;
+  }
+  body.dark .record-badge {
+    background: rgba(52, 211, 153, 0.15);
+    color: #86efac;
+  }
+  .record-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: #16a34a;
+    animation: recordDotPulse 2s ease-in-out infinite;
+    flex-shrink: 0;
+  }
+  body.dark .record-dot { background: #34d399; }
+  @keyframes recordDotPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.45; transform: scale(0.85); }
+  }
+  .record-badge.loading {
+    background: rgba(100, 116, 139, 0.12);
+    color: var(--text-muted);
+  }
+  body.dark .record-badge.loading { background: rgba(148, 163, 184, 0.12); }
+  .record-badge.loading .record-dot {
+    background: var(--text-muted);
+    animation: none;
+    opacity: 0.6;
+  }
+  .record-badge.error { display: none; }
 
   /* ============ HISTORY CHAT CARDS ============ */
   .history-chat-card[data-brand="ck"] { background: var(--ck-bg); border-color: transparent; }
@@ -561,100 +623,6 @@
     .betsize-table th, .betsize-table td { padding: 8px 6px; font-size: 12.5px; }
     .betsize-options { grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); max-height: 180px; }
   }
-
-  /* ============ HISTORY CHAT OVERLAY (Full-screen) ============ */
-  .history-overlay {
-    position: fixed; inset: 0; z-index: 1500;
-    background: var(--bg-page);
-    display: flex; flex-direction: column;
-    transform: translateX(100%);
-    transition: transform 0.5s var(--ease);
-    will-change: transform;
-    visibility: hidden;
-  }
-  .history-overlay.active {
-    transform: translateX(0);
-    visibility: visible;
-  }
-  .history-overlay-header {
-    height: calc(var(--header-h) + env(safe-area-inset-top, 0px));
-    padding: env(safe-area-inset-top, 0px) 12px 0;
-    display: flex; align-items: center; gap: 10px;
-    background: var(--header-bg);
-    backdrop-filter: saturate(180%) blur(20px);
-    -webkit-backdrop-filter: saturate(180%) blur(20px);
-    border-bottom: 1px solid var(--border);
-    flex-shrink: 0;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-  }
-  .history-back-btn {
-    width: 40px; height: 40px; border-radius: 50%;
-    background: var(--bg-card); border: 1px solid var(--border);
-    color: var(--text);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px; flex-shrink: 0;
-    transition: transform 0.15s var(--spring), background 0.2s;
-    -webkit-tap-highlight-color: transparent;
-  }
-  .history-back-btn:active { transform: scale(0.92); }
-  .history-overlay-title {
-    font-size: 15px; font-weight: 800;
-    color: var(--text);
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    flex: 1; letter-spacing: -0.01em;
-  }
-  .history-overlay-body {
-    flex: 1; position: relative; overflow: hidden;
-    background: var(--bg-page);
-  }
-  .history-overlay-body iframe {
-    position: absolute; inset: 0;
-    width: 100%; height: 100%; border: none; display: block;
-    background: var(--bg-page);
-  }
-
-  /* ============ TOAST ============ */
-  .toast-container {
-    position: fixed; top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 12px);
-    left: 50%; transform: translateX(-50%);
-    z-index: 20000;
-    display: flex; flex-direction: column; gap: 8px;
-    pointer-events: none; max-width: 90vw;
-  }
-  .toast {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 11px 18px;
-    border-radius: 14px;
-    font-size: 13px;
-    font-weight: 700;
-    box-shadow: 0 4px 20px rgba(0,0,0,0.14);
-    display: flex; align-items: center; gap: 8px;
-    pointer-events: auto;
-    opacity: 0;
-    transform: translateY(-10px);
-    transition: opacity 0.25s ease, transform 0.3s var(--spring);
-    white-space: nowrap;
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
-  }
-  .toast.show { opacity: 1; transform: translateY(0); }
-  .toast::before {
-    content: '';
-    width: 8px; height: 8px; border-radius: 50%;
-    background: var(--ck-2);
-    flex-shrink: 0;
-  }
-  .toast.success { border-color: #16a34a; color: #15803d; }
-  .toast.success::before { background: #16a34a; }
-  .toast.error { border-color: #dc2626; color: #b91c1c; }
-  .toast.error::before { background: #dc2626; }
-  .toast.info { border-color: var(--ck-2); color: var(--ck-text); }
-  body.dark .toast.success { color: #86efac; border-color: #22c55e; }
-  body.dark .toast.error { color: #fca5a5; border-color: #ef4444; }
-  body.dark .toast.info { color: #a5b4fc; border-color: #6366f1; }
 </style>
 </head>
 <body>
@@ -781,13 +749,11 @@
   </div>
 </div>
 
-<!-- CHATS (History Chats) -->
+<!-- CHATS -->
 <div id="screen-chats" class="screen">
   <div class="screen-inner">
     <div class="tools-header">
-      <div class="ph-icon"><i class="fa-regular fa-comment-dots"></i></div>
       <h2 data-t="chats_title">History Chats</h2>
-      <p data-t="chats_subtitle">View live game history</p>
     </div>
     <div class="tools-list" id="historyChatsList"></div>
   </div>
@@ -797,16 +763,13 @@
 <div id="screen-tools" class="screen">
   <div class="screen-inner">
     <div class="tools-header">
-      <div class="ph-icon"><i class="fa-solid fa-calculator"></i></div>
       <h2 data-t="nav_tools">Tools</h2>
-      <p data-t="tools_subtitle">Utility tools for lottery</p>
     </div>
     <div class="tools-list">
       <button class="tool-card" onclick="openBetSizePage()">
         <div class="tool-card-icon"><i class="fa-solid fa-calculator"></i></div>
         <div class="tool-card-body">
           <div class="tool-card-title" data-t="bet_size_customize_btn">Bet Size Customize</div>
-          <div class="tool-card-sub" data-t="bet_size_customize_sub">Calculate betting amounts</div>
         </div>
         <i class="fa-solid fa-chevron-right tool-card-arrow"></i>
       </button>
@@ -825,19 +788,6 @@
 <!-- SUB-SCREEN -->
 <div id="subScreen" class="sub-screen">
   <div class="sub-screen-body" id="subBody"></div>
-</div>
-
-<!-- HISTORY CHAT OVERLAY -->
-<div id="historyOverlay" class="history-overlay">
-  <div class="history-overlay-header">
-    <button class="history-back-btn" onclick="closeHistoryChat()" aria-label="Back">
-      <i class="fa-solid fa-arrow-left"></i>
-    </button>
-    <div class="history-overlay-title" id="historyOverlayTitle">History</div>
-  </div>
-  <div class="history-overlay-body">
-    <iframe id="historyIframe" title="History Chats"></iframe>
-  </div>
 </div>
 
 <!-- FLOATING BACK BUTTON -->
@@ -903,9 +853,6 @@
   </div>
 </div>
 
-<!-- TOAST CONTAINER -->
-<div class="toast-container" id="toastContainer"></div>
-
 <script>
   // ============ TRANSLATIONS ============
   const T = {
@@ -913,9 +860,7 @@
       nav_home: 'Home', nav_prediction: 'Prediction', nav_chats: 'Chats', nav_tools: 'Tools', nav_profile: 'Profile',
       action_register: 'Register', action_deposit: 'Deposit', action_withdraw: 'Withdraw',
       cta_register: 'Register Now', select_lang: 'Select Language', step_label: 'Step',
-      tools_subtitle: 'Utility tools for lottery',
       chats_title: 'History Chats',
-      chats_subtitle: 'View live game history',
       bet_size_title: 'Bet Size',
       bet_size_first_amount: 'First Bet Amount',
       bet_size_profits: 'Profits ×',
@@ -930,7 +875,6 @@
       bet_size_loading: 'Calculator Loading...',
       bet_size_placeholder: 'Enter First Bet Amount',
       bet_size_customize_btn: 'Bet Size Customize',
-      bet_size_customize_sub: 'Calculate betting amounts',
       bet_size_error_empty: 'Please enter First Bet Amount.',
       bet_size_error_digits: 'Please enter numbers only.',
       bet_size_error_min: 'Minimum amount is 100.',
@@ -940,9 +884,7 @@
       nav_home: 'ပင်မစာမျက်နှာ', nav_prediction: 'ကြိုတင်ခန့်မှန်း', nav_chats: 'ဇယား', nav_tools: 'ကိရိယာများ', nav_profile: 'ကျွန်ုပ်',
       action_register: 'အကောင့်ဖွင့်ရန်', action_deposit: 'ငွေသွင်းရန်', action_withdraw: 'ငွေထုတ်ရန်',
       cta_register: 'အကောင့်ဖွင့်ရန်နိပ်ပါ', select_lang: 'ဘာသာစကား ရွေးချယ်ပါ', step_label: 'အဆင့်',
-      tools_subtitle: 'လော့ထရီအတွက် အထောက်အကူကိရိယာများ',
       chats_title: 'မှတ်တမ်းဇယားများ',
-      chats_subtitle: 'ဂိမ်းမှတ်တမ်းများကို ကြည့်ရှုပါ',
       bet_size_title: 'လောင်းကြေးပမာဏ',
       bet_size_first_amount: 'ပထမဆုံးလောင်းကြေးပမာဏ',
       bet_size_profits: 'အမြတ်×',
@@ -957,7 +899,6 @@
       bet_size_loading: 'တွက်ချက်နေသည်...',
       bet_size_placeholder: 'ပထမဆုံးလောင်းကြေးပမာဏ ထည့်ပါ',
       bet_size_customize_btn: 'လောင်းကြေးတွက်ချက်ရန်',
-      bet_size_customize_sub: 'လောင်းကြေးပမာဏများ တွက်ချက်ပါ',
       bet_size_error_empty: 'ပထမဆုံးလောင်းကြေးပမာဏ ထည့်ပါ။',
       bet_size_error_digits: 'ဂဏန်းများသာ ရိုက်ထည့်ပါ။',
       bet_size_error_min: 'အနည်းဆုံး ၁၀၀ ထည့်ရပါမယ်။',
@@ -980,13 +921,21 @@
       brand: 'ck',
       title_en: 'Ck WinGo 30 History Chats',
       title_mm: 'Ck WinGo 30 မှတ်တမ်းဇယား',
-      sub_en: 'Live WinGo 30 game history',
-      sub_mm: 'WinGo 30 ဂိမ်း တိုက်ရိုက်မှတ်တမ်း',
       icon: 'fa-clock-rotate-left',
-      src: 'History%20Chat/Ck%20WinGo%2030/ck30results.html'
+      src: 'History%20Chat/Ck%20WinGo%2030/ck30results.html',
+      firebase: {
+        apiKey: "AIzaSyDj6z3O91NnlQ1zVdripiGhqQMsQhR4_ak",
+        authDomain: "ck30-35e97.firebaseapp.com",
+        databaseURL: "https://ck30-35e97-default-rtdb.europe-west1.firebasedatabase.app",
+        projectId: "ck30-35e97",
+        storageBucket: "ck30-35e97.appspot.com",
+        messagingSenderId: "625630152314",
+        appId: "1:625630152314:web:c035009eec389371b51dc3",
+        path: "ckwingo30/default"
+      }
     }
     // နောက်ထပ် ထပ်ထည့်ရန်:
-    // { id: 'ck1', brand: 'ck', title_en: 'Ck WinGo 1 Min History Chats', title_mm: 'Ck WinGo 1 မိနစ် မှတ်တမ်းဇယား', sub_en: '...', sub_mm: '...', icon: 'fa-clock-rotate-left', src: 'History%20Chat/Ck%20WinGo%201/ck1result.html' }
+    // { id: 'ck1', brand: 'ck', title_en: '...', title_mm: '...', icon: 'fa-clock-rotate-left', src: '...', firebase: { ...config, path: '...' } }
   ];
 
   // ============ CONTENT DATA ============
@@ -1052,7 +1001,7 @@
           { img: 'BigWin/BigWin Deposite Photo/p7.jpg',  text_en: '- Select Online Pay (Yellow=Wave, Blue=Kpay). Choose a channel.', text_mm: '- Online Pay ရွေးပါ။ အဝါက Wave၊ အပြာက Kpay ဖြစ်ပါသည်။' },
           { img: 'BigWin/BigWin Deposite Photo/p8.jpg',  text_en: '- Scroll up, enter amount, and tap Deposit.', text_mm: '- အပေါ်ကိုဆွဲတင်ပါ။ Amount ရိုက်ထည့်ပြီး Deposit ကိုနိပ်ပါ။' },
           { img: 'BigWin/BigWin Deposite Photo/p9.jpg',  text_en: '- Scan QR Code or copy phone number to transfer.', text_mm: '- QR Code ကို Scan လုပ်ပါ သို့မဟုတ် Phone Number Copy ယူပါ။' },
-          { img: 'BigWin/BigWin Deposite Photo/p10.jpg', text_en: '- Enter the last 5 digits of the Transaction ID and submit.', text_mm: '- နောက်ဆုံး (လုပ်ငန်းစဉ်နံပတ်) ၅လုံးကိုရိုက်ထည့်ပြီး တင်ပြပါ။' },
+          { img: 'BigWin/BigWin Deposite Photo/p10.jpg', text_en: '- Enter the last 5 digits of the Transaction ID and submit.', text_mm: '- နောက်ဆုံး (လုပ်ငန်းစဉ်နံပါတ်) ၅လုံးကိုရိုက်ထည့်ပြီး တင်ပြပါ။' },
           { img: 'BigWin/BigWin Deposite Photo/p11.jpg', text_en: '- Transaction submitted. Funds will arrive shortly.', text_mm: '- ငွေသွင်းအော်ဒါ တင်ပြီးပါပြီ။ ခဏအကြာ ငွေရောက်ပါမည်။' }
         ]
       },
@@ -1128,7 +1077,7 @@
           { img: 'Shwe/Shwe Withdraw Photo/photo_1.jpg', text_en: '- Tap Account.', text_mm: '- Account ကိုနိပ်ပါ။' },
           { img: 'Shwe/Shwe Withdraw Photo/photo_2.jpg', text_en: '- Tap Withdraw.', text_mm: '- Withdraw ကိုနိပ်ပါ။' },
           { img: 'Shwe/Shwe Withdraw Photo/photo_3.jpg', text_en: '- Select KBZ Pay or Wave.', text_mm: '- KBZ Pay သို့မဟုတ် Wave ကို Select လုပ်ပါ။' },
-          { img: 'Shwe/Shwe Withdraw Photo/photo_4.jpg', text_en: '- Link your Payment Account. Enter Amount and tap Withdraw.', text_mm: '- Payment Account ချိတ်ပါ။ Amount ရိုက်ထည့်ပြီး Withdraw ကိုနိုပ်ပါ။' },
+          { img: 'Shwe/Shwe Withdraw Photo/photo_4.jpg', text_en: '- Link your Payment Account. Enter Amount and tap Withdraw.', text_mm: '- Payment Account ချိတ်ပါ။ Amount ရိုက်ထည့်ပြီး Withdraw ကိုနိပ်ပါ။' },
           { img: 'Shwe/Shwe Withdraw Photo/photo_5.jpg', text_en: '- Enter your password for Security Verification and confirm.', text_mm: '- Security Verification တွင် Password ရိုက်ထည့်ပြီး Confirm လုပ်ပါ။' }
         ]
       }
@@ -1139,7 +1088,10 @@
   let currentLang = localStorage.getItem('appLang') || 'en';
   let currentTab = 'home';
   let currentSub = null;
-  let currentHistoryChatId = null;
+
+  const recordCounts = {};   // { [id]: { state: 'loading'|'success'|'error', count: number|null } }
+  const lastFetchTime = {};  // { [id]: timestamp }
+  const fetchInFlight = {};  // { [id]: Promise }
 
   // ============ INIT ============
   document.addEventListener('DOMContentLoaded', () => {
@@ -1149,7 +1101,9 @@
     applyTheme(initTheme, false);
 
     applyLanguage(currentLang);
-    renderHistoryChats();
+
+    // Initial fetch: force
+    HISTORY_CHATS.forEach(chat => fetchRecordCount(chat, true));
 
     setTimeout(() => {
       const intro = document.getElementById('introSplash');
@@ -1159,19 +1113,61 @@
     }, 3200);
   });
 
-  // ============ TOAST ============
-  function showToast(message, type) {
-    const container = document.getElementById('toastContainer');
-    if (!container) return;
-    const toast = document.createElement('div');
-    toast.className = 'toast ' + (type || 'info');
-    toast.textContent = message;
-    container.appendChild(toast);
-    requestAnimationFrame(() => toast.classList.add('show'));
-    setTimeout(() => {
-      toast.classList.remove('show');
-      setTimeout(() => toast.remove(), 300);
-    }, 2400);
+  // ============ RECORD COUNT FETCH ============
+  function fetchRecordCount(chat, force) {
+    if (!chat.firebase) {
+      recordCounts[chat.id] = { state: 'error', count: null };
+      renderHistoryChats();
+      return Promise.resolve();
+    }
+
+    if (!force) {
+      const now = Date.now();
+      if (lastFetchTime[chat.id] && now - lastFetchTime[chat.id] < 10000) {
+        return Promise.resolve();
+      }
+    }
+    lastFetchTime[chat.id] = Date.now();
+
+    if (fetchInFlight[chat.id]) return fetchInFlight[chat.id];
+
+    recordCounts[chat.id] = { state: 'loading', count: null };
+    renderHistoryChats();
+
+    fetchInFlight[chat.id] = new Promise((resolve) => {
+      try {
+        const appName = 'countApp_' + chat.id;
+        let app;
+        try { app = firebase.app(appName); }
+        catch (e) { app = firebase.initializeApp(chat.firebase, appName); }
+
+        const db = app.database();
+        db.ref(chat.firebase.path).once('value')
+          .then((snap) => {
+            const data = snap.val();
+            const count = (data && data.list && Array.isArray(data.list)) ? data.list.length : 0;
+            recordCounts[chat.id] = { state: 'success', count };
+            fetchInFlight[chat.id] = null;
+            renderHistoryChats();
+            resolve();
+          })
+          .catch((err) => {
+            console.error('Count fetch error for', chat.id, err);
+            recordCounts[chat.id] = { state: 'error', count: null };
+            fetchInFlight[chat.id] = null;
+            renderHistoryChats();
+            resolve();
+          });
+      } catch (err) {
+        console.error('Count init error for', chat.id, err);
+        recordCounts[chat.id] = { state: 'error', count: null };
+        fetchInFlight[chat.id] = null;
+        renderHistoryChats();
+        resolve();
+      }
+    });
+
+    return fetchInFlight[chat.id];
   }
 
   // ============ THEME ============
@@ -1205,17 +1201,24 @@
     applyTheme(isDark ? 'light' : 'dark', true);
   }
 
-  // ============ BROADCAST TO IFRAMES ============
+  // ============ BROADCAST ============
   function broadcastToIframes() {
     const theme = document.body.classList.contains('dark') ? 'dark' : 'light';
-    const language = currentLang;
-    document.querySelectorAll('iframe').forEach(function(iframe) {
+    document.querySelectorAll('iframe').forEach((iframe) => {
       try {
         if (iframe.contentWindow) {
-          iframe.contentWindow.postMessage({ type: 'app-sync', theme: theme, language: language }, '*');
+          iframe.contentWindow.postMessage({ type: 'app-sync', theme, language: currentLang }, '*');
         }
-      } catch (e) { /* cross-origin ignore */ }
+      } catch (e) {}
     });
+  }
+
+  function pushStateToIframe(iframe) {
+    try {
+      if (!iframe.contentWindow) return;
+      const theme = document.body.classList.contains('dark') ? 'dark' : 'light';
+      iframe.contentWindow.postMessage({ type: 'app-sync', theme, language: currentLang }, '*');
+    } catch (e) {}
   }
 
   // ============ MYANMAR NUMERALS ============
@@ -1254,22 +1257,20 @@
     document.getElementById('opt-mm').classList.toggle('active', lang === 'mm');
     document.getElementById('opt-en').classList.toggle('active', lang === 'en');
 
-    // Re-render dynamic content
     renderHistoryChats();
+
     if (currentSub) {
       if (currentSub.brand === 'tools' && currentSub.action === 'betsize') {
         renderBetSizePage(true);
-      } else {
+      } else if (currentSub.brand !== 'history') {
         renderSubPage(currentSub.brand, currentSub.action, true);
-      }
-    }
-
-    // Update overlay title if open
-    if (currentHistoryChatId) {
-      const chat = HISTORY_CHATS.find(c => c.id === currentHistoryChatId);
-      if (chat) {
-        document.getElementById('historyOverlayTitle').textContent =
-          lang === 'mm' ? chat.title_mm : chat.title_en;
+      } else {
+        // Update iframe title
+        const historyIframe = document.getElementById('historyIframe');
+        if (historyIframe) {
+          const chat = HISTORY_CHATS.find(c => c.id === currentSub.action);
+          if (chat) historyIframe.title = lang === 'mm' ? chat.title_mm : chat.title_en;
+        }
       }
     }
 
@@ -1292,21 +1293,33 @@
     document.getElementById('langSheet').classList.remove('active');
   }
 
-  // ============ HISTORY CHATS ============
+  // ============ HISTORY CHATS RENDER ============
   function renderHistoryChats() {
     const list = document.getElementById('historyChatsList');
     if (!list) return;
-    list.innerHTML = HISTORY_CHATS.map(function(chat, i) {
+
+    list.innerHTML = HISTORY_CHATS.map((chat, i) => {
       const title = currentLang === 'mm' ? chat.title_mm : chat.title_en;
-      const sub = currentLang === 'mm' ? chat.sub_mm : chat.sub_en;
+      const rc = recordCounts[chat.id];
+      let badgeHtml = '';
+
+      if (!rc || rc.state === 'loading') {
+        badgeHtml = '<span class="record-badge loading"><span class="record-dot"></span><span>...</span></span>';
+      } else if (rc.state === 'success' && rc.count !== null) {
+        const countStr = currentLang === 'mm' ? toMmNum(String(rc.count)) : String(rc.count);
+        badgeHtml = '<span class="record-badge" title="' + rc.count + ' Records">' +
+          '<span class="record-dot"></span><span>' + countStr + '</span></span>';
+      }
+      // error → no badge
+
       return '<button class="tool-card history-chat-card" data-brand="' + chat.brand + '" ' +
         'onclick="openHistoryChat(\'' + chat.id + '\')" ' +
         'style="animation-delay:' + (i * 60 + 100) + 'ms">' +
           '<div class="tool-card-icon"><i class="fa-solid ' + chat.icon + '"></i></div>' +
           '<div class="tool-card-body">' +
             '<div class="tool-card-title">' + escapeHtml(title) + '</div>' +
-            '<div class="tool-card-sub">' + escapeHtml(sub) + '</div>' +
           '</div>' +
+          badgeHtml +
           '<i class="fa-solid fa-chevron-right tool-card-arrow"></i>' +
         '</button>';
     }).join('');
@@ -1316,81 +1329,41 @@
     return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
   }
 
+  // ============ OPEN HISTORY CHAT (sub-screen + iframe) ============
   function openHistoryChat(chatId) {
-    const chat = HISTORY_CHATS.find(function(c) { return c.id === chatId; });
+    const chat = HISTORY_CHATS.find(c => c.id === chatId);
     if (!chat) return;
 
-    currentHistoryChatId = chatId;
-    const overlay = document.getElementById('historyOverlay');
-    const iframe = document.getElementById('historyIframe');
-    const titleEl = document.getElementById('historyOverlayTitle');
-
-    titleEl.textContent = currentLang === 'mm' ? chat.title_mm : chat.title_en;
-
-    const currentSrc = iframe.getAttribute('src');
-    if (!currentSrc || currentSrc === '' || currentSrc === 'about:blank') {
-      iframe.setAttribute('src', chat.src);
-    } else if (currentSrc !== chat.src) {
-      iframe.setAttribute('src', chat.src);
-    }
-
-    // Attach load listener once
-    if (!iframe.dataset.syncAttached) {
-      iframe.dataset.syncAttached = '1';
-      iframe.addEventListener('load', function() { broadcastToIframes(); });
-    }
-
-    overlay.classList.add('active');
-    document.body.style.overflow = 'hidden';
-
-    // Push history for hardware back
-    if (!(history.state && history.state.historyChat)) {
-      try { history.pushState({ historyChat: true }, ''); } catch(e) {}
-    }
-
-    // Push state if already loaded
-    broadcastToIframes();
-  }
-
-  function closeHistoryChat() {
-    const overlay = document.getElementById('historyOverlay');
-    if (!overlay.classList.contains('active')) return;
-    overlay.classList.remove('active');
-    document.body.style.overflow = '';
-    currentHistoryChatId = null;
-
-    if (history.state && history.state.historyChat) {
-      try { history.back(); } catch(e) {}
-    }
-  }
-
-  window.addEventListener('popstate', function() {
-    const overlay = document.getElementById('historyOverlay');
-    if (overlay && overlay.classList.contains('active')) {
-      overlay.classList.remove('active');
-      document.body.style.overflow = '';
-      currentHistoryChatId = null;
-    }
-  });
-
-  // ============ TAB SWITCH ============
-  function switchTab(tab) {
     if (currentSub) closeSub();
-    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-    const target = document.getElementById('screen-' + tab);
-    if (target) target.classList.add('active');
-    document.querySelectorAll('.nav-item').forEach(item => {
-      item.classList.toggle('active', item.dataset.tab === tab);
-    });
+
+    currentSub = { brand: 'history', action: chatId };
+
+    const subScreen = document.getElementById('subScreen');
+    const subBody = document.getElementById('subBody');
+
+    subBody.classList.add('sub-screen-body--iframe');
+    subBody.innerHTML = '';
+
+    const iframe = document.createElement('iframe');
+    iframe.id = 'historyIframe';
+    iframe.src = chat.src;
+    iframe.title = currentLang === 'mm' ? chat.title_mm : chat.title_en;
+    iframe.addEventListener('load', () => pushStateToIframe(iframe));
+    subBody.appendChild(iframe);
+
+    subScreen.classList.add('active');
     document.getElementById('bottomNav').classList.remove('hidden');
-    currentTab = tab;
-    window.scrollTo(0, 0);
+    document.getElementById('floatingBackBtn').classList.add('visible');
+
+    try { history.pushState({ historyChat: true }, ''); } catch (e) {}
   }
 
   // ============ SUB PAGE ============
   function openSub(brandKey, actionKey) {
     currentSub = { brand: brandKey, action: actionKey };
     const subScreen = document.getElementById('subScreen');
+    const subBody = document.getElementById('subBody');
+    subBody.classList.remove('sub-screen-body--iframe');
     subScreen.classList.add('active');
     document.getElementById('bottomNav').classList.remove('hidden');
     document.getElementById('floatingBackBtn').classList.add('visible');
@@ -1400,6 +1373,8 @@
   function openBetSizePage() {
     currentSub = { brand: 'tools', action: 'betsize' };
     const subScreen = document.getElementById('subScreen');
+    const subBody = document.getElementById('subBody');
+    subBody.classList.remove('sub-screen-body--iframe');
     subScreen.classList.add('active');
     document.getElementById('bottomNav').classList.remove('hidden');
     document.getElementById('floatingBackBtn').classList.add('visible');
@@ -1416,6 +1391,8 @@
     if (!brand || !content) return;
 
     const body = document.getElementById('subBody');
+    body.classList.remove('sub-screen-body--iframe');
+
     let actionLabel = T[currentLang]['action_' + actionKey];
     if (actionKey === 'register') actionLabel = currentLang === 'mm' ? 'အကောင့်ဖွင့်ရန်နည်းလမ်းများ' : 'Register Steps';
     if (actionKey === 'deposit') actionLabel = currentLang === 'mm' ? 'ငွေသွင်းရန်နည်းလမ်းများ' : 'Deposit Steps';
@@ -1461,7 +1438,7 @@
     if (!isSilentRender) body.scrollTop = 0;
   }
 
-  // ============ BET SIZE (unchanged from original) ============
+  // ============ BET SIZE STATE ============
   const betSizeState = {
     profitMult: 1, betCount: 6, openPicker: null, lastResult: null,
     copyTimer: null, calcTimer: null, inputValue: ''
@@ -1474,6 +1451,7 @@
   function renderBetSizePage(isSilentRender) {
     const body = document.getElementById('subBody');
     if (!body) return;
+    body.classList.remove('sub-screen-body--iframe');
 
     const existingInput = document.getElementById('betSizeFirstAmount');
     if (existingInput) betSizeState.inputValue = existingInput.value;
@@ -1742,12 +1720,60 @@
   // ============ CLOSE SUB ============
   function closeSub() {
     closeBetSizePickers();
+    const subBody = document.getElementById('subBody');
+    const wasHistory = currentSub && currentSub.brand === 'history';
+
+    subBody.classList.remove('sub-screen-body--iframe');
+    if (wasHistory) subBody.innerHTML = '';
+
     document.getElementById('subScreen').classList.remove('active');
     document.getElementById('floatingBackBtn').classList.remove('visible');
     currentSub = null;
+
+    // Refresh count after closing history (force)
+    if (wasHistory) {
+      HISTORY_CHATS.forEach(chat => fetchRecordCount(chat, true));
+      if (history.state && history.state.historyChat) {
+        try { history.back(); } catch (e) {}
+      }
+    }
   }
 
-  function goBack() { if (currentSub) closeSub(); }
+  function goBack() {
+    if (currentSub) closeSub();
+  }
+
+  // ============ HARDWARE BACK ============
+  window.addEventListener('popstate', function () {
+    if (currentSub && currentSub.brand === 'history') {
+      const subBody = document.getElementById('subBody');
+      subBody.classList.remove('sub-screen-body--iframe');
+      subBody.innerHTML = '';
+      document.getElementById('subScreen').classList.remove('active');
+      document.getElementById('floatingBackBtn').classList.remove('visible');
+      currentSub = null;
+      HISTORY_CHATS.forEach(chat => fetchRecordCount(chat, true));
+    }
+  });
+
+  // ============ TAB SWITCH ============
+  function switchTab(tab) {
+    if (currentSub) closeSub();
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    const target = document.getElementById('screen-' + tab);
+    if (target) target.classList.add('active');
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.classList.toggle('active', item.dataset.tab === tab);
+    });
+    document.getElementById('bottomNav').classList.remove('hidden');
+    currentTab = tab;
+    window.scrollTo(0, 0);
+
+    // Refresh counts when viewing chats (throttled)
+    if (tab === 'chats') {
+      HISTORY_CHATS.forEach(chat => fetchRecordCount(chat, false));
+    }
+  }
 
   // ============ MODAL ============
   function openModal(imgSrc, text) {
@@ -1767,8 +1793,6 @@
         document.getElementById('photoModal').classList.remove('active');
       } else if (document.getElementById('langSheet').classList.contains('active')) {
         closeLangSheet();
-      } else if (document.getElementById('historyOverlay').classList.contains('active')) {
-        closeHistoryChat();
       } else if (currentSub) {
         closeSub();
       }
