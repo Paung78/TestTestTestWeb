@@ -442,6 +442,15 @@
   body.dark .tool-card-icon { background: rgba(129,140,248,0.15); color: #a5b4fc; }
   .tool-card-body { flex: 1; min-width: 0; }
   .tool-card-title { font-size: 15px; font-weight: 800; color: var(--text); line-height: 1.3; }
+  
+  /* History Chat Title (တစ်ကြောင်းတည်း ဖြစ်စေရန်) */
+  .history-chat-card .tool-card-title {
+    font-size: 13.5px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
   .tool-card-arrow { color: var(--text-subtle); font-size: 13px; flex-shrink: 0; }
 
   /* Logo variant (image icon — overrides brand colors) */
@@ -539,6 +548,38 @@
   body.dark .history-chat-card[data-brand="ck"] .tool-card-icon { background: rgba(129,140,248,0.20); color: #a5b4fc; }
   body.dark .history-chat-card[data-brand="bigwin"] .tool-card-icon { background: rgba(52,211,153,0.20); color: #86efac; }
   body.dark .history-chat-card[data-brand="sixwin"] .tool-card-icon { background: rgba(248,113,113,0.20); color: #fca5a5; }
+
+  /* Shwe အရောင် ထည့်ရန် */
+  .history-chat-card[data-brand="shwe"] { background: var(--shwe-bg); border-color: transparent; }
+  .history-chat-card[data-brand="shwe"] .tool-card-icon { background: rgba(249, 115, 22, 0.15); color: var(--shwe-2); }
+  .history-chat-card[data-brand="shwe"] .tool-card-title { color: var(--shwe-text); }
+  body.dark .history-chat-card[data-brand="shwe"] .tool-card-icon { background: rgba(251,146,60,0.20); color: #fdba74; }
+
+  /* Record Update ဖြစ်ရင် Badge Pulse လုပ်ရန် */
+  @keyframes recordBadgePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); background: rgba(34, 197, 94, 0.3); }
+    100% { transform: scale(1); }
+  }
+  .record-badge.badge-pulse {
+    animation: recordBadgePulse 0.5s ease-in-out;
+  }
+
+  /* Shwe အရောင် ထည့်ရန် */
+  .history-chat-card[data-brand="shwe"] { background: var(--shwe-bg); border-color: transparent; }
+  .history-chat-card[data-brand="shwe"] .tool-card-icon { background: rgba(249, 115, 22, 0.15); color: var(--shwe-2); }
+  .history-chat-card[data-brand="shwe"] .tool-card-title { color: var(--shwe-text); }
+  body.dark .history-chat-card[data-brand="shwe"] .tool-card-icon { background: rgba(251,146,60,0.20); color: #fdba74; }
+
+  /* Record Update ဖြစ်ရင် Badge Pulse လုပ်ရန် */
+  @keyframes recordBadgePulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.15); background: rgba(34, 197, 94, 0.3); }
+    100% { transform: scale(1); }
+  }
+  .record-badge.badge-pulse {
+    animation: recordBadgePulse 0.5s ease-in-out;
+  }
 
   /* ============ BET SIZE PAGE ============ */
   .betsize-page { display: flex; flex-direction: column; gap: 14px; }
@@ -1239,21 +1280,21 @@
             const count = (data && data.list && Array.isArray(data.list)) ? data.list.length : 0;
             recordCounts[chat.id] = { state: 'success', count };
             fetchInFlight[chat.id] = null;
-            renderHistoryChats();
+            updateRecordBadge(chat.id);
             resolve();
           })
           .catch((err) => {
             console.error('Count fetch error for', chat.id, err);
             recordCounts[chat.id] = { state: 'error', count: null };
             fetchInFlight[chat.id] = null;
-            renderHistoryChats();
+            updateRecordBadge(chat.id);
             resolve();
           });
       } catch (err) {
         console.error('Count init error for', chat.id, err);
         recordCounts[chat.id] = { state: 'error', count: null };
         fetchInFlight[chat.id] = null;
-        renderHistoryChats();
+        updateRecordBadge(chat.id);
         resolve();
       }
     });
@@ -1418,6 +1459,62 @@
           '<i class="fa-solid fa-chevron-right tool-card-arrow"></i>' +
         '</button>';
     }).join('');
+  }
+
+  // Record Badge ကို သီးသန့် Update လုပ်ရန် Function အသစ် (Button မလှုပ်စေရန်)
+  function updateRecordBadge(chatId) {
+    const btn = document.querySelector(`.history-chat-card[onclick*="'${chatId}'"]`);
+    if (!btn) return;
+    
+    const rc = recordCounts[chatId];
+    const oldBadge = btn.querySelector('.record-badge');
+    if (!oldBadge) return;
+
+    if (!rc || rc.state === 'loading') {
+      oldBadge.className = 'record-badge loading';
+      oldBadge.innerHTML = '<span class="record-dot"></span><span>...</span>';
+    } else if (rc.state === 'success' && rc.count !== null) {
+      const countStr = currentLang === 'mm' ? toMmNum(String(rc.count)) : String(rc.count);
+      
+      // ဂဏန်း တူညီနေရင် ဘာမှ မလုပ်ဘူး
+      if (oldBadge.textContent.trim() === countStr) return;
+
+      oldBadge.className = 'record-badge';
+      oldBadge.innerHTML = `<span class="record-dot"></span><span>${countStr}</span>`;
+      oldBadge.title = rc.count + ' Records';
+      
+      // Animation ခဏ ထည့်မယ်
+      oldBadge.classList.add('badge-pulse');
+      setTimeout(() => oldBadge.classList.remove('badge-pulse'), 500);
+    }
+  }
+
+  // Record Badge ကို သီးသန့် Update လုပ်ရန် Function အသစ် (Button မလှုပ်စေရန်)
+  function updateRecordBadge(chatId) {
+    const btn = document.querySelector(`.history-chat-card[onclick*="'${chatId}'"]`);
+    if (!btn) return;
+    
+    const rc = recordCounts[chatId];
+    const oldBadge = btn.querySelector('.record-badge');
+    if (!oldBadge) return;
+
+    if (!rc || rc.state === 'loading') {
+      oldBadge.className = 'record-badge loading';
+      oldBadge.innerHTML = '<span class="record-dot"></span><span>...</span>';
+    } else if (rc.state === 'success' && rc.count !== null) {
+      const countStr = currentLang === 'mm' ? toMmNum(String(rc.count)) : String(rc.count);
+      
+      // ဂဏန်း တူညီနေရင် ဘာမှ မလုပ်ဘူး
+      if (oldBadge.textContent.trim() === countStr) return;
+
+      oldBadge.className = 'record-badge';
+      oldBadge.innerHTML = `<span class="record-dot"></span><span>${countStr}</span>`;
+      oldBadge.title = rc.count + ' Records';
+      
+      // Animation ခဏ ထည့်မယ်
+      oldBadge.classList.add('badge-pulse');
+      setTimeout(() => oldBadge.classList.remove('badge-pulse'), 500);
+    }
   }
 
   function escapeHtml(str) {
