@@ -23,8 +23,8 @@
 
     --bg-page: #f8fafc;
     --bg-card: #ffffff;
-    --bg-thead: #eef2ff;
-    --bg-hover: #f1f5f9;
+    --bg-thead: #faf5ff;
+    --bg-hover: #f3e8ff;
     --text: #0f172a;
     --text-muted: #64748b;
     --text-subtle: #94a3b8;
@@ -202,7 +202,7 @@
   th.col-num { width: 12%; text-align: center; }
   th.col-color { width: 14%; text-align: center; }
   th.col-bs { width: 18%; text-align: center; }
-  th.col-premium { width: 28%; }
+  th.col-hash { width: 28%; }
 
   td {
     padding: 11px 8px;
@@ -238,7 +238,7 @@
 
   td.col-color { text-align: center; }
   td.col-bs { text-align: center; }
-  td.col-premium { padding-right: 14px; }
+  td.col-hash { padding-right: 14px; text-align: left; }
 
   tbody tr:last-child td { border-bottom: none; }
 
@@ -322,7 +322,7 @@
     color: var(--yellow);
   }
   .badge-small {
-    background: rgba(79, 70, 229, 0.12);
+    background: rgba(168, 85, 247, 0.12);
     color: var(--ck-text);
   }
   body.dark-mode .badge-big {
@@ -330,7 +330,7 @@
     color: var(--yellow);
   }
   body.dark-mode .badge-small {
-    background: rgba(129, 140, 248, 0.18);
+    background: rgba(192, 132, 252, 0.18);
     color: var(--ck-text);
   }
 
@@ -359,7 +359,7 @@
   }
 
   body.dark-mode .premium-code {
-    color: #f1f5f9;
+    color: #d8b4fe;
   }
 
   /* ============ EMPTY STATE ============ */
@@ -452,7 +452,7 @@
   .toast-info { border-color: var(--ck-2); color: var(--ck-text); }
   body.dark-mode .toast-success { color: #86efac; }
   body.dark-mode .toast-error { color: #fca5a5; }
-  body.dark-mode .toast-info { color: #a5b4fc; }
+  body.dark-mode .toast-info { color: #d8b4fe; }
 
   /* ============ RESPONSIVE ============ */
   @media (max-width: 480px) {
@@ -471,7 +471,7 @@
     td.col-num { font-size: 13px; }
     th.col-no { padding-left: 10px; }
     td.col-no { padding-left: 10px; }
-    td.col-premium { padding-right: 10px; }
+    td.col-hash { padding-right: 10px; }
     .colour-dot { width: 13px; height: 13px; }
     .colour-duo .colour-dot { width: 11px; height: 11px; }
     .badge { font-size: 10px; padding: 2px 6px; }
@@ -480,7 +480,7 @@
   }
 
   @media (max-width: 380px) {
-    th.col-premium, td.col-premium { display: none; }
+    th.col-hash, td.col-hash { display: none; }
     th.col-period { width: 24%; }
     th.col-bs { width: 22%; }
   }
@@ -677,11 +677,33 @@
     }
   }
 
-  function classifyBigSmall(number) {
-    if (number === null || number === undefined) return null;
-    const n = parseInt(number, 10);
+  // ============ DATA FORMATTING ============
+  function classifyBigSmall(resultOrNumber) {
+    if (resultOrNumber === 'BIG' || resultOrNumber === 'SMALL') return resultOrNumber;
+    if (resultOrNumber === null || resultOrNumber === undefined) return null;
+    const n = parseInt(resultOrNumber, 10);
     if (isNaN(n)) return null;
     return n >= 5 ? 'BIG' : 'SMALL';
+  }
+
+  function extractHashValue(blockHashtag) {
+    if (!blockHashtag) return '-----';
+    const clean = String(blockHashtag).replace(/[^a-zA-Z0-9]/g, '');
+    if (clean.length >= 5) return clean.slice(-5).toUpperCase();
+    if (clean.length > 0) return clean.toUpperCase();
+    return '-----';
+  }
+
+  function getHashDisplay(result) {
+    if (result.hashValue) return String(result.hashValue).toUpperCase();
+    return extractHashValue(result.blockHashtag);
+  }
+
+  function formatPeriodNumber(period) {
+    if (period === null || period === undefined || period === '') return '-';
+    const clean = String(period).replace(/\*\*/g, '').replace(/[^0-9]/g, '');
+    if (!clean) return '-';
+    return clean.length > 3 ? clean.slice(-3) : clean;
   }
 
   function resolveColour(result) {
@@ -717,12 +739,6 @@
         '</span></span>';
     }
     return '<span class="colour-unknown">-</span>';
-  }
-
-  function formatPeriodNumber(issueNumber) {
-    if (issueNumber === null || issueNumber === undefined || issueNumber === '') return '-';
-    const str = String(issueNumber);
-    return str.length > 5 ? str.slice(-5) : str;
   }
 
   function updateLastUpdateTime(timestamp) {
@@ -765,19 +781,19 @@
     }
 
     // Detect new rows (only if we had prior data)
-    const currentSet = new Set(results.map(r => String(r.issueNumber)));
+    const currentSet = new Set(results.map(r => String(r.period || r.issueNumber)));
     const newRows = new Set();
     const isFirstRender = !hasRenderedOnce;
     if (!isFirstRender && lastIssueSet.size > 0) {
       results.forEach(r => {
-        const id = String(r.issueNumber);
+        const id = String(r.period || r.issueNumber);
         if (!lastIssueSet.has(id)) newRows.add(id);
       });
     }
 
     const th = currentLang === 'mm'
-      ? { no: 'နံပတ်', period: 'ကာလနံပတ်', num: 'နံပတ်', color: 'အရောင်', bs: 'အကြီး/အသေး', premium: 'ပရီမီယံ' }
-      : { no: 'No.', period: 'Period', num: 'Num', color: 'Color', bs: 'B/S', premium: 'Premium' };
+      ? { no: 'နံပတ်', period: 'ကာလနံပတ်', num: 'နံပတ်', color: 'အရောင်', bs: 'အကြီး/အသေး', hash: 'Hash' }
+      : { no: 'No.', period: 'Period', num: 'Num', color: 'Color', bs: 'B/S', hash: 'Hash' };
 
     let html = '<div class="table-scroll"><table><thead><tr>' +
       '<th class="col-no">' + th.no + '</th>' +
@@ -785,19 +801,19 @@
       '<th class="col-num">' + th.num + '</th>' +
       '<th class="col-color">' + th.color + '</th>' +
       '<th class="col-bs">' + th.bs + '</th>' +
-      '<th class="col-premium">' + th.premium + '</th>' +
+      '<th class="col-hash">' + th.hash + '</th>' +
       '</tr></thead><tbody>';
 
     results.forEach((result, index) => {
-      const bs = classifyBigSmall(result.number);
+      const bs = classifyBigSmall(result.result || result.number);
       const bsLabel = bs === 'BIG' ? t.big : bs === 'SMALL' ? t.small : '-';
       const bsClass = bs === 'BIG' ? 'badge-big' : 'badge-small';
-      const premium = result.premium || '-';
-      const periodNumber = formatPeriodNumber(result.issueNumber);
+      const hashValue = getHashDisplay(result);
+      const periodNumber = formatPeriodNumber(result.period || result.issueNumber);
       const numberDisplay = (result.number !== null && result.number !== undefined) ? result.number : '-';
       const colourHtml = renderColourHtml(resolveColour(result));
 
-      const issueId = String(result.issueNumber);
+      const issueId = String(result.period || result.issueNumber);
 
       let rowClass = '';
       let rowStyle = '';
@@ -820,7 +836,7 @@
         '<td class="col-num">' + num(numberDisplay) + '</td>' +
         '<td class="col-color">' + colourHtml + '</td>' +
         '<td class="col-bs"><span class="badge ' + bsClass + '">' + bsLabel + '</span></td>' +
-        '<td class="col-premium"><span class="premium-code">' + num(premium) + '</span></td>' +
+        '<td class="col-hash"><span class="premium-code">' + hashValue + '</span></td>' +
         '</tr>';
     });
 
