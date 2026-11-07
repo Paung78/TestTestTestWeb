@@ -444,6 +444,40 @@
   .tool-card-title { font-size: 15px; font-weight: 800; color: var(--text); line-height: 1.3; }
   .tool-card-arrow { color: var(--text-subtle); font-size: 13px; flex-shrink: 0; }
 
+  /* Logo variant (image icon — overrides brand colors) */
+  .tool-card-icon.tool-card-icon--logo {
+    padding: 0 !important;
+    overflow: hidden;
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border);
+    font-size: 0 !important;
+    color: transparent !important;
+  }
+  .tool-card-icon.tool-card-icon--logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: inherit;
+  }
+
+  /* Logo variant (image icon — overrides brand colors) */
+  .tool-card-icon.tool-card-icon--logo {
+    padding: 0 !important;
+    overflow: hidden;
+    background: var(--bg-card) !important;
+    border: 1px solid var(--border);
+    font-size: 0 !important;
+    color: transparent !important;
+  }
+  .tool-card-icon.tool-card-icon--logo img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    border-radius: inherit;
+  }
+
   /* ============ RECORD BADGE (history chats) ============ */
   .record-badge {
     display: inline-flex;
@@ -752,9 +786,6 @@
 <!-- CHATS -->
 <div id="screen-chats" class="screen">
   <div class="screen-inner">
-    <div class="tools-header">
-      <h2 data-t="chats_title">History Chats</h2>
-    </div>
     <div class="tools-list" id="historyChatsList"></div>
   </div>
 </div>
@@ -762,9 +793,6 @@
 <!-- TOOLS -->
 <div id="screen-tools" class="screen">
   <div class="screen-inner">
-    <div class="tools-header">
-      <h2 data-t="nav_tools">Tools</h2>
-    </div>
     <div class="tools-list">
       <button class="tool-card" onclick="openBetSizePage()">
         <div class="tool-card-icon"><i class="fa-solid fa-calculator"></i></div>
@@ -919,9 +947,9 @@
     {
       id: 'ck30',
       brand: 'ck',
-      title_en: 'Ck WinGo 30 History Chats',
-      title_mm: 'Ck WinGo 30 မှတ်တမ်းဇယား',
-      icon: 'fa-clock-rotate-left',
+      title_en: 'Ck WinGo 30 History',
+      title_mm: 'Ck WinGo 30 မှတ်တမ်း',
+      logo: 'Logo/ck_logo.jpg',
       src: 'History%20Chat/Ck%20WinGo%2030/ck30results.html',
       firebase: {
         apiKey: "AIzaSyDj6z3O91NnlQ1zVdripiGhqQMsQhR4_ak",
@@ -1312,10 +1340,14 @@
       }
       // error → no badge
 
+      const iconHtml = chat.logo
+        ? '<div class="tool-card-icon tool-card-icon--logo"><img src="' + chat.logo + '" alt="' + escapeHtml(title) + '" loading="lazy" /></div>'
+        : '<div class="tool-card-icon"><i class="fa-solid ' + (chat.icon || 'fa-clock-rotate-left') + '"></i></div>';
+
       return '<button class="tool-card history-chat-card" data-brand="' + chat.brand + '" ' +
         'onclick="openHistoryChat(\'' + chat.id + '\')" ' +
         'style="animation-delay:' + (i * 60 + 100) + 'ms">' +
-          '<div class="tool-card-icon"><i class="fa-solid ' + chat.icon + '"></i></div>' +
+          iconHtml +
           '<div class="tool-card-body">' +
             '<div class="tool-card-title">' + escapeHtml(title) + '</div>' +
           '</div>' +
