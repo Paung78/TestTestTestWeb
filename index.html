@@ -715,6 +715,66 @@
     .betsize-table th, .betsize-table td { padding: 8px 6px; font-size: 12.5px; }
     .betsize-options { grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); max-height: 180px; }
   }
+
+  /* ============ LOGIN UI ============ */
+  .login-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 20px; padding: 24px; text-align: center;
+    animation: stepFadeUp 0.5s var(--spring) both;
+    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
+    margin-top: 20px;
+  }
+  .login-card h2 { font-size: 20px; font-weight: 800; margin-bottom: 8px; color: var(--text); }
+  .login-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
+  
+  .login-input {
+    width: 100%; min-height: 52px; border: 1.5px solid var(--border);
+    border-radius: 14px; background: var(--bg-page); padding: 14px 16px;
+    font-size: 18px; font-weight: 800; color: var(--text); text-align: center;
+    outline: none; font-family: inherit; letter-spacing: 0.1em; margin-bottom: 12px;
+  }
+  .login-input:focus { border-color: var(--ck-2); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
+  
+  .login-btn {
+    width: 100%; min-height: 52px; border: none; border-radius: 14px;
+    background: linear-gradient(135deg, var(--ck-1), var(--ck-2));
+    color: #fff; font-size: 16px; font-weight: 800; cursor: pointer;
+    transition: transform 0.15s var(--spring);
+  }
+  .login-btn:active { transform: scale(0.97); }
+  .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  .error-text { color: #ef4444; font-size: 12px; font-weight: 700; margin-top: 8px; display: none; }
+  .error-text.show { display: block; animation: shake 0.4s ease-in-out; }
+  @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
+
+  .resend-text { font-size: 13px; color: var(--text-muted); margin-top: 16px; font-weight: 600; }
+  .resend-link { color: var(--ck-2); cursor: pointer; font-weight: 800; text-decoration: underline; }
+  
+  /* User View */
+  .user-profile-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; animation: stepFadeUp 0.5s var(--spring) both; }
+  .user-id-display { font-family: monospace; font-size: 18px; font-weight: 800; color: var(--ck-text); background: var(--ck-bg); padding: 6px 12px; border-radius: 10px; }
+  .logout-btn { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px 16px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; }
+  
+  .premium-status-card {
+    background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
+    padding: 16px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;
+    animation: stepFadeUp 0.5s var(--spring) both;
+  }
+  .premium-status-card.active { border-color: #22c55e; background: rgba(34, 197, 94, 0.05); }
+  .premium-status-card.inactive { opacity: 0.7; }
+  
+  .premium-name { font-size: 15px; font-weight: 800; color: var(--text); }
+  .premium-uid { font-size: 12px; color: var(--text-muted); font-family: monospace; margin-top: 2px; }
+  .status-badge { font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 999px; }
+  .status-badge.active { background: #22c55e; color: #fff; }
+  .status-badge.inactive { background: var(--border); color: var(--text-muted); }
+
+  /* Connection Status */
+  .conn-status { position: absolute; top: 20px; right: 20px; display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--text-muted); background: var(--bg-card); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); }
+  .conn-dot { width: 8px; height: 8px; border-radius: 50%; background: #eab308; }
+  .conn-dot.online { background: #22c55e; box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2); }
+  .conn-dot.offline { background: #ef4444; }
 </style>
 </head>
 <body>
@@ -833,11 +893,99 @@
   </div>
 </div>
 
-<!-- PREDICTION PLACEHOLDER -->
+<!-- PREDICTION PAGE (Locked) -->
 <div id="screen-prediction" class="screen">
-  <div class="tab-placeholder">
-    <div class="ph-icon"><i class="fa-solid fa-chart-line"></i></div>
-    <h2 data-t="nav_prediction">Prediction</h2>
+  <div class="screen-inner">
+    <div class="tools-header">
+      <h2 data-t="nav_prediction">Prediction</h2>
+    </div>
+
+    <!-- Ck Lottery Prediction -->
+    <div class="brand-card" data-brand="ck" style="margin-bottom: 14px;">
+      <div class="brand-head">
+        <div class="brand-icon"><img src="Logo/ck_logo.jpg" alt="Ck Lottery"></div>
+        <div class="brand-name">Ck Lottery Prediction</div>
+      </div>
+      <div class="brand-actions" style="grid-template-columns: 1fr 1fr;">
+        <button class="action-btn" onclick="checkAccess('ck', 'alert(\'Ck Version 1.1\')')">
+          <span class="action-icon"><i class="fa-solid fa-chart-line"></i></span>
+          <span class="action-label">Version 1.1</span>
+        </button>
+        <button class="action-btn" onclick="checkAccess('ck', 'alert(\'Ck Version 1.2\')')">
+          <span class="action-icon"><i class="fa-solid fa-chart-line"></i></span>
+          <span class="action-label">Version 1.2</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- BigWin Prediction -->
+    <div class="brand-card" data-brand="bigwin" style="margin-bottom: 14px;">
+      <div class="brand-head">
+        <div class="brand-icon"><img src="Logo/bigwin_logo.jpg" alt="777 BigWin"></div>
+        <div class="brand-name">777 BigWin Prediction</div>
+      </div>
+      <div class="brand-actions" style="grid-template-columns: 1fr 1fr;">
+        <button class="action-btn" onclick="checkAccess('bigwin', 'alert(\'BigWin Version 1.1\')')">
+          <span class="action-icon"><i class="fa-solid fa-chart-line"></i></span>
+          <span class="action-label">Version 1.1</span>
+        </button>
+        <button class="action-btn" onclick="checkAccess('bigwin', 'alert(\'BigWin Version 1.2\')')">
+          <span class="action-icon"><i class="fa-solid fa-chart-line"></i></span>
+          <span class="action-label">Version 1.2</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- SixWin Prediction -->
+    <div class="brand-card" data-brand="sixwin" style="margin-bottom: 14px;">
+      <div class="brand-head">
+        <div class="brand-icon"><img src="Logo/sixwin_logo.jpg" alt="SixWin"></div>
+        <div class="brand-name">SixWin Prediction</div>
+      </div>
+      <div class="brand-actions" style="grid-template-columns: 1fr 1fr;">
+        <button class="action-btn" onclick="checkAccess('sixwin', 'alert(\'SixWin Version 1.1\')')">
+          <span class="action-icon"><i class="fa-solid fa-chart-line"></i></span>
+          <span class="action-label">Version 1.1</span>
+        </button>
+        <button class="action-btn" onclick="checkAccess('sixwin', 'alert(\'SixWin Version 1.2\')')">
+          <span class="action-icon"><i class="fa-solid fa-chart-line"></i></span>
+          <span class="action-label">Version 1.2</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Shwe Prediction -->
+    <div class="brand-card" data-brand="shwe" style="margin-bottom: 14px;">
+      <div class="brand-head">
+        <div class="brand-icon"><img src="Logo/shwe_logo.jpg" alt="Shwe"></div>
+        <div class="brand-name">Shwe Prediction</div>
+      </div>
+      <div class="brand-actions" style="grid-template-columns: 1fr 1fr;">
+        <button class="action-btn" onclick="checkAccess('shwe', 'alert(\'Shwe Version 1.1\')')">
+          <span class="action-icon"><i class="fa-solid fa-chart-line"></i></span>
+          <span class="action-label">Version 1.1</span>
+        </button>
+        <button class="action-btn" onclick="checkAccess('shwe', 'alert(\'Shwe Version 1.2\')')">
+          <span class="action-icon"><i class="fa-solid fa-chart-line"></i></span>
+          <span class="action-label">Version 1.2</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Global Trx Prediction -->
+    <div class="brand-card" data-brand="globaltrx" style="margin-bottom: 14px;">
+      <div class="brand-head">
+        <div class="brand-icon"><img src="Logo/trxwin_logo.jpg" alt="Global Trx"></div>
+        <div class="brand-name">Global Trx Prediction</div>
+      </div>
+      <div class="brand-actions" style="grid-template-columns: 1fr;">
+        <button class="action-btn" onclick="checkAccess('paid', 'alert(\'Global Trx Version 1.1\')')">
+          <span class="action-icon"><i class="fa-solid fa-chart-line"></i></span>
+          <span class="action-label">Version 1.1</span>
+        </button>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -863,11 +1011,49 @@
   </div>
 </div>
 
-<!-- PROFILE PLACEHOLDER -->
+<!-- PROFILE (LOGIN UI) -->
 <div id="screen-profile" class="screen">
-  <div class="tab-placeholder">
-    <div class="ph-icon"><i class="fa-solid fa-user"></i></div>
-    <h2 data-t="nav_profile">Profile</h2>
+  <div class="screen-inner" style="position: relative;">
+    
+    <div class="conn-status" id="connStatus">
+      <div class="conn-dot" id="connDot"></div>
+      <span id="connText">Checking...</span>
+    </div>
+
+    <!-- Logged Out View -->
+    <div id="profileLoginView" style="display: none;">
+      <!-- Step 1: Chat ID -->
+      <div class="login-card" id="loginStep1">
+        <h2>Account Login</h2>
+        <p>Premium Member ဖြစ်ရန် သင့်ရဲ့ Telegram Chat ID ကို ထည့်ပါ။<br><span style="font-size:11px;">(Bot မှာ /start နှိပ်ပြီး သင့် ID ကို ရယူနိုင်ပါတယ်)</span></p>
+        <input type="number" id="loginChatId" class="login-input" placeholder="e.g. 597324930" inputmode="numeric">
+        <button id="sendCodeBtn" class="login-btn" onclick="sendLoginCode()">Send Code</button>
+        <div id="chatIdError" class="error-text"></div>
+      </div>
+
+      <!-- Step 2: OTP -->
+      <div class="login-card" id="loginStep2" style="display: none;">
+        <h2>Enter Verification Code</h2>
+        <p>သင့် Telegram ဆီကို ပို့လိုက်တဲ့ အနံ ၆ လုံး Code ကို ထည့်ပါ။</p>
+        <input type="number" id="loginOtp" class="login-input" placeholder="• • • • • •" maxlength="6" inputmode="numeric">
+        <button id="verifyCodeBtn" class="login-btn" onclick="verifyLoginCode()">Verify & Login</button>
+        <div id="otpError" class="error-text"></div>
+        <div id="resendTimer" class="resend-text"></div>
+      </div>
+    </div>
+
+    <!-- Logged In View -->
+    <div id="profileUserView" style="display: none;">
+      <div class="user-profile-header">
+        <div>
+          <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">My ID</div>
+          <div class="user-id-display" id="displayUserId">-</div>
+        </div>
+        <button class="logout-btn" onclick="logoutUser()">Logout</button>
+      </div>
+      <div id="premiumList"></div>
+    </div>
+
   </div>
 </div>
 
@@ -2024,6 +2210,302 @@
   document.addEventListener('dragstart', (e) => {
     if (e.target && e.target.tagName === 'IMG') e.preventDefault();
   }, true);
+
+  // ============ 🆕 WEB LOGIN FRONTEND LOGIC ============
+  const BRIDGE_CONFIG = {
+    apiKey: "AIzaSyDj6z3O91NnlQ1zVdripiGhqQMsQhR4_ak", // Dummy, not used for DB read/write
+    databaseURL: "https://chackchack-d7445-default-rtdb.europe-west1.firebasedatabase.app"
+  };
+  let loginBridgeDb = null;
+  let currentLoginReqId = null;
+  let loginResendInterval = null;
+
+  // Init Firebase for Bridge
+  try {
+    let app;
+    try { app = firebase.app('loginBridge'); } 
+    catch (e) { app = firebase.initializeApp(BRIDGE_CONFIG, 'loginBridge'); }
+    loginBridgeDb = app.database();
+  } catch (e) { console.error('Bridge init error:', e); }
+
+  // Connection Status
+  function updateConnectionStatus() {
+    const dot = document.getElementById('connDot');
+    const text = document.getElementById('connText');
+    if (!dot || !text) return;
+    
+    if (navigator.onLine) {
+      dot.className = 'conn-dot online';
+      text.textContent = 'Online';
+    } else {
+      dot.className = 'conn-dot offline';
+      text.textContent = 'Offline';
+    }
+  }
+  window.addEventListener('online', updateConnectionStatus);
+  window.addEventListener('offline', updateConnectionStatus);
+  
+  // Load saved login on start
+  document.addEventListener('DOMContentLoaded', () => {
+    updateConnectionStatus();
+    const savedUser = localStorage.getItem('webUserData');
+    if (savedUser) {
+      try {
+        const data = JSON.parse(savedUser);
+        showLoggedInView(data);
+      } catch (e) { localStorage.removeItem('webUserData'); }
+    } else {
+      showLoggedOutView();
+    }
+  });
+
+  function showLoggedOutView() {
+    document.getElementById('profileLoginView').style.display = 'block';
+    document.getElementById('profileUserView').style.display = 'none';
+    resetLoginForm();
+  }
+
+  function showLoggedInView(data) {
+    document.getElementById('profileLoginView').style.display = 'none';
+    document.getElementById('profileUserView').style.display = 'block';
+    document.getElementById('displayUserId').textContent = data.chatId;
+    
+    const list = document.getElementById('premiumList');
+    list.innerHTML = '';
+    
+    const platforms = [
+      { key: 'paid', name: 'Paid Premium', color: '#a855f7' },
+      { key: 'ck', name: 'Ck Lottery', color: '#4f46e5' },
+      { key: 'bigwin', name: '777 BigWin', color: '#16a34a' },
+      { key: 'sixwin', name: 'SixWin', color: '#dc2626' },
+      { key: 'shwe', name: 'Shwe Lottery', color: '#ea580c' }
+    ];
+
+    platforms.forEach(p => {
+      const uid = data.platforms[p.key];
+      const isActive = !!uid;
+      
+      const card = document.createElement('div');
+      card.className = `premium-status-card ${isActive ? 'active' : 'inactive'}`;
+      card.innerHTML = `
+        <div>
+          <div class="premium-name" style="color: ${isActive ? p.color : 'var(--text)'}">${p.name}</div>
+          ${isActive ? `<div class="premium-uid">UID: ${uid}</div>` : ''}
+        </div>
+        <div class="status-badge ${isActive ? 'active' : 'inactive'}">${isActive ? 'Active' : 'Inactive'}</div>
+      `;
+      list.appendChild(card);
+    });
+  }
+
+  function resetLoginForm() {
+    document.getElementById('loginStep1').style.display = 'block';
+    document.getElementById('loginStep2').style.display = 'none';
+    document.getElementById('loginChatId').value = '';
+    document.getElementById('loginOtp').value = '';
+    document.getElementById('chatIdError').classList.remove('show');
+    document.getElementById('otpError').classList.remove('show');
+    document.getElementById('sendCodeBtn').disabled = false;
+    document.getElementById('sendCodeBtn').textContent = 'Send Code';
+    if (loginResendInterval) clearInterval(loginResendInterval);
+  }
+
+  async function sendLoginCode() {
+    if (!navigator.onLine) return showError('chatIdError', '📶 အင်တာနက်မရှိပါ။');
+    const chatId = document.getElementById('loginChatId').value.trim();
+    if (!chatId || chatId.length < 5) return showError('chatIdError', 'Please enter a valid Chat ID.');
+
+    const btn = document.getElementById('sendCodeBtn');
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+    document.getElementById('chatIdError').classList.remove('show');
+
+    if (!loginBridgeDb) return showError('chatIdError', 'Database error.');
+
+    // Create Request
+    currentLoginReqId = 'req_' + Date.now() + '_' + Math.floor(Math.random()*1000);
+    const reqData = { chatId: chatId, status: 'pending', timestamp: Date.now() };
+    
+    try {
+      await loginBridgeDb.ref('web_login/' + currentLoginReqId).set(reqData);
+      
+      // Timeout 15s for Bot response
+      let timeout = setTimeout(() => {
+        if (btn.textContent === 'Sending...') {
+          btn.disabled = false;
+          btn.textContent = 'Send Code';
+          showError('chatIdError', '⚠️ Connection timeout. Admin ကို ဆက်သွယ်ပါ (@Pyaung_S777)');
+          loginBridgeDb.ref('web_login/' + currentLoginReqId).remove();
+        }
+      }, 15000);
+
+      // Listen to response
+      loginBridgeDb.ref('web_login/' + currentLoginReqId).on('value', (snap) => {
+        const data = snap.val();
+        if (!data) return;
+        
+        if (data.status === 'error') {
+          clearTimeout(timeout);
+          btn.disabled = false;
+          btn.textContent = 'Send Code';
+          showError('chatIdError', data.message || 'Error occurred.');
+          snap.ref.remove(); // Cleanup
+        } 
+        else if (data.status === 'code_sent') {
+          clearTimeout(timeout);
+          document.getElementById('loginStep1').style.display = 'none';
+          document.getElementById('loginStep2').style.display = 'block';
+          startResendTimer(60);
+        }
+      });
+
+    } catch (e) {
+      btn.disabled = false;
+      btn.textContent = 'Send Code';
+      showError('chatIdError', 'Firebase Error.');
+    }
+  }
+
+  async function verifyLoginCode() {
+    if (!navigator.onLine) return showError('otpError', '📶 အင်တာနက်မရှိပါ။');
+    const code = document.getElementById('loginOtp').value.trim();
+    if (code.length !== 6) return showError('otpError', 'Please enter 6 digits.');
+
+    const btn = document.getElementById('verifyCodeBtn');
+    btn.disabled = true;
+    btn.textContent = 'Verifying...';
+    document.getElementById('otpError').classList.remove('show');
+
+    if (!currentLoginReqId || !loginBridgeDb) return;
+
+    try {
+      await loginBridgeDb.ref('web_login/' + currentLoginReqId).update({ 
+        status: 'verifying', 
+        userCode: code 
+      });
+      
+      // Listener is already attached, it will catch success/error
+      const currentListener = loginBridgeDb.ref('web_login/' + currentLoginReqId).on('value', (snap) => {
+        const data = snap.val();
+        if (!data) return;
+        
+        if (data.status === 'success') {
+          btn.disabled = false;
+          btn.textContent = 'Verify & Login';
+          
+          const chatId = data.chatId;
+          const platforms = data.platforms || {};
+          
+          const userData = { chatId, platforms, loginTime: Date.now() };
+          localStorage.setItem('webUserData', JSON.stringify(userData));
+          
+          snap.ref.remove(); // Cleanup Firebase
+          loginBridgeDb.ref('web_login/' + currentLoginReqId).off();
+          
+          // Success Animation
+          document.getElementById('loginStep2').innerHTML = '<div style="font-size: 48px; margin: 20px 0;">✅</div><h2 style="color: #22c55e;">Login Successful!</h2>';
+          setTimeout(() => showLoggedInView(userData), 1500);
+        } 
+        else if (data.status === 'error') {
+          btn.disabled = false;
+          btn.textContent = 'Verify & Login';
+          showError('otpError', data.message || 'Invalid Code.');
+        }
+      });
+
+    } catch (e) {
+      btn.disabled = false;
+      btn.textContent = 'Verify & Login';
+    }
+  }
+
+  function logoutUser() {
+    localStorage.removeItem('webUserData');
+    showLoggedOutView();
+  }
+
+  function showError(id, msg) {
+    const el = document.getElementById(id);
+    if (el) {
+      el.textContent = msg;
+      el.classList.add('show');
+      // Remove shake class after animation
+      setTimeout(() => el.classList.remove('show'), 4000);
+    }
+  }
+
+  function startResendTimer(seconds) {
+    if (loginResendInterval) clearInterval(loginResendInterval);
+    let timeLeft = seconds;
+    const timerEl = document.getElementById('resendTimer');
+    
+    // Save cooldown to localStorage to survive refresh
+    const cooldownEnd = Date.now() + (seconds * 1000);
+    localStorage.setItem('loginCooldown', cooldownEnd);
+    
+    const updateTimer = () => {
+      if (timeLeft > 0) {
+        timerEl.innerHTML = `Resend code in <b>${timeLeft}s</b>`;
+        timeLeft--;
+      } else {
+        clearInterval(loginResendInterval);
+        timerEl.innerHTML = `Didn't receive code? <span class="resend-link" onclick="resendCode()">Resend</span>`;
+        localStorage.removeItem('loginCooldown');
+      }
+    };
+    
+    updateTimer();
+    loginResendInterval = setInterval(updateTimer, 1000);
+  }
+
+  function resendCode() {
+    document.getElementById('loginStep2').style.display = 'none';
+    document.getElementById('loginStep1').style.display = 'block';
+    document.getElementById('sendCodeBtn').disabled = false;
+    document.getElementById('sendCodeBtn').textContent = 'Send Code';
+    sendLoginCode(); // Auto trigger again
+  }
+
+  // Check cooldown on load
+  document.addEventListener('DOMContentLoaded', () => {
+    const savedCooldown = localStorage.getItem('loginCooldown');
+    if (savedCooldown) {
+      const remain = Math.floor((parseInt(savedCooldown) - Date.now()) / 1000);
+      if (remain > 0) startResendTimer(remain);
+      else localStorage.removeItem('loginCooldown');
+    }
+  });
+
+  // ============ PREDICTION UNLOCK LOGIC ============
+  // Note: You need to wrap your existing prediction buttons with this check.
+  // Example: replace `onclick="showMiniPage('ck30Mini1-1')"` with `onclick="checkAccess('ck', 'showMiniPage(\'ck30Mini1-1\')')"`
+  
+  function checkAccess(platformKey, callbackString) {
+    const savedUser = localStorage.getItem('webUserData');
+    
+    // 1. Login မဝင်ထားရင်
+    if (!savedUser) {
+      alert('⚠️ Please Login from Profile Tab to access Predictions.');
+      switchTab('profile');
+      return;
+    }
+    
+    try {
+      const data = JSON.parse(savedUser);
+      
+      // 2. Login ဝင်ထားပေမယ့် သက်ဆိုင်ရာ Premium မရှိရင်
+      if (data.platforms && data.platforms[platformKey]) {
+        // Access ရှိတယ် -> Function ကို Run မယ်
+        eval(callbackString);
+      } else {
+        alert(`⚠️ You don't have active premium for this platform. Please join from Telegram Bot.`);
+        switchTab('profile');
+      }
+    } catch (e) {
+      // Data ဖတ်လို့မရရင် (သို့) Error တက်ရင်
+      switchTab('profile');
+    }
+  }
 </script>
 
 </body>
