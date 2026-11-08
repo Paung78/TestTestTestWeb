@@ -47,8 +47,6 @@
     --shwe-text: #fdba74;
     --globaltrx-bg: rgba(168, 85, 247, 0.14);
     --globaltrx-text: #d8b4fe;
-    --globaltrx-bg: rgba(168, 85, 247, 0.14);
-    --globaltrx-text: #d8b4fe;
 
     --bg-page: #0f172a;
     --bg-card: #1e293b;
@@ -126,7 +124,7 @@
 
   .header-actions { display: flex; align-items: center; gap: 8px; }
 
-  .theme-btn {
+  .header-icon-btn {
     width: 36px; height: 36px; border-radius: 50%;
     background: var(--bg-card); border: 1px solid var(--border);
     display: flex; align-items: center; justify-content: center;
@@ -134,10 +132,14 @@
     transition: transform 0.18s var(--spring), color 0.25s, background 0.25s, border-color 0.25s;
     -webkit-tap-highlight-color: transparent;
     color: #6366f1;
+    display: none; /* Hidden by default */
   }
-  body.dark .theme-btn { color: #fbbf24; }
-  .theme-btn:active { transform: scale(0.9); }
-  .theme-btn.spin i { animation: themeSpin 0.42s var(--spring); }
+  .header-icon-btn.show { display: flex; }
+  .header-icon-btn.danger { color: #ef4444; }
+  body.dark .header-icon-btn { color: #fbbf24; }
+  body.dark .header-icon-btn.danger { color: #fca5a5; }
+  .header-icon-btn:active { transform: scale(0.9); }
+  .header-icon-btn.spin i { animation: themeSpin 0.42s var(--spring); }
   @keyframes themeSpin {
     0% { transform: rotate(0deg) scale(1); }
     50% { transform: rotate(180deg) scale(0.75); }
@@ -475,23 +477,6 @@
     border-radius: inherit;
   }
 
-  /* Logo variant (image icon — overrides brand colors) */
-  .tool-card-icon.tool-card-icon--logo {
-    padding: 0 !important;
-    overflow: hidden;
-    background: var(--bg-card) !important;
-    border: 1px solid var(--border);
-    font-size: 0 !important;
-    color: transparent !important;
-  }
-  .tool-card-icon.tool-card-icon--logo img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-    display: block;
-    border-radius: inherit;
-  }
-
   /* ============ RECORD BADGE (history chats) ============ */
   .record-badge {
     display: inline-flex;
@@ -569,28 +554,6 @@
   .record-badge.badge-pulse {
     animation: recordBadgePulse 0.5s ease-in-out;
   }
-
-  /* Shwe အရောင် ထည့်ရန် */
-  .history-chat-card[data-brand="shwe"] { background: var(--shwe-bg); border-color: transparent; }
-  .history-chat-card[data-brand="shwe"] .tool-card-icon { background: rgba(249, 115, 22, 0.15); color: var(--shwe-2); }
-  .history-chat-card[data-brand="shwe"] .tool-card-title { color: var(--shwe-text); }
-  body.dark .history-chat-card[data-brand="shwe"] .tool-card-icon { background: rgba(251,146,60,0.20); color: #fdba74; }
-
-  /* Record Update ဖြစ်ရင် Badge Pulse လုပ်ရန် */
-  @keyframes recordBadgePulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.15); background: rgba(34, 197, 94, 0.3); }
-    100% { transform: scale(1); }
-  }
-  .record-badge.badge-pulse {
-    animation: recordBadgePulse 0.5s ease-in-out;
-  }
-
-  /* Global Trx (ခရမ်းရောင်) */
-  .history-chat-card[data-brand="globaltrx"] { background: var(--globaltrx-bg); border-color: transparent; }
-  .history-chat-card[data-brand="globaltrx"] .tool-card-icon { background: rgba(168, 85, 247, 0.15); color: var(--globaltrx-2); }
-  .history-chat-card[data-brand="globaltrx"] .tool-card-title { color: var(--globaltrx-text); }
-  body.dark .history-chat-card[data-brand="globaltrx"] .tool-card-icon { background: rgba(192, 132, 252, 0.20); color: #d8b4fe; }
 
   /* Global Trx (ခရမ်းရောင်) */
   .history-chat-card[data-brand="globaltrx"] { background: var(--globaltrx-bg); border-color: transparent; }
@@ -716,65 +679,229 @@
     .betsize-options { grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); max-height: 180px; }
   }
 
-  /* ============ LOGIN UI ============ */
-  .login-card {
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: 20px; padding: 24px; text-align: center;
-    animation: stepFadeUp 0.5s var(--spring) both;
-    box-shadow: 0 4px 20px rgba(15, 23, 42, 0.05);
-    margin-top: 20px;
+  /* ============ LOGIN UI (New Design) ============ */
+  .login-container {
+    max-width: 400px; margin: 0 auto;
+    padding: 24px;
+    animation: fadeInUp 0.5s var(--spring) both;
   }
-  .login-card h2 { font-size: 20px; font-weight: 800; margin-bottom: 8px; color: var(--text); }
-  .login-card p { font-size: 13px; color: var(--text-muted); margin-bottom: 20px; line-height: 1.5; }
+  .login-header { margin-bottom: 32px; }
+  .login-icon {
+    width: 48px; height: 48px; border-radius: 12px;
+    background: linear-gradient(135deg, #f87171, #ef4444);
+    color: white; display: flex; align-items: center; justify-content: center;
+    font-size: 20px; margin-bottom: 20px;
+    box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+  }
+  .login-title {
+    font-size: 28px; font-weight: 800; color: var(--text);
+    letter-spacing: -0.03em; margin-bottom: 6px;
+  }
+  .login-subtitle {
+    font-size: 14px; color: var(--text-muted); font-weight: 500;
+  }
   
+  .input-group { margin-bottom: 20px; text-align: left; }
+  .input-group label {
+    display: block; font-size: 12px; font-weight: 700;
+    color: var(--text); margin-bottom: 8px;
+  }
+  .input-wrapper { position: relative; }
   .login-input {
-    width: 100%; min-height: 52px; border: 1.5px solid var(--border);
-    border-radius: 14px; background: var(--bg-page); padding: 14px 16px;
-    font-size: 18px; font-weight: 800; color: var(--text); text-align: center;
-    outline: none; font-family: inherit; letter-spacing: 0.1em; margin-bottom: 12px;
+    width: 100%; min-height: 52px;
+    border: 1.5px solid var(--border); border-radius: 12px;
+    background: var(--bg-page); padding: 14px 16px;
+    font-size: 16px; font-weight: 600; color: var(--text);
+    outline: none; font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
   }
   .login-input:focus { border-color: var(--ck-2); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
+  .login-input::placeholder { color: var(--text-subtle); font-weight: 500; }
   
+  .send-code-btn {
+    position: absolute; right: 8px; bottom: -36px;
+    background: transparent; border: none;
+    color: var(--ck-2); font-size: 12px; font-weight: 800;
+    cursor: pointer; padding: 4px 8px;
+  }
+  .send-code-btn:disabled { color: var(--text-subtle); cursor: not-allowed; }
+
+  /* OTP Boxes */
+  .otp-container {
+    display: flex; gap: 8px; justify-content: space-between;
+    margin-top: 4px;
+  }
+  .otp-box {
+    width: 100%; height: 52px;
+    border: 1.5px solid var(--border); border-radius: 10px;
+    background: var(--bg-page); text-align: center;
+    font-size: 20px; font-weight: 800; color: var(--text);
+    outline: none; font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+  }
+  .otp-box:focus { border-color: var(--ck-2); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
+
+  /* Sign in Button */
   .login-btn {
-    width: 100%; min-height: 52px; border: none; border-radius: 14px;
+    width: 100%; min-height: 52px;
+    border: none; border-radius: 14px;
     background: linear-gradient(135deg, var(--ck-1), var(--ck-2));
-    color: #fff; font-size: 16px; font-weight: 800; cursor: pointer;
-    transition: transform 0.15s var(--spring);
+    color: #fff; font-size: 16px; font-weight: 800;
+    cursor: pointer; margin-top: 24px;
+    transition: transform 0.15s var(--spring), box-shadow 0.2s;
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.32);
   }
   .login-btn:active { transform: scale(0.97); }
   .login-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+  /* Guest Button */
+  .guest-btn {
+    width: 100%; min-height: 52px;
+    border: 1.5px solid var(--ck-2); border-radius: 14px;
+    background: transparent; color: var(--ck-2);
+    font-size: 16px; font-weight: 800;
+    cursor: pointer; margin-top: 12px;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .guest-btn:active { transform: scale(0.97); background: var(--ck-bg); }
+
+  /* Footer */
+  .login-footer {
+    text-align: center; margin-top: 32px;
+    font-size: 13px; color: var(--text-muted); font-weight: 500;
+  }
+  .login-footer a {
+    color: var(--ck-2); font-weight: 800;
+    text-decoration: none; cursor: pointer;
+    margin-left: 4px;
+  }
 
   .error-text { color: #ef4444; font-size: 12px; font-weight: 700; margin-top: 8px; display: none; }
   .error-text.show { display: block; animation: shake 0.4s ease-in-out; }
   @keyframes shake { 0%, 100% { transform: translateX(0); } 25% { transform: translateX(-5px); } 75% { transform: translateX(5px); } }
 
-  .resend-text { font-size: 13px; color: var(--text-muted); margin-top: 16px; font-weight: 600; }
-  .resend-link { color: var(--ck-2); cursor: pointer; font-weight: 800; text-decoration: underline; }
+  /* ============ PROFILE (Logged In Design) ============ */
+  /* Hero Card */
+  .hero-card {
+    background: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+    border-radius: 24px; padding: 24px; color: white;
+    box-shadow: 0 10px 30px rgba(99, 102, 241, 0.3);
+    position: relative; overflow: hidden;
+    margin-bottom: 24px;
+    animation: slideDownFade 0.5s var(--spring) both;
+  }
+  .hero-bg-orb {
+    position: absolute; border-radius: 50%; filter: blur(30px);
+    background: rgba(255, 255, 255, 0.15);
+  }
+  .hero-bg-orb.orb-1 { width: 150px; height: 150px; top: -50px; right: -30px; }
+  .hero-bg-orb.orb-2 { width: 100px; height: 100px; bottom: -30px; left: -20px; background: rgba(236, 72, 153, 0.2); }
   
-  /* User View */
-  .user-profile-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; animation: stepFadeUp 0.5s var(--spring) both; }
-  .user-id-display { font-family: monospace; font-size: 18px; font-weight: 800; color: var(--ck-text); background: var(--ck-bg); padding: 6px 12px; border-radius: 10px; }
-  .logout-btn { background: rgba(239, 68, 68, 0.1); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.2); padding: 8px 16px; border-radius: 10px; font-weight: 800; font-size: 13px; cursor: pointer; }
+  .hero-top { display: flex; align-items: center; gap: 16px; position: relative; z-index: 1; margin-bottom: 20px; }
+  .avatar {
+    width: 60px; height: 60px; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2); backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px; font-weight: 900; color: white; flex-shrink: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  .hero-info { flex: 1; min-width: 0; }
+  .premium-badge {
+    display: inline-block; padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.25); backdrop-filter: blur(5px);
+    border-radius: 999px; font-size: 10px; font-weight: 800;
+    text-transform: uppercase; letter-spacing: 0.05em;
+    margin-bottom: 4px; border: 1px solid rgba(255, 255, 255, 0.3);
+  }
+  .hero-id { font-size: 15px; font-weight: 600; opacity: 0.95; font-family: monospace; }
   
-  .premium-status-card {
-    background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px;
-    padding: 16px; margin-bottom: 12px; display: flex; align-items: center; justify-content: space-between;
+  .refresh-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2); border: none;
+    color: white; display: flex; align-items: center; justify-content: center;
+    cursor: pointer; flex-shrink: 0; transition: transform 0.2s;
+  }
+  .refresh-btn:active { transform: rotate(180deg) scale(0.9); }
+
+  .hero-stats {
+    display: flex; gap: 16px; border-top: 1px solid rgba(255, 255, 255, 0.2);
+    padding-top: 16px; position: relative; z-index: 1;
+  }
+  .stat-item { flex: 1; display: flex; flex-direction: column; gap: 2px; }
+  .stat-val { font-size: 18px; font-weight: 800; }
+  .stat-label { font-size: 11px; font-weight: 500; opacity: 0.8; text-transform: uppercase; letter-spacing: 0.05em; }
+
+  /* Premium Cards */
+  .premium-section-title {
+    font-size: 13px; font-weight: 800; text-transform: uppercase;
+    letter-spacing: 0.05em; color: var(--text-muted);
+    margin-bottom: 12px; padding-left: 4px;
+    animation: stepFadeUp 0.5s var(--spring) 100ms both;
+  }
+  
+  .premium-card {
+    display: flex; align-items: center; gap: 14px;
+    background: var(--bg-card); border: 1.5px solid var(--border);
+    border-radius: 16px; padding: 16px;
+    margin-bottom: 10px;
+    transition: transform 0.15s var(--spring), border-color 0.2s, background 0.2s;
     animation: stepFadeUp 0.5s var(--spring) both;
   }
-  .premium-status-card.active { border-color: #22c55e; background: rgba(34, 197, 94, 0.05); }
-  .premium-status-card.inactive { opacity: 0.7; }
+  .premium-card:active { transform: scale(0.98); }
   
-  .premium-name { font-size: 15px; font-weight: 800; color: var(--text); }
-  .premium-uid { font-size: 12px; color: var(--text-muted); font-family: monospace; margin-top: 2px; }
-  .status-badge { font-size: 11px; font-weight: 800; padding: 4px 10px; border-radius: 999px; }
-  .status-badge.active { background: #22c55e; color: #fff; }
-  .status-badge.inactive { background: var(--border); color: var(--text-muted); }
+  .premium-card.active {
+    border-color: #22c55e;
+    background: linear-gradient(145deg, var(--bg-card), rgba(34, 197, 94, 0.05));
+  }
+  .premium-card.inactive {
+    opacity: 0.8; border-color: var(--border);
+    background: var(--bg-card);
+  }
 
-  /* Connection Status */
-  .conn-status { position: absolute; top: 20px; right: 20px; display: flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 700; color: var(--text-muted); background: var(--bg-card); padding: 4px 10px; border-radius: 999px; border: 1px solid var(--border); }
-  .conn-dot { width: 8px; height: 8px; border-radius: 50%; background: #eab308; }
-  .conn-dot.online { background: #22c55e; box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2); }
-  .conn-dot.offline { background: #ef4444; }
+  .premium-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px; flex-shrink: 0;
+    background: var(--bg-page); border: 1px solid var(--border);
+  }
+  .premium-icon img { width: 100%; height: 100%; object-fit: cover; border-radius: inherit; }
+  
+  .premium-body { flex: 1; min-width: 0; text-align: left; }
+  .premium-title { font-size: 15px; font-weight: 800; color: var(--text); }
+  .premium-card.active .premium-title { color: #16a34a; }
+  .premium-card.inactive .premium-title { color: var(--text-muted); }
+  
+  .premium-uid { font-size: 12px; color: var(--text-muted); font-family: monospace; margin-top: 2px; }
+  
+  .premium-status-icon {
+    width: 28px; height: 28px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; flex-shrink: 0;
+  }
+  .premium-card.active .premium-status-icon { background: rgba(34, 197, 94, 0.15); color: #16a34a; }
+  .premium-card.inactive .premium-status-icon { background: rgba(100, 116, 139, 0.1); color: var(--text-subtle); }
+
+  /* Toast */
+  .toast-container {
+    position: fixed; top: 80px; left: 50%; transform: translateX(-50%);
+    z-index: 20000; display: flex; flex-direction: column; gap: 8px;
+    pointer-events: none; align-items: center;
+  }
+  .toast {
+    background: var(--bg-card); border: 1px solid var(--border); color: var(--text);
+    padding: 10px 20px; border-radius: 12px; font-size: 13px; font-weight: 700;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+    display: flex; align-items: center; gap: 8px;
+    opacity: 0; transform: translateY(-10px);
+    transition: opacity 0.25s ease, transform 0.3s var(--spring);
+    white-space: nowrap;
+  }
+  .toast.show { opacity: 1; transform: translateY(0); }
+  .toast::before { content: '✅'; font-size: 14px; }
+
+  @keyframes slideDownFade { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 </style>
 </head>
 <body>
@@ -792,7 +919,10 @@
     <span class="red">SuperSel</span> <span class="black">Earing</span>
   </div>
   <div class="header-actions">
-    <button class="theme-btn" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme">
+    <button class="header-icon-btn danger" id="headerLogoutBtn" onclick="logoutUser()" aria-label="Logout" title="Logout">
+      <i class="fa-solid fa-arrow-right-from-bracket"></i>
+    </button>
+    <button class="header-icon-btn show" id="themeBtn" onclick="toggleTheme()" aria-label="Toggle theme">
       <i class="fa-solid fa-sun" id="themeIcon"></i>
     </button>
     <button class="lang-btn" onclick="openLangSheet()">
@@ -1011,47 +1141,95 @@
   </div>
 </div>
 
-<!-- PROFILE (LOGIN UI) -->
+<!-- PROFILE PAGE (Login / Logged In) -->
 <div id="screen-profile" class="screen">
-  <div class="screen-inner" style="position: relative;">
+  <div class="screen-inner">
     
-    <div class="conn-status" id="connStatus">
-      <div class="conn-dot" id="connDot"></div>
-      <span id="connText">Checking...</span>
-    </div>
-
     <!-- Logged Out View -->
     <div id="profileLoginView" style="display: none;">
-      <!-- Step 1: Chat ID -->
-      <div class="login-card" id="loginStep1">
-        <h2>Account Login</h2>
-        <p>Premium Member ဖြစ်ရန် သင့်ရဲ့ Telegram Chat ID ကို ထည့်ပါ။<br><span style="font-size:11px;">(Bot မှာ /start နှိပ်ပြီး သင့် ID ကို ရယူနိုင်ပါတယ်)</span></p>
-        <input type="number" id="loginChatId" class="login-input" placeholder="e.g. 597324930" inputmode="numeric">
-        <button id="sendCodeBtn" class="login-btn" onclick="sendLoginCode()">Send Code</button>
-        <div id="chatIdError" class="error-text"></div>
-      </div>
+      <div class="login-container">
+        
+        <!-- Header -->
+        <div class="login-header">
+          <div class="login-icon"><i class="fa-solid fa-arrow-right-to-bracket"></i></div>
+          <h1 class="login-title">SuperSel Earing</h1>
+          <p class="login-subtitle">Sign in to continue exploring.</p>
+        </div>
 
-      <!-- Step 2: OTP -->
-      <div class="login-card" id="loginStep2" style="display: none;">
-        <h2>Enter Verification Code</h2>
-        <p>သင့် Telegram ဆီကို ပို့လိုက်တဲ့ အနံ ၆ လုံး Code ကို ထည့်ပါ။</p>
-        <input type="number" id="loginOtp" class="login-input" placeholder="• • • • • •" maxlength="6" inputmode="numeric">
-        <button id="verifyCodeBtn" class="login-btn" onclick="verifyLoginCode()">Verify & Login</button>
-        <div id="otpError" class="error-text"></div>
-        <div id="resendTimer" class="resend-text"></div>
+        <!-- Member ID Input -->
+        <div class="input-group">
+          <label data-t="member_id">Member ID</label>
+          <div class="input-wrapper">
+            <input type="number" id="loginChatId" class="login-input" placeholder="Enter Member ID" inputmode="numeric">
+            <button id="sendCodeBtn" class="send-code-btn" onclick="sendLoginCode()">Send Code</button>
+          </div>
+          <div id="chatIdError" class="error-text"></div>
+        </div>
+
+        <!-- OTP Code Input -->
+        <div class="input-group">
+          <label data-t="otp_code">OTP Code Enter</label>
+          <div class="otp-container">
+            <input type="text" class="otp-box" maxlength="1" inputmode="numeric" oninput="moveOtp(this, 0)" onkeydown="backOtp(event, this, 0)">
+            <input type="text" class="otp-box" maxlength="1" inputmode="numeric" oninput="moveOtp(this, 1)" onkeydown="backOtp(event, this, 1)">
+            <input type="text" class="otp-box" maxlength="1" inputmode="numeric" oninput="moveOtp(this, 2)" onkeydown="backOtp(event, this, 2)">
+            <input type="text" class="otp-box" maxlength="1" inputmode="numeric" oninput="moveOtp(this, 3)" onkeydown="backOtp(event, this, 3)">
+            <input type="text" class="otp-box" maxlength="1" inputmode="numeric" oninput="moveOtp(this, 4)" onkeydown="backOtp(event, this, 4)">
+            <input type="text" class="otp-box" maxlength="1" inputmode="numeric" oninput="moveOtp(this, 5)" onkeydown="backOtp(event, this, 5)">
+          </div>
+          <div id="otpError" class="error-text"></div>
+          <div id="resendTimer" style="font-size: 11px; color: var(--text-muted); margin-top: 8px; font-weight: 600;"></div>
+        </div>
+
+        <!-- Sign In Button -->
+        <button id="verifyCodeBtn" class="login-btn" onclick="verifyLoginCode()">Sign in</button>
+
+        <!-- Guest Button -->
+        <button class="guest-btn" onclick="switchTab('home')">Continue as guest</button>
+
+        <!-- Footer -->
+        <div class="login-footer">
+          Don't have an Member ID? <a href="https://t.me/SuperEaringWebbb_Bot" target="_blank">Join Premium</a>
+        </div>
+
       </div>
     </div>
 
     <!-- Logged In View -->
     <div id="profileUserView" style="display: none;">
-      <div class="user-profile-header">
-        <div>
-          <div style="font-size: 12px; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.05em;">My ID</div>
-          <div class="user-id-display" id="displayUserId">-</div>
+      
+      <!-- Hero Card -->
+      <div class="hero-card">
+        <div class="hero-bg-orb orb-1"></div>
+        <div class="hero-bg-orb orb-2"></div>
+        
+        <div class="hero-top">
+          <div class="avatar" id="userAvatar">S</div>
+          <div class="hero-info">
+            <div class="premium-badge">Premium Member</div>
+            <div class="hero-id">ID: <span id="displayUserId">-</span></div>
+          </div>
+          <button class="refresh-btn" onclick="refreshProfileData()" title="Refresh"><i class="fa-solid fa-rotate-right"></i></button>
         </div>
-        <button class="logout-btn" onclick="logoutUser()">Logout</button>
+
+        <div class="hero-stats">
+          <div class="stat-item">
+            <span class="stat-val" id="activePremiumCount">0 / 5</span>
+            <span class="stat-label">Active</span>
+          </div>
+          <div class="stat-item">
+            <span class="stat-val" id="memberSince">Nov 2024</span>
+            <span class="stat-label">Member Since</span>
+          </div>
+        </div>
       </div>
-      <div id="premiumList"></div>
+
+      <!-- Premium List -->
+      <div class="premium-section-title">Premium Platforms</div>
+      <div id="premiumListContainer">
+        <!-- Cards will be injected here via JS -->
+      </div>
+
     </div>
 
   </div>
@@ -1125,6 +1303,9 @@
   </div>
 </div>
 
+<!-- TOAST CONTAINER -->
+<div class="toast-container" id="toastContainer"></div>
+
 <script>
   // ============ TRANSLATIONS ============
   const T = {
@@ -1150,7 +1331,9 @@
       bet_size_error_empty: 'Please enter First Bet Amount.',
       bet_size_error_digits: 'Please enter numbers only.',
       bet_size_error_min: 'Minimum amount is 100.',
-      bet_size_error_round: 'No tens digit. Example: 100, 1000, 2000 only.'
+      bet_size_error_round: 'No tens digit. Example: 100, 1000, 2000 only.',
+      member_id: 'Member ID',
+      otp_code: 'OTP Code Enter'
     },
     mm: {
       nav_home: 'ပင်မစာမျက်နှာ', nav_prediction: 'ကြိုတင်ခန့်မှန်း', nav_chats: 'ဇယား', nav_tools: 'ကိရိယာများ', nav_profile: 'ကျွန်ုပ်',
@@ -1174,7 +1357,9 @@
       bet_size_error_empty: 'ပထမဆုံးလောင်းကြေးပမာဏ ထည့်ပါ။',
       bet_size_error_digits: 'ဂဏန်းများသာ ရိုက်ထည့်ပါ။',
       bet_size_error_min: 'အနည်းဆုံး ၁၀၀ ထည့်ရပါမယ်။',
-      bet_size_error_round: 'ဆယ်ဂဏန်းမပါရပါ။ ဥပမာ ၁၀၀, ၁၀၀၀, ၂၀၀၀ သာ။'
+      bet_size_error_round: 'ဆယ်ဂဏန်းမပါရပါ။ ဥပမာ ၁၀၀, ၁၀၀၀, ၂၀၀၀ သာ။',
+      member_id: 'အဖွဲ့ဝင် ID',
+      otp_code: 'OTP ကုဒ်ထည့်ပါ'
     }
   };
 
@@ -1187,7 +1372,6 @@
   };
 
   // ============ HISTORY CHATS CONFIG ============
-  // Shared Firebase config (all chats use the same ck30-35e97 project)
   const FIREBASE_PROJECT = {
     apiKey: "AIzaSyDj6z3O91NnlQ1zVdripiGhqQMsQhR4_ak",
     authDomain: "ck30-35e97.firebaseapp.com",
@@ -1602,6 +1786,7 @@
     document.getElementById('opt-en').classList.toggle('active', lang === 'en');
 
     renderHistoryChats();
+    renderProfilePage();
 
     if (currentSub) {
       if (currentSub.brand === 'tools' && currentSub.action === 'betsize') {
@@ -1671,34 +1856,6 @@
           '<i class="fa-solid fa-chevron-right tool-card-arrow"></i>' +
         '</button>';
     }).join('');
-  }
-
-  // Record Badge ကို သီးသန့် Update လုပ်ရန် Function အသစ် (Button မလှုပ်စေရန်)
-  function updateRecordBadge(chatId) {
-    const btn = document.querySelector(`.history-chat-card[onclick*="'${chatId}'"]`);
-    if (!btn) return;
-    
-    const rc = recordCounts[chatId];
-    const oldBadge = btn.querySelector('.record-badge');
-    if (!oldBadge) return;
-
-    if (!rc || rc.state === 'loading') {
-      oldBadge.className = 'record-badge loading';
-      oldBadge.innerHTML = '<span class="record-dot"></span><span>...</span>';
-    } else if (rc.state === 'success' && rc.count !== null) {
-      const countStr = currentLang === 'mm' ? toMmNum(String(rc.count)) : String(rc.count);
-      
-      // ဂဏန်း တူညီနေရင် ဘာမှ မလုပ်ဘူး
-      if (oldBadge.textContent.trim() === countStr) return;
-
-      oldBadge.className = 'record-badge';
-      oldBadge.innerHTML = `<span class="record-dot"></span><span>${countStr}</span>`;
-      oldBadge.title = rc.count + ' Records';
-      
-      // Animation ခဏ ထည့်မယ်
-      oldBadge.classList.add('badge-pulse');
-      setTimeout(() => oldBadge.classList.remove('badge-pulse'), 500);
-    }
   }
 
   // Record Badge ကို သီးသန့် Update လုပ်ရန် Function အသစ် (Button မလှုပ်စေရန်)
@@ -2173,6 +2330,10 @@
     currentTab = tab;
     window.scrollTo(0, 0);
 
+    if (tab === 'profile') {
+      renderProfilePage();
+    }
+
     // Refresh counts when viewing chats (throttled)
     if (tab === 'chats') {
       HISTORY_CHATS.forEach(chat => fetchRecordCount(chat, false));
@@ -2218,6 +2379,7 @@
   let loginBridgeDb = null;
   let currentLoginReqId = null;
   let loginResendInterval = null;
+  let userDataCache = null;
 
   // Init Firebase for Bridge
   try {
@@ -2238,81 +2400,151 @@
     loginBridgeDb = null;
   }
 
-  // Connection Status
-  function updateConnectionStatus() {
-    const dot = document.getElementById('connDot');
-    const text = document.getElementById('connText');
-    if (!dot || !text) return;
-    
-    if (navigator.onLine) {
-      dot.className = 'conn-dot online';
-      text.textContent = 'Online';
-    } else {
-      dot.className = 'conn-dot offline';
-      text.textContent = 'Offline';
-    }
-  }
-  window.addEventListener('online', updateConnectionStatus);
-  window.addEventListener('offline', updateConnectionStatus);
-  
-  // Load saved login on start
-  document.addEventListener('DOMContentLoaded', () => {
-    updateConnectionStatus();
+  // --- LOGIN UI HANDLERS ---
+  function renderProfilePage() {
     const savedUser = localStorage.getItem('webUserData');
     if (savedUser) {
       try {
         const data = JSON.parse(savedUser);
+        userDataCache = data;
         showLoggedInView(data);
-      } catch (e) { localStorage.removeItem('webUserData'); }
+      } catch (e) { localStorage.removeItem('webUserData'); showLoggedOutView(); }
     } else {
       showLoggedOutView();
     }
-  });
+  }
 
   function showLoggedOutView() {
     document.getElementById('profileLoginView').style.display = 'block';
     document.getElementById('profileUserView').style.display = 'none';
+    document.getElementById('headerLogoutBtn').classList.remove('show');
     resetLoginForm();
   }
 
   function showLoggedInView(data) {
     document.getElementById('profileLoginView').style.display = 'none';
     document.getElementById('profileUserView').style.display = 'block';
+    document.getElementById('headerLogoutBtn').classList.add('show');
+    
+    // Update Hero Card
     document.getElementById('displayUserId').textContent = data.chatId;
     
-    const list = document.getElementById('premiumList');
-    list.innerHTML = '';
+    // Avatar Initial
+    const firstChar = String(data.chatId).charAt(0) || 'S';
+    document.getElementById('userAvatar').textContent = firstChar.toUpperCase();
     
-    const platforms = [
-      { key: 'paid', name: 'Paid Premium', color: '#a855f7' },
-      { key: 'ck', name: 'Ck Lottery', color: '#4f46e5' },
-      { key: 'bigwin', name: '777 BigWin', color: '#16a34a' },
-      { key: 'sixwin', name: 'SixWin', color: '#dc2626' },
-      { key: 'shwe', name: 'Shwe Lottery', color: '#ea580c' }
-    ];
+    // Member Since (Mock logic for now)
+    const loginDate = data.loginTime ? new Date(data.loginTime) : new Date();
+    const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+    document.getElementById('memberSince').textContent = monthNames[loginDate.getMonth()] + ' ' + loginDate.getFullYear();
 
-    platforms.forEach(p => {
-      const uid = data.platforms[p.key];
-      const isActive = !!uid;
-      
-      const card = document.createElement('div');
-      card.className = `premium-status-card ${isActive ? 'active' : 'inactive'}`;
-      card.innerHTML = `
-        <div>
-          <div class="premium-name" style="color: ${isActive ? p.color : 'var(--text)'}">${p.name}</div>
-          ${isActive ? `<div class="premium-uid">UID: ${uid}</div>` : ''}
-        </div>
-        <div class="status-badge ${isActive ? 'active' : 'inactive'}">${isActive ? 'Active' : 'Inactive'}</div>
-      `;
-      list.appendChild(card);
-    });
+    // Render Premium Cards
+    renderPremiumCards(data);
   }
 
+  function renderPremiumCards(data) {
+    const container = document.getElementById('premiumListContainer');
+    container.innerHTML = '';
+    
+    const platforms = [
+      { key: 'ck', name: 'Ck Premium', icon: 'Logo/ck_logo.jpg', activeColor: '#4f46e5' },
+      { key: 'bigwin', name: '777 BigWin', icon: 'Logo/bigwin_logo.jpg', activeColor: '#16a34a' },
+      { key: 'sixwin', name: 'SixWin Premium', icon: 'Logo/sixwin_logo.jpg', activeColor: '#dc2626' },
+      { key: 'shwe', name: 'Shwe Premium', icon: 'Logo/shwe_logo.jpg', activeColor: '#ea580c' },
+      { key: 'paid', name: 'Paid Premium', icon: '', activeColor: '#a855f7', isPaid: true }
+    ];
+
+    let activeCount = 0;
+
+    platforms.forEach((p, i) => {
+      const uid = data.platforms ? data.platforms[p.key] : null;
+      const isActive = !!uid;
+      if (isActive) activeCount++;
+
+      const card = document.createElement('div');
+      card.className = `premium-card ${isActive ? 'active' : 'inactive'}`;
+      card.style.animationDelay = `${i * 50 + 200}ms`; // Stagger animation
+      
+      const iconHtml = p.isPaid 
+        ? '<div class="premium-icon" style="background: rgba(168, 85, 247, 0.1); color: #a855f7;"><i class="fa-solid fa-credit-card"></i></div>'
+        : `<div class="premium-icon"><img src="${p.icon}" alt="${p.name}"></div>`;
+
+      card.innerHTML = `
+        ${iconHtml}
+        <div class="premium-body">
+          <div class="premium-title" style="color: ${isActive ? p.activeColor : 'var(--text-muted)'}">${p.name}</div>
+          ${isActive ? `<div class="premium-uid">UID: ${uid}</div>` : `<div class="premium-uid">Tap to Join →</div>`}
+        </div>
+        <div class="premium-status-icon">
+          ${isActive ? '<i class="fa-solid fa-check"></i>' : '<i class="fa-solid fa-chevron-right"></i>'}
+        </div>
+      `;
+
+      // Click Events
+      card.onclick = () => {
+        if (isActive) {
+          // Copy UID
+          copyToClipboard(uid);
+          card.style.transform = 'scale(0.95)';
+          setTimeout(() => card.style.transform = '', 150);
+        } else {
+          // Open Bot Link
+          window.open('https://t.me/SuperEaringWebbb_Bot', '_blank');
+        }
+      };
+
+      container.appendChild(card);
+    });
+
+    document.getElementById('activePremiumCount').textContent = `${activeCount} / 5`;
+  }
+
+  function refreshProfileData() {
+    const icon = document.querySelector('.refresh-btn i');
+    icon.style.animation = 'themeSpin 0.6s linear';
+    setTimeout(() => icon.style.animation = '', 600);
+    
+    // Simulate fetching latest data (In real app, re-verify with DB)
+    if (userDataCache) {
+      renderPremiumCards(userDataCache);
+      showToast('Status Updated');
+    }
+  }
+
+  function logoutUser() {
+    localStorage.removeItem('webUserData');
+    showLoggedOutView();
+    // Reset to home tab optionally
+    // switchTab('home'); 
+  }
+
+  // --- OTP INPUT LOGIC ---
+  function moveOtp(current, index) {
+    if (current.value.length === 1) {
+      const next = current.nextElementSibling;
+      if (next) next.focus();
+    }
+  }
+
+  function backOtp(e, current, index) {
+    if (e.key === 'Backspace' && current.value.length === 0) {
+      const prev = current.previousElementSibling;
+      if (prev) prev.focus();
+    }
+  }
+
+  // Gather OTP Code
+  function getOtpCode() {
+    const boxes = document.querySelectorAll('.otp-box');
+    let code = '';
+    boxes.forEach(box => code += box.value);
+    return code;
+  }
+
+  // --- AUTH FLOW ---
   function resetLoginForm() {
-    document.getElementById('loginStep1').style.display = 'block';
-    document.getElementById('loginStep2').style.display = 'none';
     document.getElementById('loginChatId').value = '';
-    document.getElementById('loginOtp').value = '';
+    document.querySelectorAll('.otp-box').forEach(box => box.value = '');
     document.getElementById('chatIdError').classList.remove('show');
     document.getElementById('otpError').classList.remove('show');
     document.getElementById('sendCodeBtn').disabled = false;
@@ -2323,7 +2555,7 @@
   async function sendLoginCode() {
     if (!navigator.onLine) return showError('chatIdError', '📶 အင်တာနက်မရှိပါ။');
     const chatId = document.getElementById('loginChatId').value.trim();
-    if (!chatId || chatId.length < 5) return showError('chatIdError', 'Please enter a valid Chat ID.');
+    if (!chatId || chatId.length < 5) return showError('chatIdError', 'Please enter a valid Member ID.');
 
     const btn = document.getElementById('sendCodeBtn');
     btn.disabled = true;
@@ -2363,8 +2595,6 @@
         } 
         else if (data.status === 'code_sent') {
           clearTimeout(timeout);
-          document.getElementById('loginStep1').style.display = 'none';
-          document.getElementById('loginStep2').style.display = 'block';
           startResendTimer(60);
         }
       });
@@ -2380,12 +2610,12 @@
 
   async function verifyLoginCode() {
     if (!navigator.onLine) return showError('otpError', '📶 အင်တာနက်မရှိပါ။');
-    const code = document.getElementById('loginOtp').value.trim();
+    const code = getOtpCode();
     if (code.length !== 6) return showError('otpError', 'Please enter 6 digits.');
 
     const btn = document.getElementById('verifyCodeBtn');
     btn.disabled = true;
-    btn.textContent = 'Verifying...';
+    btn.textContent = 'Signing in...';
     document.getElementById('otpError').classList.remove('show');
 
     if (!currentLoginReqId || !loginBridgeDb) return;
@@ -2403,37 +2633,36 @@
         
         if (data.status === 'success') {
           btn.disabled = false;
-          btn.textContent = 'Verify & Login';
+          btn.textContent = 'Sign in';
           
           const chatId = data.chatId;
           const platforms = data.platforms || {};
           
           const userData = { chatId, platforms, loginTime: Date.now() };
           localStorage.setItem('webUserData', JSON.stringify(userData));
+          userDataCache = userData;
           
           snap.ref.remove(); // Cleanup Firebase
           loginBridgeDb.ref('web_login/' + currentLoginReqId).off();
           
           // Success Animation
-          document.getElementById('loginStep2').innerHTML = '<div style="font-size: 48px; margin: 20px 0;">✅</div><h2 style="color: #22c55e;">Login Successful!</h2>';
-          setTimeout(() => showLoggedInView(userData), 1500);
+          showToast('Login Successful!');
+          setTimeout(() => {
+            switchTab('home');
+            renderProfilePage();
+          }, 800);
         } 
         else if (data.status === 'error') {
           btn.disabled = false;
-          btn.textContent = 'Verify & Login';
+          btn.textContent = 'Sign in';
           showError('otpError', data.message || 'Invalid Code.');
         }
       });
 
     } catch (e) {
       btn.disabled = false;
-      btn.textContent = 'Verify & Login';
+      btn.textContent = 'Sign in';
     }
-  }
-
-  function logoutUser() {
-    localStorage.removeItem('webUserData');
-    showLoggedOutView();
   }
 
   function showError(id, msg) {
@@ -2451,10 +2680,6 @@
     let timeLeft = seconds;
     const timerEl = document.getElementById('resendTimer');
     
-    // Save cooldown to localStorage to survive refresh
-    const cooldownEnd = Date.now() + (seconds * 1000);
-    localStorage.setItem('loginCooldown', cooldownEnd);
-    
     const updateTimer = () => {
       if (timeLeft > 0) {
         timerEl.innerHTML = `Resend code in <b>${timeLeft}s</b>`;
@@ -2462,7 +2687,6 @@
       } else {
         clearInterval(loginResendInterval);
         timerEl.innerHTML = `Didn't receive code? <span class="resend-link" onclick="resendCode()">Resend</span>`;
-        localStorage.removeItem('loginCooldown');
       }
     };
     
@@ -2471,31 +2695,43 @@
   }
 
   function resendCode() {
-    document.getElementById('loginStep2').style.display = 'none';
-    document.getElementById('loginStep1').style.display = 'block';
     document.getElementById('sendCodeBtn').disabled = false;
     document.getElementById('sendCodeBtn').textContent = 'Send Code';
     sendLoginCode(); // Auto trigger again
   }
 
-  // Check cooldown on load
-  document.addEventListener('DOMContentLoaded', () => {
-    const savedCooldown = localStorage.getItem('loginCooldown');
-    if (savedCooldown) {
-      const remain = Math.floor((parseInt(savedCooldown) - Date.now()) / 1000);
-      if (remain > 0) startResendTimer(remain);
-      else localStorage.removeItem('loginCooldown');
+  // ============ UTILS ============
+  function showToast(msg) {
+    const container = document.getElementById('toastContainer');
+    const toast = document.createElement('div');
+    toast.className = 'toast';
+    toast.textContent = msg;
+    container.appendChild(toast);
+    requestAnimationFrame(() => toast.classList.add('show'));
+    setTimeout(() => {
+      toast.classList.remove('show');
+      setTimeout(() => toast.remove(), 300);
+    }, 2000);
+  }
+
+  function copyToClipboard(text) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(() => showToast('UID Copied!')).catch(() => {});
+    } else {
+      const ta = document.createElement('textarea');
+      ta.value = text;
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand('copy');
+      document.body.removeChild(ta);
+      showToast('UID Copied!');
     }
-  });
+  }
 
   // ============ PREDICTION UNLOCK LOGIC ============
-  // Note: You need to wrap your existing prediction buttons with this check.
-  // Example: replace `onclick="showMiniPage('ck30Mini1-1')"` with `onclick="checkAccess('ck', 'showMiniPage(\'ck30Mini1-1\')')"`
-  
   function checkAccess(platformKey, callbackString) {
     const savedUser = localStorage.getItem('webUserData');
     
-    // 1. Login မဝင်ထားရင်
     if (!savedUser) {
       alert('⚠️ Please Login from Profile Tab to access Predictions.');
       switchTab('profile');
@@ -2504,17 +2740,13 @@
     
     try {
       const data = JSON.parse(savedUser);
-      
-      // 2. Login ဝင်ထားပေမယ့် သက်ဆိုင်ရာ Premium မရှိရင်
       if (data.platforms && data.platforms[platformKey]) {
-        // Access ရှိတယ် -> Function ကို Run မယ်
         eval(callbackString);
       } else {
         alert(`⚠️ You don't have active premium for this platform. Please join from Telegram Bot.`);
         switchTab('profile');
       }
     } catch (e) {
-      // Data ဖတ်လို့မရရင် (သို့) Error တက်ရင်
       switchTab('profile');
     }
   }
