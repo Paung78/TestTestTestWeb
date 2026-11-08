@@ -2213,7 +2213,6 @@
 
   // ============ 🆕 WEB LOGIN FRONTEND LOGIC ============
   const BRIDGE_CONFIG = {
-    apiKey: "AIzaSyDj6z3O91NnlQ1zVdripiGhqQMsQhR4_ak", // Dummy, not used for DB read/write
     databaseURL: "https://chackchack-d7445-default-rtdb.europe-west1.firebasedatabase.app"
   };
   let loginBridgeDb = null;
@@ -2223,10 +2222,21 @@
   // Init Firebase for Bridge
   try {
     let app;
-    try { app = firebase.app('loginBridge'); } 
-    catch (e) { app = firebase.initializeApp(BRIDGE_CONFIG, 'loginBridge'); }
+    try { 
+      app = firebase.app('loginBridge'); 
+    } catch (e) { 
+      app = firebase.initializeApp(BRIDGE_CONFIG, 'loginBridge'); 
+    }
     loginBridgeDb = app.database();
-  } catch (e) { console.error('Bridge init error:', e); }
+    
+    // Connection test
+    loginBridgeDb.ref('.info/connected').on('value', (snap) => {
+      console.log('🔗 Bridge DB connected:', snap.val());
+    });
+  } catch (e) { 
+    console.error('❌ Bridge init error:', e); 
+    loginBridgeDb = null;
+  }
 
   // Connection Status
   function updateConnectionStatus() {
@@ -2360,9 +2370,11 @@
       });
 
     } catch (e) {
+      console.error('Send Code error:', e);
       btn.disabled = false;
       btn.textContent = 'Send Code';
-      showError('chatIdError', 'Firebase Error.');
+      const msg = (e && e.message) ? e.message : 'unknown';
+      showError('chatIdError', 'Firebase Error: ' + msg);
     }
   }
 
