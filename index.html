@@ -224,14 +224,21 @@
   .login-input:focus { border-color: var(--ck-2); box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15); }
   .login-input::placeholder { color: var(--text-subtle); font-weight: 500; }
 
+  #loginChatId { padding-right: 120px !important; }
   .send-code-btn {
-    position: absolute; right: 8px; bottom: -36px;
-    background: transparent; border: none;
-    color: var(--ck-2); font-size: 12px; font-weight: 800;
-    cursor: pointer; padding: 4px 8px;
-    transition: opacity 0.2s;
+    position: absolute; right: 6px; top: 50%; transform: translateY(-50%);
+    background: linear-gradient(135deg, var(--ck-1), var(--ck-2));
+    color: #fff; border: none; border-radius: 10px;
+    font-size: 12px; font-weight: 800; letter-spacing: 0.02em;
+    padding: 0 14px; height: 40px; min-width: 92px;
+    cursor: pointer; font-family: inherit;
+    display: inline-flex; align-items: center; justify-content: center;
+    box-shadow: 0 2px 8px rgba(79,70,229,0.28);
+    transition: transform 0.15s var(--spring), opacity 0.2s, box-shadow 0.2s;
+    -webkit-tap-highlight-color: transparent; white-space: nowrap;
   }
-  .send-code-btn:disabled { color: var(--text-subtle); cursor: not-allowed; }
+  .send-code-btn:active { transform: translateY(-50%) scale(0.95); box-shadow: 0 1px 4px rgba(79,70,229,0.2); }
+  .send-code-btn:disabled { opacity: 0.65; cursor: not-allowed; box-shadow: none; }
 
   .otp-container {
     display: flex; gap: 8px; justify-content: space-between;
@@ -1282,58 +1289,89 @@
   .toast.success .toast-progress { background: #16a34a; }
   .toast.info .toast-progress { background: #6366f1; }
   .toast.error .toast-progress { background: #dc2626; }
+  .toast.warning .toast-icon { background: rgba(245, 158, 11, 0.15); color: #d97706; }
+  body.dark .toast.warning .toast-icon { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+  .toast.warning .toast-progress { background: #d97706; }
+  body.dark .toast.warning .toast-progress { background: #fbbf24; }
   @keyframes toastProgress { from { width: 100%; } to { width: 0%; } }
 
   @keyframes slideDownFade { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* ============ PREDICTION PAGE (v26 Concept A) ============ */
-  .prediction-platform-grid { display: flex; flex-direction: column; gap: 12px; }
+  /* ============ PREDICTION PAGE (v27 List + Badge) ============ */
+  #screen-prediction { padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 12px); }
+  .prediction-list { display: flex; flex-direction: column; gap: 10px; }
 
-  .prediction-platform-card {
-    display: flex; align-items: center; gap: 14px;
-    padding: 15px 16px;
+  .prediction-card {
+    position: relative; display: flex; align-items: center; gap: 14px;
+    padding: 14px 16px 14px 18px;
     background: var(--bg-card); border: 1.5px solid var(--border);
     border-radius: var(--r-card); text-align: left; width: 100%;
-    color: var(--text); font-family: inherit;
-    transition: transform 0.18s var(--spring), border-color 0.22s, box-shadow 0.22s;
+    color: var(--text); font-family: inherit; cursor: pointer;
+    overflow: hidden; transition: transform 0.18s var(--spring), border-color 0.22s, box-shadow 0.22s;
     animation: staggerIn 0.5s var(--spring) both;
     -webkit-tap-highlight-color: transparent;
-    position: relative; overflow: hidden;
   }
-  .prediction-platform-card:active { transform: scale(0.97); }
-  .prediction-platform-card:nth-child(1) { animation-delay: 40ms; }
-  .prediction-platform-card:nth-child(2) { animation-delay: 120ms; }
-  .prediction-platform-card:nth-child(3) { animation-delay: 200ms; }
-  .prediction-platform-card:nth-child(4) { animation-delay: 280ms; }
-  .prediction-platform-card:nth-child(5) { animation-delay: 360ms; }
-  .prediction-platform-card::before {
-    content: ""; position: absolute; top: 0; left: 0; bottom: 0; width: 4px;
-  }
-  .prediction-platform-card[data-brand="ck"]::before { background: linear-gradient(180deg, var(--ck-1), var(--ck-2)); }
-  .prediction-platform-card[data-brand="bigwin"]::before { background: linear-gradient(180deg, var(--bigwin-1), var(--bigwin-2)); }
-  .prediction-platform-card[data-brand="sixwin"]::before { background: linear-gradient(180deg, var(--sixwin-1), var(--sixwin-2)); }
-  .prediction-platform-card[data-brand="shwe"]::before { background: linear-gradient(180deg, var(--shwe-1), var(--shwe-2)); }
-  .prediction-platform-card[data-brand="globaltrx"]::before { background: linear-gradient(180deg, var(--globaltrx-1), var(--globaltrx-2)); }
+  .prediction-card:nth-child(1) { animation-delay: 40ms; }
+  .prediction-card:nth-child(2) { animation-delay: 100ms; }
+  .prediction-card:nth-child(3) { animation-delay: 160ms; }
+  .prediction-card:nth-child(4) { animation-delay: 220ms; }
+  .prediction-card:nth-child(5) { animation-delay: 280ms; }
+  .prediction-card:active { transform: scale(0.98); }
+  .prediction-card::before { content: ""; position: absolute; top: 0; left: 0; bottom: 0; width: 4px; }
+  .prediction-card[data-brand="ck"]::before { background: linear-gradient(180deg, var(--ck-1), var(--ck-2)); }
+  .prediction-card[data-brand="bigwin"]::before { background: linear-gradient(180deg, var(--bigwin-1), var(--bigwin-2)); }
+  .prediction-card[data-brand="sixwin"]::before { background: linear-gradient(180deg, var(--sixwin-1), var(--sixwin-2)); }
+  .prediction-card[data-brand="shwe"]::before { background: linear-gradient(180deg, var(--shwe-1), var(--shwe-2)); }
+  .prediction-card[data-brand="globaltrx"]::before { background: linear-gradient(180deg, var(--globaltrx-1), var(--globaltrx-2)); }
 
-  .prediction-platform-icon {
-    width: 48px; height: 48px; border-radius: 14px;
-    overflow: hidden; flex-shrink: 0;
-    background: var(--bg-card); border: 1.5px solid var(--border);
+  .prediction-logo {
+    width: 46px; height: 46px; border-radius: 13px; overflow: hidden;
+    flex-shrink: 0; background: var(--bg-page); border: 1.5px solid var(--border);
+    transition: filter 0.2s, opacity 0.2s;
   }
-  .prediction-platform-icon img { width: 100%; height: 100%; object-fit: cover; }
+  .prediction-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .prediction-card.is-locked .prediction-logo { filter: grayscale(0.75) brightness(0.92); opacity: 0.82; }
 
-  .prediction-platform-info { flex: 1; min-width: 0; }
-  .prediction-platform-name {
-    font-size: 15px; font-weight: 800; line-height: 1.25;
-    color: var(--text); margin-bottom: 3px;
+  .prediction-info { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
+  .prediction-name {
+    font-size: 14.5px; font-weight: 800; line-height: 1.25;
+    color: var(--text); letter-spacing: -0.01em;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
   }
-  .prediction-platform-meta {
-    font-size: 11.5px; font-weight: 700; color: var(--text-muted);
+  .prediction-meta {
+    font-size: 11px; font-weight: 700; color: var(--text-muted);
     font-variant-numeric: tabular-nums;
+    display: flex; align-items: center; gap: 5px; flex-wrap: wrap;
   }
-  .prediction-platform-arrow { color: var(--text-subtle); font-size: 13px; flex-shrink: 0; }
+  .prediction-meta .dot-sep { width: 3px; height: 3px; border-radius: 50%; background: currentColor; opacity: 0.5; display: inline-block; }
+  .prediction-meta.status-active { color: #16a34a; }
+  body.dark .prediction-meta.status-active { color: #86efac; }
+  .prediction-meta.status-locked { color: var(--text-subtle); }
+
+  .prediction-badge {
+    display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+    min-width: 24px; height: 24px; padding: 0 8px; border-radius: 999px;
+    font-size: 10px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.04em;
+    flex-shrink: 0; position: relative;
+  }
+  .prediction-badge.active { background: rgba(34, 197, 94, 0.14); color: #16a34a; padding: 0 10px; }
+  .prediction-badge.active::before {
+    content: ""; position: absolute; inset: 0; border-radius: inherit;
+    border: 1.5px solid rgba(34, 197, 94, 0.35);
+    animation: predBadgePulse 2.4s ease-in-out infinite; pointer-events: none;
+  }
+  @keyframes predBadgePulse { 0%, 100% { transform: scale(1); opacity: 0.6; } 50% { transform: scale(1.08); opacity: 0; } }
+  .prediction-badge.locked { background: rgba(100, 116, 139, 0.12); color: var(--text-subtle); padding: 0 8px; }
+  .prediction-badge.locked i { font-size: 10px; }
+  body.dark .prediction-badge.active { background: rgba(52, 211, 153, 0.2); color: #86efac; }
+  body.dark .prediction-badge.active::before { border-color: rgba(52, 211, 153, 0.4); }
+  body.dark .prediction-badge.locked { background: rgba(148, 163, 184, 0.18); color: var(--text-muted); }
+
+  .prediction-arrow { color: var(--text-subtle); font-size: 12px; flex-shrink: 0; margin-left: 4px; transition: transform 0.2s; }
+  .prediction-card:active .prediction-arrow { transform: translateX(2px); }
+  .prediction-card.is-locked .prediction-arrow { opacity: 0.5; }
+  .prediction-card.is-locked { opacity: 0.92; }
 
   /* Platform detail (sub-screen) */
   .prediction-game-section {
@@ -1570,52 +1608,10 @@
     </div>
   </div>
 
-  <!-- PREDICTION (v26 Concept A) -->
+  <!-- PREDICTION (v27 List + Badge) -->
   <div id="screen-prediction" class="screen">
     <div class="screen-inner">
-      <div class="tools-header"><h2 data-t="nav_prediction">Prediction</h2></div>
-      <div class="prediction-platform-grid">
-        <button class="prediction-platform-card" data-brand="ck" onclick="openPredictionPlatform('ck')">
-          <div class="prediction-platform-icon"><img src="Logo/ck_logo.jpg" alt="Ck Lottery"></div>
-          <div class="prediction-platform-info">
-            <div class="prediction-platform-name">Ck Lottery</div>
-            <div class="prediction-platform-meta">3 Special · 1 Free</div>
-          </div>
-          <i class="fa-solid fa-chevron-right prediction-platform-arrow"></i>
-        </button>
-        <button class="prediction-platform-card" data-brand="bigwin" onclick="openPredictionPlatform('bigwin')">
-          <div class="prediction-platform-icon"><img src="Logo/bigwin_logo.jpg" alt="777 BigWin"></div>
-          <div class="prediction-platform-info">
-            <div class="prediction-platform-name">777 BigWin</div>
-            <div class="prediction-platform-meta">3 Special · 1 Free</div>
-          </div>
-          <i class="fa-solid fa-chevron-right prediction-platform-arrow"></i>
-        </button>
-        <button class="prediction-platform-card" data-brand="sixwin" onclick="openPredictionPlatform('sixwin')">
-          <div class="prediction-platform-icon"><img src="Logo/sixwin_logo.jpg" alt="SixWin"></div>
-          <div class="prediction-platform-info">
-            <div class="prediction-platform-name">SixWin</div>
-            <div class="prediction-platform-meta">3 Special · 1 Free</div>
-          </div>
-          <i class="fa-solid fa-chevron-right prediction-platform-arrow"></i>
-        </button>
-        <button class="prediction-platform-card" data-brand="shwe" onclick="openPredictionPlatform('shwe')">
-          <div class="prediction-platform-icon"><img src="Logo/shwe_logo.jpg" alt="Shwe Lottery"></div>
-          <div class="prediction-platform-info">
-            <div class="prediction-platform-name">Shwe Lottery</div>
-            <div class="prediction-platform-meta">3 Special · 1 Free</div>
-          </div>
-          <i class="fa-solid fa-chevron-right prediction-platform-arrow"></i>
-        </button>
-        <button class="prediction-platform-card" data-brand="globaltrx" onclick="openPredictionPlatform('globaltrx')">
-          <div class="prediction-platform-icon"><img src="Logo/trxwin_logo.jpg" alt="Global Trx"></div>
-          <div class="prediction-platform-info">
-            <div class="prediction-platform-name">Global Trx</div>
-            <div class="prediction-platform-meta">1 Min · 3 Special</div>
-          </div>
-          <i class="fa-solid fa-chevron-right prediction-platform-arrow"></i>
-        </button>
-      </div>
+      <div class="prediction-list" id="predictionList"></div>
     </div>
   </div>
 
@@ -2341,9 +2337,12 @@ function startPremiumListener(chatId) {
     // Mark just-added for animation
     justAddedPlatforms = added.slice();
 
-    // Re-render if on profile
+    // Re-render if on profile or prediction
     if (appState.currentTab === 'profile') {
       renderProfilePage();
+    }
+    if (appState.currentTab === 'prediction') {
+      renderPredictionList();
     }
 
     // Toasts
@@ -3286,6 +3285,7 @@ function switchTab(tab) {
   appState.currentTab = tab;
   window.scrollTo(0, 0);
   if (tab === 'profile') renderProfilePage();
+  if (tab === 'prediction') renderPredictionList();
   if (tab === 'chats') HISTORY_CHATS.forEach(chat => fetchRecordCount(chat, false));
 }
 
@@ -3715,12 +3715,15 @@ function resendCode() {
 }
 
 // ============ UTILS ============
-function showToast(msg, type = 'success') {
+function showToast(msg, type = 'success', duration = 2200) {
   const container = document.getElementById('toastContainer');
   while (container.children.length >= 3) container.removeChild(container.firstChild);
   const toast = document.createElement('div');
   toast.className = 'toast ' + type;
-  const icon = type === 'success' ? 'fa-check' : (type === 'error' ? 'fa-exclamation' : 'fa-info');
+  let icon = 'fa-info';
+  if (type === 'success') icon = 'fa-check';
+  else if (type === 'error') icon = 'fa-exclamation';
+  else if (type === 'warning') icon = 'fa-triangle-exclamation';
   toast.innerHTML = `
     <div class="toast-icon"><i class="fa-solid ${icon}"></i></div>
     <div class="toast-msg">${escapeHtml(msg)}</div>
@@ -3731,7 +3734,7 @@ function showToast(msg, type = 'success') {
   setTimeout(() => {
     toast.classList.remove('show');
     setTimeout(() => { if (toast.parentNode) toast.remove(); }, 400);
-  }, 2200);
+  }, duration);
 }
 
 function copyToClipboard(text) {
@@ -3775,10 +3778,11 @@ const style = document.createElement('style');
 style.textContent = '@keyframes themeSpin { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(0.75); } 100% { transform: rotate(360deg) scale(1); } }';
 document.head.appendChild(style);
 
-// ============ PREDICTION PAGE (v26 Concept A) ============
+// ============ PREDICTION PAGE (v27 List + Badge + Unlock) ============
 const PREDICTION_DATA = {
   ck: {
-    name: 'Ck Lottery', logo: 'Logo/ck_logo.jpg', accessKey: 'ck',
+    name: 'Ck Lottery', logo: 'Logo/ck_logo.jpg',
+    accessKeys: ['ck'],
     games: {
       wg30: {
         name: 'WinGo 30 Sec',
@@ -3802,7 +3806,8 @@ const PREDICTION_DATA = {
     }
   },
   bigwin: {
-    name: '777 BigWin', logo: 'Logo/bigwin_logo.jpg', accessKey: 'bigwin',
+    name: '777 BigWin', logo: 'Logo/bigwin_logo.jpg',
+    accessKeys: ['bigwin'],
     games: {
       wg30: {
         name: 'WinGo 30 Sec',
@@ -3826,7 +3831,8 @@ const PREDICTION_DATA = {
     }
   },
   sixwin: {
-    name: 'SixWin', logo: 'Logo/sixwin_logo.jpg', accessKey: 'sixwin',
+    name: 'SixWin', logo: 'Logo/sixwin_logo.jpg',
+    accessKeys: ['sixwin'],
     games: {
       wg30: {
         name: 'WinGo 30 Sec',
@@ -3850,7 +3856,8 @@ const PREDICTION_DATA = {
     }
   },
   shwe: {
-    name: 'Shwe Lottery', logo: 'Logo/shwe_logo.jpg', accessKey: 'shwe',
+    name: 'Shwe Lottery', logo: 'Logo/shwe_logo.jpg',
+    accessKeys: ['shwe'],
     games: {
       wg30: {
         name: 'WinGo 30 Sec',
@@ -3874,7 +3881,8 @@ const PREDICTION_DATA = {
     }
   },
   globaltrx: {
-    name: 'Global Trx', logo: 'Logo/trxwin_logo.jpg', accessKey: 'paid',
+    name: 'Global Trx', logo: 'Logo/trxwin_logo.jpg',
+    accessKeys: ['ck', 'bigwin', 'sixwin', 'shwe', 'paid'],
     games: {
       wg1: {
         name: 'Global Trx 1 Min',
@@ -3889,6 +3897,86 @@ const PREDICTION_DATA = {
 };
 
 let predictionState = null;
+const predictionLockedClicks = {};
+const PREDICTION_LOCK_THRESHOLD = 3;
+
+function isPredictionUnlocked(platformKey) {
+  const p = PREDICTION_DATA[platformKey];
+  if (!p) return false;
+  if (appState.mode !== 'user') return false;
+  try {
+    const data = userDataCache || JSON.parse(localStorage.getItem('webUserData') || '{}');
+    const platforms = data.platforms || {};
+    const paidUid = data.paidUid || null;
+    for (const k of p.accessKeys) {
+      if (k === 'paid') { if (paidUid) return true; }
+      else if (platforms[k]) { return true; }
+    }
+    return false;
+  } catch (e) { return false; }
+}
+
+function renderPredictionList() {
+  const container = document.getElementById('predictionList');
+  if (!container) return;
+  const order = ['ck', 'bigwin', 'sixwin', 'shwe', 'globaltrx'];
+  container.innerHTML = order.map(key => {
+    const p = PREDICTION_DATA[key];
+    if (!p) return '';
+    const unlocked = isPredictionUnlocked(key);
+    const lockedClass = unlocked ? '' : 'is-locked';
+    let summary;
+    if (key === 'globaltrx') {
+      summary = unlocked ? 'Unlocked · 3 Special' : 'Premium Required';
+    } else {
+      const sCount = (p.games.wg30 && p.games.wg30.special ? p.games.wg30.special.length : 0) + (p.games.wg1 && p.games.wg1.special ? p.games.wg1.special.length : 0);
+      const fCount = (p.games.wg30 && p.games.wg30.free ? p.games.wg30.free.length : 0) + (p.games.wg1 && p.games.wg1.free ? p.games.wg1.free.length : 0);
+      summary = unlocked
+        ? sCount + ' Special' + (fCount ? ' · ' + fCount + ' Free' : '')
+        : 'Premium Required';
+    }
+    const metaClass = unlocked ? 'status-active' : 'status-locked';
+    const badge = unlocked
+      ? '<div class="prediction-badge active"><i class="fa-solid fa-check" style="font-size:9px"></i><span>Active</span></div>'
+      : '<div class="prediction-badge locked"><i class="fa-solid fa-lock"></i></div>';
+    const metaParts = summary.split(' · ');
+    const metaHtml = metaParts.map(s => '<span>' + s + '</span>').join('<span class="dot-sep"></span>');
+    return '<button class="prediction-card ' + lockedClass + '" data-brand="' + key + '" onclick="openPredictionPlatform(\'' + key + '\')">' +
+      '<div class="prediction-logo"><img src="' + p.logo + '" alt="' + escapeHtml(p.name) + '" loading="lazy"></div>' +
+      '<div class="prediction-info">' +
+        '<div class="prediction-name">' + escapeHtml(p.name) + '</div>' +
+        '<div class="prediction-meta ' + metaClass + '">' + metaHtml + '</div>' +
+      '</div>' +
+      badge +
+      '<i class="fa-solid fa-chevron-right prediction-arrow"></i>' +
+    '</button>';
+  }).join('');
+}
+
+function handleLockedPredictionClick(platformKey) {
+  const p = PREDICTION_DATA[platformKey];
+  const name = p ? p.name : platformKey;
+  predictionLockedClicks[platformKey] = (predictionLockedClicks[platformKey] || 0) + 1;
+  const count = predictionLockedClicks[platformKey];
+  const remain = PREDICTION_LOCK_THRESHOLD - count;
+
+  if (count >= PREDICTION_LOCK_THRESHOLD) {
+    predictionLockedClicks[platformKey] = 0;
+    const msg = currentLang === 'mm'
+      ? name + ' Premium ဝင်ရောက်ရန် Profile သို့ ပို့ဆောင်နေသည်...'
+      : 'Opening Profile to get ' + name + ' Premium...';
+    showToast(msg, 'info', 2000);
+    setTimeout(() => {
+      if (currentSub) closeSub();
+      switchTab('profile');
+    }, 400);
+  } else {
+    const msg = currentLang === 'mm'
+      ? name + ' Premium မရှိသေးပါ။ (' + remain + ' ကြိမ် ထပ်နှိပ်ပါ)'
+      : 'No active premium for ' + name + '. (Tap ' + remain + ' more time' + (remain === 1 ? '' : 's') + ')';
+    showToast(msg, 'warning', 3000);
+  }
+}
 
 function openPredictionPlatform(platformKey) {
   const p = PREDICTION_DATA[platformKey];
@@ -3896,29 +3984,25 @@ function openPredictionPlatform(platformKey) {
 
   if (appState.mode !== 'user') {
     const msg = currentLang === 'mm'
-      ? '⚠️ ခန့်မှန်းချက်များ အသုံးပြုရန် Profile မှ ဝင်ရောက်ပါ။'
-      : '⚠️ Please Login to access Predictions.';
-    alert(msg);
-    if (appState.mode === 'guest') openLoginFromGuest();
-    else switchTab('profile');
+      ? 'ခန့်မှန်းချက်များ အသုံးပြုရန် Profile မှ ဝင်ရောက်ပါ။'
+      : 'Please Login to access Predictions.';
+    showToast(msg, 'warning', 3000);
+    if (appState.mode === 'guest') setTimeout(() => openLoginFromGuest(), 400);
+    else setTimeout(() => switchTab('profile'), 400);
     return;
   }
-  try {
-    const data = userDataCache || JSON.parse(localStorage.getItem('webUserData') || '{}');
-    if (!data.platforms || !data.platforms[p.accessKey]) {
-      const msg = currentLang === 'mm'
-        ? `⚠️ ${p.name} အတွက် ပရီမီယံ မရှိသေးပါ။ Telegram Bot မှ ချိတ်ဆက်ပါ။`
-        : `⚠️ You don't have active premium for ${p.name}.`;
-      alert(msg);
-      switchTab('profile');
-      return;
-    }
-  } catch (e) { switchTab('profile'); return; }
+
+  if (!isPredictionUnlocked(platformKey)) {
+    handleLockedPredictionClick(platformKey);
+    return;
+  }
+
+  predictionLockedClicks[platformKey] = 0;
 
   if (currentSub) closeSub();
   hideExtensionForSubscreen();
   currentSub = { brand: 'prediction', action: platformKey };
-  predictionState = { platform: platformKey, game: null, ver: null };
+  predictionState = { platform: platformKey };
   const subScreen = document.getElementById('subScreen');
   const subBody = document.getElementById('subBody');
   subBody.classList.remove('sub-screen-body--iframe');
@@ -3936,40 +4020,41 @@ function renderPredictionPlatformDetail() {
   const subBody = document.getElementById('subBody');
   subBody.classList.remove('sub-screen-body--iframe');
 
-  let html = `<div class="sub-page-header">
-    <div class="sub-brand-icon"><img src="${p.logo}" alt=""></div>
-    <div>
-      <div class="sub-brand-label">Prediction</div>
-      <div class="sub-page-title">${escapeHtml(p.name)}</div>
-    </div>
-  </div>`;
+  let html = '<div class="sub-page-header">' +
+    '<div class="sub-brand-icon"><img src="' + p.logo + '" alt=""></div>' +
+    '<div>' +
+      '<div class="sub-brand-label">Prediction</div>' +
+      '<div class="sub-page-title">' + escapeHtml(p.name) + '</div>' +
+    '</div>' +
+  '</div>';
 
-  Object.entries(p.games).forEach(([gKey, g]) => {
-    html += `<div class="prediction-game-section">
-      <div class="prediction-game-title"><i class="fa-solid fa-gamepad"></i>${escapeHtml(g.name)}</div>`;
+  Object.keys(p.games).forEach(function(gKey) {
+    const g = p.games[gKey];
+    html += '<div class="prediction-game-section">' +
+      '<div class="prediction-game-title"><i class="fa-solid fa-gamepad"></i>' + escapeHtml(g.name) + '</div>';
     if (g.special && g.special.length) {
-      html += `<div class="prediction-version-label">Special</div><div class="prediction-version-row">`;
-      g.special.forEach(v => {
+      html += '<div class="prediction-version-label">Special</div><div class="prediction-version-row">';
+      g.special.forEach(function(v) {
         const cls = 'prediction-version-btn special' + (v.placeholder ? ' is-placeholder' : '');
-        html += `<button class="${cls}" onclick="openPredictionMini('${gKey}', '${v.ver}', 'special')">
-          <span class="ver-num">${escapeHtml(v.ver)}</span>
-          <span class="ver-tag">Special</span>
-        </button>`;
+        html += '<button class="' + cls + '" onclick="openPredictionMini(\'' + gKey + '\', \'' + v.ver + '\', \'special\')">' +
+          '<span class="ver-num">' + escapeHtml(v.ver) + '</span>' +
+          '<span class="ver-tag">Special</span>' +
+        '</button>';
       });
-      html += `</div>`;
+      html += '</div>';
     }
     if (g.free && g.free.length) {
-      html += `<div class="prediction-version-label">Free</div><div class="prediction-version-row">`;
-      g.free.forEach(v => {
+      html += '<div class="prediction-version-label">Free</div><div class="prediction-version-row">';
+      g.free.forEach(function(v) {
         const cls = 'prediction-version-btn free' + (v.placeholder ? ' is-placeholder' : '');
-        html += `<button class="${cls}" onclick="openPredictionMini('${gKey}', '${v.ver}', 'free')">
-          <span class="ver-num">${escapeHtml(v.ver)}</span>
-          <span class="ver-tag">Free</span>
-        </button>`;
+        html += '<button class="' + cls + '" onclick="openPredictionMini(\'' + gKey + '\', \'' + v.ver + '\', \'free\')">' +
+          '<span class="ver-num">' + escapeHtml(v.ver) + '</span>' +
+          '<span class="ver-tag">Free</span>' +
+        '</button>';
       });
-      html += `</div>`;
+      html += '</div>';
     }
-    html += `</div>`;
+    html += '</div>';
   });
 
   subBody.innerHTML = html;
@@ -3983,7 +4068,7 @@ function openPredictionMini(gameKey, verKey, type) {
   const g = p.games[gameKey];
   if (!g) return;
   const list = g[type] || [];
-  const v = list.find(item => item.ver === verKey);
+  const v = list.find(function(item) { return item.ver === verKey; });
   if (!v) return;
 
   predictionState.game = gameKey;
@@ -3995,7 +4080,7 @@ function openPredictionMini(gameKey, verKey, type) {
   subBody.innerHTML = '';
   const iframe = document.createElement('iframe');
   iframe.src = v.path;
-  iframe.title = `${p.name} - ${g.name} ${v.ver}`;
+  iframe.title = p.name + ' - ' + g.name + ' ' + v.ver;
   iframe.style.cssText = 'width:100%;height:100%;border:none;display:block;background:var(--bg-page);';
   subBody.appendChild(iframe);
 }
