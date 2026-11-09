@@ -117,12 +117,26 @@
     -webkit-backdrop-filter: saturate(180%) blur(20px);
     border-bottom: 1px solid var(--border); z-index: 1000;
   }
+  .header-left { display: flex; align-items: center; gap: 8px; min-width: 0; flex: 1; }
   .header-brand { font-size: 16px; font-weight: 800; letter-spacing: -0.02em; white-space: nowrap; }
   .header-brand .red { color: #dc2626; }
   .header-brand .black { color: var(--text); }
   body.dark .header-brand .black { color: #ffffff; }
 
-  .header-right { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .header-close-btn {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--bg-card);
+    border: 1.5px solid var(--border);
+    color: var(--text);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px;
+    transition: transform 0.2s var(--spring);
+    -webkit-tap-highlight-color: transparent;
+    flex-shrink: 0;
+  }
+  .header-close-btn:active { transform: scale(0.9); }
+
+  .header-right { display: flex; align-items: center; gap: 8px; min-width: 0; flex-shrink: 0; }
 
   .header-signin-btn {
     padding: 8px 16px;
@@ -167,24 +181,6 @@
     -webkit-overflow-scrolling: touch;
   }
   .login-screen.active { display: flex; }
-
-  .login-close-btn {
-    position: absolute;
-    top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 12px);
-    left: 16px;
-    width: 40px; height: 40px;
-    border-radius: 50%;
-    background: var(--bg-card);
-    border: 1.5px solid var(--border);
-    color: var(--text);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-    z-index: 10;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    transition: transform 0.2s var(--spring);
-    display: none;
-  }
-  .login-close-btn:active { transform: scale(0.9); }
 
   .login-container {
     max-width: 400px; margin: 0 auto;
@@ -305,36 +301,17 @@
   .login-success-overlay.show .login-success-content {
     transform: scale(1); opacity: 1;
   }
-  .login-success-circle {
-    width: 96px; height: 96px; margin: 0 auto 20px;
-  }
+  .login-success-circle { width: 96px; height: 96px; margin: 0 auto 20px; }
   .checkmark { width: 96px; height: 96px; }
-  .checkmark-circle {
-    stroke: #fff; stroke-width: 3;
-    stroke-dasharray: 166; stroke-dashoffset: 166;
-    stroke-linecap: round;
-  }
-  .checkmark-check {
-    stroke: #fff; stroke-width: 5;
-    stroke-dasharray: 48; stroke-dashoffset: 48;
-    stroke-linecap: round;
-  }
-  .login-success-overlay.show .checkmark-circle {
-    animation: checkCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) 0.2s forwards;
-  }
-  .login-success-overlay.show .checkmark-check {
-    animation: checkCheck 0.4s cubic-bezier(0.65, 0, 0.45, 1) 0.7s forwards;
-  }
+  .checkmark-circle { stroke: #fff; stroke-width: 3; stroke-dasharray: 166; stroke-dashoffset: 166; stroke-linecap: round; }
+  .checkmark-check { stroke: #fff; stroke-width: 5; stroke-dasharray: 48; stroke-dashoffset: 48; stroke-linecap: round; }
+  .login-success-overlay.show .checkmark-circle { animation: checkCircle 0.6s cubic-bezier(0.65, 0, 0.45, 1) 0.2s forwards; }
+  .login-success-overlay.show .checkmark-check { animation: checkCheck 0.4s cubic-bezier(0.65, 0, 0.45, 1) 0.7s forwards; }
   @keyframes checkCircle { to { stroke-dashoffset: 0; } }
   @keyframes checkCheck { to { stroke-dashoffset: 0; } }
-  .login-success-text {
-    font-size: 24px; font-weight: 900;
-    margin-bottom: 10px;
-    letter-spacing: -0.02em;
-  }
+  .login-success-text { font-size: 24px; font-weight: 900; margin-bottom: 10px; letter-spacing: -0.02em; }
   .login-success-id {
-    font-size: 15px; font-weight: 600;
-    opacity: 0.95;
+    font-size: 15px; font-weight: 600; opacity: 0.95;
     font-family: 'SF Mono', Consolas, monospace;
     padding: 8px 20px;
     background: rgba(255,255,255,0.22);
@@ -343,6 +320,56 @@
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255,255,255,0.25);
   }
+
+  /* ============ FORCE LOGOUT OVERLAY ============ */
+  .force-logout-overlay {
+    position: fixed; inset: 0; z-index: 30001;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.35s ease;
+  }
+  .force-logout-overlay.show { opacity: 1; pointer-events: auto; }
+  .force-logout-content {
+    background: var(--bg-card);
+    border-radius: 24px;
+    padding: 32px 24px 24px;
+    max-width: 360px; width: 100%;
+    text-align: center;
+    transform: scale(0.9);
+    transition: transform 0.4s var(--spring);
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .force-logout-overlay.show .force-logout-content { transform: scale(1); }
+  .force-logout-icon {
+    width: 72px; height: 72px; border-radius: 50%;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 30px; margin: 0 auto 20px;
+    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.4);
+    animation: warningPulse 1.5s ease-in-out infinite;
+  }
+  @keyframes warningPulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.08); }
+  }
+  .force-logout-title { font-size: 20px; font-weight: 800; margin-bottom: 10px; }
+  .force-logout-desc { font-size: 14px; color: var(--text-muted); line-height: 1.55; margin-bottom: 24px; font-weight: 600; }
+  .force-logout-btn {
+    width: 100%; padding: 14px 20px;
+    background: linear-gradient(135deg, var(--ck-1), var(--ck-2));
+    color: white; border: none;
+    border-radius: 14px;
+    font-size: 15px; font-weight: 800;
+    display: flex; align-items: center; justify-content: center; gap: 8px;
+    box-shadow: 0 4px 14px rgba(79, 70, 229, 0.32);
+    transition: transform 0.15s var(--spring);
+  }
+  .force-logout-btn:active { transform: scale(0.96); }
 
   /* ============ MAIN APP ============ */
   .main-app { display: none; }
@@ -502,9 +529,7 @@
     pointer-events: none;
     transition: all 0.3s var(--ease);
   }
-  .extension-fab-list.visible {
-    opacity: 1; transform: translateY(0); pointer-events: auto;
-  }
+  .extension-fab-list.visible { opacity: 1; transform: translateY(0); pointer-events: auto; }
   .extension-brand-btn {
     width: 48px; height: 48px; border-radius: 50%;
     pointer-events: auto; padding: 0; overflow: hidden;
@@ -534,12 +559,8 @@
     box-shadow: 0 12px 48px rgba(0,0,0,0.18), 0 4px 16px rgba(0,0,0,0.1);
     border: 1px solid var(--border);
   }
-  .extension-website-overlay.active {
-    opacity: 1; transform: scale(1) translateY(0); pointer-events: auto;
-  }
-  .extension-website-overlay iframe {
-    width: 100%; height: 100%; border: none; display: block; background: #fff;
-  }
+  .extension-website-overlay.active { opacity: 1; transform: scale(1) translateY(0); pointer-events: auto; }
+  .extension-website-overlay iframe { width: 100%; height: 100%; border: none; display: block; background: #fff; }
   body.dark .extension-website-overlay iframe { background: #1a1a1a; }
   .extension-website-loading {
     position: absolute; inset: 0;
@@ -685,6 +706,7 @@
   .settings-row-logo img { width: 100%; height: 100%; object-fit: cover; }
   .settings-row-content { flex: 1; min-width: 0; }
   .settings-row-title { font-size: 14px; font-weight: 800; color: var(--text); line-height: 1.3; }
+  .settings-row-sub { font-size: 11.5px; color: var(--text-muted); margin-top: 2px; font-weight: 600; }
   .settings-row-arrow { color: var(--text-subtle); font-size: 12px; flex-shrink: 0; }
 
   .switch {
@@ -718,10 +740,7 @@
     margin-bottom: 24px;
     animation: slideDownFade 0.5s var(--spring) both;
   }
-  .hero-bg-orb {
-    position: absolute; border-radius: 50%; filter: blur(30px);
-    background: rgba(255, 255, 255, 0.15);
-  }
+  .hero-bg-orb { position: absolute; border-radius: 50%; filter: blur(30px); background: rgba(255, 255, 255, 0.15); }
   .hero-bg-orb.orb-1 { width: 150px; height: 150px; top: -50px; right: -30px; }
   .hero-bg-orb.orb-2 { width: 100px; height: 100px; bottom: -30px; left: -20px; background: rgba(236, 72, 153, 0.2); }
 
@@ -767,34 +786,37 @@
     animation: stepFadeUp 0.5s var(--spring) 100ms both;
   }
 
-  .premium-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 16px;
-  }
+  .premium-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 16px; }
   .premium-card {
     display: flex; flex-direction: column; align-items: stretch;
     background: var(--bg-card); border: 1.5px solid var(--border);
     border-radius: 16px; padding: 14px;
-    transition: transform 0.15s var(--spring), border-color 0.2s, background 0.2s;
-    animation: stepFadeUp 0.5s var(--spring) both;
+    transition: transform 0.15s var(--spring), border-color 0.2s, background 0.2s, box-shadow 0.2s;
+    animation: premiumCardIn 0.5s var(--spring) both;
     position: relative;
     -webkit-tap-highlight-color: transparent;
+  }
+  @keyframes premiumCardIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.92); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
   }
   .premium-card:active { transform: scale(0.98); }
   .premium-card.active {
     border-color: #22c55e;
     background: linear-gradient(145deg, var(--bg-card), rgba(34, 197, 94, 0.05));
+    box-shadow: 0 4px 16px rgba(34, 197, 94, 0.12);
   }
-  .premium-card.inactive {
-    opacity: 0.85; border-color: var(--border);
-    background: var(--bg-card);
+  .premium-card.inactive { opacity: 0.85; border-color: var(--border); background: var(--bg-card); }
+  .premium-card.just-added {
+    animation: premiumCardAdded 1.2s var(--spring) both;
   }
-  .premium-card-top {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 10px;
+  @keyframes premiumCardAdded {
+    0% { transform: scale(0.8); opacity: 0; box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.6); }
+    50% { transform: scale(1.05); opacity: 1; box-shadow: 0 0 0 12px rgba(34, 197, 94, 0); }
+    100% { transform: scale(1); box-shadow: 0 4px 16px rgba(34, 197, 94, 0.12); }
   }
+
+  .premium-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
   .premium-icon {
     width: 36px; height: 36px; border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
@@ -810,10 +832,7 @@
   }
   .premium-card.active .premium-status-icon { background: rgba(34, 197, 94, 0.15); color: #16a34a; }
   .premium-card.inactive .premium-status-icon { background: rgba(100, 116, 139, 0.1); color: var(--text-subtle); }
-  .premium-title {
-    font-size: 13px; font-weight: 800;
-    line-height: 1.3; margin-bottom: 4px;
-  }
+  .premium-title { font-size: 13px; font-weight: 800; line-height: 1.3; margin-bottom: 4px; }
   .premium-card.active .premium-title { color: #16a34a; }
   .premium-card.inactive .premium-title { color: var(--text-muted); }
   .premium-uid {
@@ -836,11 +855,7 @@
     -webkit-tap-highlight-color: transparent;
   }
   .profile-action-btn:active { transform: scale(0.97); }
-  .profile-action-btn.settings {
-    background: var(--bg-card);
-    border: 1.5px solid var(--border);
-    color: var(--text);
-  }
+  .profile-action-btn.settings { background: var(--bg-card); border: 1.5px solid var(--border); color: var(--text); }
   .profile-action-btn.settings i { color: var(--text-muted); }
   .profile-action-btn.logout {
     background: linear-gradient(135deg, #f87171, #dc2626);
@@ -884,31 +899,18 @@
     backdrop-filter: blur(10px);
     border: 3px solid rgba(255,255,255,0.4);
     display: flex; align-items: center; justify-content: center;
-    font-size: 40px;
-    color: white;
+    font-size: 40px; color: white;
     margin: 0 auto 20px;
     box-shadow: 0 8px 24px rgba(0,0,0,0.15);
     position: relative; z-index: 1;
   }
-  .guest-title {
-    font-size: 20px; font-weight: 800;
-    margin-bottom: 6px;
-    position: relative; z-index: 1;
-  }
-  .guest-desc {
-    font-size: 13px; font-weight: 500;
-    opacity: 0.9;
-    margin-bottom: 24px;
-    position: relative; z-index: 1;
-  }
+  .guest-title { font-size: 20px; font-weight: 800; margin-bottom: 6px; position: relative; z-index: 1; }
+  .guest-desc { font-size: 13px; font-weight: 500; opacity: 0.9; margin-bottom: 24px; position: relative; z-index: 1; }
   .guest-signin-btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    gap: 8px;
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
     padding: 14px 32px;
-    background: #ffffff;
-    color: #4f46e5;
-    border: none;
-    border-radius: 14px;
+    background: #ffffff; color: #4f46e5;
+    border: none; border-radius: 14px;
     font-size: 15px; font-weight: 800;
     box-shadow: 0 6px 20px rgba(0,0,0,0.2);
     transition: transform 0.15s var(--spring);
@@ -917,23 +919,16 @@
   .guest-signin-btn:active { transform: scale(0.95); }
 
   .guest-premium-wrap { position: relative; margin-bottom: 24px; }
-  .premium-card.blurred {
-    filter: blur(5px);
-    opacity: 0.65;
-    pointer-events: none;
-  }
+  .premium-card.blurred { filter: blur(5px); opacity: 0.65; pointer-events: none; }
   .guest-lock-overlay {
     position: absolute; inset: 0;
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
-    gap: 10px;
-    z-index: 2;
-    pointer-events: none;
+    gap: 10px; z-index: 2; pointer-events: none;
   }
   .guest-lock-icon {
     width: 44px; height: 44px; border-radius: 50%;
-    background: var(--bg-card);
-    border: 1.5px solid var(--border);
+    background: var(--bg-card); border: 1.5px solid var(--border);
     display: flex; align-items: center; justify-content: center;
     font-size: 18px; color: var(--text-muted);
     box-shadow: 0 4px 12px rgba(0,0,0,0.1);
@@ -1006,16 +1001,8 @@
     transition: transform 0.15s var(--spring);
   }
   .logout-btn:active { transform: scale(0.96); }
-  .logout-btn.cancel {
-    background: var(--bg-page);
-    border: 1.5px solid var(--border);
-    color: var(--text);
-  }
-  .logout-btn.confirm {
-    background: linear-gradient(135deg, #f87171, #dc2626);
-    color: #ffffff;
-    box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
-  }
+  .logout-btn.cancel { background: var(--bg-page); border: 1.5px solid var(--border); color: var(--text); }
+  .logout-btn.confirm { background: linear-gradient(135deg, #f87171, #dc2626); color: #ffffff; box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3); }
 
   /* ============ BOTTOM SHEET ============ */
   .sheet-overlay {
@@ -1083,10 +1070,7 @@
   body.dark .tool-card-icon { background: rgba(129,140,248,0.15); color: #a5b4fc; }
   .tool-card-body { flex: 1; min-width: 0; }
   .tool-card-title { font-size: 15px; font-weight: 800; color: var(--text); line-height: 1.3; }
-  .history-chat-card .tool-card-title {
-    font-size: 13.5px;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  }
+  .history-chat-card .tool-card-title { font-size: 13.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .tool-card-arrow { color: var(--text-subtle); font-size: 13px; flex-shrink: 0; }
   .tool-card-icon.tool-card-icon--logo {
     padding: 0 !important; overflow: hidden;
@@ -1094,9 +1078,7 @@
     border: 1px solid var(--border);
     font-size: 0 !important; color: transparent !important;
   }
-  .tool-card-icon.tool-card-icon--logo img {
-    width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit;
-  }
+  .tool-card-icon.tool-card-icon--logo img { width: 100%; height: 100%; object-fit: cover; display: block; border-radius: inherit; }
 
   .record-badge {
     display: inline-flex; align-items: center; gap: 5px;
@@ -1260,11 +1242,6 @@
   }
   .betsize-copy-btn:active { transform: scale(0.96); }
   .betsize-copy-btn.copied { background: linear-gradient(135deg, #34d399, #16a34a); }
-  @media (max-width: 480px) {
-    .betsize-card { padding: 12px; }
-    .betsize-table th, .betsize-table td { padding: 8px 6px; font-size: 12.5px; }
-    .betsize-options { grid-template-columns: repeat(auto-fill, minmax(52px, 1fr)); max-height: 180px; }
-  }
 
   /* ============ TOAST ============ */
   .toast-container {
@@ -1275,18 +1252,14 @@
     width: calc(100% - 40px); max-width: 400px;
   }
   .toast {
-    background: var(--bg-card);
-    color: var(--text);
-    padding: 12px 18px;
-    border-radius: 14px;
+    background: var(--bg-card); color: var(--text);
+    padding: 12px 18px; border-radius: 14px;
     font-size: 13px; font-weight: 700;
     box-shadow: 0 10px 30px rgba(0,0,0,0.18), 0 2px 8px rgba(0,0,0,0.08);
     display: flex; align-items: center; gap: 12px;
-    opacity: 0;
-    transform: translateY(-20px) scale(0.9);
+    opacity: 0; transform: translateY(-20px) scale(0.9);
     transition: opacity 0.3s ease, transform 0.4s var(--spring);
-    position: relative; overflow: hidden;
-    width: 100%;
+    position: relative; overflow: hidden; width: 100%;
   }
   .toast.show { opacity: 1; transform: translateY(0) scale(1); }
   .toast-icon {
@@ -1326,17 +1299,19 @@
 
 <!-- HEADER -->
 <header class="app-header">
-  <div class="header-brand">
-    <span class="red">SuperSel</span> <span class="black">Earing</span>
+  <div class="header-left">
+    <div class="header-brand" id="headerBrand">
+      <span class="red">SuperSel</span> <span class="black">Earing</span>
+    </div>
+    <button class="header-close-btn" id="headerCloseBtn" onclick="closeLogin()" aria-label="Back" style="display: none;">
+      <i class="fa-solid fa-xmark"></i>
+    </button>
   </div>
   <div class="header-right" id="headerRight"></div>
 </header>
 
 <!-- LOGIN SCREEN (Full page) -->
 <div id="loginScreen" class="login-screen">
-  <button class="login-close-btn" id="loginCloseBtn" onclick="closeLogin()" aria-label="Back">
-    <i class="fa-solid fa-xmark"></i>
-  </button>
   <div class="login-container" id="loginContainer">
     <div class="login-header stagger-1">
       <h1 class="login-title">
@@ -1585,9 +1560,7 @@
       <!-- Guest View -->
       <div id="profileGuestView" style="display: none;">
         <div class="guest-hero">
-          <div class="guest-avatar">
-            <i class="fa-solid fa-user"></i>
-          </div>
+          <div class="guest-avatar"><i class="fa-solid fa-user"></i></div>
           <h2 class="guest-title" data-t="guest_welcome">Welcome to SuperSel Earing</h2>
           <p class="guest-desc" data-t="guest_desc">Sign in to unlock all premium features</p>
           <button class="guest-signin-btn" onclick="openLoginFromGuest()">
@@ -1603,6 +1576,13 @@
             <div class="guest-lock-icon"><i class="fa-solid fa-lock"></i></div>
             <div class="guest-lock-text" data-t="signin_to_unlock">Sign in to unlock</div>
           </div>
+        </div>
+
+        <div class="profile-actions">
+          <button class="profile-action-btn settings" onclick="openSettingsPage()">
+            <i class="fa-solid fa-gear"></i>
+            <span data-t="settings">Settings</span>
+          </button>
         </div>
       </div>
 
@@ -1755,6 +1735,19 @@
   </div>
 </div>
 
+<!-- FORCE LOGOUT OVERLAY -->
+<div id="forceLogoutOverlay" class="force-logout-overlay">
+  <div class="force-logout-content">
+    <div class="force-logout-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
+    <h2 class="force-logout-title" id="forceLogoutTitle">Session Ended</h2>
+    <p class="force-logout-desc" id="forceLogoutDesc">Your account already logged in somewhere else</p>
+    <button class="force-logout-btn" onclick="finalizeForceLogout()">
+      <i class="fa-solid fa-arrow-right-to-bracket"></i>
+      <span data-t="back_to_login">Back to Login</span>
+    </button>
+  </div>
+</div>
+
 <!-- TOAST -->
 <div class="toast-container" id="toastContainer"></div>
 
@@ -1787,7 +1780,14 @@ const T = {
     guest_welcome: 'Welcome to SuperSel Earing',
     guest_desc: 'Sign in to unlock all premium features',
     signin_to_unlock: 'Sign in to unlock',
-    welcome_back: 'Welcome!'
+    welcome_back: 'Welcome!',
+    back_to_login: 'Back to Login',
+    session_ended_title: 'Session Ended',
+    session_ended_desc: 'Your account already logged in somewhere else',
+    session_expired_title: 'Session Expired',
+    session_expired_desc: 'Your session has expired. Please sign in again.',
+    premium_activated: 'Premium Activated',
+    premium_removed: 'Premium Removed'
   },
   mm: {
     nav_home: 'ပင်မစာမျက်နှာ', nav_prediction: 'ကြိုတင်ခန့်မှန်း', nav_chats: 'ဇယား', nav_tools: 'ကိရိယာများ', nav_profile: 'ကျွန်ုပ်',
@@ -1821,7 +1821,14 @@ const T = {
     guest_welcome: 'SuperSel Earing မှ ကြိုဆိုပါသည်',
     guest_desc: 'ပရီမီယံ ဝန်ဆောင်မှုများ အသုံးပြုရန် အကောင့်ဝင်ပါ',
     signin_to_unlock: 'ဖွင့်ရန် အကောင့်ဝင်ပါ',
-    welcome_back: 'ကြိုဆိုပါသည်!'
+    welcome_back: 'ကြိုဆိုပါသည်!',
+    back_to_login: 'လော့ဂ်အင်သို့ ပြန်',
+    session_ended_title: 'Session ပြီးဆုံးပါပြီ',
+    session_ended_desc: 'သင့်အကောင့်အား အခြားနေရာတစ်ခုတွင် ဝင်ရောက်ထားပြီးဖြစ်သည်',
+    session_expired_title: 'သက်တမ်းကုန်ဆုံးပါပြီ',
+    session_expired_desc: 'သင့်အကောင့်ဝင်ရောက်မှု သက်တမ်းကုန်ဆုံးသွားပါပြီ။ ထပ်မံဝင်ရောက်ပါ။',
+    premium_activated: 'ပရီမီယံ အသက်သွင်းပြီး',
+    premium_removed: 'ပရီမီယံ ဖြုတ်လိုက်ပြီ'
   }
 };
 
@@ -1843,7 +1850,15 @@ const EXT_CONFIG = {
   shwe:   { name: 'Shwe Lottery', logo: 'Logo/shwe_logo.jpg', url: 'https://www.shwe008.com', color: '#ea580c' }
 };
 
-// ============ HISTORY CHATS CONFIG ============
+const PLATFORM_NAMES = {
+  ck: 'Ck Lottery',
+  bigwin: 'BigWin',
+  sixwin: 'SixWin',
+  shwe: 'Shwe Lottery',
+  paid: 'Paid Premium'
+};
+
+// ============ HISTORY CHATS ============
 const FIREBASE_PROJECT = {
   apiKey: "AIzaSyDj6z3O91NnlQ1zVdripiGhqQMsQhR4_ak",
   authDomain: "ck30-35e97.firebaseapp.com",
@@ -1864,7 +1879,7 @@ const HISTORY_CHATS = [
   { id: 'shwe1', brand: 'shwe', title_en: 'Shwe WinGo 1 History', title_mm: 'Shwe WinGo 1 မှတ်တမ်း', logo: 'Logo/shwe_logo.jpg', src: 'History%20Chat/Shwe%20WinGo%201/shwe1results.html', firebase: Object.assign({}, FIREBASE_PROJECT, { path: "shwewingo1/default" }) }
 ];
 
-// ============ CONTENT (abbreviated but functional) ============
+// ============ CONTENT (same as before, abbreviated pattern) ============
 const CONTENT = {
   ck: {
     register: { cta: { href: 'http://www.cklottery.top/#/register?invitationCode=81487219676', text_en: 'Register Now', text_mm: 'အကောင့်ဖွင့်ရန်နိပ်ပါ' }, steps: [
@@ -1976,7 +1991,7 @@ const CONTENT = {
 
 // ============ APP STATE ============
 const appState = {
-  mode: 'login',          // 'login' | 'guest' | 'user'
+  mode: 'login',
   currentTab: 'home',
   previousTab: 'home',
   cameFromGuest: false
@@ -2006,6 +2021,20 @@ let verifyTimeout = null;
 let currentSendListener = null;
 let currentVerifyListener = null;
 
+// Session state
+const SESSION_KEY = 'webSessionId';
+const DEVICE_ID_KEY = 'webDeviceId';
+const SESSION_DURATION_MS = 24 * 60 * 60 * 1000; // 24 hours
+let sessionRef = null;
+let sessionHandler = null;
+let forceLogoutInProgress = false;
+let forceLogoutTimer = null;
+
+// Premium real-time state
+let premiumRef = null;
+let premiumHandler = null;
+let justAddedPlatforms = [];
+
 // Bridge
 const BRIDGE_CONFIG = { databaseURL: "https://chackchack-d7445-default-rtdb.europe-west1.firebasedatabase.app" };
 let loginBridgeDb = null;
@@ -2016,24 +2045,286 @@ try {
   loginBridgeDb = app.database();
 } catch (e) { console.error('Bridge init error:', e); }
 
+// ============ SESSION MANAGEMENT ============
+function getOrCreateDeviceId() {
+  let id = localStorage.getItem(DEVICE_ID_KEY);
+  if (!id) {
+    id = 'dev_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+    localStorage.setItem(DEVICE_ID_KEY, id);
+  }
+  return id;
+}
+
+function generateSessionId() {
+  return 'sess_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+}
+
+async function createSession(chatId) {
+  if (!loginBridgeDb) return null;
+  const sessionId = generateSessionId();
+  const deviceId = getOrCreateDeviceId();
+  const now = Date.now();
+  const sessionData = {
+    sessionId,
+    deviceId,
+    loginTime: now,
+    expiresAt: now + SESSION_DURATION_MS
+  };
+  try {
+    await loginBridgeDb.ref('active_sessions/' + chatId).set(sessionData);
+    localStorage.setItem(SESSION_KEY, sessionId);
+    return sessionId;
+  } catch (e) {
+    console.warn('Session create failed:', e);
+    return null;
+  }
+}
+
+async function verifySessionOnLoad(chatId) {
+  if (!loginBridgeDb) return true; // Optimistic allow
+  const mySessionId = localStorage.getItem(SESSION_KEY);
+  if (!mySessionId) return false;
+  try {
+    const snap = await loginBridgeDb.ref('active_sessions/' + chatId).get();
+    const data = snap.val();
+    if (!data || !data.sessionId) return false;
+    if (data.sessionId !== mySessionId) return false;
+    if (data.expiresAt && Date.now() > data.expiresAt) return false;
+    return true;
+  } catch (e) {
+    // Network error — optimistic allow
+    return true;
+  }
+}
+
+function startSessionListener(chatId) {
+  stopSessionListener();
+  if (!loginBridgeDb) return;
+  const mySessionId = localStorage.getItem(SESSION_KEY);
+  if (!mySessionId) return;
+
+  sessionRef = loginBridgeDb.ref('active_sessions/' + chatId);
+  sessionHandler = sessionRef.on('value', (snap) => {
+    const data = snap.val();
+    if (!data || !data.sessionId) {
+      handleForceLogout('removed');
+      return;
+    }
+    if (data.sessionId !== mySessionId) {
+      handleForceLogout('conflict');
+      return;
+    }
+    if (data.expiresAt && Date.now() > data.expiresAt) {
+      handleForceLogout('expired');
+    }
+  });
+}
+
+function stopSessionListener() {
+  if (sessionRef && sessionHandler) {
+    try { sessionRef.off('value', sessionHandler); } catch (e) {}
+  }
+  sessionRef = null;
+  sessionHandler = null;
+}
+
+async function removeMySession(chatId) {
+  if (!loginBridgeDb || !chatId) return;
+  try {
+    await loginBridgeDb.ref('active_sessions/' + chatId).remove();
+  } catch (e) {}
+}
+
+function handleForceLogout(reason) {
+  if (forceLogoutInProgress) return;
+  forceLogoutInProgress = true;
+
+  // Cleanup listeners
+  stopSessionListener();
+  stopPremiumListener();
+
+  // Cleanup local state
+  localStorage.removeItem('webUserData');
+  localStorage.removeItem(SESSION_KEY);
+  sessionStorage.removeItem('guestMode');
+  userDataCache = null;
+
+  // Close any open UI
+  closeAllUI();
+
+  // Show dialog
+  showForceLogoutDialog(reason);
+
+  // Auto-dismiss in 5s
+  if (forceLogoutTimer) clearTimeout(forceLogoutTimer);
+  forceLogoutTimer = setTimeout(() => {
+    finalizeForceLogout();
+  }, 5000);
+}
+
+function showForceLogoutDialog(reason) {
+  const overlay = document.getElementById('forceLogoutOverlay');
+  const titleEl = document.getElementById('forceLogoutTitle');
+  const descEl = document.getElementById('forceLogoutDesc');
+
+  let title, desc;
+  if (reason === 'expired') {
+    title = T[currentLang].session_expired_title;
+    desc = T[currentLang].session_expired_desc;
+  } else {
+    title = T[currentLang].session_ended_title;
+    desc = T[currentLang].session_ended_desc;
+  }
+
+  titleEl.textContent = title;
+  descEl.textContent = desc;
+  overlay.classList.add('show');
+}
+
+function finalizeForceLogout() {
+  if (!forceLogoutInProgress) return;
+  forceLogoutInProgress = false;
+  if (forceLogoutTimer) { clearTimeout(forceLogoutTimer); forceLogoutTimer = null; }
+  document.getElementById('forceLogoutOverlay').classList.remove('show');
+
+  appState.mode = 'login';
+  appState.cameFromGuest = false;
+  showLoginScreen();
+  updateHeader();
+  resetLoginForm();
+}
+
+function closeAllUI() {
+  if (currentSub) {
+    try { closeSub(); } catch (e) {}
+  }
+  if (currentExtensionOpen) closeExtensionWebsite();
+  document.getElementById('logoutConfirmModal').classList.remove('active');
+  document.getElementById('photoModal').classList.remove('active');
+  document.getElementById('langSheet').classList.remove('active');
+  document.getElementById('sheetOverlay').classList.remove('active');
+}
+
+// ============ PREMIUM REAL-TIME ============
+function getPlatformName(key) {
+  return PLATFORM_NAMES[key] || key;
+}
+
+function startPremiumListener(chatId) {
+  stopPremiumListener();
+  if (!loginBridgeDb) return;
+
+  premiumRef = loginBridgeDb.ref('user_premium/' + chatId);
+  premiumHandler = premiumRef.on('value', (snap) => {
+    const data = snap.val() || {};
+    const newPlatforms = data.platforms || {};
+    const newPaidUid = data.paidUid || null;
+
+    if (!userDataCache) return;
+
+    const oldPlatforms = userDataCache.platforms || {};
+    const oldPaidUid = userDataCache.paidUid || null;
+
+    const added = [];
+    const removed = [];
+
+    for (const key of ['ck', 'bigwin', 'sixwin', 'shwe']) {
+      const oldUid = oldPlatforms[key];
+      const newUid = newPlatforms[key];
+      if (oldUid !== newUid) {
+        if (!oldUid && newUid) added.push(key);
+        else if (oldUid && !newUid) removed.push(key);
+      }
+    }
+
+    if (oldPaidUid !== newPaidUid) {
+      if (!oldPaidUid && newPaidUid) added.push('paid');
+      else if (oldPaidUid && !newPaidUid) removed.push('paid');
+    }
+
+    if (added.length === 0 && removed.length === 0) return;
+
+    // Update cache
+    userDataCache.platforms = newPlatforms;
+    userDataCache.paidUid = newPaidUid;
+    userDataCache.lastPremiumSync = Date.now();
+    localStorage.setItem('webUserData', JSON.stringify(userDataCache));
+
+    // Mark just-added for animation
+    justAddedPlatforms = added.slice();
+
+    // Re-render if on profile
+    if (appState.currentTab === 'profile') {
+      renderProfilePage();
+    }
+
+    // Toasts
+    added.forEach(key => {
+      const name = getPlatformName(key);
+      const tpl = currentLang === 'mm' ? `${name} ${T.mm.premium_activated}` : `${name} ${T.en.premium_activated}`;
+      showToast(tpl, 'success');
+    });
+    removed.forEach(key => {
+      const name = getPlatformName(key);
+      const tpl = currentLang === 'mm' ? `${name} ${T.mm.premium_removed}` : `${name} ${T.en.premium_removed}`;
+      showToast(tpl, 'error');
+    });
+
+    justAddedPlatforms = [];
+  });
+}
+
+function stopPremiumListener() {
+  if (premiumRef && premiumHandler) {
+    try { premiumRef.off('value', premiumHandler); } catch (e) {}
+  }
+  premiumRef = null;
+  premiumHandler = null;
+}
+
+async function writePremiumSnapshot(chatId, platforms, paidUid) {
+  if (!loginBridgeDb) return;
+  try {
+    await loginBridgeDb.ref('user_premium/' + chatId).update({
+      platforms: platforms || {},
+      paidUid: paidUid || null,
+      updatedAt: Date.now()
+    });
+  } catch (e) {
+    console.warn('Premium snapshot write failed:', e);
+  }
+}
+
 // ============ INIT ============
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener('DOMContentLoaded', async () => {
   const savedTheme = localStorage.getItem('appTheme');
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'), false);
 
   applyLanguage(currentLang);
 
-  // Determine app mode
   const savedUser = localStorage.getItem('webUserData');
+
   if (savedUser) {
-    appState.mode = 'user';
-    userDataCache = JSON.parse(savedUser);
-    loadExtensionState();
-    showMainApp();
-    switchTab('home');
+    const valid = await verifySessionOnLoad(JSON.parse(savedUser).chatId);
+    if (valid) {
+      appState.mode = 'user';
+      userDataCache = JSON.parse(savedUser);
+      loadExtensionState();
+      showMainApp();
+      switchTab('home');
+      startSessionListener(userDataCache.chatId);
+      startPremiumListener(userDataCache.chatId);
+    } else {
+      // Session invalid
+      localStorage.removeItem('webUserData');
+      localStorage.removeItem(SESSION_KEY);
+      appState.mode = 'login';
+      showLoginScreen();
+    }
   } else if (sessionStorage.getItem('guestMode') === 'true') {
     appState.mode = 'guest';
+    loadExtensionState();
     showMainApp();
     switchTab('home');
   } else {
@@ -2055,13 +2346,12 @@ document.addEventListener('DOMContentLoaded', () => {
   }, 3200);
 });
 
-// ============ APP MODE / SCREENS ============
+// ============ APP MODE ============
 function showLoginScreen() {
   document.getElementById('loginScreen').classList.add('active');
   document.getElementById('mainApp').style.display = 'none';
   updateBottomNav();
   updateExtensionVisibility();
-  showLoginCloseButton(appState.cameFromGuest);
 
   const container = document.getElementById('loginContainer');
   if (container) {
@@ -2078,15 +2368,22 @@ function showMainApp() {
   updateExtensionVisibility();
 }
 
-function showLoginCloseButton(show) {
-  const btn = document.getElementById('loginCloseBtn');
-  if (btn) btn.style.display = show ? 'flex' : 'none';
-}
-
 function updateHeader() {
+  const brand = document.getElementById('headerBrand');
+  const closeBtn = document.getElementById('headerCloseBtn');
   const right = document.getElementById('headerRight');
-  if (!right) return;
+  if (!brand || !closeBtn || !right) return;
 
+  // Left side
+  if (appState.mode === 'login' && appState.cameFromGuest) {
+    brand.style.display = 'none';
+    closeBtn.style.display = 'flex';
+  } else {
+    brand.style.display = 'block';
+    closeBtn.style.display = 'none';
+  }
+
+  // Right side
   if (appState.mode === 'login') {
     right.innerHTML = '';
   } else if (appState.mode === 'guest') {
@@ -2101,15 +2398,12 @@ function updateHeader() {
 function updateBottomNav() {
   const nav = document.getElementById('bottomNav');
   if (!nav) return;
-  if (appState.mode === 'login') {
-    nav.classList.add('hidden');
-  } else {
-    nav.classList.remove('hidden');
-  }
+  if (appState.mode === 'login') nav.classList.add('hidden');
+  else nav.classList.remove('hidden');
 }
 
 function updateExtensionVisibility() {
-  if (appState.mode === 'user') {
+  if (appState.mode === 'user' || appState.mode === 'guest') {
     renderExtensionFab();
   } else {
     document.getElementById('extensionFabWrap').classList.remove('visible');
@@ -2121,6 +2415,7 @@ function continueAsGuest() {
   sessionStorage.setItem('guestMode', 'true');
   appState.mode = 'guest';
   appState.cameFromGuest = false;
+  loadExtensionState();
   showMainApp();
   updateHeader();
   switchTab('home');
@@ -2147,8 +2442,11 @@ function closeLogin() {
 
 // ============ EXTENSION LOGIC ============
 function getExtensionStorageKey() {
-  const data = JSON.parse(localStorage.getItem('webUserData') || 'null');
-  return data ? `extensionState_${data.chatId}` : 'extensionState_guest';
+  if (appState.mode === 'user') {
+    const data = JSON.parse(localStorage.getItem('webUserData') || 'null');
+    return data ? `extensionState_${data.chatId}` : 'extensionState_guest';
+  }
+  return 'extensionState_guest';
 }
 
 function loadExtensionState() {
@@ -2170,10 +2468,10 @@ function renderExtensionFab() {
   const wrap = document.getElementById('extensionFabWrap');
   const fab = document.getElementById('extensionFab');
   const list = document.getElementById('extensionFabList');
-  const isLoggedIn = !!localStorage.getItem('webUserData');
   const enabled = getEnabledExtensions();
 
-  if (!isLoggedIn || appState.mode !== 'user' || enabled.length === 0) {
+  // Allow both user and guest
+  if (appState.mode === 'login' || enabled.length === 0) {
     wrap.classList.remove('visible');
     list.classList.remove('visible');
     extensionExpanded = false;
@@ -2202,17 +2500,8 @@ function renderExtensionFab() {
 function toggleExtensionFab() {
   const enabled = getEnabledExtensions();
   if (enabled.length === 0) return;
-
-  if (currentExtensionOpen) {
-    closeExtensionWebsite();
-    return;
-  }
-
-  if (enabled.length === 1) {
-    openExtensionWebsite(enabled[0]);
-    return;
-  }
-
+  if (currentExtensionOpen) { closeExtensionWebsite(); return; }
+  if (enabled.length === 1) { openExtensionWebsite(enabled[0]); return; }
   extensionExpanded = !extensionExpanded;
   renderExtensionList();
 }
@@ -2220,32 +2509,27 @@ function toggleExtensionFab() {
 function renderExtensionList() {
   const list = document.getElementById('extensionFabList');
   const enabled = getEnabledExtensions();
-
   if (!extensionExpanded || enabled.length === 0) {
     list.classList.remove('visible');
     list.innerHTML = '';
     return;
   }
-
   list.innerHTML = enabled.map(key => {
     const cfg = EXT_CONFIG[key];
     return `<button class="extension-brand-btn" onclick="event.stopPropagation(); openExtensionWebsite('${key}')" style="border-color: ${cfg.color}">
       <img src="${cfg.logo}" alt="${cfg.name}">
     </button>`;
   }).join('');
-
   list.classList.add('visible');
 }
 
 function openExtensionWebsite(brandKey) {
   const cfg = EXT_CONFIG[brandKey];
   if (!cfg) return;
-
   if (currentSub) closeSub();
 
   const overlay = document.getElementById('extensionWebsiteOverlay');
 
-  // SAME BRAND CACHED → just show (NO REFRESH!)
   if (extensionCache.brand === brandKey && extensionCache.iframe && extensionCache.iframe.parentNode === overlay) {
     overlay.classList.add('active');
     currentExtensionOpen = brandKey;
@@ -2253,9 +2537,7 @@ function openExtensionWebsite(brandKey) {
     return;
   }
 
-  // Different brand → destroy old, create new
   overlay.innerHTML = '';
-
   const skeleton = document.createElement('div');
   skeleton.className = 'extension-website-loading';
   skeleton.innerHTML = `
@@ -2268,25 +2550,14 @@ function openExtensionWebsite(brandKey) {
   const iframe = document.createElement('iframe');
   iframe.src = cfg.url;
   iframe.title = cfg.name;
-  iframe.style.opacity = '0';
-  iframe.style.transition = 'opacity 0.3s';
-  iframe.style.width = '100%';
-  iframe.style.height = '100%';
-  iframe.style.border = 'none';
-  iframe.style.display = 'block';
-  iframe.style.position = 'absolute';
-  iframe.style.inset = '0';
-  iframe.onload = () => {
-    skeleton.remove();
-    iframe.style.opacity = '1';
-  };
+  iframe.style.cssText = 'width:100%;height:100%;border:none;display:block;position:absolute;inset:0;opacity:0;transition:opacity 0.3s;';
+  iframe.onload = () => { skeleton.remove(); iframe.style.opacity = '1'; };
   overlay.appendChild(iframe);
 
   extensionCache = { brand: brandKey, iframe };
   currentExtensionOpen = brandKey;
   extensionExpanded = false;
   renderExtensionList();
-
   overlay.classList.add('active');
   renderExtensionFab();
 }
@@ -2296,35 +2567,26 @@ function closeExtensionWebsite() {
   overlay.classList.remove('active');
   currentExtensionOpen = null;
   renderExtensionFab();
-  // Keep iframe in cache (don't remove)
 }
 
 function toggleExtensionSetting(key, enabled) {
   extensionState[key] = enabled;
   saveExtensionState();
   renderExtensionFab();
-
   if (!enabled && currentExtensionOpen === key) closeExtensionWebsite();
-
   if (getEnabledExtensions().length === 0) {
     extensionExpanded = false;
     renderExtensionList();
   }
 }
 
-// Hide extension when sub-screen opens
 function hideExtensionForSubscreen() {
-  const fab = document.getElementById('extensionFabWrap');
-  const overlay = document.getElementById('extensionWebsiteOverlay');
-  fab.style.visibility = 'hidden';
-  if (currentExtensionOpen) overlay.style.visibility = 'hidden';
+  document.getElementById('extensionFabWrap').style.visibility = 'hidden';
+  document.getElementById('extensionWebsiteOverlay').style.visibility = 'hidden';
 }
-
 function showExtensionAfterSubscreen() {
-  const fab = document.getElementById('extensionFabWrap');
-  const overlay = document.getElementById('extensionWebsiteOverlay');
-  fab.style.visibility = '';
-  overlay.style.visibility = '';
+  document.getElementById('extensionFabWrap').style.visibility = '';
+  document.getElementById('extensionWebsiteOverlay').style.visibility = '';
 }
 
 // ============ RECORD COUNT ============
@@ -2336,10 +2598,8 @@ function fetchRecordCount(chat, force) {
   }
   lastFetchTime[chat.id] = Date.now();
   if (fetchInFlight[chat.id]) return fetchInFlight[chat.id];
-
   recordCounts[chat.id] = { state: 'loading', count: null };
   renderHistoryChats();
-
   fetchInFlight[chat.id] = new Promise((resolve) => {
     try {
       const appName = 'countApp_' + chat.id;
@@ -2463,30 +2723,25 @@ function closeLangSheet() {
   document.getElementById('langSheet').classList.remove('active');
 }
 
-// ============ HISTORY CHATS ============
+// ============ HISTORY CHATS RENDER ============
 function renderHistoryChats() {
   const list = document.getElementById('historyChatsList');
   if (!list) return;
-
   list.innerHTML = HISTORY_CHATS.map((chat, i) => {
     const title = currentLang === 'mm' ? chat.title_mm : chat.title_en;
     const rc = recordCounts[chat.id];
     let badgeHtml = '';
-
     if (!rc || rc.state === 'loading') badgeHtml = '<span class="record-badge loading"><span class="record-dot"></span><span>...</span></span>';
     else if (rc.state === 'success' && rc.count !== null) {
       const countStr = currentLang === 'mm' ? toMmNum(String(rc.count)) : String(rc.count);
       badgeHtml = '<span class="record-badge" title="' + rc.count + ' Records"><span class="record-dot"></span><span>' + countStr + '</span></span>';
     }
-
     const iconHtml = chat.logo
       ? '<div class="tool-card-icon tool-card-icon--logo"><img src="' + chat.logo + '" alt="" loading="lazy" /></div>'
       : '<div class="tool-card-icon"><i class="fa-solid fa-clock-rotate-left"></i></div>';
-
     return '<button class="tool-card history-chat-card" data-brand="' + chat.brand + '" onclick="openHistoryChat(\'' + chat.id + '\')" style="animation-delay:' + (i * 60 + 100) + 'ms">' +
-        iconHtml + '<div class="tool-card-body"><div class="tool-card-title">' + escapeHtml(title) + '</div></div>' +
-        badgeHtml + '<i class="fa-solid fa-chevron-right tool-card-arrow"></i>' +
-      '</button>';
+      iconHtml + '<div class="tool-card-body"><div class="tool-card-title">' + escapeHtml(title) + '</div></div>' +
+      badgeHtml + '<i class="fa-solid fa-chevron-right tool-card-arrow"></i></button>';
   }).join('');
 }
 
@@ -2496,7 +2751,6 @@ function updateRecordBadge(chatId) {
   const rc = recordCounts[chatId];
   const oldBadge = btn.querySelector('.record-badge');
   if (!oldBadge) return;
-
   if (!rc || rc.state === 'loading') {
     oldBadge.className = 'record-badge loading';
     oldBadge.innerHTML = '<span class="record-dot"></span><span>...</span>';
@@ -2521,25 +2775,20 @@ function openHistoryChat(chatId) {
   if (!chat) return;
   if (currentSub) closeSub();
   hideExtensionForSubscreen();
-
   currentSub = { brand: 'history', action: chatId };
   const subScreen = document.getElementById('subScreen');
   const subBody = document.getElementById('subBody');
-
   subBody.classList.add('sub-screen-body--iframe');
   subBody.innerHTML = '';
-
   const iframe = document.createElement('iframe');
   iframe.id = 'historyIframe';
   iframe.src = chat.src;
   iframe.title = currentLang === 'mm' ? chat.title_mm : chat.title_en;
   iframe.addEventListener('load', () => pushStateToIframe(iframe));
   subBody.appendChild(iframe);
-
   subScreen.classList.add('active');
   document.getElementById('bottomNav').classList.remove('hidden');
   document.getElementById('floatingBackBtn').classList.add('visible');
-
   try { history.pushState({ historyChat: true }, ''); } catch (e) {}
 }
 
@@ -2569,10 +2818,6 @@ function openBetSizePage() {
 }
 
 function openSettingsPage() {
-  if (appState.mode !== 'user') {
-    showToast(currentLang === 'mm' ? 'အကောင့်ဝင်ရန် လိုအပ်ပါသည်' : 'Please sign in first', 'error');
-    return;
-  }
   currentSub = { brand: 'settings', action: 'settings' };
   hideExtensionForSubscreen();
   const subScreen = document.getElementById('subScreen');
@@ -2591,7 +2836,6 @@ function renderSubPage(brandKey, actionKey, isSilentRender) {
   const brand = BRANDS[brandKey];
   const content = CONTENT[brandKey] && CONTENT[brandKey][actionKey];
   if (!brand || !content) return;
-
   const body = document.getElementById('subBody');
   body.classList.remove('sub-screen-body--iframe');
 
@@ -2624,7 +2868,6 @@ function renderSubPage(brandKey, actionKey, isSilentRender) {
     '</div>';
   });
   html += '</div>';
-
   body.innerHTML = html;
   if (!isSilentRender) body.scrollTop = 0;
 }
@@ -2649,7 +2892,7 @@ function renderSettingsPage(isSilentRender) {
       '<button class="settings-row" onclick="openLangSheet()">' +
         '<div class="settings-row-icon"><i class="fa-solid fa-language"></i></div>' +
         '<div class="settings-row-content"><div class="settings-row-title">' + t.language_label + '</div>' +
-          '<div style="font-size:11.5px;color:var(--text-muted);margin-top:2px;font-weight:600;">' + langText + '</div></div>' +
+          '<div class="settings-row-sub">' + langText + '</div></div>' +
         '<i class="fa-solid fa-chevron-right settings-row-arrow"></i>' +
       '</button>' +
       '<div class="settings-row">' +
@@ -2680,19 +2923,16 @@ function renderExtensionToggle(key) {
     '</div>';
 }
 
-// ============ BET SIZE ============
+// ============ BET SIZE (same as before) ============
 const betSizeState = { profitMult: 1, betCount: 6, openPicker: null, lastResult: null, copyTimer: null, calcTimer: null, inputValue: '' };
-
 function escapeHtmlAttr(str) { return String(str || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
 function renderBetSizePage(isSilentRender) {
   const body = document.getElementById('subBody');
   if (!body) return;
   body.classList.remove('sub-screen-body--iframe');
-
   const existingInput = document.getElementById('betSizeFirstAmount');
   if (existingInput) betSizeState.inputValue = existingInput.value;
-
   const wasResultShown = document.getElementById('betSizeResult') ? document.getElementById('betSizeResult').classList.contains('show') : false;
   const savedResult = betSizeState.lastResult;
   const t = T[currentLang];
@@ -2737,7 +2977,6 @@ function renderBetSizePage(isSilentRender) {
   body.innerHTML = html;
   buildBetSizeOptions('profit', betSizeState.profitMult);
   buildBetSizeOptions('count', betSizeState.betCount);
-
   const newInput = document.getElementById('betSizeFirstAmount');
   if (newInput) {
     newInput.addEventListener('input', () => {
@@ -2748,7 +2987,6 @@ function renderBetSizePage(isSilentRender) {
     });
     newInput.addEventListener('keydown', (e) => { if (e.key === 'Enter') { e.preventDefault(); runBetSizeCalculator(); } });
   }
-
   if (savedResult && wasResultShown) renderBetSizeResult(savedResult);
   if (!isSilentRender) body.scrollTop = 0;
 }
@@ -2928,6 +3166,7 @@ function goBack() { if (currentSub) closeSub(); }
 
 // ============ HARDWARE BACK ============
 window.addEventListener('popstate', function () {
+  if (forceLogoutInProgress) return;
   if (document.getElementById('logoutConfirmModal').classList.contains('active')) { closeLogoutConfirm(); return; }
   if (document.getElementById('photoModal').classList.contains('active')) { document.getElementById('photoModal').classList.remove('active'); return; }
   if (currentExtensionOpen) { closeExtensionWebsite(); return; }
@@ -2938,9 +3177,7 @@ window.addEventListener('popstate', function () {
 // ============ TAB SWITCH ============
 function switchTab(tab) {
   if (currentSub) closeSub();
-  // DO NOT close extension (per user request)
   if (extensionExpanded) { extensionExpanded = false; renderExtensionList(); }
-
   document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
   const target = document.getElementById('screen-' + tab);
   if (target) target.classList.add('active');
@@ -3025,6 +3262,7 @@ function showLoggedInView(data) {
 
 function renderPremiumCards(data) {
   const container = document.getElementById('premiumListContainer');
+  if (!container) return;
   container.innerHTML = '';
   const platforms = [
     { key: 'ck', name_en: 'Ck Premium', name_mm: 'Ck ပရီမီယံ', icon: 'Logo/ck_logo.jpg', activeColor: '#4f46e5' },
@@ -3040,8 +3278,9 @@ function renderPremiumCards(data) {
     const name = currentLang === 'mm' ? p.name_mm : p.name_en;
     const joinText = currentLang === 'mm' ? 'ချိတ်ဆက်ရန် →' : 'Tap to Join →';
     const card = document.createElement('div');
-    card.className = `premium-card ${isActive ? 'active' : 'inactive'}`;
-    card.style.animationDelay = `${i * 50 + 200}ms`;
+    const wasJustAdded = justAddedPlatforms.includes(p.key);
+    card.className = `premium-card ${isActive ? 'active' : 'inactive'}${wasJustAdded ? ' just-added' : ''}`;
+    card.style.animationDelay = wasJustAdded ? '0ms' : `${i * 50 + 200}ms`;
     card.innerHTML = `
       <div class="premium-card-top">
         <div class="premium-icon"><img src="${p.icon}" alt=""></div>
@@ -3074,10 +3313,15 @@ function refreshProfileData() {
 function showLogoutConfirm() { document.getElementById('logoutConfirmModal').classList.add('active'); }
 function closeLogoutConfirm() { document.getElementById('logoutConfirmModal').classList.remove('active'); }
 
-function confirmLogout() {
+async function confirmLogout() {
   closeLogoutConfirm();
+  const currentData = JSON.parse(localStorage.getItem('webUserData') || 'null');
   cleanupAllLogin();
+  stopSessionListener();
+  stopPremiumListener();
+  if (currentData) await removeMySession(currentData.chatId);
   localStorage.removeItem('webUserData');
+  localStorage.removeItem(SESSION_KEY);
   sessionStorage.removeItem('guestMode');
   userDataCache = null;
   if (currentExtensionOpen) closeExtensionWebsite();
@@ -3101,7 +3345,6 @@ function moveOtp(current, index) {
     if (next) next.focus();
   }
 }
-
 function backOtp(e, current, index) {
   if (e.key === 'Backspace' && current.value.length === 0) {
     const prev = current.previousElementSibling;
@@ -3115,7 +3358,7 @@ function backOtp(e, current, index) {
   }
 }
 
-// OTP paste handler (bug fix)
+// OTP paste
 document.addEventListener('DOMContentLoaded', () => {
   const boxes = Array.from(document.querySelectorAll('.otp-box'));
   boxes.forEach((box, i) => {
@@ -3168,7 +3411,6 @@ function cleanupSend() {
     currentSendListener = null;
   }
 }
-
 function cleanupVerify() {
   if (verifyTimeout) { clearTimeout(verifyTimeout); verifyTimeout = null; }
   if (currentVerifyListener && currentLoginReqId && loginBridgeDb) {
@@ -3176,7 +3418,6 @@ function cleanupVerify() {
     currentVerifyListener = null;
   }
 }
-
 function cleanupAllLogin() {
   cleanupSend();
   cleanupVerify();
@@ -3188,7 +3429,6 @@ function cleanupAllLogin() {
 
 async function sendLoginCode() {
   if (sendBusy) return;
-
   if (!navigator.onLine) return showError('chatIdError', currentLang === 'mm' ? '📶 အင်တာနက်မရှိပါ။' : 'No internet connection.');
   const chatId = document.getElementById('loginChatId').value.trim();
   if (!chatId || chatId.length < 5) return showError('chatIdError', currentLang === 'mm' ? 'မှန်ကန်သော Member ID ထည့်ပါ။' : 'Please enter a valid Member ID.');
@@ -3205,7 +3445,6 @@ async function sendLoginCode() {
 
   try {
     await loginBridgeDb.ref('web_login/' + currentLoginReqId).set({ chatId, status: 'pending', timestamp: Date.now() });
-
     currentSendListener = loginBridgeDb.ref('web_login/' + currentLoginReqId).on('value', (snap) => {
       const data = snap.val();
       if (!data) return;
@@ -3223,7 +3462,6 @@ async function sendLoginCode() {
         startResendTimer(60);
       }
     });
-
     sendTimeout = setTimeout(() => {
       if (sendBusy) {
         cleanupSend();
@@ -3244,7 +3482,6 @@ async function sendLoginCode() {
 
 async function verifyLoginCode() {
   if (loginBusy) return;
-
   if (!navigator.onLine) return showError('otpError', currentLang === 'mm' ? '📶 အင်တာနက်မရှိပါ။' : 'No internet connection.');
   const code = getOtpCode();
   if (code.length !== 6) return showError('otpError', currentLang === 'mm' ? 'ဂဏန်း ၆ လုံး ထည့်ပါ။' : 'Please enter 6 digits.');
@@ -3256,7 +3493,6 @@ async function verifyLoginCode() {
   btn.textContent = currentLang === 'mm' ? 'ဝင်ရောက်နေသည်...' : 'Signing in...';
   document.getElementById('otpError').classList.remove('show');
 
-  // Bug fix: detach any old verify listener BEFORE starting new one
   if (currentVerifyListener && currentLoginReqId && loginBridgeDb) {
     try { loginBridgeDb.ref('web_login/' + currentLoginReqId).off('value', currentVerifyListener); } catch (e) {}
     currentVerifyListener = null;
@@ -3265,28 +3501,21 @@ async function verifyLoginCode() {
 
   try {
     await loginBridgeDb.ref('web_login/' + currentLoginReqId).update({ status: 'verifying', userCode: code });
-
     currentVerifyListener = loginBridgeDb.ref('web_login/' + currentLoginReqId).on('value', (snap) => {
       const data = snap.val();
       if (!data) return;
-
       if (data.status === 'success') {
         cleanupVerify();
         loginBusy = false;
         btn.disabled = false;
         btn.textContent = T[currentLang].sign_in;
-
         const chatId = data.chatId;
         const platforms = data.platforms || {};
-
         try { snap.ref.remove(); } catch (e) {}
-
         showLoginSuccess(chatId, platforms);
-
       } else if (data.status === 'error') {
         cleanupVerify();
         showError('otpError', data.message || 'Invalid Code.');
-        // Q8-A: 1.5s cooldown
         btn.disabled = true;
         btn.style.opacity = '0.6';
         btn.textContent = T[currentLang].sign_in;
@@ -3297,7 +3526,6 @@ async function verifyLoginCode() {
         }, 1500);
       }
     });
-
     verifyTimeout = setTimeout(() => {
       if (loginBusy) {
         cleanupVerify();
@@ -3315,16 +3543,19 @@ async function verifyLoginCode() {
   }
 }
 
-function showLoginSuccess(chatId, platforms) {
+async function showLoginSuccess(chatId, platforms) {
   const overlay = document.getElementById('loginSuccessOverlay');
   document.getElementById('loginSuccessId').textContent = 'ID: ' + chatId;
   overlay.classList.add('show');
 
+  // Create session + write premium snapshot
+  try { await createSession(chatId); } catch (e) {}
+  try { await writePremiumSnapshot(chatId, platforms || {}, platforms?.paid || null); } catch (e) {}
+
   setTimeout(() => {
     overlay.classList.remove('show');
-
     setTimeout(() => {
-      const userData = { chatId, platforms: platforms || {}, loginTime: Date.now() };
+      const userData = { chatId, platforms: platforms || {}, paidUid: platforms?.paid || null, loginTime: Date.now() };
       localStorage.setItem('webUserData', JSON.stringify(userData));
       sessionStorage.removeItem('guestMode');
       userDataCache = userData;
@@ -3340,6 +3571,10 @@ function showLoginSuccess(chatId, platforms) {
       switchTab('home');
       renderProfilePage();
       renderExtensionFab();
+
+      // Start listeners
+      startSessionListener(chatId);
+      startPremiumListener(chatId);
     }, 400);
   }, 1600);
 }
@@ -3372,7 +3607,6 @@ function startResendTimer(seconds) {
 function resendCode() {
   document.getElementById('sendCodeBtn').disabled = false;
   document.getElementById('sendCodeBtn').textContent = T[currentLang].send_code;
-  // Bug fix: clear OTP boxes on resend
   document.querySelectorAll('.otp-box').forEach(box => box.value = '');
   document.getElementById('otpError').classList.remove('show');
   sendBusy = false;
@@ -3383,9 +3617,7 @@ function resendCode() {
 // ============ UTILS ============
 function showToast(msg, type = 'success') {
   const container = document.getElementById('toastContainer');
-  // Cap at 3 toasts (bug fix)
   while (container.children.length >= 3) container.removeChild(container.firstChild);
-
   const toast = document.createElement('div');
   toast.className = 'toast ' + type;
   const icon = type === 'success' ? 'fa-check' : (type === 'error' ? 'fa-exclamation' : 'fa-info');
@@ -3438,7 +3670,7 @@ function checkAccess(platformKey, callbackFn) {
   } catch (e) { switchTab('profile'); }
 }
 
-// Spin keyframe (used by refresh)
+// Spin keyframe
 const style = document.createElement('style');
 style.textContent = '@keyframes themeSpin { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(0.75); } 100% { transform: rotate(360deg) scale(1); } }';
 document.head.appendChild(style);
