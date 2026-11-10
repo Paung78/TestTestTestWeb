@@ -79,6 +79,15 @@
     overflow-x: hidden;
   }
 
+  /* ============ IMAGE PROTECTION (PREVENT LONG-PRESS MENU) ============ */
+  img {
+    -webkit-touch-callout: none !important; /* iOS မှာ ဖိထားရင် Menu မတက်အောင် ပိတ် */
+    -webkit-user-select: none !important;
+    user-select: none !important;
+    pointer-events: none !important; /* ပုံကို နှိပ်လို့မရအောင် ပိတ် (ပုံအောက်က Button ကို နှိပ်ရမယ်) */
+    -webkit-user-drag: none !important; /* ပုံကို ဆွဲချတာကို ပိတ် */
+  }
+
   body.lang-mm .nav-label { font-size: 9px; }
   body.lang-mm .action-label { font-size: 10px; }
   body.lang-mm .step-text { line-height: 1.6; }
@@ -3306,8 +3315,20 @@ document.addEventListener('keydown', (e) => {
 });
 
 // ============ IMAGE PROTECTION ============
-document.addEventListener('contextmenu', (e) => { if (e.target && e.target.tagName === 'IMG') e.preventDefault(); }, true);
-document.addEventListener('dragstart', (e) => { if (e.target && e.target.tagName === 'IMG') e.preventDefault(); }, true);
+document.addEventListener('contextmenu', (e) => { 
+    if (e.target && e.target.tagName === 'IMG') e.preventDefault(); 
+}, true);
+
+document.addEventListener('dragstart', (e) => { 
+    if (e.target && e.target.tagName === 'IMG') e.preventDefault(); 
+}, true);
+
+// Telegram နဲ့ iOS တွေမှာ ပုံကို ဖိထားရင် ပေါ်တဲ့ Menu ကို ပိတ်ခြင်း
+document.addEventListener('touchstart', (e) => {
+    if (e.target && e.target.tagName === 'IMG') {
+        e.preventDefault();
+    }
+}, { passive: false });
 
 // ============ PROFILE ============
 function renderProfilePage() {
