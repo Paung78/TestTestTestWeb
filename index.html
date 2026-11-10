@@ -85,6 +85,64 @@
 
   button { font-family: inherit; cursor: pointer; border: none; outline: none; }
 
+  /* ============ FIXING BANNER ============ */
+  .fixing-banner {
+    position: fixed;
+    top: calc(var(--header-h) + env(safe-area-inset-top, 0px));
+    left: 0;
+    right: 0;
+    z-index: 9997;
+    transform: translateY(-140%);
+    opacity: 0;
+    pointer-events: none;
+    transition: transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    padding: 0 16px;
+  }
+  .fixing-banner.show {
+    transform: translateY(0);
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .fixing-banner-inner {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 13px 20px;
+    max-width: 440px;
+    margin: 8px auto 0;
+    background: linear-gradient(135deg, #fbbf24, #f59e0b);
+    color: #1c1917;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: 800;
+    letter-spacing: 0.01em;
+    box-shadow:
+      0 8px 24px rgba(245, 158, 11, 0.35),
+      0 2px 8px rgba(245, 158, 11, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.35);
+    border: 1.5px solid rgba(251, 191, 36, 0.55);
+  }
+  body.dark .fixing-banner-inner {
+    background: linear-gradient(135deg, #fbbf24, #d97706);
+    color: #0f0a00;
+    box-shadow:
+      0 8px 24px rgba(251, 191, 36, 0.4),
+      0 2px 8px rgba(251, 191, 36, 0.25),
+      inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  }
+  body.lang-mm .fixing-banner-inner { font-size: 12px; }
+  .fixing-banner-icon {
+    font-size: 15px;
+    animation: fixingWrenchSpin 1.2s ease-in-out infinite;
+    transform-origin: center;
+    flex-shrink: 0;
+  }
+  @keyframes fixingWrenchSpin {
+    0%, 100% { transform: rotate(-18deg); }
+    50% { transform: rotate(18deg); }
+  }
+
   /* ============ INTRO SPLASH ============ */
   #introSplash {
     position: fixed; inset: 0; z-index: 9999;
@@ -1298,7 +1356,7 @@
   @keyframes slideDownFade { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* ============ PREDICTION PAGE (v27 List + Badge) ============ */
+  /* ============ PREDICTION PAGE ============ */
   #screen-prediction { padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 12px); }
   .prediction-list { display: flex; flex-direction: column; gap: 10px; }
 
@@ -1449,6 +1507,14 @@
 </style>
 </head>
 <body>
+
+<!-- FIXING BANNER -->
+<div id="fixingBanner" class="fixing-banner">
+  <div class="fixing-banner-inner">
+    <i class="fa-solid fa-wrench fixing-banner-icon"></i>
+    <span id="fixingBannerText">Fixing in progress... Please wait</span>
+  </div>
+</div>
 
 <!-- INTRO SPLASH -->
 <div id="introSplash">
@@ -1608,7 +1674,7 @@
     </div>
   </div>
 
-  <!-- PREDICTION (v27 List + Badge) -->
+  <!-- PREDICTION -->
   <div id="screen-prediction" class="screen">
     <div class="screen-inner">
       <div class="prediction-list" id="predictionList"></div>
@@ -1871,7 +1937,8 @@ const T = {
     session_expired_title: 'Session Expired',
     session_expired_desc: 'Your session has expired. Please sign in again.',
     premium_activated: 'Premium Activated',
-    premium_removed: 'Premium Removed'
+    premium_removed: 'Premium Removed',
+    fixing_in_progress: 'Fixing in progress... Please wait'
   },
   mm: {
     nav_home: 'ပင်မစာမျက်နှာ', nav_prediction: 'ကြိုတင်ခန့်မှန်း', nav_chats: 'ဇယား', nav_tools: 'ကိရိယာများ', nav_profile: 'ကျွန်ုပ်',
@@ -1912,7 +1979,8 @@ const T = {
     session_expired_title: 'သက်တမ်းကုန်ဆုံးပါပြီ',
     session_expired_desc: 'သင့်အကောင့်ဝင်ရောက်မှု သက်တမ်းကုန်ဆုံးသွားပါပြီ။ ထပ်မံဝင်ရောက်ပါ။',
     premium_activated: 'ပရီမီယံ အသက်သွင်းပြီး',
-    premium_removed: 'ပရီမီယံ ဖြုတ်လိုက်ပြီ'
+    premium_removed: 'ပရီမီယံ ဖြုတ်လိုက်ပြီ',
+    fixing_in_progress: 'ပြင်ဆင်နေသည်... ခဏစောင့်ပါ'
   }
 };
 
@@ -1963,7 +2031,7 @@ const HISTORY_CHATS = [
   { id: 'shwe1', brand: 'shwe', title_en: 'Shwe WinGo 1 History', title_mm: 'Shwe WinGo 1 မှတ်တမ်း', logo: 'Logo/shwe_logo.jpg', src: 'History%20Chat/Shwe%20WinGo%201/shwe1results.html', firebase: Object.assign({}, FIREBASE_PROJECT, { path: "shwewingo1/default" }) }
 ];
 
-// ============ CONTENT (same as before, abbreviated pattern) ============
+// ============ CONTENT ============
 const CONTENT = {
   ck: {
     register: { cta: { href: 'http://www.cklottery.top/#/register?invitationCode=81487219676', text_en: 'Register Now', text_mm: 'အကောင့်ဖွင့်ရန်နိပ်ပါ' }, steps: [
@@ -2108,7 +2176,7 @@ let currentVerifyListener = null;
 // Session state
 const SESSION_KEY = 'webSessionId';
 const DEVICE_ID_KEY = 'webDeviceId';
-const SESSION_DURATION_MS = 24 * 60 * 60 * 1000; // 24 hours
+const SESSION_DURATION_MS = 24 * 60 * 60 * 1000;
 let sessionRef = null;
 let sessionHandler = null;
 let forceLogoutInProgress = false;
@@ -2119,6 +2187,9 @@ let premiumRef = null;
 let premiumHandler = null;
 let justAddedPlatforms = [];
 
+// Fixing banner state
+let fixingBannerTimer = null;
+
 // Bridge
 const BRIDGE_CONFIG = { databaseURL: "https://chackchack-d7445-default-rtdb.europe-west1.firebasedatabase.app" };
 let loginBridgeDb = null;
@@ -2128,6 +2199,27 @@ try {
   catch (e) { app = firebase.initializeApp(BRIDGE_CONFIG, 'loginBridge'); }
   loginBridgeDb = app.database();
 } catch (e) { console.error('Bridge init error:', e); }
+
+// ============ FIXING BANNER ============
+function showFixingBanner() {
+  const banner = document.getElementById('fixingBanner');
+  if (!banner) return;
+
+  const textEl = document.getElementById('fixingBannerText');
+  if (textEl) {
+    textEl.textContent = T[currentLang].fixing_in_progress || 'Fixing in progress... Please wait';
+  }
+
+  banner.classList.remove('show');
+  void banner.offsetWidth;
+  banner.classList.add('show');
+
+  if (fixingBannerTimer) clearTimeout(fixingBannerTimer);
+  fixingBannerTimer = setTimeout(() => {
+    banner.classList.remove('show');
+    fixingBannerTimer = null;
+  }, 3000);
+}
 
 // ============ SESSION MANAGEMENT ============
 function getOrCreateDeviceId() {
@@ -2148,24 +2240,16 @@ async function createSession(chatId) {
   const sessionId = generateSessionId();
   const deviceId = getOrCreateDeviceId();
   const now = Date.now();
-  const sessionData = {
-    sessionId,
-    deviceId,
-    loginTime: now,
-    expiresAt: now + SESSION_DURATION_MS
-  };
+  const sessionData = { sessionId, deviceId, loginTime: now, expiresAt: now + SESSION_DURATION_MS };
   try {
     await loginBridgeDb.ref('active_sessions/' + chatId).set(sessionData);
     localStorage.setItem(SESSION_KEY, sessionId);
     return sessionId;
-  } catch (e) {
-    console.warn('Session create failed:', e);
-    return null;
-  }
+  } catch (e) { console.warn('Session create failed:', e); return null; }
 }
 
 async function verifySessionOnLoad(chatId) {
-  if (!loginBridgeDb) return true; // Optimistic allow
+  if (!loginBridgeDb) return true;
   const mySessionId = localStorage.getItem(SESSION_KEY);
   if (!mySessionId) return false;
   try {
@@ -2175,10 +2259,7 @@ async function verifySessionOnLoad(chatId) {
     if (data.sessionId !== mySessionId) return false;
     if (data.expiresAt && Date.now() > data.expiresAt) return false;
     return true;
-  } catch (e) {
-    // Network error — optimistic allow
-    return true;
-  }
+  } catch (e) { return true; }
 }
 
 function startSessionListener(chatId) {
@@ -2186,71 +2267,45 @@ function startSessionListener(chatId) {
   if (!loginBridgeDb) return;
   const mySessionId = localStorage.getItem(SESSION_KEY);
   if (!mySessionId) return;
-
   sessionRef = loginBridgeDb.ref('active_sessions/' + chatId);
   sessionHandler = sessionRef.on('value', (snap) => {
     const data = snap.val();
-    if (!data || !data.sessionId) {
-      handleForceLogout('removed');
-      return;
-    }
-    if (data.sessionId !== mySessionId) {
-      handleForceLogout('conflict');
-      return;
-    }
-    if (data.expiresAt && Date.now() > data.expiresAt) {
-      handleForceLogout('expired');
-    }
+    if (!data || !data.sessionId) { handleForceLogout('removed'); return; }
+    if (data.sessionId !== mySessionId) { handleForceLogout('conflict'); return; }
+    if (data.expiresAt && Date.now() > data.expiresAt) { handleForceLogout('expired'); }
   });
 }
 
 function stopSessionListener() {
-  if (sessionRef && sessionHandler) {
-    try { sessionRef.off('value', sessionHandler); } catch (e) {}
-  }
+  if (sessionRef && sessionHandler) { try { sessionRef.off('value', sessionHandler); } catch (e) {} }
   sessionRef = null;
   sessionHandler = null;
 }
 
 async function removeMySession(chatId) {
   if (!loginBridgeDb || !chatId) return;
-  try {
-    await loginBridgeDb.ref('active_sessions/' + chatId).remove();
-  } catch (e) {}
+  try { await loginBridgeDb.ref('active_sessions/' + chatId).remove(); } catch (e) {}
 }
 
 function handleForceLogout(reason) {
   if (forceLogoutInProgress) return;
   forceLogoutInProgress = true;
-
-  // Cleanup listeners
   stopSessionListener();
   stopPremiumListener();
-
-  // Cleanup local state
   localStorage.removeItem('webUserData');
   localStorage.removeItem(SESSION_KEY);
   sessionStorage.removeItem('guestMode');
   userDataCache = null;
-
-  // Close any open UI
   closeAllUI();
-
-  // Show dialog
   showForceLogoutDialog(reason);
-
-  // Auto-dismiss in 5s
   if (forceLogoutTimer) clearTimeout(forceLogoutTimer);
-  forceLogoutTimer = setTimeout(() => {
-    finalizeForceLogout();
-  }, 5000);
+  forceLogoutTimer = setTimeout(() => { finalizeForceLogout(); }, 5000);
 }
 
 function showForceLogoutDialog(reason) {
   const overlay = document.getElementById('forceLogoutOverlay');
   const titleEl = document.getElementById('forceLogoutTitle');
   const descEl = document.getElementById('forceLogoutDesc');
-
   let title, desc;
   if (reason === 'expired') {
     title = T[currentLang].session_expired_title;
@@ -2259,7 +2314,6 @@ function showForceLogoutDialog(reason) {
     title = T[currentLang].session_ended_title;
     desc = T[currentLang].session_ended_desc;
   }
-
   titleEl.textContent = title;
   descEl.textContent = desc;
   overlay.classList.add('show');
@@ -2270,7 +2324,6 @@ function finalizeForceLogout() {
   forceLogoutInProgress = false;
   if (forceLogoutTimer) { clearTimeout(forceLogoutTimer); forceLogoutTimer = null; }
   document.getElementById('forceLogoutOverlay').classList.remove('show');
-
   appState.mode = 'login';
   appState.cameFromGuest = false;
   showLoginScreen();
@@ -2279,9 +2332,7 @@ function finalizeForceLogout() {
 }
 
 function closeAllUI() {
-  if (currentSub) {
-    try { closeSub(); } catch (e) {}
-  }
+  if (currentSub) { try { closeSub(); } catch (e) {} }
   if (currentExtensionOpen) closeExtensionWebsite();
   document.getElementById('logoutConfirmModal').classList.remove('active');
   document.getElementById('photoModal').classList.remove('active');
@@ -2290,28 +2341,21 @@ function closeAllUI() {
 }
 
 // ============ PREMIUM REAL-TIME ============
-function getPlatformName(key) {
-  return PLATFORM_NAMES[key] || key;
-}
+function getPlatformName(key) { return PLATFORM_NAMES[key] || key; }
 
 function startPremiumListener(chatId) {
   stopPremiumListener();
   if (!loginBridgeDb) return;
-
   premiumRef = loginBridgeDb.ref('user_premium/' + chatId);
   premiumHandler = premiumRef.on('value', (snap) => {
     const data = snap.val() || {};
     const newPlatforms = data.platforms || {};
     const newPaidUid = data.paidUid || null;
-
     if (!userDataCache) return;
-
     const oldPlatforms = userDataCache.platforms || {};
     const oldPaidUid = userDataCache.paidUid || null;
-
     const added = [];
     const removed = [];
-
     for (const key of ['ck', 'bigwin', 'sixwin', 'shwe']) {
       const oldUid = oldPlatforms[key];
       const newUid = newPlatforms[key];
@@ -2320,32 +2364,18 @@ function startPremiumListener(chatId) {
         else if (oldUid && !newUid) removed.push(key);
       }
     }
-
     if (oldPaidUid !== newPaidUid) {
       if (!oldPaidUid && newPaidUid) added.push('paid');
       else if (oldPaidUid && !newPaidUid) removed.push('paid');
     }
-
     if (added.length === 0 && removed.length === 0) return;
-
-    // Update cache
     userDataCache.platforms = newPlatforms;
     userDataCache.paidUid = newPaidUid;
     userDataCache.lastPremiumSync = Date.now();
     localStorage.setItem('webUserData', JSON.stringify(userDataCache));
-
-    // Mark just-added for animation
     justAddedPlatforms = added.slice();
-
-    // Re-render if on profile or prediction
-    if (appState.currentTab === 'profile') {
-      renderProfilePage();
-    }
-    if (appState.currentTab === 'prediction') {
-      renderPredictionList();
-    }
-
-    // Toasts
+    if (appState.currentTab === 'profile') renderProfilePage();
+    if (appState.currentTab === 'prediction') renderPredictionList();
     added.forEach(key => {
       const name = getPlatformName(key);
       const tpl = currentLang === 'mm' ? `${name} ${T.mm.premium_activated}` : `${name} ${T.en.premium_activated}`;
@@ -2356,15 +2386,12 @@ function startPremiumListener(chatId) {
       const tpl = currentLang === 'mm' ? `${name} ${T.mm.premium_removed}` : `${name} ${T.en.premium_removed}`;
       showToast(tpl, 'error');
     });
-
     justAddedPlatforms = [];
   });
 }
 
 function stopPremiumListener() {
-  if (premiumRef && premiumHandler) {
-    try { premiumRef.off('value', premiumHandler); } catch (e) {}
-  }
+  if (premiumRef && premiumHandler) { try { premiumRef.off('value', premiumHandler); } catch (e) {} }
   premiumRef = null;
   premiumHandler = null;
 }
@@ -2377,9 +2404,7 @@ async function writePremiumSnapshot(chatId, platforms, paidUid) {
       paidUid: paidUid || null,
       updatedAt: Date.now()
     });
-  } catch (e) {
-    console.warn('Premium snapshot write failed:', e);
-  }
+  } catch (e) { console.warn('Premium snapshot write failed:', e); }
 }
 
 // ============ INIT ============
@@ -2387,11 +2412,9 @@ document.addEventListener('DOMContentLoaded', async () => {
   const savedTheme = localStorage.getItem('appTheme');
   const prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
   applyTheme(savedTheme || (prefersDark ? 'dark' : 'light'), false);
-
   applyLanguage(currentLang);
 
   const savedUser = localStorage.getItem('webUserData');
-
   if (savedUser) {
     const valid = await verifySessionOnLoad(JSON.parse(savedUser).chatId);
     if (valid) {
@@ -2403,7 +2426,6 @@ document.addEventListener('DOMContentLoaded', async () => {
       startSessionListener(userDataCache.chatId);
       startPremiumListener(userDataCache.chatId);
     } else {
-      // Session invalid
       localStorage.removeItem('webUserData');
       localStorage.removeItem(SESSION_KEY);
       appState.mode = 'login';
@@ -2422,7 +2444,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   updateHeader();
   updateBottomNav();
   renderExtensionFab();
-
   HISTORY_CHATS.forEach(chat => fetchRecordCount(chat, true));
 
   setTimeout(() => {
@@ -2439,7 +2460,6 @@ function showLoginScreen() {
   document.getElementById('mainApp').style.display = 'none';
   updateBottomNav();
   updateExtensionVisibility();
-
   const container = document.getElementById('loginContainer');
   if (container) {
     container.classList.remove('stagger');
@@ -2460,8 +2480,6 @@ function updateHeader() {
   const closeBtn = document.getElementById('headerCloseBtn');
   const right = document.getElementById('headerRight');
   if (!brand || !closeBtn || !right) return;
-
-  // Left side
   if (appState.mode === 'login' && appState.cameFromGuest) {
     brand.style.display = 'none';
     closeBtn.style.display = 'flex';
@@ -2469,8 +2487,6 @@ function updateHeader() {
     brand.style.display = 'block';
     closeBtn.style.display = 'none';
   }
-
-  // Right side
   if (appState.mode === 'login') {
     right.innerHTML = '';
   } else if (appState.mode === 'guest') {
@@ -2556,25 +2572,19 @@ function renderExtensionFab() {
   const fab = document.getElementById('extensionFab');
   const list = document.getElementById('extensionFabList');
   const enabled = getEnabledExtensions();
-
-  // Allow both user and guest
   if (appState.mode === 'login' || enabled.length === 0) {
     wrap.classList.remove('visible');
     list.classList.remove('visible');
     extensionExpanded = false;
     return;
   }
-
   wrap.classList.add('visible');
-
   if (currentExtensionOpen) {
     fab.innerHTML = `<img src="${EXT_CONFIG[currentExtensionOpen].logo}" alt="">`;
     fab.classList.add('single-brand', 'is-open');
     return;
   }
-
   fab.classList.remove('is-open');
-
   if (enabled.length === 1) {
     fab.innerHTML = `<img src="${EXT_CONFIG[enabled[0]].logo}" alt="">`;
     fab.classList.add('single-brand');
@@ -2614,16 +2624,13 @@ function openExtensionWebsite(brandKey) {
   const cfg = EXT_CONFIG[brandKey];
   if (!cfg) return;
   if (currentSub) closeSub();
-
   const overlay = document.getElementById('extensionWebsiteOverlay');
-
   if (extensionCache.brand === brandKey && extensionCache.iframe && extensionCache.iframe.parentNode === overlay) {
     overlay.classList.add('active');
     currentExtensionOpen = brandKey;
     renderExtensionFab();
     return;
   }
-
   overlay.innerHTML = '';
   const skeleton = document.createElement('div');
   skeleton.className = 'extension-website-loading';
@@ -2633,14 +2640,12 @@ function openExtensionWebsite(brandKey) {
     <div>${cfg.name}</div>
   `;
   overlay.appendChild(skeleton);
-
   const iframe = document.createElement('iframe');
   iframe.src = cfg.url;
   iframe.title = cfg.name;
   iframe.style.cssText = 'width:100%;height:100%;border:none;display:block;position:absolute;inset:0;opacity:0;transition:opacity 0.3s;';
   iframe.onload = () => { skeleton.remove(); iframe.style.opacity = '1'; };
   overlay.appendChild(iframe);
-
   extensionCache = { brand: brandKey, iframe };
   currentExtensionOpen = brandKey;
   extensionExpanded = false;
@@ -2763,7 +2768,6 @@ function applyLanguage(lang) {
   currentLang = lang;
   localStorage.setItem('appLang', lang);
   document.body.classList.toggle('lang-mm', lang === 'mm');
-
   document.querySelectorAll('[data-t]').forEach(el => {
     const key = el.getAttribute('data-t');
     if (T[lang][key]) {
@@ -2772,14 +2776,14 @@ function applyLanguage(lang) {
       el.textContent = T[lang][key];
     }
   });
-
   document.getElementById('opt-mm').classList.toggle('active', lang === 'mm');
   document.getElementById('opt-en').classList.toggle('active', lang === 'en');
-
   updateHeader();
   renderHistoryChats();
   renderProfilePage();
-
+  // Update fixing banner text if showing
+  const fixingText = document.getElementById('fixingBannerText');
+  if (fixingText) fixingText.textContent = T[lang].fixing_in_progress || 'Fixing in progress... Please wait';
   if (currentSub) {
     if (currentSub.brand === 'tools' && currentSub.action === 'betsize') renderBetSizePage(true);
     else if (currentSub.brand === 'settings') renderSettingsPage(true);
@@ -2919,29 +2923,24 @@ function openSettingsPage() {
 function renderSubPage(brandKey, actionKey, isSilentRender) {
   if (brandKey === 'tools' && actionKey === 'betsize') { renderBetSizePage(isSilentRender); return; }
   if (brandKey === 'settings') { renderSettingsPage(isSilentRender); return; }
-
   const brand = BRANDS[brandKey];
   const content = CONTENT[brandKey] && CONTENT[brandKey][actionKey];
   if (!brand || !content) return;
   const body = document.getElementById('subBody');
   body.classList.remove('sub-screen-body--iframe');
-
   let actionLabel = T[currentLang]['action_' + actionKey];
   if (actionKey === 'register') actionLabel = currentLang === 'mm' ? 'အကောင့်ဖွင့်ရန်နည်းလမ်းများ' : 'Register Steps';
   if (actionKey === 'deposit') actionLabel = currentLang === 'mm' ? 'ငွေသွင်းရန်နည်းလမ်းများ' : 'Deposit Steps';
   if (actionKey === 'withdraw') actionLabel = currentLang === 'mm' ? 'ငွေထုတ်ရန်နည်းလမ်းများ' : 'Withdraw Steps';
-
   let html = '<div class="sub-page-header">' +
     '<div class="sub-brand-icon"><img src="' + brand.logo + '" alt=""></div>' +
     '<div><div class="sub-brand-label">' + brand.name + '</div><div class="sub-page-title">' + actionLabel + '</div></div>' +
   '</div>';
-
   if (content.cta) {
     const ctaText = currentLang === 'mm' ? content.cta.text_mm : content.cta.text_en;
     html += '<a class="register-cta" href="' + content.cta.href + '" target="_blank" rel="noopener noreferrer" style="background:linear-gradient(135deg,' + brand.c1 + ',' + brand.c2 + ');">' +
       '<i class="fa-solid fa-arrow-up-right-from-square"></i><span>' + ctaText + '</span></a>';
   }
-
   html += '<div class="step-grid">';
   content.steps.forEach((step, i) => {
     const delay = isSilentRender ? 0 : (200 + i * 50);
@@ -2964,11 +2963,9 @@ function renderSettingsPage(isSilentRender) {
   const body = document.getElementById('subBody');
   if (!body) return;
   body.classList.remove('sub-screen-body--iframe');
-
   const t = T[currentLang];
   const isDark = document.body.classList.contains('dark');
   const langText = currentLang === 'mm' ? 'မြန်မာ (Myanmar)' : 'English (USA)';
-
   let html = '' +
     '<div class="sub-page-header">' +
       '<div class="sub-brand-icon settings-icon"><i class="fa-solid fa-gear"></i></div>' +
@@ -2995,7 +2992,6 @@ function renderSettingsPage(isSilentRender) {
       renderExtensionToggle('sixwin') +
       renderExtensionToggle('shwe') +
     '</div>';
-
   body.innerHTML = html;
   if (!isSilentRender) body.scrollTop = 0;
 }
@@ -3010,7 +3006,7 @@ function renderExtensionToggle(key) {
     '</div>';
 }
 
-// ============ BET SIZE (same as before) ============
+// ============ BET SIZE ============
 const betSizeState = { profitMult: 1, betCount: 6, openPicker: null, lastResult: null, copyTimer: null, calcTimer: null, inputValue: '' };
 function escapeHtmlAttr(str) { return String(str || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
 
@@ -3025,7 +3021,6 @@ function renderBetSizePage(isSilentRender) {
   const t = T[currentLang];
   const profitLabel = (currentLang === 'mm' ? toMmNum(betSizeState.profitMult) : betSizeState.profitMult) + '×';
   const countLabel = currentLang === 'mm' ? toMmNum(betSizeState.betCount) : String(betSizeState.betCount);
-
   let html = '' +
     '<div class="sub-page-header">' +
       '<div class="sub-brand-icon bet-size-icon"><i class="fa-solid fa-calculator"></i></div>' +
@@ -3060,7 +3055,6 @@ function renderBetSizePage(isSilentRender) {
         '</table>' +
       '</div>' +
     '</div>';
-
   body.innerHTML = html;
   buildBetSizeOptions('profit', betSizeState.profitMult);
   buildBetSizeOptions('count', betSizeState.betCount);
@@ -3458,7 +3452,6 @@ function backOtp(e, current, index) {
   }
 }
 
-// OTP paste
 document.addEventListener('DOMContentLoaded', () => {
   const boxes = Array.from(document.querySelectorAll('.otp-box'));
   boxes.forEach((box, i) => {
@@ -3533,16 +3526,13 @@ async function sendLoginCode() {
   const chatId = document.getElementById('loginChatId').value.trim();
   if (!chatId || chatId.length < 5) return showError('chatIdError', currentLang === 'mm' ? 'မှန်ကန်သော Member ID ထည့်ပါ။' : 'Please enter a valid Member ID.');
   if (!loginBridgeDb) return showError('chatIdError', 'Database error.');
-
   sendBusy = true;
   const btn = document.getElementById('sendCodeBtn');
   btn.disabled = true;
   btn.textContent = currentLang === 'mm' ? 'ပို့နေသည်...' : 'Sending...';
   document.getElementById('chatIdError').classList.remove('show');
-
   cleanupSend();
   currentLoginReqId = 'req_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
-
   try {
     await loginBridgeDb.ref('web_login/' + currentLoginReqId).set({ chatId, status: 'pending', timestamp: Date.now() });
     currentSendListener = loginBridgeDb.ref('web_login/' + currentLoginReqId).on('value', (snap) => {
@@ -3586,19 +3576,16 @@ async function verifyLoginCode() {
   const code = getOtpCode();
   if (code.length !== 6) return showError('otpError', currentLang === 'mm' ? 'ဂဏန်း ၆ လုံး ထည့်ပါ။' : 'Please enter 6 digits.');
   if (!currentLoginReqId || !loginBridgeDb) return showError('otpError', currentLang === 'mm' ? 'ပထမဦးစွာ ကုဒ်တောင်းပါ။' : 'Please request a code first.');
-
   loginBusy = true;
   const btn = document.getElementById('verifyCodeBtn');
   btn.disabled = true;
   btn.textContent = currentLang === 'mm' ? 'ဝင်ရောက်နေသည်...' : 'Signing in...';
   document.getElementById('otpError').classList.remove('show');
-
   if (currentVerifyListener && currentLoginReqId && loginBridgeDb) {
     try { loginBridgeDb.ref('web_login/' + currentLoginReqId).off('value', currentVerifyListener); } catch (e) {}
     currentVerifyListener = null;
   }
   if (verifyTimeout) { clearTimeout(verifyTimeout); verifyTimeout = null; }
-
   try {
     await loginBridgeDb.ref('web_login/' + currentLoginReqId).update({ status: 'verifying', userCode: code });
     currentVerifyListener = loginBridgeDb.ref('web_login/' + currentLoginReqId).on('value', (snap) => {
@@ -3647,11 +3634,8 @@ async function showLoginSuccess(chatId, platforms) {
   const overlay = document.getElementById('loginSuccessOverlay');
   document.getElementById('loginSuccessId').textContent = 'ID: ' + chatId;
   overlay.classList.add('show');
-
-  // Create session + write premium snapshot
   try { await createSession(chatId); } catch (e) {}
   try { await writePremiumSnapshot(chatId, platforms || {}, platforms?.paid || null); } catch (e) {}
-
   setTimeout(() => {
     overlay.classList.remove('show');
     setTimeout(() => {
@@ -3659,11 +3643,9 @@ async function showLoginSuccess(chatId, platforms) {
       localStorage.setItem('webUserData', JSON.stringify(userData));
       sessionStorage.removeItem('guestMode');
       userDataCache = userData;
-
       cleanupAllLogin();
       resetLoginForm();
       loadExtensionState();
-
       appState.mode = 'user';
       appState.cameFromGuest = false;
       showMainApp();
@@ -3671,8 +3653,6 @@ async function showLoginSuccess(chatId, platforms) {
       switchTab('home');
       renderProfilePage();
       renderExtensionFab();
-
-      // Start listeners
       startSessionListener(chatId);
       startPremiumListener(chatId);
     }, 400);
@@ -3778,7 +3758,7 @@ const style = document.createElement('style');
 style.textContent = '@keyframes themeSpin { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(0.75); } 100% { transform: rotate(360deg) scale(1); } }';
 document.head.appendChild(style);
 
-// ============ PREDICTION PAGE (v27 List + Badge + Unlock) ============
+// ============ PREDICTION PAGE ============
 const PREDICTION_DATA = {
   ck: {
     name: 'Ck Lottery', logo: 'Logo/ck_logo.jpg',
@@ -3862,8 +3842,8 @@ const PREDICTION_DATA = {
       wg30: {
         name: 'WinGo 30 Sec',
         special: [
-          { ver: 'v1.1', path: 'Mini/ShweMini/shwe30mini1-1.html', placeholder: true },
-          { ver: 'v1.2', path: 'Mini/ShweMini/shwe30mini1-2.html', placeholder: true },
+          { ver: 'v1.1', path: 'Mini/ShweMini/shwe30mini1-1.html' },
+          { ver: 'v1.2', path: 'Mini/ShweMini/shwe30mini1-2.html' },
           { ver: 'v1.3', path: 'Mini/ShweMini/shwe30mini1-3.html', placeholder: true }
         ],
         free: [
@@ -3873,8 +3853,8 @@ const PREDICTION_DATA = {
       wg1: {
         name: 'WinGo 1 Min',
         special: [
-          { ver: 'v1.1', path: 'Mini/ShweMini/shwe1mini1-1.html', placeholder: true },
-          { ver: 'v1.2', path: 'Mini/ShweMini/shwe1mini1-2.html', placeholder: true },
+          { ver: 'v1.1', path: 'Mini/ShweMini/shwe1mini1-1.html' },
+          { ver: 'v1.2', path: 'Mini/ShweMini/shwe1mini1-2.html' },
           { ver: 'v1.3', path: 'Mini/ShweMini/shwe1mini1-3.html', placeholder: true }
         ]
       }
@@ -3959,7 +3939,6 @@ function handleLockedPredictionClick(platformKey) {
   predictionLockedClicks[platformKey] = (predictionLockedClicks[platformKey] || 0) + 1;
   const count = predictionLockedClicks[platformKey];
   const remain = PREDICTION_LOCK_THRESHOLD - count;
-
   if (count >= PREDICTION_LOCK_THRESHOLD) {
     predictionLockedClicks[platformKey] = 0;
     const msg = currentLang === 'mm'
@@ -3981,7 +3960,6 @@ function handleLockedPredictionClick(platformKey) {
 function openPredictionPlatform(platformKey) {
   const p = PREDICTION_DATA[platformKey];
   if (!p) return;
-
   if (appState.mode !== 'user') {
     const msg = currentLang === 'mm'
       ? 'ခန့်မှန်းချက်များ အသုံးပြုရန် Profile မှ ဝင်ရောက်ပါ။'
@@ -3991,14 +3969,11 @@ function openPredictionPlatform(platformKey) {
     else setTimeout(() => switchTab('profile'), 400);
     return;
   }
-
   if (!isPredictionUnlocked(platformKey)) {
     handleLockedPredictionClick(platformKey);
     return;
   }
-
   predictionLockedClicks[platformKey] = 0;
-
   if (currentSub) closeSub();
   hideExtensionForSubscreen();
   currentSub = { brand: 'prediction', action: platformKey };
@@ -4019,7 +3994,6 @@ function renderPredictionPlatformDetail() {
   if (!p) return;
   const subBody = document.getElementById('subBody');
   subBody.classList.remove('sub-screen-body--iframe');
-
   let html = '<div class="sub-page-header">' +
     '<div class="sub-brand-icon"><img src="' + p.logo + '" alt=""></div>' +
     '<div>' +
@@ -4027,7 +4001,6 @@ function renderPredictionPlatformDetail() {
       '<div class="sub-page-title">' + escapeHtml(p.name) + '</div>' +
     '</div>' +
   '</div>';
-
   Object.keys(p.games).forEach(function(gKey) {
     const g = p.games[gKey];
     html += '<div class="prediction-game-section">' +
@@ -4056,7 +4029,6 @@ function renderPredictionPlatformDetail() {
     }
     html += '</div>';
   });
-
   subBody.innerHTML = html;
   subBody.scrollTop = 0;
 }
@@ -4071,10 +4043,15 @@ function openPredictionMini(gameKey, verKey, type) {
   const v = list.find(function(item) { return item.ver === verKey; });
   if (!v) return;
 
+  // ===== NEW: If placeholder, show Fixing banner instead of navigating =====
+  if (v.placeholder) {
+    showFixingBanner();
+    return;
+  }
+
   predictionState.game = gameKey;
   predictionState.ver = verKey;
   predictionState.type = type;
-
   const subBody = document.getElementById('subBody');
   subBody.classList.add('sub-screen-body--iframe');
   subBody.innerHTML = '';
