@@ -156,8 +156,8 @@ body.lang-mm { font-family: 'Padauk', 'Inter', sans-serif; }
 }
 .cd-value.urgent { color: #ef4444; }
 
-/* ===== PREDICTION TERMINAL ===== */
-.pred-hero {
+/* ===== TERMINAL BOX ===== */
+.terminal-box {
   background: var(--terminal-bg);
   border: 1.5px solid var(--border);
   border-radius: 14px;
@@ -167,15 +167,14 @@ body.lang-mm { font-family: 'Padauk', 'Inter', sans-serif; }
   overflow: hidden;
   animation: fadeUp 0.5s var(--ease) 160ms both;
 }
-.pred-hero::before {
+.terminal-box::before {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; height: 2px;
   background: linear-gradient(90deg, transparent, var(--accent), transparent);
   opacity: 0.8;
 }
-
-.hero-head {
+.terminal-box .hero-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -183,7 +182,7 @@ body.lang-mm { font-family: 'Padauk', 'Inter', sans-serif; }
   padding-bottom: 10px;
   border-bottom: 1px solid rgba(255,255,255,0.08);
 }
-.hero-label {
+.terminal-box .hero-label {
   font-family: var(--font-mono);
   font-size: 10px;
   font-weight: 700;
@@ -194,13 +193,46 @@ body.lang-mm { font-family: 'Padauk', 'Inter', sans-serif; }
   align-items: center;
   gap: 6px;
 }
-.hero-label::before { content: '>'; opacity: 0.7; }
-.hero-period {
+.terminal-box .hero-label::before { content: '>'; opacity: 0.7; }
+.terminal-box .hero-period {
   font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 700;
   color: #64748b;
 }
+
+/* ===== RESULT BOX ===== */
+.result-box {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  position: relative;
+  overflow: hidden;
+  animation: fadeUp 0.5s var(--ease) 200ms both;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+}
+.result-box .hero-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.result-box .hero-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.result-box .hero-label::before { display: none; }
 
 /* Terminal Typing Area */
 .terminal-area {
@@ -267,27 +299,7 @@ body.lang-mm { font-family: 'Padauk', 'Inter', sans-serif; }
   text-shadow: 0 0 20px rgba(255,255,255,0.1);
 }
 
-/* Radar Pulse */
-.radar-pulse {
-  position: absolute;
-  top: 50%; left: 50%;
-  width: 120px; height: 120px;
-  border-radius: 50%;
-  border: 1.5px solid var(--accent);
-  transform: translate(-50%, -50%);
-  opacity: 0;
-  pointer-events: none;
-}
-.result-area.show .radar-pulse {
-  animation: radarPulse 2.5s ease-out infinite;
-}
-.result-value.is-small ~ .radar-pulse {
-  border-color: #94a3b8;
-}
-@keyframes radarPulse {
-  0% { transform: translate(-50%, -50%) scale(0.6); opacity: 0.5; }
-  100% { transform: translate(-50%, -50%) scale(1.6); opacity: 0; }
-}
+
 
 .result-confidence {
   display: flex;
@@ -503,13 +515,13 @@ body.lang-mm { font-family: 'Padauk', 'Inter', sans-serif; }
     <span class="cd-value" id="cdValue">00:30</span>
   </div>
 
-  <section class="pred-hero" id="predHero">
+  <!-- 1. Analysis Terminal Box -->
+  <section class="terminal-box" id="terminalBox">
     <div class="hero-head">
       <span class="hero-label" data-en="Analysis Terminal" data-mm="ခွဲခြမ်းစိတ်ဖြာမှု">Analysis Terminal</span>
       <span class="hero-period" id="heroPeriod">#---</span>
     </div>
 
-    <!-- Terminal Animation Area -->
     <div class="terminal-area" id="terminalArea">
       <div class="terminal-line" id="line1" style="display:none;"><span class="prompt">></span><span class="text"></span></div>
       <div class="terminal-line" id="line2" style="display:none;"><span class="prompt">></span><span class="text"></span></div>
@@ -517,11 +529,17 @@ body.lang-mm { font-family: 'Padauk', 'Inter', sans-serif; }
       <div class="terminal-line" id="line4" style="display:none;"><span class="prompt">></span><span class="text"></span></div>
       <span class="blinking-cursor" id="cursor"></span>
     </div>
+  </section>
 
-    <!-- Result Area -->
-    <div class="result-area" id="resultArea">
-      <div class="radar-pulse"></div>
-      <div class="result-value" id="resultValue">BIG</div>
+  <!-- 2. Prediction Result Box -->
+  <section class="result-box" id="resultBox">
+    <div class="hero-head">
+      <span class="hero-label" data-en="Prediction Result" data-mm="ခန့်မှန်းချက် ရလဒ်">Prediction Result</span>
+    </div>
+
+    <div class="result-area" id="resultArea" style="flex:1; justify-content:center;">
+      <!-- Radar pulse (အဝိုင်းကြီး) ကို ဖျက်ပြီးပါပြီ -->
+      <div class="result-value" id="resultValue">-</div>
       <div class="result-confidence">
         <span class="conf-label" data-en="Confidence" data-mm="ယုံကြည်မှု">Confidence</span>
         <div class="conf-track"><div class="conf-fill" id="confFill"></div></div>
