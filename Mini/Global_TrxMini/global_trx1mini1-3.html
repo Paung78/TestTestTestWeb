@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<title>Global Trx • 1Min V1.3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;700&family=Padauk:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --font-sans: 'Inter', 'Padauk', system-ui, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Courier New', monospace;
+
+  /* Global Trx Purple Theme */
+  --bg-page: #f8fafc;
+  --bg-card: #ffffff;
+  --text-dark: #0f172a;
+  --text-muted: #64748b;
+  --text-light: #cbd5e1;
+  
+  --accent: #a855f7; /* Theme Purple */
+  --accent-hover: #9333ea;
+  --accent-light: #c084fc;
+  --accent-glow: rgba(168, 85, 247, 0.2);
+  
+  --border: #e2e8f0;
+  --border-light: #f1f5f9;
+  
+  --terminal-bg: #0f172a;
+  --terminal-text: #c084fc;
+
+  /* Specific Colors */
+  --color-big: #ca8a04;
+  --color-small: #0284c7;
+  --color-win: #16a34a;
+  --color-lose: #dc2626;
+  --color-low: #dc2626;
+  --color-med: #ea580c;
+  --color-high: #16a34a;
+  --bg-big: rgba(202, 138, 4, 0.15);
+  --bg-small: rgba(2, 132, 199, 0.15);
+
+  --spring: cubic-bezier(0.34,1.56,0.64,1);
+  --ease: cubic-bezier(0.32,0.72,0,1);
+}
+
+body.dark {
+  --bg-page: #0f172a;
+  --bg-card: #1e293b;
+  --text-dark: #f1f5f9;
+  --text-muted: #94a3b8;
+  --text-light: #334155;
+  
+  --accent: #c084fc;
+  --accent-hover: #a855f7;
+  --accent-light: #d8b4fe;
+  --accent-glow: rgba(192, 132, 252, 0.25);
+  
+  --border: #334155;
+  --border-light: #1e293b;
+  
+  --terminal-bg: #020617;
+  --terminal-text: #d8b4fe;
+
+  /* Specific Colors */
+  --color-big: #fde047;
+  --color-small: #38bdf8;
+  --color-win: #4ade80;
+  --color-lose: #f87171;
+  --color-low: #f87171;
+  --color-med: #fb923c;
+  --color-high: #4ade80;
+  --bg-big: rgba(253, 224, 71, 0.15);
+  --bg-small: rgba(56, 189, 248, 0.15);
+}
+
+html, body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  background: var(--bg-page);
+  color: var(--text-dark);
+  transition: background-color 0.35s ease, color 0.35s ease;
+}
+
+body {
+  font-family: var(--font-sans);
+  min-height: 100vh;
+  padding: 14px;
+  padding-top: calc(14px + env(safe-area-inset-top, 0px));
+  padding-bottom: calc(24px + env(safe-area-inset-bottom, 0px));
+  display: flex;
+  justify-content: center;
+}
+
+body.lang-mm { font-family: 'Padauk', 'Inter', sans-serif; }
+
+.app {
+  width: 100%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* ===== HEADER ===== */
+.app-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding: 0 4px 10px;
+  border-bottom: 1px solid var(--border);
+  animation: fadeDown 0.5s var(--ease) both;
+}
+.header-left { display: flex; flex-direction: column; gap: 4px; }
+.header-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: var(--text-dark);
+  line-height: 1.2;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.version-badge {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 2px 8px;
+  background: var(--accent);
+  color: #fff;
+  border-radius: 999px;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+.header-sub {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.pulse-dot {
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  transition: background 0.3s;
+}
+.pulse-dot.live { background: var(--accent); box-shadow: 0 0 8px var(--accent-glow); }
+.pulse-dot.error { background: var(--color-lose); }
+
+/* ===== CD BANNER ===== */
+.cd-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  animation: fadeUp 0.5s var(--ease) 80ms both;
+}
+.cd-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+.cd-value {
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-dark); /* Dynamic: White in Dark, Black in Light */
+  letter-spacing: 0.02em;
+  transition: color 0.3s;
+}
+.cd-value.urgent { color: var(--color-lose); }
+
+/* ===== TERMINAL BOX ===== */
+.terminal-box {
+  background: var(--terminal-bg);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  position: relative;
+  overflow: hidden;
+  animation: fadeUp 0.5s var(--ease) 160ms both;
+}
+.terminal-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0.8;
+}
+.terminal-box .hero-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+.terminal-box .hero-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--terminal-text);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.terminal-box .hero-label::before { content: '>'; opacity: 0.7; }
+.terminal-box .hero-period {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  font-weight: 700;
+  color: #64748b;
+}
+
+.terminal-area {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  color: #94a3b8;
+  line-height: 1.6;
+  min-height: 70px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.terminal-line {
+  display: flex;
+  align-items: flex-start;
+  gap: 6px;
+  margin-bottom: 4px;
+}
+.terminal-line .prompt { color: var(--accent-light); font-weight: 700; }
+.terminal-line .text { color: #cbd5e1; }
+.blinking-cursor {
+  display: inline-block;
+  width: 6px;
+  height: 12px;
+  background: var(--terminal-text);
+  animation: blink 1s step-end infinite;
+  vertical-align: text-bottom;
+  margin-left: 2px;
+}
+@keyframes blink { 50% { opacity: 0; } }
+
+/* ===== RESULT BOX ===== */
+.result-box {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+  position: relative;
+  overflow: hidden;
+  animation: fadeUp 0.5s var(--ease) 200ms both;
+  min-height: 140px;
+  display: flex;
+  flex-direction: column;
+}
+.result-box .hero-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+.result-box .hero-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.result-area {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+}
+.result-area.show {
+  display: flex;
+  animation: resultFadeUp 0.6s var(--spring) both;
+}
+@keyframes resultFadeUp {
+  0% { opacity: 0; transform: translateY(8px) scale(0.98); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.result-value {
+  font-size: 36px;
+  font-weight: 900;
+  letter-spacing: 0.1em;
+  line-height: 1;
+  color: var(--color-big);
+  text-shadow: 0 0 20px var(--bg-big);
+  margin-bottom: 14px;
+  text-transform: uppercase;
+}
+.result-value.is-small {
+  color: var(--color-small);
+  text-shadow: 0 0 20px var(--bg-small);
+}
+
+.result-confidence {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  max-width: 200px;
+  padding: 6px 10px;
+  background: var(--bg-page);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+}
+.conf-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.conf-track {
+  flex: 1;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+}
+.conf-fill {
+  height: 100%;
+  width: 0%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width 0.8s var(--ease);
+}
+/* Dynamic Colors for Rate */
+.conf-fill.low { background: var(--color-low); }
+.conf-fill.medium { background: var(--color-med); }
+.conf-fill.high { background: var(--color-high); }
+
+.conf-text {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--accent);
+  text-transform: uppercase;
+}
+.conf-text.low { color: var(--color-low); }
+.conf-text.medium { color: var(--color-med); }
+.conf-text.high { color: var(--color-high); }
+
+/* ===== STATS GRID ===== */
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  animation: fadeUp 0.5s var(--ease) 240ms both;
+}
+.stat-box {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  overflow: hidden;
+}
+.stat-box::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; width: 3px; height: 100%;
+  background: var(--accent);
+  opacity: 0.6;
+}
+.stat-label {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+.stat-val {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-dark);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.stat-val.ok { color: var(--accent); }
+.stat-val.bad { color: var(--color-lose); }
+
+/* ===== HISTORY ===== */
+.history-section {
+  animation: fadeUp 0.5s var(--ease) 320ms both;
+}
+.history-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 10px;
+}
+.history-title {
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.history-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--accent);
+  padding: 2px 8px;
+  border: 1px solid var(--accent);
+  border-radius: 999px;
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.history-badge.show { opacity: 1; }
+
+.history-wrap {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.history-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 400px;
+}
+.history-table th {
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+  text-align: left;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border);
+  background: var(--border-light);
+}
+.history-table th:last-child { text-align: right; }
+.history-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--border-light);
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+.history-table tr:last-child td { border-bottom: none; }
+.history-table td.hid { color: var(--text-muted); font-family: var(--font-mono); font-size: 10px; width: 30px; }
+.history-table td.hper { font-family: var(--font-mono); font-weight: 700; }
+.history-table td.hnum { text-align: center; font-weight: 700; }
+.history-table td.hbs { text-align: center; }
+.history-table td.hprem { color: var(--text-dark); font-family: var(--font-mono); font-size: 10px; }
+.history-table td.hres { text-align: right; font-weight: 700; font-size: 10px; }
+
+.badge-bs {
+  display: inline-block;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 9px;
+  font-weight: 800;
+  text-transform: uppercase;
+  min-width: 40px;
+  text-align: center;
+}
+.badge-bs.big { background: var(--bg-big); color: var(--color-big); }
+.badge-bs.small { background: var(--bg-small); color: var(--color-small); }
+
+.badge-res.win { color: var(--color-win); }
+.badge-res.lose { color: var(--color-lose); }
+
+.row-new td { animation: rowIn 0.5s var(--ease) both; }
+@keyframes rowIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
+
+.last-update {
+  text-align: center;
+  font-size: 10px;
+  color: var(--text-muted);
+  margin-top: 12px;
+  font-family: var(--font-mono);
+}
+
+@keyframes fadeUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+@keyframes fadeDown { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+
+@media (max-width: 380px) {
+  .header-title { font-size: 15px; }
+  .result-value { font-size: 32px; }
+  .stat-val { font-size: 12px; }
+  .terminal-line { font-size: 10.5px; }
+}
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="app-header">
+    <div class="header-left">
+      <h1 class="header-title">
+        <span data-en="Global Trx • 1Min" data-mm="Global Trx • 1 မိနစ်">Global Trx • 1Min</span>
+        <span class="version-badge">V1.3</span>
+      </h1>
+      <div class="header-sub">
+        <span class="pulse-dot" id="pulseDot"></span>
+        <span id="connectionText" data-en="Connecting..." data-mm="ချိတ်ဆက်နေသည်...">Connecting...</span>
+      </div>
+    </div>
+  </header>
+
+  <div class="cd-banner">
+    <span class="cd-label" data-en="Next Round In" data-mm="နောက်ပွဲစဉ်စောင့်ချိန်">Next Round In</span>
+    <span class="cd-value" id="cdValue">01:00</span>
+  </div>
+
+  <!-- 1. Analysis Terminal Box -->
+  <section class="terminal-box" id="terminalBox">
+    <div class="hero-head">
+      <span class="hero-label" data-en="Analysis Terminal" data-mm="ခွဲခြမ်းစိတ်ဖြာမှု">Analysis Terminal</span>
+      <span class="hero-period" id="heroPeriod">#---</span>
+    </div>
+
+    <div class="terminal-area" id="terminalArea">
+      <div class="terminal-line" id="line1" style="display:none;"><span class="prompt">></span><span class="text"></span></div>
+      <div class="terminal-line" id="line2" style="display:none;"><span class="prompt">></span><span class="text"></span></div>
+      <div class="terminal-line" id="line3" style="display:none;"><span class="prompt">></span><span class="text"></span></div>
+      <div class="terminal-line" id="line4" style="display:none;"><span class="prompt">></span><span class="text"></span></div>
+      <span class="blinking-cursor" id="cursor"></span>
+    </div>
+  </section>
+
+  <!-- 2. Prediction Result Box -->
+  <section class="result-box" id="resultBox">
+    <div class="hero-head">
+      <span class="hero-label" data-en="Prediction Result" data-mm="ခန့်မှန်းချက် ရလဒ်">Prediction Result</span>
+    </div>
+
+    <div class="result-area" id="resultArea">
+      <div class="result-value" id="resultValue">-</div>
+      <div class="result-confidence">
+        <span class="conf-label" data-en="Confidence" data-mm="ယုံကြည်မှု">Confidence</span>
+        <div class="conf-track"><div class="conf-fill" id="confFill"></div></div>
+        <span class="conf-text" id="confText">-</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats-grid">
+    <div class="stat-box">
+      <span class="stat-label" data-en="Latest Period" data-mm="နောက်ဆုံးကာလ">Latest Period</span>
+      <span class="stat-val" id="latestPeriodVal">---</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label" data-en="Accuracy" data-mm="တိကျမှု">Accuracy</span>
+      <span class="stat-val" id="accuracyVal">--%</span>
+    </div>
+    <div class="stat-box">
+      <span class="stat-label" data-en="Rate" data-mm="အဆင့်">Rate</span>
+      <span class="stat-val" id="rateVal">--</span>
+    </div>
+  </section>
+
+  <section class="history-section">
+    <div class="history-head">
+      <h2 class="history-title" data-en="History Logs" data-mm="မှတ်တမ်း">History Logs</h2>
+      <span class="history-badge" id="historyBadge" data-en="Syncing" data-mm="အပ်ဒိတ်လုပ်နေသည်">Syncing</span>
+    </div>
+    <div class="history-wrap">
+      <table class="history-table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th data-en="Period" data-mm="ကာလ">Period</th>
+            <th style="text-align:center;" data-en="Num" data-mm="ဂဏန်း">Num</th>
+            <th style="text-align:center;" data-en="B/S" data-mm="ကြီး/သေး">B/S</th>
+            <th data-en="Hash" data-mm="Hash">Hash</th>
+            <th style="text-align:right;" data-en="Result" data-mm="ရလဒ်">Result</th>
+          </tr>
+        </thead>
+        <tbody id="historyBody">
+          <tr><td colspan="6" style="text-align:center; padding: 24px; color: var(--text-muted); font-size:11px;" data-en="Waiting for data..." data-mm="ဒေတာစောင့်နေသည်...">Waiting for data...</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="last-update" id="lastUpdate" style="display:none;"></div>
+  </section>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+var firebaseConfig = {
+  apiKey: "AIzaSyDj6z3O91NnlQ1zVdripiGhqQMsQhR4_ak",
+  authDomain: "ck30-35e97.firebaseapp.com",
+  databaseURL: "https://ck30-35e97-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId: "ck30-35e97",
+  storageBucket: "ck30-35e97.appspot.com",
+  messagingSenderId: "625630152314",
+  appId: "1:625630152314:web:c035009eec389371b51dc3"
+};
+var FIREBASE_PATH = "globaltrx/default";
+var CD_DURATION = 60; // 1 Min
+
+var db = null, listener = null;
+var currentResults = [], displayedHistory = [];
+var lastSeenKey = null, lastAnalyzedKey = null;
+var cdTimer = null, cdSec = CD_DURATION;
+var lastUpdateTime = null;
+var currentLang = localStorage.getItem('appLang') || 'en';
+
+/* Animation Timers */
+var typeTimer = null;
+var currentLine = 0;
+
+var T = {
+  en: {
+    t1: "Initializing sequence...",
+    t2: "Fetching historical data...",
+    t3: "Applying Mirror & Breakout strategy...",
+    t4: "Computation complete.",
+    conn: 'Live',
+    conn_ing: 'Connecting...',
+    conn_err: 'Offline',
+    win: 'Win', lose: 'Lose', wait: '-',
+    big: 'BIG', small: 'SMALL',
+    low: 'Low', med: 'Med', high: 'High',
+    noData: 'No data available'
+  },
+  mm: {
+    t1: "စနစ်စတင်နေသည်...",
+    t2: "မှတ်တမ်းများရှာဖွေနေသည်...",
+    t3: "ခန့်မှန်းချက်တွက်ချက်နေသည်...",
+    t4: "တွက်ချက်မှုပြီးစီးပါပြီ။",
+    conn: 'ချိတ်ဆက်ပြီး',
+    conn_ing: 'ချိတ်ဆက်နေသည်...',
+    conn_err: 'ချိတ်ဆက်မှုမရှိ',
+    win: 'အနိုင်', lose: 'ရှုံး', wait: '-',
+    big: 'ကြီး', small: 'သေး',
+    low: 'နည်း', med: 'အလယ်', high: 'မြင့်',
+    noData: 'ဒေတာ မရှိပါ'
+  }
+};
+function t(k) { return (T[currentLang] && T[currentLang][k]) || k; }
+
+/* ========== V1.3 PREDICTION LOGIC (Mirror & Breakout) ========== */
+function classifyBS(n) {
+  var num = parseInt(n, 10);
+  if (isNaN(num)) return null;
+  return num >= 5 ? 'BIG' : 'SMALL';
+}
+
+function calculatePrediction(history) {
+  if (!history || history.length < 2) return null;
+  
+  var bsList = history.map(function(r){ return classifyBS(r.number); }).filter(Boolean);
+  if (bsList.length < 2) return null;
+
+  // Rule 1: Mirror Pattern (e.g., BIG -> SMALL -> BIG => Predict SMALL)
+  if (bsList.length >= 3) {
+    if (bsList[0] === bsList[2] && bsList[0] !== bsList[1]) {
+      return { value: bsList[1], confidence: 'high' };
+    }
+  }
+
+  // Rule 2: Streak Reversal (4 same in a row => Predict opposite)
+  if (bsList.length >= 4) {
+    if (bsList[0] === bsList[1] && bsList[1] === bsList[2] && bsList[2] === bsList[3]) {
+      return { value: bsList[0] === 'BIG' ? 'SMALL' : 'BIG', confidence: 'high' };
+    }
+  }
+
+  // Rule 3: Fallback (Predict opposite of latest)
+  return { value: bsList[0] === 'BIG' ? 'SMALL' : 'BIG', confidence: 'medium' };
+}
+
+function calculateAccuracyPct(history) {
+  if (!history || history.length < 6) return null;
+  var correct = 0, total = 0;
+  for (var i = 0; i < 4 && i + 4 < history.length; i++) {
+    var pred = calculatePrediction(history.slice(i + 1));
+    var actual = classifyBS(history[i].number);
+    if (pred && actual) {
+      if (pred.value === actual) correct++;
+      total++;
+    }
+  }
+  if (total === 0) return null;
+  return Math.round((correct / total) * 100);
+}
+
+/* ========== UI UPDATERS ========== */
+function periodKey(r) {
+  return String(r.issueNumber != null ? r.issueNumber : (r.period != null ? r.period : ''));
+}
+function displayPeriod(p) {
+  if (!p) return '---';
+  var s = String(p);
+  return s.length > 6 ? s.slice(-6) : s;
+}
+function getNextPeriod(issue) {
+  var s = String(issue == null ? '' : issue).replace(/\D/g, '');
+  if (!s) return '---';
+  try {
+    var n = BigInt(s) + 1n;
+    var ns = n.toString();
+    if (s.length > ns.length) ns = ns.padStart(s.length, '0');
+    return ns.length > 8 ? ns.slice(-6) : ns;
+  } catch(e) { return '---'; }
+}
+
+function applyTheme(theme) {
+  document.body.classList.toggle('dark', theme === 'dark');
+}
+
+function applyLanguage(lang) {
+  currentLang = lang;
+  localStorage.setItem('appLang', lang);
+  document.documentElement.lang = lang === 'mm' ? 'my' : 'en';
+  document.body.classList.toggle('lang-mm', lang === 'mm');
+  
+  document.querySelectorAll('[data-en][data-mm]').forEach(function(el){
+    var v = el.getAttribute('data-' + lang);
+    if (v !== null) el.textContent = v;
+  });
+
+  // Update terminal text if currently typing
+  if (currentLine > 0) {
+     updateTerminalTexts();
+  }
+
+  if (currentResults.length > 0) {
+    renderStats();
+    renderHistory();
+    if (document.getElementById('resultArea').classList.contains('show')) {
+       updateResultLabels();
+    }
+  }
+  updateConnText();
+}
+
+function updateConnText() {
+  var dot = document.getElementById('pulseDot');
+  var txt = document.getElementById('connectionText');
+  if (!dot || !txt) return;
+  if (dot.classList.contains('live')) txt.textContent = t('conn');
+  else if (dot.classList.contains('error')) txt.textContent = t('conn_err');
+  else txt.textContent = t('conn_ing');
+}
+
+function setConn(state) {
+  var dot = document.getElementById('pulseDot');
+  if (!dot) return;
+  dot.className = 'pulse-dot ' + (state || '');
+  updateConnText();
+}
+
+function startCD() {
+  if (cdTimer) clearInterval(cdTimer);
+  cdSec = CD_DURATION;
+  updateCD();
+  cdTimer = setInterval(function(){
+    cdSec = Math.max(0, cdSec - 1);
+    updateCD();
+    if (cdSec <= 0) { clearInterval(cdTimer); cdTimer = null; }
+  }, 1000);
+}
+function updateCD() {
+  var el = document.getElementById('cdValue');
+  if (!el) return;
+  var m = Math.floor(cdSec / 60);
+  var s = cdSec % 60;
+  el.textContent = (m < 10 ? '0'+m : m) + ':' + (s < 10 ? '0'+s : s);
+  el.classList.toggle('urgent', cdSec <= 5 && cdSec > 0);
+}
+
+/* ========== ANIMATION: TYPEWRITER ========== */
+function updateTerminalTexts() {
+  var keys = ['t1', 't2', 't3', 't4'];
+  for (var i = 1; i <= currentLine; i++) {
+    var el = document.getElementById('line' + i);
+    if (el) {
+      var txtEl = el.querySelector('.text');
+      if (txtEl) txtEl.textContent = t(keys[i-1]);
+    }
+  }
+}
+
+function clearTerminal() {
+  if (typeTimer) clearTimeout(typeTimer);
+  currentLine = 0;
+  ['line1', 'line2', 'line3', 'line4'].forEach(function(id){
+    var el = document.getElementById(id);
+    if (el) { el.style.display = 'none'; el.querySelector('.text').textContent = ''; }
+  });
+  document.getElementById('cursor').style.display = 'inline-block';
+}
+
+function typeLine(lineIndex, callback) {
+  currentLine = lineIndex;
+  var el = document.getElementById('line' + lineIndex);
+  if (!el) { if(callback) callback(); return; }
+  
+  el.style.display = 'flex';
+  var txtEl = el.querySelector('.text');
+  var keys = ['t1', 't2', 't3', 't4'];
+  var fullText = t(keys[lineIndex-1]);
+  
+  var charIndex = 0;
+  txtEl.textContent = '';
+  
+  function typeChar() {
+    if (charIndex < fullText.length) {
+      txtEl.textContent += fullText.charAt(charIndex);
+      charIndex++;
+      typeTimer = setTimeout(typeChar, 20); // Typing speed
+    } else {
+      if (callback) setTimeout(callback, 300); // Pause between lines
+    }
+  }
+  typeChar();
+}
+
+function runAnalysisAnimation(pred, onComplete) {
+  clearTerminal();
+  var resultArea = document.getElementById('resultArea');
+  resultArea.classList.remove('show');
+
+  typeLine(1, function(){
+    typeLine(2, function(){
+      typeLine(3, function(){
+        typeLine(4, function(){
+          document.getElementById('cursor').style.display = 'none';
+          if (onComplete) onComplete();
+        });
+      });
+    });
+  });
+}
+
+/* ========== RENDERERS ========== */
+function renderPrediction(forceAnalyze) {
+  var periodEl = document.getElementById('heroPeriod');
+  
+  if (!currentResults.length) {
+    clearTerminal();
+    document.getElementById('resultArea').classList.remove('show');
+    if (periodEl) periodEl.textContent = '#---';
+    return;
+  }
+
+  var latest = currentResults[0];
+  var latestKey = periodKey(latest);
+  var nextPeriod = getNextPeriod(latest.issueNumber != null ? latest.issueNumber : latest.period);
+  var pred = calculatePrediction(currentResults);
+
+  if (periodEl) periodEl.textContent = '#' + nextPeriod;
+
+  if (!pred) {
+    clearTerminal();
+    document.getElementById('resultArea').classList.remove('show');
+    return;
+  }
+
+  var needsAnalysis = forceAnalyze || lastAnalyzedKey !== latestKey;
+
+  if (needsAnalysis) {
+    lastAnalyzedKey = latestKey;
+    runAnalysisAnimation(pred, function() {
+      revealResult(pred);
+    });
+  } else {
+    // Skip animation, show instantly
+    clearTerminal();
+    currentLine = 4;
+    updateTerminalTexts();
+    document.getElementById('cursor').style.display = 'none';
+    revealResult(pred);
+  }
+}
+
+function revealResult(pred) {
+  var area = document.getElementById('resultArea');
+  var valEl = document.getElementById('resultValue');
+  var confFill = document.getElementById('confFill');
+  var confTxt = document.getElementById('confText');
+
+  area.classList.add('show');
+  valEl.textContent = t(pred.value.toLowerCase());
+  
+  valEl.classList.toggle('is-small', pred.value === 'SMALL');
+
+  var pct = pred.confidence === 'high' ? 85 : pred.confidence === 'medium' ? 55 : 30;
+  confFill.style.width = pct + '%';
+  
+  // Dynamic classes for Rate colors
+  confFill.className = 'conf-fill ' + pred.confidence;
+  confTxt.className = 'conf-text ' + pred.confidence;
+
+  var confKey = pred.confidence === 'high' ? 'high' : (pred.confidence === 'medium' ? 'med' : 'low');
+  confTxt.textContent = t(confKey);
+}
+
+function updateResultLabels() {
+  var pred = calculatePrediction(currentResults);
+  if (!pred) return;
+  var confTxt = document.getElementById('confText');
+  if (confTxt) {
+    var confKey = pred.confidence === 'high' ? 'high' : (pred.confidence === 'medium' ? 'med' : 'low');
+    confTxt.textContent = t(confKey);
+  }
+}
+
+function renderStats() {
+  var latestEl = document.getElementById('latestPeriodVal');
+  var accEl = document.getElementById('accuracyVal');
+  var rateEl = document.getElementById('rateVal');
+
+  if (!currentResults.length) {
+    latestEl.textContent = '---'; accEl.textContent = '--%'; rateEl.textContent = '--';
+    return;
+  }
+
+  latestEl.textContent = displayPeriod(periodKey(currentResults[0]));
+
+  var acc = calculateAccuracyPct(currentResults);
+  if (acc !== null) {
+    accEl.textContent = acc + '%';
+    accEl.className = 'stat-val ' + (acc >= 66 ? 'ok' : acc < 40 ? 'bad' : '');
+  } else {
+    accEl.textContent = '--%';
+    accEl.className = 'stat-val';
+  }
+
+  var pred = calculatePrediction(currentResults);
+  if (pred) {
+    var confKey = pred.confidence === 'high' ? 'high' : (pred.confidence === 'medium' ? 'med' : 'low');
+    rateEl.textContent = t(confKey);
+    rateEl.className = 'stat-val ' + (pred.confidence === 'high' ? 'ok' : '');
+  } else {
+    rateEl.textContent = '--';
+    rateEl.className = 'stat-val';
+  }
+}
+
+function renderHistory() {
+  var tbody = document.getElementById('historyBody');
+  if (!tbody) return;
+
+  if (!displayedHistory.length) {
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 24px; color: var(--text-muted); font-size:11px;">' + t('conn_ing') + '</td></tr>';
+    return;
+  }
+
+  var html = '';
+  displayedHistory.forEach(function(r, i) {
+    var bs = classifyBS(r.number);
+    var period = displayPeriod(periodKey(r));
+    var num = (r.number != null) ? r.number : '-';
+    var prem = (r.premium || r.hashValue || r.blockHashtag || '-').toString();
+    if (prem.length > 8) prem = prem.slice(-8);
+    
+    var bsLabel = bs ? t(bs.toLowerCase()) : '-';
+
+    var idxInFull = currentResults.findIndex(function(x){ return periodKey(x) === periodKey(r); });
+    var histBefore = idxInFull >= 0 ? currentResults.slice(idxInFull + 1) : [];
+    var pred = calculatePrediction(histBefore);
+
+    var resClass = '', resTxt = t('wait');
+    if (pred && bs) {
+      if (pred.value === bs) { resClass = 'win'; resTxt = t('win'); }
+      else { resClass = 'lose'; resTxt = t('lose'); }
+    }
+
+    var rowClass = (i === 0 && displayedHistory.length > 1) ? ' class="row-new"' : '';
+
+    html += '<tr' + rowClass + '>' +
+      '<td class="hid">' + (i+1) + '</td>' +
+      '<td class="hper">' + period + '</td>' +
+      '<td class="hnum">' + num + '</td>' +
+      '<td class="hbs"><span class="badge-bs ' + (bs ? bs.toLowerCase() : '') + '">' + bsLabel + '</span></td>' +
+      '<td class="hprem">' + prem + '</td>' +
+      '<td class="hres"><span class="badge-res ' + resClass + '">' + resTxt + '</span></td>' +
+    '</tr>';
+  });
+  tbody.innerHTML = html;
+}
+
+function renderLastUpdate(ts) {
+  lastUpdateTime = ts;
+  var el = document.getElementById('lastUpdate');
+  if (!el) return;
+  if (!ts) { el.style.display = 'none'; return; }
+  var date = new Date(ts);
+  el.textContent = 'Last Sync: ' + date.toLocaleTimeString('en-US');
+  el.style.display = 'block';
+}
+
+function flashBadge() {
+  var b = document.getElementById('historyBadge');
+  if (!b) return;
+  b.classList.add('show');
+  setTimeout(function(){ b.classList.remove('show'); }, 2500);
+}
+
+/* ========== FIREBASE ========== */
+function initFirebase() {
+  try {
+    var app;
+    try { app = firebase.app('globaltrx13'); }
+    catch (e) { app = firebase.initializeApp(firebaseConfig, 'globaltrx13'); }
+    db = app.database();
+    return true;
+  } catch (e) {
+    console.error('Firebase init error', e);
+    setConn('error');
+    return false;
+  }
+}
+
+function processData(data) {
+  var list = (data && data.list && Array.isArray(data.list)) ? data.list : [];
+  currentResults = list;
+
+  if (!list.length) {
+    displayedHistory = [];
+    lastSeenKey = null;
+    renderStats();
+    renderHistory();
+    renderPrediction(false);
+    renderLastUpdate(null);
+    return;
+  }
+
+  var latest = list[0];
+  var latestKey = periodKey(latest);
+  var isNew = false;
+
+  if (lastSeenKey === null) {
+    displayedHistory = [latest];
+    lastSeenKey = latestKey;
+    startCD();
+  } else if (latestKey !== lastSeenKey) {
+    displayedHistory = [latest].concat(displayedHistory);
+    lastSeenKey = latestKey;
+    isNew = true;
+    startCD();
+  }
+
+  if (displayedHistory.length > 20) displayedHistory = displayedHistory.slice(0, 20); // Keep it clean
+
+  renderStats();
+  renderHistory();
+  renderPrediction(isNew || lastAnalyzedKey === null);
+  renderLastUpdate(data && data.publishedAt ? data.publishedAt : Date.now());
+
+  if (isNew) flashBadge();
+}
+
+function connectFirebase() {
+  if (!db && !initFirebase()) return;
+  setConn('connecting');
+  try {
+    if (listener) db.ref(FIREBASE_PATH).off('value', listener);
+    listener = db.ref(FIREBASE_PATH).on('value', function(snap){
+      var data = snap.val();
+      if (data && data.list && Array.isArray(data.list)) {
+        processData(data);
+        setConn('live');
+      } else {
+        processData(null);
+        setConn('connecting');
+      }
+    }, function(err){
+      console.error('Firebase read error', err);
+      setConn('error');
+    });
+  } catch (e) {
+    setConn('error');
+  }
+}
+
+/* ========== SYNC & INIT ========== */
+function applyStoredState() {
+  applyTheme(localStorage.getItem('appTheme') || 'light');
+  applyLanguage(localStorage.getItem('appLang') || 'en');
+}
+
+window.addEventListener('storage', function(e){
+  if (e.key === 'appTheme' && e.newValue) applyTheme(e.newValue);
+  if (e.key === 'appLang' && e.newValue) applyLanguage(e.newValue);
+});
+window.addEventListener('message', function(e){
+  if (!e.data || e.data.type !== 'app-sync') return;
+  if (e.data.theme) applyTheme(e.data.theme);
+  if (e.data.language) applyLanguage(e.data.language);
+});
+
+function init() {
+  applyStoredState();
+  if (initFirebase()) setTimeout(connectFirebase, 250);
+  else setConn('error');
+}
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+else init();
+
+window.addEventListener('beforeunload', function(){
+  if (listener && db) { try { db.ref(FIREBASE_PATH).off('value', listener); } catch(e){} }
+  if (cdTimer) clearInterval(cdTimer);
+  if (typeTimer) clearTimeout(typeTimer);
+});
+
+})();
+</script>
+</body>
+</html>
