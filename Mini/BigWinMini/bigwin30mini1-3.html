@@ -22,12 +22,23 @@
   --text-dark: #0f172a;
   --text-muted: #64748b;
   --text-light: #cbd5e1;
-  --accent: #16a34a; /* Main Green */
+  --accent: #16a34a; /* Main Green (Theme) */
   --accent-hover: #15803d;
   --accent-light: #22c55e;
   --accent-glow: rgba(34, 197, 94, 0.2);
   --border: #e2e8f0;
   --border-light: #f1f5f9;
+
+  /* Specific Colors */
+  --color-big: #ca8a04;
+  --color-small: #0284c7;
+  --color-win: #16a34a;
+  --color-lose: #dc2626;
+  --color-low: #dc2626;
+  --color-med: #ea580c;
+  --color-high: #16a34a;
+  --bg-big: rgba(202, 138, 4, 0.15);
+  --bg-small: rgba(2, 132, 199, 0.15);
   
   --terminal-bg: #0f172a;
   --terminal-text: #4ade80; /* Light green for terminal */
@@ -48,6 +59,28 @@ body.dark {
   --accent-glow: rgba(74, 222, 128, 0.25);
   --border: #334155;
   --border-light: #1e293b;
+
+  /* Specific Colors */
+  --color-big: #fde047;
+  --color-small: #38bdf8;
+  --color-win: #4ade80;
+  --color-lose: #f87171;
+  --color-low: #f87171;
+  --color-med: #fb923c;
+  --color-high: #4ade80;
+  --bg-big: rgba(253, 224, 71, 0.15);
+  --bg-small: rgba(56, 189, 248, 0.15);
+
+  /* Specific Colors */
+  --color-big: #fde047;
+  --color-small: #38bdf8;
+  --color-win: #4ade80;
+  --color-lose: #f87171;
+  --color-low: #f87171;
+  --color-med: #fb923c;
+  --color-high: #4ade80;
+  --bg-big: rgba(253, 224, 71, 0.15);
+  --bg-small: rgba(56, 189, 248, 0.15);
   
   --terminal-bg: #020617;
   --terminal-text: #4ade80;
@@ -150,11 +183,11 @@ body.lang-mm { font-family: 'Padauk', 'Inter', sans-serif; }
   font-family: var(--font-mono);
   font-size: 18px;
   font-weight: 800;
-  color: var(--accent);
+  color: var(--text-dark); /* Dark mode = White, Light mode = Black */
   letter-spacing: 0.02em;
   transition: color 0.3s;
 }
-.cd-value.urgent { color: #ef4444; }
+.cd-value.urgent { color: var(--color-lose); }
 
 /* ===== TERMINAL BOX ===== */
 .terminal-box {
@@ -288,15 +321,15 @@ body.lang-mm { font-family: 'Padauk', 'Inter', sans-serif; }
   font-weight: 900;
   letter-spacing: 0.1em;
   line-height: 1;
-  color: var(--accent-light);
-  text-shadow: 0 0 20px var(--accent-glow);
+  color: var(--color-big);
+  text-shadow: 0 0 20px var(--bg-big);
   margin-bottom: 14px;
   position: relative;
   text-transform: uppercase;
 }
 .result-value.is-small {
-  color: #f8fafc;
-  text-shadow: 0 0 20px rgba(255,255,255,0.1);
+  color: var(--color-small);
+  text-shadow: 0 0 20px var(--bg-small);
 }
 
 
@@ -339,7 +372,13 @@ body.lang-mm { font-family: 'Padauk', 'Inter', sans-serif; }
   color: var(--accent-light);
   text-transform: uppercase;
 }
-.conf-text.is-small { color: #94a3b8; }
+/* Dynamic colors based on classes added by JS */
+.conf-fill.low { background: var(--color-low); }
+.conf-fill.medium { background: var(--color-med); }
+.conf-fill.high { background: var(--color-high); }
+.conf-text.low { color: var(--color-low); }
+.conf-text.medium { color: var(--color-med); }
+.conf-text.high { color: var(--color-high); }
 
 /* ===== STATS GRID ===== */
 .stats-grid {
@@ -453,7 +492,7 @@ body.lang-mm { font-family: 'Padauk', 'Inter', sans-serif; }
 .history-table td.hper { font-family: var(--font-mono); font-weight: 700; }
 .history-table td.hnum { text-align: center; font-weight: 700; }
 .history-table td.hbs { text-align: center; }
-.history-table td.hprem { color: var(--text-muted); font-family: var(--font-mono); font-size: 10px; }
+.history-table td.hprem { color: var(--text-dark); font-family: var(--font-mono); font-size: 10px; }
 .history-table td.hres { text-align: right; font-weight: 700; font-size: 10px; }
 
 .badge-bs {
@@ -466,11 +505,11 @@ body.lang-mm { font-family: 'Padauk', 'Inter', sans-serif; }
   min-width: 40px;
   text-align: center;
 }
-.badge-bs.big { background: var(--accent-glow); color: var(--accent); }
-.badge-bs.small { background: var(--border); color: var(--text-muted); }
+.badge-bs.big { background: var(--bg-big); color: var(--color-big); }
+.badge-bs.small { background: var(--bg-small); color: var(--color-small); }
 
-.badge-res.win { color: var(--accent); }
-.badge-res.lose { color: #ef4444; }
+.badge-res.win { color: var(--color-win); }
+.badge-res.lose { color: var(--color-lose); }
 
 .row-new td { animation: rowIn 0.5s var(--ease) both; }
 @keyframes rowIn { from { opacity: 0; transform: translateY(-5px); } to { opacity: 1; transform: translateY(0); } }
