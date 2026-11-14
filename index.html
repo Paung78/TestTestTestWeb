@@ -99,7 +99,7 @@
     background: linear-gradient(135deg, #fbbf24, #f59e0b);
     color: #1c1917; border-radius: 14px;
     font-size: 0.8125rem; font-weight: 800;
-    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.35), 0 2px 8px rgba(245, 158, 11, 0.2);
+    box-shadow: 0 8px 24px rgba(245, 158, 11, 0.35);
     border: 1.5px solid rgba(251, 191, 36, 0.55);
   }
   body.dark .fixing-banner-inner { background: linear-gradient(135deg, #fbbf24, #d97706); color: #0f0a00; }
@@ -231,7 +231,6 @@
     cursor: pointer; font-family: inherit;
     display: inline-flex; align-items: center; justify-content: center;
     box-shadow: 0 2px 8px rgba(79,70,229,0.28);
-    transition: transform 0.15s var(--spring), opacity 0.2s;
     white-space: nowrap;
   }
   .send-code-btn:active { transform: translateY(-50%) scale(0.95); }
@@ -252,8 +251,7 @@
     width: 100%; min-height: 52px; border-radius: 14px;
     background: linear-gradient(135deg, var(--ck-1), var(--ck-2));
     color: #fff; font-size: 1rem; font-weight: 800;
-    cursor: pointer; margin-top: 24px;
-    transition: transform 0.15s var(--spring), opacity 0.2s;
+    margin-top: 24px;
     box-shadow: 0 4px 14px rgba(79, 70, 229, 0.28);
   }
   .login-btn:active { transform: scale(0.97); }
@@ -264,8 +262,7 @@
     border: 1px solid var(--ck-2); border-radius: 14px;
     background: transparent; color: var(--ck-2);
     font-size: 1rem; font-weight: 800;
-    cursor: pointer; margin-top: 12px;
-    transition: background 0.2s, transform 0.15s;
+    margin-top: 12px;
   }
   .guest-btn:active { transform: scale(0.97); background: var(--ck-bg); }
 
@@ -307,7 +304,7 @@
     backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.25);
   }
 
-  /* ============ FORCE LOGOUT OVERLAY ============ */
+  /* ============ FORCE LOGOUT ============ */
   .force-logout-overlay {
     position: fixed; inset: 0; z-index: 30001;
     background: rgba(0, 0, 0, 0.75);
@@ -343,13 +340,10 @@
     font-size: 0.9375rem; font-weight: 800;
     display: flex; align-items: center; justify-content: center; gap: 8px;
     box-shadow: 0 4px 14px rgba(79, 70, 229, 0.32);
-    transition: transform 0.15s var(--spring);
   }
-  .force-logout-btn:active { transform: scale(0.96); }
 
   /* ============ MAIN APP / SCREENS ============ */
   .main-app { display: none; }
-
   .screen {
     display: none; min-height: 100vh;
     padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 20px);
@@ -395,7 +389,6 @@
     gap: 6px; padding: 12px 6px 10px; min-height: 72px;
     border: 1px solid var(--border); border-radius: var(--r-btn);
     background: var(--bg-card); color: var(--text);
-    transition: transform 0.18s var(--spring);
   }
   .action-btn:active { transform: scale(0.94); }
   .action-icon { width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 13px; }
@@ -443,10 +436,7 @@
   }
   body.dark .floating-back-btn { background: #f1f5f9; color: #0f172a; }
   .floating-back-btn.visible { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
-  .floating-back-btn:active { transform: scale(0.9); }
-  @media (max-width: 480px) {
-    .floating-back-btn { left: calc(50% - (100vw - 32px) / 2 + 20px); }
-  }
+  @media (max-width: 480px) { .floating-back-btn { left: calc(50% - (100vw - 32px) / 2 + 20px); } }
 
   /* ============ EXTENSION FAB ============ */
   .extension-fab-wrap {
@@ -457,18 +447,15 @@
   }
   @media (max-width: 480px) { .extension-fab-wrap { right: calc(50% - (100vw - 32px) / 2 + 20px); } }
   .extension-fab-wrap.visible { display: flex; }
-
   .extension-fab {
     width: 48px; height: 48px; border-radius: 50%;
     pointer-events: auto;
     display: flex; align-items: center; justify-content: center;
     box-shadow: 0 4px 16px rgba(0,0,0,0.2);
-    transition: all 0.35s var(--spring);
     background: linear-gradient(135deg, var(--ck-1), var(--ck-2));
     color: white; font-size: 18px; padding: 0; overflow: hidden;
     border: 2px solid var(--bg-card); position: relative;
   }
-  .extension-fab:active { transform: scale(0.9); }
   .extension-fab img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
   .extension-fab.single-brand { background: var(--bg-card); }
   .extension-fab.is-open::after {
@@ -477,7 +464,6 @@
     animation: fabPulse 1.6s ease-in-out infinite; pointer-events: none;
   }
   @keyframes fabPulse { 0%, 100% { transform: scale(1); opacity: 0.6; } 50% { transform: scale(1.18); opacity: 0; } }
-
   .extension-fab-list {
     display: flex; flex-direction: column; gap: 10px;
     opacity: 0; transform: translateY(10px); pointer-events: none;
@@ -490,9 +476,7 @@
     background: var(--bg-card); border: 2px solid var(--border);
     display: flex; align-items: center; justify-content: center;
     box-shadow: 0 4px 16px rgba(0,0,0,0.15);
-    transition: transform 0.2s var(--spring), border-color 0.2s;
   }
-  .extension-brand-btn:active { transform: scale(0.9); }
   .extension-brand-btn img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; display: block; }
 
   /* ============ EXTENSION WEBSITE OVERLAY ============ */
@@ -600,20 +584,16 @@
     display: flex; align-items: center; justify-content: center; gap: 8px;
     width: 100%; padding: 16px 20px; border-radius: 16px;
     font-size: 0.9375rem; font-weight: 700; color: #fff; text-decoration: none;
-    margin-bottom: 20px; position: relative; overflow: hidden;
+    margin-bottom: 20px;
     animation: stepFadeUp 0.5s var(--spring) 180ms both;
-    transition: transform 0.18s var(--spring);
   }
-  .register-cta:active { transform: scale(0.97); }
 
   .step-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
   .step-card {
     background: var(--bg-card); border: 1px solid var(--border);
     border-radius: 16px; padding: 10px; cursor: pointer;
-    transition: transform 0.2s var(--spring);
     animation: stepFadeUp 0.55s var(--spring) both;
   }
-  .step-card:active { transform: scale(0.96); }
   .step-card[data-brand="ck"] { background: var(--ck-bg); border-color: transparent; }
   .step-card[data-brand="bigwin"] { background: var(--bigwin-bg); border-color: transparent; }
   .step-card[data-brand="sixwin"] { background: var(--sixwin-bg); border-color: transparent; }
@@ -621,7 +601,7 @@
   .step-label { font-size: 0.6875rem; font-weight: 800; color: var(--text-subtle); margin-bottom: 6px; margin-left: 2px; text-transform: uppercase; letter-spacing: 0.05em; }
   .step-photo-wrap {
     width: 100%; aspect-ratio: 4 / 3; border-radius: 10px; overflow: hidden;
-    background: rgba(255, 255, 255, 0.6); margin-bottom: 8px; position: relative;
+    background: rgba(255, 255, 255, 0.6); margin-bottom: 8px;
   }
   body.dark .step-photo-wrap { background: rgba(255,255,255,0.06); }
   .step-photo-wrap img { display: block; width: 100%; height: 100%; object-fit: cover; }
@@ -648,7 +628,6 @@
     margin-bottom: 10px; text-align: left; width: 100%;
     min-height: 56px; color: var(--text);
   }
-  button.settings-row:active { transform: scale(0.98); }
   .settings-row-icon {
     width: 40px; height: 40px; border-radius: 12px;
     background: rgba(99, 102, 241, 0.10); color: var(--ck-2);
@@ -719,7 +698,6 @@
     width: 44px; height: 44px; border-radius: 50%;
     background: rgba(255, 255, 255, 0.2);
     color: white; display: flex; align-items: center; justify-content: center;
-    transition: transform 0.2s;
   }
   .refresh-btn:active { transform: rotate(180deg) scale(0.9); }
 
@@ -760,7 +738,6 @@
     50% { transform: scale(1.05); opacity: 1; }
     100% { transform: scale(1); }
   }
-
   .premium-card-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
   .premium-icon {
     width: 36px; height: 36px; border-radius: 10px;
@@ -785,7 +762,6 @@
     display: flex; align-items: center; justify-content: center; gap: 10px;
     width: 100%; padding: 16px 20px; border-radius: 16px;
     font-size: 0.9375rem; font-weight: 800; min-height: 52px;
-    transition: transform 0.15s var(--spring);
   }
   .profile-action-btn:active { transform: scale(0.97); }
   .profile-action-btn.settings { background: var(--bg-card); border: 1px solid var(--border); color: var(--text); }
@@ -793,37 +769,54 @@
   .profile-action-btn.logout { background: linear-gradient(135deg, #f87171, #dc2626); color: #ffffff; box-shadow: 0 4px 14px rgba(220, 38, 38, 0.28); }
   .profile-action-btn.logout i { color: #ffffff; }
 
-  /* ============ NEW PROFILE LINK BUTTONS (No 4 & No 5) ============ */
+  /* ============ PROFILE LINK BUTTONS (Premium Clean Design) ============ */
   .profile-link-btn {
     display: flex; align-items: center; gap: 14px;
     width: 100%; padding: 14px 16px;
-    border-radius: 16px; min-height: 68px;
-    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: 16px; min-height: 64px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
     color: var(--text); text-align: left;
-    transition: transform 0.15s var(--spring), border-color 0.2s;
+    transition: transform 0.15s var(--spring), border-color 0.2s, background 0.2s;
     animation: stepFadeUp 0.5s var(--spring) both;
     cursor: pointer;
   }
   .profile-link-btn:active { transform: scale(0.98); }
-  .profile-link-btn.auto-bot {
-    background: linear-gradient(135deg, rgba(168,85,247,0.06), rgba(236,72,153,0.06));
-    border-color: rgba(168,85,247,0.25);
-  }
-  body.dark .profile-link-btn.auto-bot {
-    background: linear-gradient(135deg, rgba(168,85,247,0.12), rgba(236,72,153,0.12));
-    border-color: rgba(168,85,247,0.3);
-  }
+  .profile-link-btn.auto-bot { border-color: rgba(168, 85, 247, 0.22); }
+  .profile-link-btn.telegram { border-color: rgba(34, 158, 217, 0.22); }
+  body.dark .profile-link-btn.auto-bot { border-color: rgba(168, 85, 247, 0.35); }
+  body.dark .profile-link-btn.telegram { border-color: rgba(34, 158, 217, 0.35); }
+
   .profile-link-icon {
-    width: 44px; height: 44px; border-radius: 12px;
+    width: 40px; height: 40px; border-radius: 11px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px; color: #fff; flex-shrink: 0;
+    font-size: 17px; color: #fff; flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   }
-  .profile-link-icon.telegram { background: linear-gradient(135deg, var(--tg-blue), #0088cc); }
-  .profile-link-icon.auto-bot { background: linear-gradient(135deg, var(--bot-purple), var(--bot-pink)); }
-  .profile-link-content { flex: 1; min-width: 0; }
-  .profile-link-title { font-size: 0.875rem; font-weight: 800; color: var(--text); line-height: 1.3; }
-  .profile-link-sub { font-size: 0.71875rem; color: var(--text-muted); margin-top: 2px; font-weight: 600; }
-  .profile-link-arrow { color: var(--text-subtle); font-size: 12px; flex-shrink: 0; }
+  .profile-link-icon.telegram {
+    background: linear-gradient(135deg, #229ED9, #0088cc);
+    box-shadow: 0 2px 10px rgba(34, 158, 217, 0.3);
+  }
+  .profile-link-icon.auto-bot {
+    background: linear-gradient(135deg, #a855f7, #ec4899);
+    box-shadow: 0 2px 10px rgba(168, 85, 247, 0.3);
+  }
+
+  .profile-link-title {
+    flex: 1;
+    font-size: 0.9375rem;
+    font-weight: 800;
+    color: var(--text);
+    text-align: left;
+    line-height: 1.3;
+    letter-spacing: -0.01em;
+  }
+
+  .profile-link-arrow {
+    color: var(--text-subtle);
+    font-size: 12px;
+    flex-shrink: 0;
+  }
 
   /* ============ GUEST PROFILE ============ */
   .guest-hero {
@@ -833,9 +826,7 @@
     box-shadow: 0 10px 30px rgba(99, 102, 241, 0.25);
     position: relative; overflow: hidden;
   }
-  .guest-hero::before, .guest-hero::after {
-    content: ''; position: absolute; border-radius: 50%;
-  }
+  .guest-hero::before, .guest-hero::after { content: ''; position: absolute; border-radius: 50%; }
   .guest-hero::before { top: -50px; right: -50px; width: 180px; height: 180px; background: rgba(255,255,255,0.1); filter: blur(30px); }
   .guest-hero::after { bottom: -30px; left: -30px; width: 120px; height: 120px; background: rgba(236,72,153,0.2); filter: blur(20px); }
   .guest-avatar {
@@ -857,7 +848,6 @@
     position: relative; z-index: 1; min-height: 48px;
   }
   .guest-signin-btn:active { transform: scale(0.95); }
-
   .guest-premium-wrap { position: relative; margin-bottom: 24px; }
   .premium-card.blurred { filter: blur(5px); opacity: 0.65; pointer-events: none; }
   .guest-lock-overlay {
@@ -900,7 +890,6 @@
     width: 40px; height: 40px; background: rgba(255, 255, 255, 0.9);
     border-radius: 50%; display: flex; align-items: center; justify-content: center;
     font-size: 16px; color: #0f172a; z-index: 10;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   }
   body.dark .modal-close { background: rgba(30, 41, 59, 0.9); color: #f1f5f9; }
   .modal-scrollable { padding: 16px; overflow-y: auto; border-radius: 20px; }
@@ -948,7 +937,7 @@
   }
   .bottom-sheet.active { transform: translateY(0); }
   .sheet-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
-  .sheet-title { font-size: 1.125rem; font-weight: 800; }
+  .sheet-title { font-size: 1.125rem; font-weight: 800; display: flex; align-items: center; gap: 10px; }
   .sheet-close {
     width: 32px; height: 32px; border-radius: 50%;
     background: var(--bg-page); display: flex; align-items: center; justify-content: center;
@@ -961,7 +950,6 @@
     margin-bottom: 12px; background: var(--bg-card);
     min-height: 56px;
   }
-  .lang-option:active { background: var(--bg-page); }
   .lang-option.active { border-color: var(--ck-2); background: var(--ck-bg); }
   .lang-left { display: flex; align-items: center; gap: 12px; }
   .lang-left span { font-size: 0.9375rem; font-weight: 700; }
@@ -974,37 +962,44 @@
   .flag-mm { background: linear-gradient(to bottom, #fecb00 33.33%, #34b233 33.33%, #34b233 66.66%, #ea2839 66.66%); }
   .flag-mm::before { content: "★"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: white; font-size: 8px; line-height: 1; }
 
-  /* Sheet List Item (Telegram & Auto Bot) */
+  /* ============ SHEET LIST ITEM (Clean - No Subtitle) ============ */
   .sheet-list { display: flex; flex-direction: column; gap: 8px; }
   .sheet-list-item {
     display: flex; align-items: center; gap: 14px;
     padding: 14px 16px; border-radius: 14px;
     background: var(--bg-page); border: 1px solid var(--border);
     color: var(--text); text-decoration: none;
-    min-height: 64px; transition: transform 0.15s var(--spring), background 0.2s;
+    min-height: 60px;
+    transition: transform 0.15s var(--spring), background 0.2s;
     cursor: pointer;
   }
   .sheet-list-item:active { transform: scale(0.98); background: var(--bg-card); }
   .sheet-list-icon {
-    width: 40px; height: 40px; border-radius: 10px;
+    width: 38px; height: 38px; border-radius: 10px;
     display: flex; align-items: center; justify-content: center;
-    font-size: 18px; color: #fff; flex-shrink: 0;
+    font-size: 17px; color: #fff; flex-shrink: 0;
     overflow: hidden;
   }
-  .sheet-list-icon.telegram { background: linear-gradient(135deg, var(--tg-blue), #0088cc); }
+  .sheet-list-icon.telegram {
+    background: linear-gradient(135deg, #229ED9, #0088cc);
+    box-shadow: 0 2px 8px rgba(34, 158, 217, 0.25);
+  }
   .sheet-list-icon.platform {
-    background: var(--bg-card); border: 1px solid var(--border);
+    background: var(--bg-card);
+    border: 1px solid var(--border);
     padding: 0;
   }
   .sheet-list-icon.platform img { width: 100%; height: 100%; object-fit: cover; }
-  .sheet-list-content { flex: 1; min-width: 0; }
   .sheet-list-title {
-    font-size: 0.84375rem; font-weight: 800; color: var(--text);
-    line-height: 1.3; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  }
-  .sheet-list-sub {
-    font-size: 0.6875rem; color: var(--text-muted); margin-top: 2px;
-    font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    flex: 1;
+    font-size: 0.875rem;
+    font-weight: 800;
+    color: var(--text);
+    line-height: 1.3;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    letter-spacing: -0.01em;
   }
   .sheet-list-arrow { color: var(--text-subtle); font-size: 12px; flex-shrink: 0; }
 
@@ -1015,10 +1010,8 @@
     padding: 16px 18px; min-height: 68px;
     background: var(--bg-card); border: 1px solid var(--border);
     border-radius: var(--r-card); text-align: left; width: 100%;
-    transition: transform 0.18s var(--spring);
     animation: stepFadeUp 0.55s var(--spring) 100ms both;
   }
-  .tool-card:active { transform: scale(0.97); }
   .tool-card-icon {
     width: 44px; height: 44px; border-radius: 12px;
     background: rgba(99, 102, 241, 0.10); color: var(--ck-2);
@@ -1082,7 +1075,6 @@
     text-align: left; background: var(--bg-card); color: var(--text);
     font-family: inherit; cursor: pointer;
     border-bottom: 1px solid var(--border);
-    transition: background 0.15s ease;
   }
   .history-group-item:last-child { border-bottom: none; }
   .history-group-item:active { background: var(--bg-page); }
@@ -1097,11 +1089,7 @@
   .betsize-card {
     background: var(--bg-card); border: 1px solid var(--border);
     border-radius: 16px; padding: 14px;
-    animation: stepFadeUp 0.5s var(--spring) both;
   }
-  .betsize-card:nth-child(1) { animation-delay: 150ms; }
-  .betsize-card:nth-child(2) { animation-delay: 200ms; }
-  .betsize-card:nth-child(3) { animation-delay: 250ms; }
   .betsize-field-label { display: block; font-size: 0.8125rem; font-weight: 800; color: var(--text); margin-bottom: 10px; }
   .betsize-input {
     width: 100%; min-height: 48px;
@@ -1119,7 +1107,7 @@
     border: 1px solid var(--border); border-radius: 12px;
     padding: 12px 16px; background: var(--bg-page);
     font-size: 0.9375rem; font-weight: 800; color: var(--text);
-    cursor: pointer; font-family: inherit;
+    font-family: inherit;
   }
   .betsize-select-btn[aria-expanded="true"] { border-color: var(--ck-2); }
   .betsize-chevron { font-size: 11px; opacity: 0.7; transition: transform 0.2s ease; }
@@ -1137,7 +1125,7 @@
     min-height: 44px;
     border: 1px solid var(--border); border-radius: 10px;
     background: var(--bg-card); color: var(--text);
-    font-size: 0.84375rem; font-weight: 800; cursor: pointer; font-family: inherit;
+    font-size: 0.84375rem; font-weight: 800; font-family: inherit;
   }
   .betsize-option.selected { background: linear-gradient(135deg, var(--ck-1), var(--ck-2)); border-color: transparent; color: #ffffff; }
   .betsize-calc-btn {
@@ -1170,7 +1158,6 @@
   .betsize-table th, .betsize-table td { padding: 10px 8px; text-align: center; font-size: 0.8125rem; border-bottom: 1px solid var(--border); }
   .betsize-table th { font-size: 0.6875rem; font-weight: 800; color: var(--text-subtle); text-transform: uppercase; }
   .betsize-table td { font-weight: 700; color: var(--text); }
-  .betsize-table tbody tr:last-child td { border-bottom: none; }
   .betsize-table tfoot td { border-bottom: none; border-top: 2px solid var(--ck-2); font-weight: 800; color: var(--ck-text); padding-top: 12px; }
   .betsize-copy-btn {
     display: inline-flex; align-items: center; justify-content: center;
@@ -1219,7 +1206,7 @@
   @keyframes slideDownFade { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
   @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* ============ PREDICTION PAGE ============ */
+  /* ============ PREDICTION LIST ============ */
   #screen-prediction { padding-top: calc(var(--header-h) + env(safe-area-inset-top, 0px) + 20px); }
   .prediction-section-title {
     font-size: 0.75rem; font-weight: 800; letter-spacing: 0.06em;
@@ -1238,7 +1225,6 @@
     background: var(--bg-card); color: var(--text);
     font-family: inherit; cursor: pointer;
     border-bottom: 1px solid var(--border);
-    transition: background 0.15s ease;
   }
   .prediction-item:last-child { border-bottom: none; }
   .prediction-item:active { background: var(--bg-page); }
@@ -1246,7 +1232,6 @@
     width: 42px; height: 42px; border-radius: 11px;
     overflow: hidden; flex-shrink: 0;
     background: var(--bg-page); border: 1px solid var(--border);
-    transition: filter 0.2s, opacity 0.2s;
   }
   .prediction-item .prediction-logo img { width: 100%; height: 100%; object-fit: cover; display: block; }
   .prediction-item.is-locked .prediction-logo { filter: grayscale(0.7) brightness(0.95); opacity: 0.85; }
@@ -1267,7 +1252,7 @@
   body.dark .prediction-status-icon.locked { background: rgba(148, 163, 184, 0.15); color: var(--text-muted); }
   .prediction-arrow { color: var(--text-subtle); font-size: 11px; flex-shrink: 0; }
 
-  /* ============ PREDICTION DETAIL — Horizontal Tabs ============ */
+  /* ============ PREDICTION DETAIL ============ */
   .pred-game-tabs {
     display: flex; gap: 4px; padding: 4px;
     background: var(--bg-card); border: 1px solid var(--border);
@@ -1293,12 +1278,7 @@
     animation: stepFadeUp 0.4s var(--spring) 80ms both;
   }
 
-  /* Version container with horizontal slide animation */
-  #predVersionContainer {
-    overflow: hidden;
-    will-change: transform, opacity;
-  }
-
+  #predVersionContainer { overflow: hidden; will-change: transform, opacity; }
   .pred-version-section { margin-bottom: 16px; }
   .pred-version-label {
     font-size: 0.6875rem; font-weight: 800; text-transform: uppercase;
@@ -1307,76 +1287,125 @@
   }
   .pred-version-row-h { display: flex; flex-direction: column; gap: 8px; }
 
-  /* ============ Version Button — Minimal List (Option B) ============ */
+  /* ============ Version Button — Type Distinction ============ */
   .pred-version-btn {
-    display: flex; align-items: center; gap: 10px;
-    width: 100%; min-height: 52px; padding: 0 16px;
-    border: 1px solid var(--border); border-radius: 12px;
-    background: var(--bg-card); color: var(--text);
-    font-family: inherit; cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    min-height: 56px;
+    padding: 0 14px 0 14px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg-card);
+    color: var(--text);
+    font-family: inherit;
+    cursor: pointer;
     transition: transform 0.15s var(--spring), border-color 0.2s, background 0.2s;
-    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
     position: relative;
+    overflow: hidden;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.02);
   }
   .pred-version-btn:active { transform: scale(0.98); background: var(--bg-page); }
 
-  .pred-version-btn .ver-num {
-    font-size: 0.9375rem; font-weight: 800; color: var(--text);
-    letter-spacing: -0.01em; flex-shrink: 0;
+  /* Left Bar - 4px */
+  .pred-version-btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0;
+    width: 4px;
+  }
+  .pred-version-btn.special::before {
+    background: linear-gradient(180deg, #f59e0b, #d97706);
+  }
+  .pred-version-btn.special.is-locked-premium::before {
+    background: linear-gradient(180deg, #f59e0b, #d97706);
+    opacity: 0.5;
+  }
+  .pred-version-btn.free::before {
+    background: linear-gradient(180deg, #22c55e, #16a34a);
+  }
+  .pred-version-btn.is-placeholder::before {
+    background: var(--border);
   }
 
-  /* Win Rate badge */
+  /* Type Icon */
+  .pred-version-btn .ver-icon {
+    width: 26px; height: 26px; border-radius: 7px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; flex-shrink: 0;
+  }
+  .pred-version-btn.special .ver-icon {
+    background: rgba(245, 158, 11, 0.14);
+    color: #b45309;
+  }
+  body.dark .pred-version-btn.special .ver-icon {
+    background: rgba(251, 191, 36, 0.18);
+    color: #fbbf24;
+  }
+  .pred-version-btn.special.is-locked-premium .ver-icon {
+    background: rgba(100, 116, 139, 0.1);
+    color: var(--text-muted);
+  }
+  .pred-version-btn.free .ver-icon {
+    background: rgba(34, 197, 94, 0.14);
+    color: #15803d;
+  }
+  body.dark .pred-version-btn.free .ver-icon {
+    background: rgba(52, 211, 153, 0.18);
+    color: #86efac;
+  }
+  .pred-version-btn.is-placeholder .ver-icon {
+    background: rgba(100, 116, 139, 0.08);
+    color: var(--text-subtle);
+  }
+
+  /* Version Number */
+  .pred-version-btn .ver-num {
+    font-size: 0.9375rem;
+    font-weight: 800;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    flex-shrink: 0;
+  }
+
+  /* Win Rate Badge */
   .pred-version-btn .ver-winrate {
     margin-left: auto;
-    font-size: 0.6875rem; font-weight: 800;
-    padding: 4px 10px; border-radius: 6px;
-    letter-spacing: 0.01em; flex-shrink: 0;
-    transition: background 0.2s, color 0.2s;
+    font-size: 0.6875rem;
+    font-weight: 800;
+    padding: 4px 10px;
+    border-radius: 6px;
+    letter-spacing: 0.01em;
+    flex-shrink: 0;
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
+    transition: background 0.2s, color 0.2s;
   }
   .ver-winrate.high { background: rgba(34, 197, 94, 0.12); color: #15803d; }
   .ver-winrate.medium { background: rgba(245, 158, 11, 0.14); color: #b45309; }
   .ver-winrate.low { background: rgba(239, 68, 68, 0.12); color: #b91c1c; }
   .ver-winrate.loading { background: var(--bg-page); color: var(--text-subtle); }
+  .ver-winrate.fixing { background: rgba(100, 116, 139, 0.1); color: var(--text-subtle); }
   body.dark .ver-winrate.high { background: rgba(52, 211, 153, 0.18); color: #86efac; }
   body.dark .ver-winrate.medium { background: rgba(251, 191, 36, 0.18); color: #fbbf24; }
   body.dark .ver-winrate.low { background: rgba(248, 113, 113, 0.16); color: #fca5a5; }
   body.dark .ver-winrate.loading { background: var(--bg-page); color: var(--text-subtle); }
+  body.dark .ver-winrate.fixing { background: rgba(148, 163, 184, 0.12); color: var(--text-muted); }
 
-  /* Free version tag (kept from before) */
-  .pred-version-btn .ver-tag {
-    font-size: 0.625rem; font-weight: 800;
-    text-transform: uppercase; letter-spacing: 0.06em;
-    padding: 4px 10px; border-radius: 6px;
-    background: rgba(34, 197, 94, 0.12); color: #15803d;
-    display: inline-flex; align-items: center; gap: 4px;
-    margin-left: auto;
-  }
-  body.dark .pred-version-btn .ver-tag { background: rgba(52, 211, 153, 0.15); color: #86efac; }
-
+  /* Arrow */
   .pred-version-btn .ver-arrow {
-    color: var(--text-subtle); font-size: 11px; flex-shrink: 0;
+    color: var(--text-subtle);
+    font-size: 11px;
+    flex-shrink: 0;
     transition: transform 0.2s;
   }
   .pred-version-btn:active .ver-arrow { transform: translateX(2px); }
 
-  /* Locked style for Special when no premium */
-  .pred-version-btn.special.is-locked-premium {
-    background: var(--bg-card);
-  }
-  .pred-version-btn.special.is-locked-premium .ver-winrate {
-    background: rgba(100, 116, 139, 0.1);
-    color: var(--text-muted);
-  }
-  body.dark .pred-version-btn.special.is-locked-premium .ver-winrate {
-    background: rgba(148, 163, 184, 0.15);
-    color: var(--text-muted);
-  }
-  .pred-version-btn.is-placeholder { opacity: 0.72; border-style: dashed; }
-  .pred-version-btn.is-placeholder::after {
-    content: "🔧"; position: absolute; top: 4px; right: 4px;
-    font-size: 9px; opacity: 0.6; pointer-events: none;
+  /* Placeholder (Fix) */
+  .pred-version-btn.is-placeholder {
+    border-style: dashed;
+    opacity: 0.85;
   }
 </style>
 </head>
@@ -1392,20 +1421,14 @@
   
   <!-- INTRO SPLASH -->
   <div id="introSplash">
-    <div class="intro-logo">
-      <span class="red">SuperSel</span> <span class="black">Earing</span>
-    </div>
+    <div class="intro-logo"><span class="red">SuperSel</span> <span class="black">Earing</span></div>
   </div>
   
   <!-- HEADER -->
   <header class="app-header">
     <div class="header-left">
-      <div class="header-brand" id="headerBrand">
-        <span class="red">SuperSel</span> <span class="black">Earing</span>
-      </div>
-      <button class="header-close-btn" id="headerCloseBtn" onclick="closeLogin()" aria-label="Back" style="display: none;">
-        <i class="fa-solid fa-xmark"></i>
-      </button>
+      <div class="header-brand" id="headerBrand"><span class="red">SuperSel</span> <span class="black">Earing</span></div>
+      <button class="header-close-btn" id="headerCloseBtn" onclick="closeLogin()" aria-label="Back" style="display: none;"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="header-right" id="headerRight"></div>
   </header>
@@ -1455,83 +1478,35 @@
       <div class="screen-inner">
         <div class="brand-list">
           <div class="brand-card" data-brand="ck">
-            <div class="brand-head">
-              <div class="brand-icon"><img src="Logo/ck_logo.jpg" alt="Ck Lottery"></div>
-              <div class="brand-name">Ck Lottery</div>
-            </div>
+            <div class="brand-head"><div class="brand-icon"><img src="Logo/ck_logo.jpg" alt="Ck Lottery"></div><div class="brand-name">Ck Lottery</div></div>
             <div class="brand-actions">
-              <button class="action-btn" onclick="openSub('ck','register')">
-                <span class="action-icon"><i class="fa-solid fa-user-plus"></i></span>
-                <span class="action-label" data-t="action_register">Register</span>
-              </button>
-              <button class="action-btn" onclick="openSub('ck','deposit')">
-                <span class="action-icon"><i class="fa-solid fa-arrow-down"></i></span>
-                <span class="action-label" data-t="action_deposit">Deposit</span>
-              </button>
-              <button class="action-btn" onclick="openSub('ck','withdraw')">
-                <span class="action-icon"><i class="fa-solid fa-arrow-up"></i></span>
-                <span class="action-label" data-t="action_withdraw">Withdraw</span>
-              </button>
+              <button class="action-btn" onclick="openSub('ck','register')"><span class="action-icon"><i class="fa-solid fa-user-plus"></i></span><span class="action-label" data-t="action_register">Register</span></button>
+              <button class="action-btn" onclick="openSub('ck','deposit')"><span class="action-icon"><i class="fa-solid fa-arrow-down"></i></span><span class="action-label" data-t="action_deposit">Deposit</span></button>
+              <button class="action-btn" onclick="openSub('ck','withdraw')"><span class="action-icon"><i class="fa-solid fa-arrow-up"></i></span><span class="action-label" data-t="action_withdraw">Withdraw</span></button>
             </div>
           </div>
           <div class="brand-card" data-brand="bigwin">
-            <div class="brand-head">
-              <div class="brand-icon"><img src="Logo/bigwin_logo.jpg" alt="777 BigWin"></div>
-              <div class="brand-name">777 BigWin</div>
-            </div>
+            <div class="brand-head"><div class="brand-icon"><img src="Logo/bigwin_logo.jpg" alt="777 BigWin"></div><div class="brand-name">777 BigWin</div></div>
             <div class="brand-actions">
-              <button class="action-btn" onclick="openSub('bigwin','register')">
-                <span class="action-icon"><i class="fa-solid fa-user-plus"></i></span>
-                <span class="action-label" data-t="action_register">Register</span>
-              </button>
-              <button class="action-btn" onclick="openSub('bigwin','deposit')">
-                <span class="action-icon"><i class="fa-solid fa-arrow-down"></i></span>
-                <span class="action-label" data-t="action_deposit">Deposit</span>
-              </button>
-              <button class="action-btn" onclick="openSub('bigwin','withdraw')">
-                <span class="action-icon"><i class="fa-solid fa-arrow-up"></i></span>
-                <span class="action-label" data-t="action_withdraw">Withdraw</span>
-              </button>
+              <button class="action-btn" onclick="openSub('bigwin','register')"><span class="action-icon"><i class="fa-solid fa-user-plus"></i></span><span class="action-label" data-t="action_register">Register</span></button>
+              <button class="action-btn" onclick="openSub('bigwin','deposit')"><span class="action-icon"><i class="fa-solid fa-arrow-down"></i></span><span class="action-label" data-t="action_deposit">Deposit</span></button>
+              <button class="action-btn" onclick="openSub('bigwin','withdraw')"><span class="action-icon"><i class="fa-solid fa-arrow-up"></i></span><span class="action-label" data-t="action_withdraw">Withdraw</span></button>
             </div>
           </div>
           <div class="brand-card" data-brand="sixwin">
-            <div class="brand-head">
-              <div class="brand-icon"><img src="Logo/sixwin_logo.jpg" alt="SixWin"></div>
-              <div class="brand-name">SixWin</div>
-            </div>
+            <div class="brand-head"><div class="brand-icon"><img src="Logo/sixwin_logo.jpg" alt="SixWin"></div><div class="brand-name">SixWin</div></div>
             <div class="brand-actions">
-              <button class="action-btn" onclick="openSub('sixwin','register')">
-                <span class="action-icon"><i class="fa-solid fa-user-plus"></i></span>
-                <span class="action-label" data-t="action_register">Register</span>
-              </button>
-              <button class="action-btn" onclick="openSub('sixwin','deposit')">
-                <span class="action-icon"><i class="fa-solid fa-arrow-down"></i></span>
-                <span class="action-label" data-t="action_deposit">Deposit</span>
-              </button>
-              <button class="action-btn" onclick="openSub('sixwin','withdraw')">
-                <span class="action-icon"><i class="fa-solid fa-arrow-up"></i></span>
-                <span class="action-label" data-t="action_withdraw">Withdraw</span>
-              </button>
+              <button class="action-btn" onclick="openSub('sixwin','register')"><span class="action-icon"><i class="fa-solid fa-user-plus"></i></span><span class="action-label" data-t="action_register">Register</span></button>
+              <button class="action-btn" onclick="openSub('sixwin','deposit')"><span class="action-icon"><i class="fa-solid fa-arrow-down"></i></span><span class="action-label" data-t="action_deposit">Deposit</span></button>
+              <button class="action-btn" onclick="openSub('sixwin','withdraw')"><span class="action-icon"><i class="fa-solid fa-arrow-up"></i></span><span class="action-label" data-t="action_withdraw">Withdraw</span></button>
             </div>
           </div>
           <div class="brand-card" data-brand="shwe">
-            <div class="brand-head">
-              <div class="brand-icon"><img src="Logo/shwe_logo.jpg" alt="Shwe"></div>
-              <div class="brand-name">Shwe</div>
-            </div>
+            <div class="brand-head"><div class="brand-icon"><img src="Logo/shwe_logo.jpg" alt="Shwe"></div><div class="brand-name">Shwe</div></div>
             <div class="brand-actions">
-              <button class="action-btn" onclick="openSub('shwe','register')">
-                <span class="action-icon"><i class="fa-solid fa-user-plus"></i></span>
-                <span class="action-label" data-t="action_register">Register</span>
-              </button>
-              <button class="action-btn" onclick="openSub('shwe','deposit')">
-                <span class="action-icon"><i class="fa-solid fa-arrow-down"></i></span>
-                <span class="action-label" data-t="action_deposit">Deposit</span>
-              </button>
-              <button class="action-btn" onclick="openSub('shwe','withdraw')">
-                <span class="action-icon"><i class="fa-solid fa-arrow-up"></i></span>
-                <span class="action-label" data-t="action_withdraw">Withdraw</span>
-              </button>
+              <button class="action-btn" onclick="openSub('shwe','register')"><span class="action-icon"><i class="fa-solid fa-user-plus"></i></span><span class="action-label" data-t="action_register">Register</span></button>
+              <button class="action-btn" onclick="openSub('shwe','deposit')"><span class="action-icon"><i class="fa-solid fa-arrow-down"></i></span><span class="action-label" data-t="action_deposit">Deposit</span></button>
+              <button class="action-btn" onclick="openSub('shwe','withdraw')"><span class="action-icon"><i class="fa-solid fa-arrow-up"></i></span><span class="action-label" data-t="action_withdraw">Withdraw</span></button>
             </div>
           </div>
         </div>
@@ -1559,9 +1534,7 @@
         <div class="tools-list">
           <button class="tool-card" onclick="openBetSizePage()">
             <div class="tool-card-icon"><i class="fa-solid fa-calculator"></i></div>
-            <div class="tool-card-body">
-              <div class="tool-card-title" data-t="bet_size_customize_btn">Bet Size Customize</div>
-            </div>
+            <div class="tool-card-body"><div class="tool-card-title" data-t="bet_size_customize_btn">Bet Size Customize</div></div>
             <i class="fa-solid fa-chevron-right tool-card-arrow"></i>
           </button>
         </div>
@@ -1576,10 +1549,7 @@
             <div class="guest-avatar"><i class="fa-solid fa-user"></i></div>
             <h2 class="guest-title" data-t="guest_welcome">Welcome to SuperSel Earing</h2>
             <p class="guest-desc" data-t="guest_desc">Sign in to unlock all premium features</p>
-            <button class="guest-signin-btn" onclick="openLoginFromGuest()">
-              <i class="fa-solid fa-arrow-right-to-bracket"></i>
-              <span data-t="sign_in">Sign in</span>
-            </button>
+            <button class="guest-signin-btn" onclick="openLoginFromGuest()"><i class="fa-solid fa-arrow-right-to-bracket"></i><span data-t="sign_in">Sign in</span></button>
           </div>
           <div class="premium-section-title" data-t="premium_platform">Premium Platforms</div>
           <div class="guest-premium-wrap">
@@ -1592,18 +1562,12 @@
           <div class="profile-actions">
             <button class="profile-link-btn auto-bot" onclick="openBotSheet()" style="animation-delay: 100ms;">
               <div class="profile-link-icon auto-bot"><i class="fa-solid fa-robot"></i></div>
-              <div class="profile-link-content">
-                <div class="profile-link-title" data-t="auto_bot_title">Automatic Prediction Bot</div>
-                <div class="profile-link-sub" data-t="auto_bot_sub">AI-Powered Predictions</div>
-              </div>
+              <div class="profile-link-title" data-t="auto_bot_title">Automatic Prediction Bot</div>
               <i class="fa-solid fa-chevron-right profile-link-arrow"></i>
             </button>
             <button class="profile-link-btn telegram" onclick="openTelegramSheet()" style="animation-delay: 150ms;">
               <div class="profile-link-icon telegram"><i class="fa-brands fa-telegram"></i></div>
-              <div class="profile-link-content">
-                <div class="profile-link-title" data-t="telegram_title">Telegram</div>
-                <div class="profile-link-sub" data-t="telegram_sub">Follow us on Telegram</div>
-              </div>
+              <div class="profile-link-title" data-t="telegram_title">Telegram</div>
               <i class="fa-solid fa-chevron-right profile-link-arrow"></i>
             </button>
             <button class="profile-action-btn settings" onclick="openSettingsPage()">
@@ -1623,17 +1587,11 @@
                 <div class="premium-badge" data-t="premium_member">Premium Member</div>
                 <div class="hero-id">ID: <span id="displayUserId">-</span></div>
               </div>
-              <button class="refresh-btn" onclick="refreshProfileData()" title="Refresh"><i class="fa-solid fa-rotate-right"></i></button>
+              <button class="refresh-btn" onclick="refreshProfileData()"><i class="fa-solid fa-rotate-right"></i></button>
             </div>
             <div class="hero-stats">
-              <div class="stat-item">
-                <span class="stat-val" id="activePremiumCount">0 / 4</span>
-                <span class="stat-label" data-t="active_label">Active</span>
-              </div>
-              <div class="stat-item">
-                <span class="stat-val" id="memberSince">-</span>
-                <span class="stat-label" data-t="member_since">Member Since</span>
-              </div>
+              <div class="stat-item"><span class="stat-val" id="activePremiumCount">0 / 4</span><span class="stat-label" data-t="active_label">Active</span></div>
+              <div class="stat-item"><span class="stat-val" id="memberSince">-</span><span class="stat-label" data-t="member_since">Member Since</span></div>
             </div>
           </div>
           <div class="premium-section-title" data-t="premium_platform">Premium Platforms</div>
@@ -1641,39 +1599,24 @@
           <div class="profile-actions">
             <button class="profile-link-btn auto-bot" onclick="openBotSheet()">
               <div class="profile-link-icon auto-bot"><i class="fa-solid fa-robot"></i></div>
-              <div class="profile-link-content">
-                <div class="profile-link-title" data-t="auto_bot_title">Automatic Prediction Bot</div>
-                <div class="profile-link-sub" data-t="auto_bot_sub">AI-Powered Predictions</div>
-              </div>
+              <div class="profile-link-title" data-t="auto_bot_title">Automatic Prediction Bot</div>
               <i class="fa-solid fa-chevron-right profile-link-arrow"></i>
             </button>
             <button class="profile-link-btn telegram" onclick="openTelegramSheet()">
               <div class="profile-link-icon telegram"><i class="fa-brands fa-telegram"></i></div>
-              <div class="profile-link-content">
-                <div class="profile-link-title" data-t="telegram_title">Telegram</div>
-                <div class="profile-link-sub" data-t="telegram_sub">Follow us on Telegram</div>
-              </div>
+              <div class="profile-link-title" data-t="telegram_title">Telegram</div>
               <i class="fa-solid fa-chevron-right profile-link-arrow"></i>
             </button>
-            <button class="profile-action-btn settings" onclick="openSettingsPage()">
-              <i class="fa-solid fa-gear"></i>
-              <span data-t="settings">Settings</span>
-            </button>
-            <button class="profile-action-btn logout" onclick="showLogoutConfirm()">
-              <i class="fa-solid fa-arrow-right-from-bracket"></i>
-              <span data-t="logout">Logout</span>
-            </button>
+            <button class="profile-action-btn settings" onclick="openSettingsPage()"><i class="fa-solid fa-gear"></i><span data-t="settings">Settings</span></button>
+            <button class="profile-action-btn logout" onclick="showLogoutConfirm()"><i class="fa-solid fa-arrow-right-from-bracket"></i><span data-t="logout">Logout</span></button>
           </div>
         </div>
       </div>
     </div>
-  
   </div>
   
   <!-- SUB-SCREEN -->
-  <div id="subScreen" class="sub-screen">
-    <div class="sub-screen-body" id="subBody"></div>
-  </div>
+  <div id="subScreen" class="sub-screen"><div class="sub-screen-body" id="subBody"></div></div>
   
   <!-- EXTENSION WEBSITE OVERLAY -->
   <div id="extensionWebsiteOverlay" class="extension-website-overlay"></div>
@@ -1685,42 +1628,22 @@
   </div>
   
   <!-- FLOATING BACK -->
-  <button class="floating-back-btn" id="floatingBackBtn" onclick="goBack()" aria-label="Back">
-    <i class="fa-solid fa-arrow-left"></i>
-  </button>
+  <button class="floating-back-btn" id="floatingBackBtn" onclick="goBack()" aria-label="Back"><i class="fa-solid fa-arrow-left"></i></button>
   
   <!-- BOTTOM NAV -->
   <nav class="bottom-nav hidden" id="bottomNav">
-    <button class="nav-item active" data-tab="home" onclick="switchTab('home')">
-      <i class="fa-solid fa-house"></i>
-      <span class="nav-label" data-t="nav_home">Home</span>
-    </button>
-    <button class="nav-item" data-tab="prediction" onclick="switchTab('prediction')">
-      <i class="fa-solid fa-chart-line"></i>
-      <span class="nav-label" data-t="nav_prediction">Prediction</span>
-    </button>
-    <button class="nav-item" data-tab="chats" onclick="switchTab('chats')">
-      <i class="fa-solid fa-clock-rotate-left"></i>
-      <span class="nav-label" data-t="nav_chats">Chats</span>
-    </button>
-    <button class="nav-item" data-tab="tools" onclick="switchTab('tools')">
-      <i class="fa-solid fa-calculator"></i>
-      <span class="nav-label" data-t="nav_tools">Tools</span>
-    </button>
-    <button class="nav-item" data-tab="profile" onclick="switchTab('profile')">
-      <i class="fa-solid fa-user"></i>
-      <span class="nav-label" data-t="nav_profile">Profile</span>
-    </button>
+    <button class="nav-item active" data-tab="home" onclick="switchTab('home')"><i class="fa-solid fa-house"></i><span class="nav-label" data-t="nav_home">Home</span></button>
+    <button class="nav-item" data-tab="prediction" onclick="switchTab('prediction')"><i class="fa-solid fa-chart-line"></i><span class="nav-label" data-t="nav_prediction">Prediction</span></button>
+    <button class="nav-item" data-tab="chats" onclick="switchTab('chats')"><i class="fa-solid fa-clock-rotate-left"></i><span class="nav-label" data-t="nav_chats">Chats</span></button>
+    <button class="nav-item" data-tab="tools" onclick="switchTab('tools')"><i class="fa-solid fa-calculator"></i><span class="nav-label" data-t="nav_tools">Tools</span></button>
+    <button class="nav-item" data-tab="profile" onclick="switchTab('profile')"><i class="fa-solid fa-user"></i><span class="nav-label" data-t="nav_profile">Profile</span></button>
   </nav>
   
   <!-- PHOTO MODAL -->
   <div class="modal-overlay" id="photoModal" onclick="closeModal(event)">
     <div class="modal-content">
       <button class="modal-close" onclick="closeModal(event)"><i class="fa-solid fa-xmark"></i></button>
-      <div class="modal-scrollable">
-        <img id="modalImg" class="modal-img" src="" alt="Step Photo">
-        <div id="modalText" class="modal-text"></div>
-      </div>
+      <div class="modal-scrollable"><img id="modalImg" class="modal-img" src="" alt="Step Photo"><div id="modalText" class="modal-text"></div></div>
     </div>
   </div>
   
@@ -1729,7 +1652,7 @@
     <div class="logout-confirm-dialog">
       <div class="logout-confirm-icon"><i class="fa-solid fa-right-from-bracket"></i></div>
       <h2 class="logout-confirm-title" data-t="logout_confirm_title">Logout?</h2>
-      <p class="logout-confirm-desc" data-t="logout_confirm_desc">You'll need to sign in again to access premium features.</p>
+      <p class="logout-confirm-desc" data-t="logout_confirm_desc">You'll need to sign in again.</p>
       <div class="logout-confirm-actions">
         <button class="logout-btn cancel" onclick="closeLogoutConfirm()" data-t="cancel">Cancel</button>
         <button class="logout-btn confirm" onclick="confirmLogout()" data-t="confirm">Confirm</button>
@@ -1740,115 +1663,73 @@
   <!-- LANGUAGE SHEET -->
   <div class="sheet-overlay" id="sheetOverlay" onclick="closeLangSheet()"></div>
   <div class="bottom-sheet" id="langSheet">
-    <div class="sheet-header">
-      <div class="sheet-title" data-t="select_lang">Select Language</div>
-      <button class="sheet-close" onclick="closeLangSheet()"><i class="fa-solid fa-xmark"></i></button>
-    </div>
-    <div class="lang-option" id="opt-mm" onclick="setLanguage('mm')">
-      <div class="lang-left"><div class="flag flag-mm"></div><span>မြန်မာ (Myanmar)</span></div>
-      <i class="fa-solid fa-check lang-check"></i>
-    </div>
-    <div class="lang-option" id="opt-en" onclick="setLanguage('en')">
-      <div class="lang-left"><div class="flag flag-us"></div><span>English (USA)</span></div>
-      <i class="fa-solid fa-check lang-check"></i>
-    </div>
+    <div class="sheet-header"><div class="sheet-title" data-t="select_lang">Select Language</div><button class="sheet-close" onclick="closeLangSheet()"><i class="fa-solid fa-xmark"></i></button></div>
+    <div class="lang-option" id="opt-mm" onclick="setLanguage('mm')"><div class="lang-left"><div class="flag flag-mm"></div><span>မြန်မာ (Myanmar)</span></div><i class="fa-solid fa-check lang-check"></i></div>
+    <div class="lang-option" id="opt-en" onclick="setLanguage('en')"><div class="lang-left"><div class="flag flag-us"></div><span>English (USA)</span></div><i class="fa-solid fa-check lang-check"></i></div>
   </div>
   
-  <!-- TELEGRAM SHEET (No 4) -->
+  <!-- TELEGRAM SHEET (No 4) — Clean, no subtitle -->
   <div class="sheet-overlay" id="tgOverlay" onclick="closeTelegramSheet()"></div>
   <div class="bottom-sheet" id="tgSheet">
     <div class="sheet-header">
-      <div class="sheet-title" style="display: flex; align-items: center; gap: 10px;">
-        <i class="fa-brands fa-telegram" style="color: var(--tg-blue); font-size: 1.25rem;"></i>
-        <span data-t="telegram_sheet_title">Telegram</span>
-      </div>
+      <div class="sheet-title"><i class="fa-brands fa-telegram" style="color: var(--tg-blue);"></i><span data-t="telegram_title">Telegram</span></div>
       <button class="sheet-close" onclick="closeTelegramSheet()"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="sheet-list">
       <a class="sheet-list-item" href="https://t.me/LotteryTricksAiPrediction" target="_blank" rel="noopener">
         <div class="sheet-list-icon telegram"><i class="fa-brands fa-telegram"></i></div>
-        <div class="sheet-list-content">
-          <div class="sheet-list-title" data-t="tg_ch1_title">Telegram Channel 1</div>
-          <div class="sheet-list-sub" data-t="tg_ch1_sub">Lottery Tricks & AI Prediction</div>
-        </div>
+        <div class="sheet-list-title" data-t="tg_ch1_title">Telegram Channel 1</div>
         <i class="fa-solid fa-chevron-right sheet-list-arrow"></i>
       </a>
       <a class="sheet-list-item" href="https://t.me/SuperSelEaring" target="_blank" rel="noopener">
         <div class="sheet-list-icon telegram"><i class="fa-brands fa-telegram"></i></div>
-        <div class="sheet-list-content">
-          <div class="sheet-list-title" data-t="tg_ch2_title">Telegram Channel 2</div>
-          <div class="sheet-list-sub" data-t="tg_ch2_sub">SuperSel Earing Official</div>
-        </div>
+        <div class="sheet-list-title" data-t="tg_ch2_title">Telegram Channel 2</div>
         <i class="fa-solid fa-chevron-right sheet-list-arrow"></i>
       </a>
       <a class="sheet-list-item" href="https://t.me/SuperEaringWebbb_Bot" target="_blank" rel="noopener">
         <div class="sheet-list-icon telegram"><i class="fa-brands fa-telegram"></i></div>
-        <div class="sheet-list-content">
-          <div class="sheet-list-title" data-t="tg_prem_title">Telegram Premium Bot</div>
-          <div class="sheet-list-sub" data-t="tg_prem_sub">Subscribe Premium</div>
-        </div>
+        <div class="sheet-list-title" data-t="tg_prem_title">Telegram Premium Bot</div>
         <i class="fa-solid fa-chevron-right sheet-list-arrow"></i>
       </a>
       <a class="sheet-list-item" href="https://t.me/Sel_Group" target="_blank" rel="noopener">
         <div class="sheet-list-icon telegram"><i class="fa-brands fa-telegram"></i></div>
-        <div class="sheet-list-content">
-          <div class="sheet-list-title" data-t="tg_group_title">Telegram Group</div>
-          <div class="sheet-list-sub" data-t="tg_group_sub">Join Community</div>
-        </div>
+        <div class="sheet-list-title" data-t="tg_group_title">Telegram Group</div>
         <i class="fa-solid fa-chevron-right sheet-list-arrow"></i>
       </a>
       <a class="sheet-list-item" href="https://t.me/LotteryTricksAiPrediction/2559" target="_blank" rel="noopener">
         <div class="sheet-list-icon telegram"><i class="fa-brands fa-telegram"></i></div>
-        <div class="sheet-list-content">
-          <div class="sheet-list-title" data-t="tg_signal_title">24/7 Signal Channel</div>
-          <div class="sheet-list-sub" data-t="tg_signal_sub">S-1 & S-2 Signals</div>
-        </div>
+        <div class="sheet-list-title" data-t="tg_signal_title">24/7 Signal Channel</div>
         <i class="fa-solid fa-chevron-right sheet-list-arrow"></i>
       </a>
     </div>
   </div>
   
-  <!-- AUTO BOT SHEET (No 5) -->
+  <!-- AUTO BOT SHEET (No 5) — Clean, no subtitle -->
   <div class="sheet-overlay" id="botOverlay" onclick="closeBotSheet()"></div>
   <div class="bottom-sheet" id="botSheet">
     <div class="sheet-header">
-      <div class="sheet-title" style="display: flex; align-items: center; gap: 10px;">
-        <i class="fa-solid fa-robot" style="color: var(--bot-purple); font-size: 1.25rem;"></i>
-        <span data-t="auto_bot_title">Automatic Prediction Bot</span>
-      </div>
+      <div class="sheet-title"><i class="fa-solid fa-robot" style="color: var(--bot-purple);"></i><span data-t="auto_bot_title">Automatic Prediction Bot</span></div>
       <button class="sheet-close" onclick="closeBotSheet()"><i class="fa-solid fa-xmark"></i></button>
     </div>
     <div class="sheet-list">
       <a class="sheet-list-item" href="https://t.me/Ck_automatic_prediction_bot" target="_blank" rel="noopener">
         <div class="sheet-list-icon platform"><img src="Logo/ck_logo.jpg" alt="Ck"></div>
-        <div class="sheet-list-content">
-          <div class="sheet-list-title" data-t="bot_ck_title">Ck Automatic Prediction Bot</div>
-          <div class="sheet-list-sub" data-t="bot_open">Open on Telegram</div>
-        </div>
+        <div class="sheet-list-title" data-t="bot_ck_title">Ck Automatic Prediction Bot</div>
         <i class="fa-solid fa-chevron-right sheet-list-arrow"></i>
       </a>
       <a class="sheet-list-item" href="https://t.me/BigWin_automatic_predictionn_bot" target="_blank" rel="noopener">
         <div class="sheet-list-icon platform"><img src="Logo/bigwin_logo.jpg" alt="BigWin"></div>
-        <div class="sheet-list-content">
-          <div class="sheet-list-title" data-t="bot_bigwin_title">BigWin Automatic Prediction Bot</div>
-          <div class="sheet-list-sub" data-t="bot_open">Open on Telegram</div>
-        </div>
+        <div class="sheet-list-title" data-t="bot_bigwin_title">BigWin Automatic Prediction Bot</div>
         <i class="fa-solid fa-chevron-right sheet-list-arrow"></i>
       </a>
       <a class="sheet-list-item" href="https://t.me/SixWin_automatic_predictionn_bot" target="_blank" rel="noopener">
         <div class="sheet-list-icon platform"><img src="Logo/sixwin_logo.jpg" alt="SixWin"></div>
-        <div class="sheet-list-content">
-          <div class="sheet-list-title" data-t="bot_sixwin_title">SixWin Automatic Prediction Bot</div>
-          <div class="sheet-list-sub" data-t="bot_open">Open on Telegram</div>
-        </div>
+        <div class="sheet-list-title" data-t="bot_sixwin_title">SixWin Automatic Prediction Bot</div>
         <i class="fa-solid fa-chevron-right sheet-list-arrow"></i>
       </a>
       <a class="sheet-list-item" href="https://t.me/Shwe_automatic_prediction_bot" target="_blank" rel="noopener">
         <div class="sheet-list-icon platform"><img src="Logo/shwe_logo.jpg" alt="Shwe"></div>
-        <div class="sheet-list-content">
-          <div class="sheet-list-title" data-t="bot_shwe_title">Shwe Automatic Prediction Bot</div>
-          <div class="sheet-list-sub" data-t="bot_open">Open on Telegram</div>
-        </div>
+        <div class="sheet-list-title" data-t="bot_shwe_title">Shwe Automatic Prediction Bot</div>
         <i class="fa-solid fa-chevron-right sheet-list-arrow"></i>
       </a>
     </div>
@@ -1857,12 +1738,7 @@
   <!-- LOGIN SUCCESS -->
   <div id="loginSuccessOverlay" class="login-success-overlay">
     <div class="login-success-content">
-      <div class="login-success-circle">
-        <svg class="checkmark" viewBox="0 0 52 52">
-          <circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/>
-          <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-        </svg>
-      </div>
+      <div class="login-success-circle"><svg class="checkmark" viewBox="0 0 52 52"><circle class="checkmark-circle" cx="26" cy="26" r="25" fill="none"/><path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/></svg></div>
       <div class="login-success-text" data-t="welcome_back">Welcome!</div>
       <div class="login-success-id" id="loginSuccessId">-</div>
     </div>
@@ -1874,10 +1750,7 @@
       <div class="force-logout-icon"><i class="fa-solid fa-triangle-exclamation"></i></div>
       <h2 class="force-logout-title" id="forceLogoutTitle">Session Ended</h2>
       <p class="force-logout-desc" id="forceLogoutDesc">Your account already logged in somewhere else</p>
-      <button class="force-logout-btn" onclick="finalizeForceLogout()">
-        <i class="fa-solid fa-arrow-right-to-bracket"></i>
-        <span data-t="back_to_login">Back to Login</span>
-      </button>
+      <button class="force-logout-btn" onclick="finalizeForceLogout()"><i class="fa-solid fa-arrow-right-to-bracket"></i><span data-t="back_to_login">Back to Login</span></button>
     </div>
   </div>
   
@@ -1890,7 +1763,7 @@
     en: {
       nav_home: 'Home', nav_prediction: 'Prediction', nav_chats: 'Chats', nav_tools: 'Tools', nav_profile: 'Profile',
       action_register: 'Register', action_deposit: 'Deposit', action_withdraw: 'Withdraw',
-      cta_register: 'Register Now', select_lang: 'Select Language', step_label: 'Step',
+      select_lang: 'Select Language', step_label: 'Step',
       bet_size_title: 'Bet Size', bet_size_first_amount: 'First Bet Amount', bet_size_profits: 'Profits ×',
       bet_size_count: 'Bet Count', bet_size_no: 'No.', bet_size_amount: 'Amount', bet_size_profits_col: 'Profits',
       bet_size_total: 'Total', bet_size_copy: 'Copy', bet_size_copied: 'Copied', bet_size_calc: 'Calculator',
@@ -1904,7 +1777,7 @@
       premium_member: 'Premium Member', premium_platform: 'Premium Platforms',
       member_since: 'Member Since', active_label: 'Active',
       settings: 'Settings', logout: 'Logout',
-      logout_confirm_title: 'Logout?', logout_confirm_desc: "You'll need to sign in again to access premium features.",
+      logout_confirm_title: 'Logout?', logout_confirm_desc: "You'll need to sign in again.",
       cancel: 'Cancel', confirm: 'Confirm',
       settings_title: 'Settings', appearance: 'Appearance', language_label: 'Language',
       dark_mode: 'Dark Mode', extensions: 'Extensions',
@@ -1912,27 +1785,24 @@
       signin_to_unlock: 'Sign in to unlock', welcome_back: 'Welcome!',
       back_to_login: 'Back to Login',
       session_ended_title: 'Session Ended', session_ended_desc: 'Your account already logged in somewhere else',
-      session_expired_title: 'Session Expired', session_expired_desc: 'Your session has expired. Please sign in again.',
+      session_expired_title: 'Session Expired', session_expired_desc: 'Your session has expired.',
       premium_activated: 'Premium Activated', premium_removed: 'Premium Removed',
       fixing_in_progress: 'Fixing in progress... Please wait',
       loading_game: 'Loading Game...', loading_history: 'Loading History...',
-      telegram_title: 'Telegram', telegram_sub: 'Follow us on Telegram',
-      telegram_sheet_title: 'Telegram',
-      auto_bot_title: 'Automatic Prediction Bot', auto_bot_sub: 'AI-Powered Predictions',
-      bot_open: 'Open on Telegram',
-      tg_ch1_title: 'Telegram Channel 1', tg_ch1_sub: 'Lottery Tricks & AI Prediction',
-      tg_ch2_title: 'Telegram Channel 2', tg_ch2_sub: 'SuperSel Earing Official',
-      tg_prem_title: 'Telegram Premium Bot', tg_prem_sub: 'Subscribe Premium',
-      tg_group_title: 'Telegram Group', tg_group_sub: 'Join Community',
-      tg_signal_title: '24/7 Signal Channel', tg_signal_sub: 'S-1 & S-2 Signals',
+      telegram_title: 'Telegram',
+      auto_bot_title: 'Automatic Prediction Bot',
+      tg_ch1_title: 'Telegram Channel 1', tg_ch2_title: 'Telegram Channel 2',
+      tg_prem_title: 'Telegram Premium Bot', tg_group_title: 'Telegram Group',
+      tg_signal_title: '24/7 Signal Channel',
       bot_ck_title: 'Ck Automatic Prediction Bot', bot_bigwin_title: 'BigWin Automatic Prediction Bot',
       bot_sixwin_title: 'SixWin Automatic Prediction Bot', bot_shwe_title: 'Shwe Automatic Prediction Bot',
-      win: 'Win', win_rate_fmt: 'Win {p}%'
+      login_required: 'Please enter the app first.',
+      win_rate_fmt: 'Win {p}%', fixing: 'Fixing...'
     },
     mm: {
       nav_home: 'ပင်မစာမျက်နှာ', nav_prediction: 'ကြိုတင်ခန့်မှန်း', nav_chats: 'ဇယား', nav_tools: 'ကိရိယာများ', nav_profile: 'ကျွန်ုပ်',
       action_register: 'အကောင့်ဖွင့်ရန်', action_deposit: 'ငွေသွင်းရန်', action_withdraw: 'ငွေထုတ်ရန်',
-      cta_register: 'အကောင့်ဖွင့်ရန်နိပ်ပါ', select_lang: 'ဘာသာစကား ရွေးချယ်ပါ', step_label: 'အဆင့်',
+      select_lang: 'ဘာသာစကား ရွေးချယ်ပါ', step_label: 'အဆင့်',
       bet_size_title: 'လောင်းကြေးပမာဏ', bet_size_first_amount: 'ပထမဆုံးလောင်းကြေးပမာဏ',
       bet_size_profits: 'အမြတ်×', bet_size_count: 'လောင်းကြေးအကြိမ်ရေ',
       bet_size_no: 'နံပါတ်', bet_size_amount: 'ငွေပမာဏ', bet_size_profits_col: 'အမြတ်ငွေများ',
@@ -1940,7 +1810,7 @@
       bet_size_calc: 'တွက်ချက်ရန်', bet_size_loading: 'တွက်ချက်နေသည်...',
       bet_size_placeholder: 'ပထမဆုံးလောင်းကြေးပမာဏ ထည့်ပါ', bet_size_customize_btn: 'လောင်းကြေးတွက်ချက်ရန်',
       bet_size_error_empty: 'ပထမဆုံးလောင်းကြေးပမာဏ ထည့်ပါ။', bet_size_error_digits: 'ဂဏန်းများသာ ရိုက်ထည့်ပါ။',
-      bet_size_error_min: 'အနည်းဆုံး ၁၀၀ ထည့်ရပါမယ်။', bet_size_error_round: 'ဆယ်ဂဏန်းမပါရပါ။ ဥပမာ ၁၀၀, ၁၀၀၀, ၂၀၀၀ သာ။',
+      bet_size_error_min: 'အနည်းဆုံး ၁၀၀ ထည့်ရပါမယ်။', bet_size_error_round: 'ဆယ်ဂဏန်းမပါရပါ။',
       member_id: 'အဖွဲ့ဝင် ID', otp_code: 'OTP ကုဒ်ထည့်ပါ',
       login_subtitle: 'ဆက်လက်ကြည့်ရှုရန် အကောင့်ဝင်ပါ', send_code: 'ကုဒ်နံပါတ် ပို့မည်', sign_in: 'ဝင်ရောက်ရန်',
       continue_guest: 'ဧည့်သည်အဖြစ်ဝင်ရောက်ရန်',
@@ -1948,8 +1818,7 @@
       premium_member: 'ပရီမီယံ မန်ဘာ', premium_platform: 'ပရီမီယံ ပလက်ဖောင်း',
       member_since: 'အဖွဲ့ဝင်ဖြစ်ခဲ့သည့်နေ့', active_label: 'လုပ်ဆောင်နေသည်',
       settings: 'စက်တင်', logout: 'လော့အောက်',
-      logout_confirm_title: 'လော့အောက် လုပ်မှာလား?',
-      logout_confirm_desc: 'ပရီမီယံ ဝန်ဆောင်မှုများ ပြန်လည်အသုံးပြုရန် ထပ်မံဝင်ရောက်ရပါမည်။',
+      logout_confirm_title: 'လော့အောက် လုပ်မှာလား?', logout_confirm_desc: 'ထပ်မံဝင်ရောက်ရပါမည်။',
       cancel: 'မလုပ်တော့', confirm: 'အတည်ပြု',
       settings_title: 'စက်တင်', appearance: 'အသွင်အပြင်', language_label: 'ဘာသာစကား',
       dark_mode: 'အမှောင်မုဒ်', extensions: 'Extension များ',
@@ -1959,23 +1828,18 @@
       back_to_login: 'လော့ဂ်အင်သို့ ပြန်',
       session_ended_title: 'Session ပြီးဆုံးပါပြီ',
       session_ended_desc: 'သင့်အကောင့်အား အခြားနေရာတစ်ခုတွင် ဝင်ရောက်ထားပြီးဖြစ်သည်',
-      session_expired_title: 'သက်တမ်းကုန်ဆုံးပါပြီ',
-      session_expired_desc: 'သင့်အကောင့်ဝင်ရောက်မှု သက်တမ်းကုန်ဆုံးသွားပါပြီ။ ထပ်မံဝင်ရောက်ပါ။',
+      session_expired_title: 'သက်တမ်းကုန်ဆုံးပါပြီ', session_expired_desc: 'ထပ်မံဝင်ရောက်ပါ။',
       premium_activated: 'ပရီမီယံ အသက်သွင်းပြီး', premium_removed: 'ပရီမီယံ ဖြုတ်လိုက်ပြီ',
       fixing_in_progress: 'ပြင်ဆင်နေသည်... ခဏစောင့်ပါ',
       loading_game: 'ဂိမ်း တင်နေသည်...', loading_history: 'မှတ်တမ်း တင်နေသည်...',
-      telegram_title: 'Telegram', telegram_sub: 'Telegram တွင် လိုက်ပါ',
-      telegram_sheet_title: 'Telegram',
-      auto_bot_title: 'အလိုအလျောက် ခန့်မှန်းချက် Bot', auto_bot_sub: 'AI ခန့်မှန်းချက်များ',
-      bot_open: 'Telegram တွင် ဖွင့်ပါ',
-      tg_ch1_title: 'Telegram Channel 1', tg_ch1_sub: 'Lottery Tricks & AI Prediction',
-      tg_ch2_title: 'Telegram Channel 2', tg_ch2_sub: 'SuperSel Earing Official',
-      tg_prem_title: 'Telegram Premium Bot', tg_prem_sub: 'ပရီမီယံ ဝယ်ယူရန်',
-      tg_group_title: 'Telegram Group', tg_group_sub: 'အဖွဲ့အစည်းတွင် ပါဝင်ပါ',
-      tg_signal_title: '24/7 Signal Channel', tg_signal_sub: 'S-1 & S-2 အချက်�ပြများ',
+      telegram_title: 'Telegram', auto_bot_title: 'အလိုအလျောက် ခန့်မှန်းချက် Bot',
+      tg_ch1_title: 'Telegram Channel 1', tg_ch2_title: 'Telegram Channel 2',
+      tg_prem_title: 'Telegram Premium Bot', tg_group_title: 'Telegram Group',
+      tg_signal_title: '24/7 Signal Channel',
       bot_ck_title: 'Ck အလိုအလျောက် Bot', bot_bigwin_title: 'BigWin အလိုအလျောက် Bot',
       bot_sixwin_title: 'SixWin အလိုအလျောက် Bot', bot_shwe_title: 'Shwe အလိုအလျောက် Bot',
-      win: 'နိုင်', win_rate_fmt: 'နိုင် {p}%'
+      login_required: 'App ထဲသို့ အရင်ဝင်ပါ။',
+      win_rate_fmt: 'နိုင် {p}%', fixing: 'ပြင်နေသည်...'
     }
   };
   
@@ -1989,14 +1853,12 @@
     sixwin: { name: 'SixWin',     logo: 'Logo/sixwin_logo.jpg', c1: '#f87171', c2: '#dc2626' },
     shwe:   { name: 'Shwe',       logo: 'Logo/shwe_logo.jpg', c1: '#fb923c', c2: '#ea580c' }
   };
-  
   const EXT_CONFIG = {
     ck:     { name: 'Ck Lottery', logo: 'Logo/ck_logo.jpg', url: 'http://www.cklottery.top', color: '#4f46e5' },
     bigwin: { name: '777 BigWin', logo: 'Logo/bigwin_logo.jpg', url: 'https://www.777bigwingame.vip', color: '#16a34a' },
     sixwin: { name: 'SixWin',     logo: 'Logo/sixwin_logo.jpg', url: 'https://www.6win333.com', color: '#dc2626' },
     shwe:   { name: 'Shwe Lottery', logo: 'Logo/shwe_logo.jpg', url: 'https://www.shwe008.com', color: '#ea580c' }
   };
-  
   const PLATFORM_NAMES = { ck: 'Ck Lottery', bigwin: 'BigWin', sixwin: 'SixWin', shwe: 'Shwe Lottery', paid: 'Paid Premium' };
   
   const FIREBASE_PROJECT = {
@@ -2007,7 +1869,6 @@
     messagingSenderId: "625630152314", appId: "1:625630152314:web:c035009eec389371b51dc3"
   };
   
-  // Firebase Paths for Win Rate calculation
   const PLATFORM_FIREBASE = {
     ck:     { wg30: 'ckwingo30/default', wg1: 'ckwingo1/default' },
     bigwin: { wg30: 'bigwin/default',    wg1: 'bigwinwingo1/default' },
@@ -2028,112 +1889,112 @@
     { id: 'shwe1', brand: 'shwe', title_en: 'Shwe WinGo 1 History', title_mm: 'Shwe WinGo 1 မှတ်တမ်း', logo: 'Logo/shwe_logo.jpg', src: 'History%20Chat/Shwe%20WinGo%201/shwe1results.html', firebase: Object.assign({}, FIREBASE_PROJECT, { path: "shwewingo1/default" }) }
   ];
   
-  // ============ CONTENT (unchanged) ============
+  // ============ CONTENT ============
   const CONTENT = {
     ck: {
       register: { cta: { href: 'http://www.cklottery.top/#/register?invitationCode=81487219676', text_en: 'Register Now', text_mm: 'အကောင့်ဖွင့်ရန်နိပ်ပါ' }, steps: [
-        { img: 'Ck Lottery/Ck Lottery Register Photo/photo_1.jpg', text_en: '- Tap "Register Now". - Enter your phone number starting with 9 (e.g., 9123456789).', text_mm: '- Register Now ကိုနိပ်ပါ။<br><br>- Phone Number တွင် 9 တစ်လုံးပဲခံပြီးရေးပါ။ (ဥပမာ-9123456789)' },
-        { img: 'Ck Lottery/Ck Lottery Register Photo/photo_2.jpg', text_en: '- Set Password & Confirm Password. Both must match exactly.', text_mm: '- Set Password နှင့် Confirm Password နှစ်ခုတူညီရမည်။ (ဥပမာ - Abc11111)' },
-        { img: 'Ck Lottery/Ck Lottery Register Photo/photo_3.jpg', text_en: '- Enter Invite Code: (81487219676).', text_mm: '- Invite Code ရေးနေရာတွင် (81487219676) ရိုက်ထည့်ပါ။' },
-        { img: 'Ck Lottery/Ck Lottery Register Photo/photo_4.jpg', text_en: '- Check the "I Have Read And Agree" box.', text_mm: '- I Have Read And Agree နေရာမှ (အမှန်ခြစ်)တပ်ပါ။' },
-        { img: 'Ck Lottery/Ck Lottery Register Photo/photo_5.jpg', text_en: '- Fill in Account Information and tap Register.', text_mm: '- Account Information ဖြည့်ပြီး Register ကိုနိပ်ပါ။' }
+        { img: 'Ck Lottery/Ck Lottery Register Photo/photo_1.jpg', text_en: '- Tap "Register Now". Phone number starting with 9.', text_mm: '- Register Now ကိုနိပ်ပါ။ Phone Number တွင် 9 ခံပါ။' },
+        { img: 'Ck Lottery/Ck Lottery Register Photo/photo_2.jpg', text_en: '- Set Password & Confirm Password.', text_mm: '- Password နှစ်ခု တူညီရမည်။' },
+        { img: 'Ck Lottery/Ck Lottery Register Photo/photo_3.jpg', text_en: '- Enter Invite Code: (81487219676).', text_mm: '- Invite Code: (81487219676) ရိုက်ပါ။' },
+        { img: 'Ck Lottery/Ck Lottery Register Photo/photo_4.jpg', text_en: '- Check "I Have Read And Agree".', text_mm: '- I Have Read And Agree ကို အမှန်ခြစ်ပါ။' },
+        { img: 'Ck Lottery/Ck Lottery Register Photo/photo_5.jpg', text_en: '- Fill in Account Information and Register.', text_mm: '- Account Information ဖြည့်ပြီး Register နိပ်ပါ။' }
       ]},
       deposit: { cta: null, steps: [
-        { img: 'Ck Lottery/Ck Lottery deposite Photo/p1.jpg', text_en: '- Log in to your Ck Lottery Account.', text_mm: '- Ck Lottery Account ထဲကိုဝင်ပါ။' },
+        { img: 'Ck Lottery/Ck Lottery deposite Photo/p1.jpg', text_en: '- Log in to your Account.', text_mm: '- Account ထဲကိုဝင်ပါ။' },
         { img: 'Ck Lottery/Ck Lottery deposite Photo/p2.jpg', text_en: '- Tap Deposit.', text_mm: '- Deposit ကိုနိပ်ပါ။' },
-        { img: 'Ck Lottery/Ck Lottery deposite Photo/p3.jpg', text_en: '- Choose Kpay/Wave or E-Wallet for faster transfer.', text_mm: '- Kpay/Wave သို့မဟုတ် ပိုမြန်ချင်ရင် E-Wallet ကိုသုံးပါ။' },
-        { img: 'Ck Lottery/Ck Lottery deposite Photo/p4.jpg', text_en: '- Select Kpay or Wave. Enter Amount and tap Deposit.', text_mm: '- Kpay သို့မဟုတ် Wave ရွေးပါ။ Amount ရိုက်ထည့်ပါ။' },
-        { img: 'Ck Lottery/Ck Lottery deposite Photo/p6.jpg', text_en: '- Copy the Account Name, Phone Number, and Amount.', text_mm: '- Account Name, Phone Number နှင့် Amount ကို Copy ယူပါ။' },
-        { img: 'Ck Lottery/Ck Lottery deposite Photo/p7.jpg', text_en: '- Tap "Complete Payment" after transferring.', text_mm: '- ငွေလွဲပြီးပါက Complete Payment ကိုနိပ်ပါ။' },
-        { img: 'Ck Lottery/Ck Lottery deposite Photo/p8.jpg', text_en: '- Select E-Wallet. Blue is Kpay, Yellow is Wave.', text_mm: '- E-Wallet ရွေးပါ။ အပြာက Kpay၊ အဝါက Wave။' },
-        { img: 'Ck Lottery/Ck Lottery deposite Photo/p13.jpg', text_en: '- Scroll up, enter Deposit Amount, and tap Deposit.', text_mm: '- အပေါ်ကိုဆွဲတင်ပါ။ Amount ရိုက်ပြီး Deposit ကိုနိပ်ပါ။' },
-        { img: 'Ck Lottery/Ck Lottery deposite Photo/p10.jpg', text_en: '- Scan the QR Code or copy the Phone Number.', text_mm: '- QR Code ကို Scan လုပ်ပါ။' },
-        { img: 'Ck Lottery/Ck Lottery deposite Photo/p11.jpg', text_en: '- Enter the last 6 digits of the Transaction ID and submit.', text_mm: '- နောက်ဆုံး ၆လုံးကိုရိုက်ထည့်ပြီး တင်ပြပါ။' },
-        { img: 'Ck Lottery/Ck Lottery deposite Photo/p12.jpg', text_en: '- Wait for the transaction check to complete.', text_mm: '- စစ်ဆေးပြီးရင် Account ထဲသို့ ငွေရောက်ပါမည်။' }
+        { img: 'Ck Lottery/Ck Lottery deposite Photo/p3.jpg', text_en: '- Choose Kpay/Wave or E-Wallet.', text_mm: '- Kpay/Wave သို့မဟုတ် E-Wallet ကိုသုံးပါ။' },
+        { img: 'Ck Lottery/Ck Lottery deposite Photo/p4.jpg', text_en: '- Select Kpay or Wave. Enter Amount.', text_mm: '- Kpay သို့မဟုတ် Wave ရွေးပါ။ Amount ရိုက်ပါ။' },
+        { img: 'Ck Lottery/Ck Lottery deposite Photo/p6.jpg', text_en: '- Copy Account Info and transfer.', text_mm: '- Account အချက်အလက် Copy ယူပြီး ငွေလွဲပါ။' },
+        { img: 'Ck Lottery/Ck Lottery deposite Photo/p7.jpg', text_en: '- Tap Complete Payment.', text_mm: '- Complete Payment ကိုနိပ်ပါ။' },
+        { img: 'Ck Lottery/Ck Lottery deposite Photo/p8.jpg', text_en: '- Select E-Wallet.', text_mm: '- E-Wallet ရွေးပါ။' },
+        { img: 'Ck Lottery/Ck Lottery deposite Photo/p13.jpg', text_en: '- Enter Deposit Amount.', text_mm: '- Amount ရိုက်ပါ။' },
+        { img: 'Ck Lottery/Ck Lottery deposite Photo/p10.jpg', text_en: '- Scan QR or copy phone.', text_mm: '- QR Scan လုပ်ပါ။' },
+        { img: 'Ck Lottery/Ck Lottery deposite Photo/p11.jpg', text_en: '- Enter last 6 digits of Transaction ID.', text_mm: '- နောက်ဆုံး ၆လုံး ရိုက်ပါ။' },
+        { img: 'Ck Lottery/Ck Lottery deposite Photo/p12.jpg', text_en: '- Wait for check to complete.', text_mm: '- စစ်ဆေးပြီးရင် ငွေရောက်ပါမည်။' }
       ]},
       withdraw: { cta: null, steps: [
-        { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p1.jpg', text_en: '- Log in to your Ck Lottery Account.', text_mm: '- Ck Lottery Account ထဲကိုဝင်ပါ။' },
-        { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p2.jpg', text_en: '- Tap Withdrawal.', text_mm: '- Withdrawal ကိုနိပ်ပါ။' },
-        { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p3.jpg', text_en: '- Select Wave or Kpay. Add wallet if not linked.', text_mm: '- Wave သို့မဟုတ် Kpay ရွေးပါ။' },
-        { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p4.jpg', text_en: '- You are now ready to withdraw.', text_mm: '- ယခုငွေထုတ်ရန် အသင့်ဖြစ်ပါပြီ။' },
-        { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p5.jpg', text_en: '- Enter the Amount and tap Withdrawal.', text_mm: '- ငွေပမာဏရိုက်ထည့်ပြီး Withdrawal ကိုနိပ်ပါ။' }
+        { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p1.jpg', text_en: '- Log in to Account.', text_mm: '- Account ထဲကိုဝင်ပါ။' },
+        { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p2.jpg', text_en: '- Tap Withdrawal.', text_mm: '- Withdrawal နိပ်ပါ။' },
+        { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p3.jpg', text_en: '- Select Wave or Kpay.', text_mm: '- Wave သို့မဟုတ် Kpay ရွေးပါ။' },
+        { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p4.jpg', text_en: '- Ready to withdraw.', text_mm: '- အသင့်ဖြစ်ပါပြီ။' },
+        { img: 'Ck Lottery/Ck Lottery Withdraw Photo/p5.jpg', text_en: '- Enter Amount and Withdrawal.', text_mm: '- Amount ရိုက်ပြီး Withdrawal နိပ်ပါ။' }
       ]}
     },
     bigwin: {
       register: { cta: { href: 'https://www.777bigwingame.vip/#/register?invitationCode=22884102596', text_en: 'Register Now', text_mm: 'အကောင့်ဖွင့်ရန်နိပ်ပါ' }, steps: [
-        { img: 'BigWin/BigWin Register Photo/b_photos_1.jpg', text_en: '- Tap "Register Now". - Enter your phone number starting with 9.', text_mm: '- Register Now ကိုနိပ်ပါ။ Phone Number တွင် 9 ခံပါ။' },
-        { img: 'BigWin/BigWin Register Photo/b_photos_2.jpg', text_en: '- Set and confirm your password.', text_mm: '- Set Password နှင့် Confirm Password တူညီရမည်။' },
-        { img: 'BigWin/BigWin Register Photo/b_photos_3.jpg', text_en: '- Enter Invite Code: (22884102596).', text_mm: '- Invite Code: (22884102596) ရိုက်ထည့်ပါ။' },
-        { img: 'BigWin/BigWin Register Photo/b_photos_4.jpg', text_en: '- Check the "I Have Read And Agree" box.', text_mm: '- I Have Read And Agree မှ (အမှန်ခြစ်)တပ်ပါ။' },
-        { img: 'BigWin/BigWin Register Photo/b_photos_5.jpg', text_en: '- Fill in info and tap Register.', text_mm: '- Account Information ဖြည့်ပြီး Register ကိုနိပ်ပါ။' }
+        { img: 'BigWin/BigWin Register Photo/b_photos_1.jpg', text_en: '- Tap "Register Now".', text_mm: '- Register Now နိပ်ပါ။' },
+        { img: 'BigWin/BigWin Register Photo/b_photos_2.jpg', text_en: '- Set and confirm password.', text_mm: '- Password တူညီရမည်။' },
+        { img: 'BigWin/BigWin Register Photo/b_photos_3.jpg', text_en: '- Enter Invite Code: (22884102596).', text_mm: '- Invite Code: (22884102596) ရိုက်ပါ။' },
+        { img: 'BigWin/BigWin Register Photo/b_photos_4.jpg', text_en: '- Check "I Have Read And Agree".', text_mm: '- I Have Read And Agree ကို အမှန်ခြစ်ပါ။' },
+        { img: 'BigWin/BigWin Register Photo/b_photos_5.jpg', text_en: '- Fill in info and Register.', text_mm: '- Info ဖြည့်ပြီး Register နိပ်ပါ။' }
       ]},
       deposit: { cta: null, steps: [
-        { img: 'BigWin/BigWin Deposite Photo/p1.jpg', text_en: '- Log in to your 777 BigWin Account.', text_mm: '- 777 BigWin Account ထဲကိုဝင်ပါ။' },
-        { img: 'BigWin/BigWin Deposite Photo/p2.jpg', text_en: '- Tap Deposit.', text_mm: '- Deposit ကိုနိပ်ပါ။' },
-        { img: 'BigWin/BigWin Deposite Photo/p3.jpg', text_en: '- Choose Kpay/Wave or Online Pay.', text_mm: '- Kpay/Wave သို့မဟုတ် Online Pay ကိုသုံးပါ။' },
-        { img: 'BigWin/BigWin Deposite Photo/p4.jpg', text_en: '- Select Kpay or Wave. Enter amount and tap Deposit.', text_mm: '- Kpay သို့မဟုတ် Wave ရွေးပါ။ Amount ရိုက်ထည့်ပါ။' },
-        { img: 'BigWin/BigWin Deposite Photo/p5.jpg', text_en: '- Copy the Account details and transfer.', text_mm: '- Account အချက်အလက်များကို Copy ယူပါ။' },
-        { img: 'BigWin/BigWin Deposite Photo/p6.jpg', text_en: '- Tap Complete Payment after transfer.', text_mm: '- ငွေလွဲပြီးပါက Complete Payment ကိုနိပ်ပါ။' },
+        { img: 'BigWin/BigWin Deposite Photo/p1.jpg', text_en: '- Log in to Account.', text_mm: '- Account ထဲကိုဝင်ပါ။' },
+        { img: 'BigWin/BigWin Deposite Photo/p2.jpg', text_en: '- Tap Deposit.', text_mm: '- Deposit နိပ်ပါ။' },
+        { img: 'BigWin/BigWin Deposite Photo/p3.jpg', text_en: '- Choose Kpay/Wave/Online.', text_mm: '- Kpay/Wave/Online ရွေးပါ။' },
+        { img: 'BigWin/BigWin Deposite Photo/p4.jpg', text_en: '- Select method. Enter Amount.', text_mm: '- Method ရွေးပါ။ Amount ရိုက်ပါ။' },
+        { img: 'BigWin/BigWin Deposite Photo/p5.jpg', text_en: '- Copy Account details and transfer.', text_mm: '- Account Copy ယူပြီး ငွေလွဲပါ။' },
+        { img: 'BigWin/BigWin Deposite Photo/p6.jpg', text_en: '- Tap Complete Payment.', text_mm: '- Complete Payment နိပ်ပါ။' },
         { img: 'BigWin/BigWin Deposite Photo/p7.jpg', text_en: '- Select Online Pay.', text_mm: '- Online Pay ရွေးပါ။' },
-        { img: 'BigWin/BigWin Deposite Photo/p8.jpg', text_en: '- Scroll up, enter amount, and tap Deposit.', text_mm: '- အပေါ်ကိုဆွဲတင်ပါ။ Amount ရိုက်ထည့်ပါ။' },
-        { img: 'BigWin/BigWin Deposite Photo/p9.jpg', text_en: '- Scan QR Code or copy phone number.', text_mm: '- QR Code ကို Scan လုပ်ပါ။' },
-        { img: 'BigWin/BigWin Deposite Photo/p10.jpg', text_en: '- Enter last 5 digits of Transaction ID.', text_mm: '- နောက်ဆုံး ၅လုံးကိုရိုက်ထည့်ပါ။' },
-        { img: 'BigWin/BigWin Deposite Photo/p11.jpg', text_en: '- Transaction submitted.', text_mm: '- ငွေသွင်းအော်ဒါ တင်ပြီးပါပြီ။' }
+        { img: 'BigWin/BigWin Deposite Photo/p8.jpg', text_en: '- Enter amount and Deposit.', text_mm: '- Amount ရိုက်ပြီး Deposit နိပ်ပါ။' },
+        { img: 'BigWin/BigWin Deposite Photo/p9.jpg', text_en: '- Scan QR Code.', text_mm: '- QR Code Scan လုပ်ပါ။' },
+        { img: 'BigWin/BigWin Deposite Photo/p10.jpg', text_en: '- Enter last 5 digits of Transaction ID.', text_mm: '- နောက်ဆုံး ၅လုံး ရိုက်ပါ။' },
+        { img: 'BigWin/BigWin Deposite Photo/p11.jpg', text_en: '- Transaction submitted.', text_mm: '- အော်ဒါ တင်ပြီးပါပြီ။' }
       ]},
       withdraw: { cta: null, steps: [
-        { img: 'BigWin/BigWin Withdraw Photo/p1.jpg', text_en: '- Log in to your 777 BigWin Account.', text_mm: '- 777 BigWin Account ထဲကိုဝင်ပါ။' },
-        { img: 'BigWin/BigWin Withdraw Photo/p2.jpg', text_en: '- Tap Withdrawal.', text_mm: '- Withdrawal ကိုနိပ်ပါ။' },
-        { img: 'BigWin/BigWin Withdraw Photo/p3.jpg', text_en: '- Select Wave or Kpay.', text_mm: '- Wave သို့မဟုတ် Kpay ရွေးပါ။' },
-        { img: 'BigWin/BigWin Withdraw Photo/p4.jpg', text_en: '- Ready to withdraw.', text_mm: '- ယခုငွေထုတ်ရန် အသင့်ဖြစ်ပါပြီ။' },
-        { img: 'BigWin/BigWin Withdraw Photo/p5.jpg', text_en: '- Enter Amount and tap Withdrawal.', text_mm: '- ငွေပမာဏရိုက်ထည့်ပါ။' }
+        { img: 'BigWin/BigWin Withdraw Photo/p1.jpg', text_en: '- Log in to Account.', text_mm: '- Account ထဲကိုဝင်ပါ။' },
+        { img: 'BigWin/BigWin Withdraw Photo/p2.jpg', text_en: '- Tap Withdrawal.', text_mm: '- Withdrawal နိပ်ပါ။' },
+        { img: 'BigWin/BigWin Withdraw Photo/p3.jpg', text_en: '- Select Wave or Kpay.', text_mm: '- Wave/Kpay ရွေးပါ။' },
+        { img: 'BigWin/BigWin Withdraw Photo/p4.jpg', text_en: '- Ready.', text_mm: '- အသင့်ဖြစ်ပါပြီ။' },
+        { img: 'BigWin/BigWin Withdraw Photo/p5.jpg', text_en: '- Enter Amount and Withdrawal.', text_mm: '- Amount ရိုက်ပြီး Withdrawal နိပ်ပါ။' }
       ]}
     },
     sixwin: {
       register: { cta: { href: 'https://www.6win333.com/#/register?invitationCode=35815623835', text_en: 'Register Now', text_mm: 'အကောင့်ဖွင့်ရန်နိပ်ပါ' }, steps: [
-        { img: 'SixWin/Six Win Register Photo/photo_1.jpg', text_en: '- Tap "Register Now". Enter phone starting with 9 (no 09).', text_mm: '- Register Now ကိုနိပ်ပါ။ Phone Number တွင် (09 မခံ) 9 ခံပါ။' },
-        { img: 'SixWin/Six Win Register Photo/photo_2.jpg', text_en: '- Set and confirm password.', text_mm: '- Password နှစ်ခု တူညီရမည်။' },
-        { img: 'SixWin/Six Win Register Photo/photo_3.jpg', text_en: '- Enter Invite Code: (35815623835).', text_mm: '- Invite Code: (35815623835) ရိုက်ထည့်ပါ။' },
-        { img: 'SixWin/Six Win Register Photo/photo_4.jpg', text_en: '- Check the "I Have And Agree" box.', text_mm: '- I Have And Agree မှ (အမှန်ခြစ်)တပ်ပါ။' },
-        { img: 'SixWin/Six Win Register Photo/photo_5.jpg', text_en: '- Fill in info and tap Register.', text_mm: '- Account Information ဖြည့်ပြီး Register ကိုနိပ်ပါ။' }
+        { img: 'SixWin/Six Win Register Photo/photo_1.jpg', text_en: '- Register Now. Phone starting with 9 (no 09).', text_mm: '- Register Now နိပ်ပါ။ Phone (09 မခံ) 9 ခံပါ။' },
+        { img: 'SixWin/Six Win Register Photo/photo_2.jpg', text_en: '- Set and confirm password.', text_mm: '- Password တူညီရမည်။' },
+        { img: 'SixWin/Six Win Register Photo/photo_3.jpg', text_en: '- Enter Invite Code: (35815623835).', text_mm: '- Invite Code: (35815623835) ရိုက်ပါ။' },
+        { img: 'SixWin/Six Win Register Photo/photo_4.jpg', text_en: '- Check "I Have And Agree".', text_mm: '- I Have And Agree ကို အမှန်ခြစ်ပါ။' },
+        { img: 'SixWin/Six Win Register Photo/photo_5.jpg', text_en: '- Fill in info and Register.', text_mm: '- Info ဖြည့်ပြီး Register နိပ်ပါ။' }
       ]},
       deposit: { cta: null, steps: [
-        { img: 'SixWin/Six Win Deposite Photo/photo_1.jpg', text_en: '- Tap SixWin Account.', text_mm: '- SixWin Account ကိုနိပ်ပါ။' },
-        { img: 'SixWin/Six Win Deposite Photo/photo_2.jpg', text_en: '- Tap Deposit.', text_mm: '- Deposit ကိုနိပ်ပါ။' },
-        { img: 'SixWin/Six Win Deposite Photo/photo_3.jpg', text_en: '- Select Kpay or Wave.', text_mm: '- Kpay သို့မဟုတ် Wave ရွေးပါ။' },
-        { img: 'SixWin/Six Win Deposite Photo/photo_4.jpg', text_en: '- Choose a Channel. Enter Amount and tap Deposit.', text_mm: '- Channel ရွေးပါ။ Amount ရိုက်ပါ။' },
-        { img: 'SixWin/Six Win Deposite Photo/photo_5.jpg', text_en: '- Copy Account Number. Transfer via Kpay/Wave.', text_mm: '- Account နံပါတ် Copy ယူပါ။' },
-        { img: 'SixWin/Six Win Deposite Photo/photo_6.jpg', text_en: '- Enter last 5 digits of Transaction ID.', text_mm: '- နောက်ဆုံး 5လုံး ရိုက်ထည့်ပါ။' }
+        { img: 'SixWin/Six Win Deposite Photo/photo_1.jpg', text_en: '- Tap Account.', text_mm: '- Account နိပ်ပါ။' },
+        { img: 'SixWin/Six Win Deposite Photo/photo_2.jpg', text_en: '- Tap Deposit.', text_mm: '- Deposit နိပ်ပါ။' },
+        { img: 'SixWin/Six Win Deposite Photo/photo_3.jpg', text_en: '- Select Kpay or Wave.', text_mm: '- Kpay/Wave ရွေးပါ။' },
+        { img: 'SixWin/Six Win Deposite Photo/photo_4.jpg', text_en: '- Choose Channel. Enter Amount.', text_mm: '- Channel ရွေးပါ။ Amount ရိုက်ပါ။' },
+        { img: 'SixWin/Six Win Deposite Photo/photo_5.jpg', text_en: '- Copy Account Number. Transfer.', text_mm: '- Account Copy ယူပါ။' },
+        { img: 'SixWin/Six Win Deposite Photo/photo_6.jpg', text_en: '- Enter last 5 digits.', text_mm: '- နောက်ဆုံး 5လုံး ရိုက်ပါ။' }
       ]},
       withdraw: { cta: null, steps: [
-        { img: 'SixWin/Six Win Withdraw Photo/photo_1.jpg', text_en: '- Tap Account.', text_mm: '- Account ကိုနိပ်ပါ။' },
-        { img: 'SixWin/Six Win Withdraw Photo/photo_2.jpg', text_en: '- Tap Withdraw.', text_mm: '- Withdraw ကိုနိပ်ပါ။' },
-        { img: 'SixWin/Six Win Withdraw Photo/photo_3.jpg', text_en: '- Select KBZ Pay or Wave.', text_mm: '- KBZ Pay သို့မဟုတ် Wave ရွေးပါ။' },
-        { img: 'SixWin/Six Win Withdraw Photo/photo_4.jpg', text_en: '- Link your Payment Account. Enter Amount.', text_mm: '- Payment Account ချိတ်ပါ။ Amount ရိုက်ပါ။' },
-        { img: 'SixWin/Six Win Withdraw Photo/photo_5.jpg', text_en: '- Enter password for Security Verification.', text_mm: '- Password ရိုက်ထည့်ပြီး Confirm လုပ်ပါ။' }
+        { img: 'SixWin/Six Win Withdraw Photo/photo_1.jpg', text_en: '- Tap Account.', text_mm: '- Account နိပ်ပါ။' },
+        { img: 'SixWin/Six Win Withdraw Photo/photo_2.jpg', text_en: '- Tap Withdraw.', text_mm: '- Withdraw နိပ်ပါ။' },
+        { img: 'SixWin/Six Win Withdraw Photo/photo_3.jpg', text_en: '- Select KBZ Pay or Wave.', text_mm: '- KBZ Pay/Wave ရွေးပါ။' },
+        { img: 'SixWin/Six Win Withdraw Photo/photo_4.jpg', text_en: '- Link Account. Enter Amount.', text_mm: '- Account ချိတ်ပါ။ Amount ရိုက်ပါ။' },
+        { img: 'SixWin/Six Win Withdraw Photo/photo_5.jpg', text_en: '- Enter password and Confirm.', text_mm: '- Password ရိုက်ပြီး Confirm လုပ်ပါ။' }
       ]}
     },
     shwe: {
       register: { cta: { href: 'https://www.shwe008.com/#/register?invitationCode=12843101366', text_en: 'Register Now', text_mm: 'အကောင့်ဖွင့်ရန်နိပ်ပါ' }, steps: [
-        { img: 'Shwe/Shwe Register Photo/photo_1.jpg', text_en: '- Tap "Register Now". Enter phone starting with 9 (no 09).', text_mm: '- Register Now ကိုနိပ်ပါ။ Phone Number တွင် (09 မခံ) 9 ခံပါ။' },
-        { img: 'Shwe/Shwe Register Photo/photo_2.jpg', text_en: '- Set and confirm password.', text_mm: '- Password နှစ်ခု တူညီရမည်။' },
+        { img: 'Shwe/Shwe Register Photo/photo_1.jpg', text_en: '- Register Now. Phone starting with 9.', text_mm: '- Register Now နိပ်ပါ။ Phone 9 ခံပါ။' },
+        { img: 'Shwe/Shwe Register Photo/photo_2.jpg', text_en: '- Set and confirm password.', text_mm: '- Password တူညီရမည်။' },
         { img: 'Shwe/Shwe Register Photo/photo_3.jpg', text_en: '- Enter Invite Code: (12843101366).', text_mm: '- Invite Code: (12843101366) ရိုက်ပါ။' },
-        { img: 'Shwe/Shwe Register Photo/photo_4.jpg', text_en: '- Check the "I Have And Agree" box.', text_mm: '- I Have And Agree မှ (အမှန်ခြစ်)တပ်ပါ။' },
-        { img: 'Shwe/Shwe Register Photo/photo_5.jpg', text_en: '- Fill in info and tap Register.', text_mm: '- Account Information ဖြည့်ပြီး Register ကိုနိပ်ပါ။' }
+        { img: 'Shwe/Shwe Register Photo/photo_4.jpg', text_en: '- Check "I Have And Agree".', text_mm: '- I Have And Agree ကို အမှန်ခြစ်ပါ။' },
+        { img: 'Shwe/Shwe Register Photo/photo_5.jpg', text_en: '- Fill in info and Register.', text_mm: '- Info ဖြည့်ပြီး Register နိပ်ပါ။' }
       ]},
       deposit: { cta: null, steps: [
-        { img: 'Shwe/Shwe Deposite Photo/photo_1.jpg', text_en: '- Tap Shwe Account.', text_mm: '- Shwe Account ကိုနိပ်ပါ။' },
-        { img: 'Shwe/Shwe Deposite Photo/photo_2.jpg', text_en: '- Tap Deposit.', text_mm: '- Deposit ကိုနိပ်ပါ။' },
-        { img: 'Shwe/Shwe Deposite Photo/photo_3.jpg', text_en: '- Select Kpay or Wave.', text_mm: '- Kpay သို့မဟုတ် Wave ရွေးပါ။' },
-        { img: 'Shwe/Shwe Deposite Photo/photo_4.jpg', text_en: '- Choose a Channel. Enter Amount.', text_mm: '- Channel ရွေးပါ။ Amount ရိုက်ပါ။' },
-        { img: 'Shwe/Shwe Deposite Photo/photo_5.jpg', text_en: '- Copy Account Number.', text_mm: '- Account နံပါတ် Copy ယူပါ။' },
-        { img: 'Shwe/Shwe Deposite Photo/photo_6.jpg', text_en: '- Enter last 5 digits of Transaction ID.', text_mm: '- နောက်ဆုံး 5လုံး ရိုက်ထည့်ပါ။' }
+        { img: 'Shwe/Shwe Deposite Photo/photo_1.jpg', text_en: '- Tap Account.', text_mm: '- Account နိပ်ပါ။' },
+        { img: 'Shwe/Shwe Deposite Photo/photo_2.jpg', text_en: '- Tap Deposit.', text_mm: '- Deposit နိပ်ပါ။' },
+        { img: 'Shwe/Shwe Deposite Photo/photo_3.jpg', text_en: '- Select Kpay or Wave.', text_mm: '- Kpay/Wave ရွေးပါ။' },
+        { img: 'Shwe/Shwe Deposite Photo/photo_4.jpg', text_en: '- Choose Channel. Enter Amount.', text_mm: '- Channel ရွေးပါ။ Amount ရိုက်ပါ။' },
+        { img: 'Shwe/Shwe Deposite Photo/photo_5.jpg', text_en: '- Copy Account Number.', text_mm: '- Account Copy ယူပါ။' },
+        { img: 'Shwe/Shwe Deposite Photo/photo_6.jpg', text_en: '- Enter last 5 digits.', text_mm: '- နောက်ဆုံး 5လုံး ရိုက်ပါ။' }
       ]},
       withdraw: { cta: null, steps: [
-        { img: 'Shwe/Shwe Withdraw Photo/photo_1.jpg', text_en: '- Tap Account.', text_mm: '- Account ကိုနိပ်ပါ။' },
-        { img: 'Shwe/Shwe Withdraw Photo/photo_2.jpg', text_en: '- Tap Withdraw.', text_mm: '- Withdraw ကိုနိပ်ပါ။' },
-        { img: 'Shwe/Shwe Withdraw Photo/photo_3.jpg', text_en: '- Select KBZ Pay or Wave.', text_mm: '- KBZ Pay သို့မဟုတ် Wave ရွေးပါ။' },
-        { img: 'Shwe/Shwe Withdraw Photo/photo_4.jpg', text_en: '- Link your Payment Account.', text_mm: '- Payment Account ချိတ်ပါ။' },
-        { img: 'Shwe/Shwe Withdraw Photo/photo_5.jpg', text_en: '- Enter password for Security Verification.', text_mm: '- Password ရိုက်ပြီး Confirm လုပ်ပါ။' }
+        { img: 'Shwe/Shwe Withdraw Photo/photo_1.jpg', text_en: '- Tap Account.', text_mm: '- Account နိပ်ပါ။' },
+        { img: 'Shwe/Shwe Withdraw Photo/photo_2.jpg', text_en: '- Tap Withdraw.', text_mm: '- Withdraw နိပ်ပါ။' },
+        { img: 'Shwe/Shwe Withdraw Photo/photo_3.jpg', text_en: '- Select KBZ Pay or Wave.', text_mm: '- KBZ Pay/Wave ရွေးပါ။' },
+        { img: 'Shwe/Shwe Withdraw Photo/photo_4.jpg', text_en: '- Link Account. Enter Amount.', text_mm: '- Account ချိတ်ပါ။ Amount ရိုက်ပါ။' },
+        { img: 'Shwe/Shwe Withdraw Photo/photo_5.jpg', text_en: '- Enter password and Confirm.', text_mm: '- Password ရိုက်ပြီး Confirm လုပ်ပါ။' }
       ]}
     }
   };
@@ -2144,9 +2005,7 @@
   let currentSub = null;
   let userDataCache = null;
   
-  const recordCounts = {};
-  const lastFetchTime = {};
-  const fetchInFlight = {};
+  const recordCounts = {}, lastFetchTime = {}, fetchInFlight = {};
   
   let extensionState = { ck: false, bigwin: false, sixwin: false, shwe: false };
   let extensionExpanded = false;
@@ -2166,19 +2025,19 @@
   let premiumRef = null, premiumHandler = null, justAddedPlatforms = [];
   let fixingBannerTimer = null;
   
+  // Win rate cache
+  const winRateCache = {};
+  const WIN_RATE_CACHE_DURATION = 30000;
+  const WIN_RATE_APP_PREFIX = 'wrApp_';
+  let winRateRefreshInterval = null;
+  
   const BRIDGE_CONFIG = { databaseURL: "https://chackchack-d7445-default-rtdb.europe-west1.firebasedatabase.app" };
   let loginBridgeDb = null;
   try {
     let app;
-    try { app = firebase.app('loginBridge'); }
-    catch (e) { app = firebase.initializeApp(BRIDGE_CONFIG, 'loginBridge'); }
+    try { app = firebase.app('loginBridge'); } catch (e) { app = firebase.initializeApp(BRIDGE_CONFIG, 'loginBridge'); }
     loginBridgeDb = app.database();
   } catch (e) { console.error('Bridge init error:', e); }
-  
-  // ============ Win Rate Cache (No 3) ============
-  const winRateCache = {};
-  const WIN_RATE_CACHE_DURATION = 30000; // 30 seconds
-  const WIN_RATE_APP_PREFIX = 'wrApp_';
   
   // ============ FIXING BANNER ============
   function showFixingBanner() {
@@ -2193,7 +2052,7 @@
     fixingBannerTimer = setTimeout(() => { banner.classList.remove('show'); fixingBannerTimer = null; }, 3000);
   }
   
-  // ============ SESSION MANAGEMENT ============
+  // ============ SESSION ============
   function getOrCreateDeviceId() {
     let id = localStorage.getItem(DEVICE_ID_KEY);
     if (!id) { id = 'dev_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9); localStorage.setItem(DEVICE_ID_KEY, id); }
@@ -2211,8 +2070,9 @@
       await loginBridgeDb.ref('active_sessions/' + chatId).set(sessionData);
       localStorage.setItem(SESSION_KEY, sessionId);
       return sessionId;
-    } catch (e) { console.warn('Session create failed:', e); return null; }
+    } catch (e) { return null; }
   }
+  
   async function verifySessionOnLoad(chatId) {
     if (!loginBridgeDb) return true;
     const mySessionId = localStorage.getItem(SESSION_KEY);
@@ -2226,6 +2086,7 @@
       return true;
     } catch (e) { return true; }
   }
+  
   function startSessionListener(chatId) {
     stopSessionListener();
     if (!loginBridgeDb) return;
@@ -2251,8 +2112,7 @@
     if (forceLogoutInProgress) return;
     forceLogoutInProgress = true;
     stopSessionListener(); stopPremiumListener();
-    localStorage.removeItem('webUserData');
-    localStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem('webUserData'); localStorage.removeItem(SESSION_KEY);
     sessionStorage.removeItem('guestMode');
     userDataCache = null;
     closeAllUI();
@@ -2267,8 +2127,7 @@
     let title, desc;
     if (reason === 'expired') { title = T[currentLang].session_expired_title; desc = T[currentLang].session_expired_desc; }
     else { title = T[currentLang].session_ended_title; desc = T[currentLang].session_ended_desc; }
-    titleEl.textContent = title;
-    descEl.textContent = desc;
+    titleEl.textContent = title; descEl.textContent = desc;
     overlay.classList.add('show');
   }
   function finalizeForceLogout() {
@@ -2276,11 +2135,8 @@
     forceLogoutInProgress = false;
     if (forceLogoutTimer) { clearTimeout(forceLogoutTimer); forceLogoutTimer = null; }
     document.getElementById('forceLogoutOverlay').classList.remove('show');
-    appState.mode = 'login';
-    appState.cameFromGuest = false;
-    showLoginScreen();
-    updateHeader();
-    resetLoginForm();
+    appState.mode = 'login'; appState.cameFromGuest = false;
+    showLoginScreen(); updateHeader(); resetLoginForm();
   }
   function closeAllUI() {
     if (currentSub) { try { closeSub(); } catch (e) {} }
@@ -2346,13 +2202,9 @@
     if (savedUser) {
       const valid = await verifySessionOnLoad(JSON.parse(savedUser).chatId);
       if (valid) {
-        appState.mode = 'user';
-        userDataCache = JSON.parse(savedUser);
-        loadExtensionState();
-        showMainApp();
-        switchTab('home');
-        startSessionListener(userDataCache.chatId);
-        startPremiumListener(userDataCache.chatId);
+        appState.mode = 'user'; userDataCache = JSON.parse(savedUser);
+        loadExtensionState(); showMainApp(); switchTab('home');
+        startSessionListener(userDataCache.chatId); startPremiumListener(userDataCache.chatId);
       } else {
         localStorage.removeItem('webUserData'); localStorage.removeItem(SESSION_KEY);
         appState.mode = 'login'; showLoginScreen();
@@ -2398,8 +2250,7 @@
     else if (appState.mode === 'guest') { right.innerHTML = `<button class="header-signin-btn" onclick="openLoginFromGuest()">${escapeHtml(T[currentLang].sign_in)}</button>`; }
     else if (appState.mode === 'user') {
       const data = userDataCache || {};
-      const displayId = String(data.chatId || '---');
-      right.innerHTML = `<button class="header-id-chip" onclick="switchTab('profile')">ID: ${escapeHtml(displayId)}</button>`;
+      right.innerHTML = `<button class="header-id-chip" onclick="switchTab('profile')">ID: ${escapeHtml(String(data.chatId || '---'))}</button>`;
     }
   }
   function updateBottomNav() {
@@ -2427,7 +2278,7 @@
     }
   }
   
-  // ============ EXTENSION LOGIC ============
+  // ============ EXTENSION ============
   function getExtensionStorageKey() {
     if (appState.mode === 'user') { const data = JSON.parse(localStorage.getItem('webUserData') || 'null'); return data ? `extensionState_${data.chatId}` : 'extensionState_guest'; }
     return 'extensionState_guest';
@@ -2455,8 +2306,7 @@
     if (enabled.length === 0) return;
     if (currentExtensionOpen) { closeExtensionWebsite(); return; }
     if (enabled.length === 1) { openExtensionWebsite(enabled[0]); return; }
-    extensionExpanded = !extensionExpanded;
-    renderExtensionList();
+    extensionExpanded = !extensionExpanded; renderExtensionList();
   }
   function renderExtensionList() {
     const list = document.getElementById('extensionFabList');
@@ -2482,14 +2332,10 @@
     iframe.onload = () => { skeleton.remove(); iframe.style.opacity = '1'; };
     overlay.appendChild(iframe);
     extensionCache = { brand: brandKey, iframe };
-    currentExtensionOpen = brandKey;
-    extensionExpanded = false; renderExtensionList();
+    currentExtensionOpen = brandKey; extensionExpanded = false; renderExtensionList();
     overlay.classList.add('active'); renderExtensionFab();
   }
-  function closeExtensionWebsite() {
-    document.getElementById('extensionWebsiteOverlay').classList.remove('active');
-    currentExtensionOpen = null; renderExtensionFab();
-  }
+  function closeExtensionWebsite() { document.getElementById('extensionWebsiteOverlay').classList.remove('active'); currentExtensionOpen = null; renderExtensionFab(); }
   function toggleExtensionSetting(key, enabled) {
     extensionState[key] = enabled; saveExtensionState(); renderExtensionFab();
     if (!enabled && currentExtensionOpen === key) closeExtensionWebsite();
@@ -2584,18 +2430,13 @@
     });
     document.getElementById('opt-mm').classList.toggle('active', lang === 'mm');
     document.getElementById('opt-en').classList.toggle('active', lang === 'en');
-    updateHeader();
-    renderHistoryChats();
-    renderProfilePage();
+    updateHeader(); renderHistoryChats(); renderProfilePage();
     const fixingText = document.getElementById('fixingBannerText');
     if (fixingText) fixingText.textContent = T[lang].fixing_in_progress || 'Fixing in progress...';
     if (currentSub) {
       if (currentSub.brand === 'tools' && currentSub.action === 'betsize') renderBetSizePage(true);
       else if (currentSub.brand === 'settings') renderSettingsPage(true);
-      else if (currentSub.brand === 'prediction') {
-        renderPredictionPlatformDetail();
-        updateVersionWinRateDisplays();
-      }
+      else if (currentSub.brand === 'prediction') { renderPredictionPlatformDetail(); updateVersionWinRateDisplays(); }
       else if (currentSub.brand !== 'history') renderSubPage(currentSub.brand, currentSub.action, true);
       else {
         const historyIframe = document.getElementById('historyIframe');
@@ -2611,15 +2452,15 @@
   function openLangSheet() { document.getElementById('sheetOverlay').classList.add('active'); document.getElementById('langSheet').classList.add('active'); }
   function closeLangSheet() { document.getElementById('sheetOverlay').classList.remove('active'); document.getElementById('langSheet').classList.remove('active'); }
   
-  // ============ TELEGRAM SHEET (No 4) ============
+  // ============ TELEGRAM SHEET ============
   function openTelegramSheet() { document.getElementById('tgOverlay').classList.add('active'); document.getElementById('tgSheet').classList.add('active'); }
   function closeTelegramSheet() { document.getElementById('tgOverlay').classList.remove('active'); document.getElementById('tgSheet').classList.remove('active'); }
   
-  // ============ AUTO BOT SHEET (No 5) ============
+  // ============ AUTO BOT SHEET ============
   function openBotSheet() { document.getElementById('botOverlay').classList.add('active'); document.getElementById('botSheet').classList.add('active'); }
   function closeBotSheet() { document.getElementById('botOverlay').classList.remove('active'); document.getElementById('botSheet').classList.remove('active'); }
   
-  // ============ HISTORY CHATS RENDER ============
+  // ============ HISTORY CHATS ============
   function renderHistoryChats() {
     const list = document.getElementById('historyChatsList');
     if (!list) return;
@@ -2640,11 +2481,7 @@
       if (!chats || !chats.length) return;
       const info = brandInfo[brandKey];
       html += '<div class="history-group" data-brand="' + brandKey + '" style="animation-delay:' + (gIdx * 70 + 50) + 'ms">';
-      html += '<div class="history-group-header">';
-      html += '<div class="history-group-icon"><img src="' + info.logo + '" alt=""></div>';
-      html += '<div class="history-group-title">' + escapeHtml(info.name) + '</div>';
-      html += '<div class="history-group-count" style="opacity:0.6">...</div>';
-      html += '</div>';
+      html += '<div class="history-group-header"><div class="history-group-icon"><img src="' + info.logo + '" alt=""></div><div class="history-group-title">' + escapeHtml(info.name) + '</div><div class="history-group-count" style="opacity:0.6">...</div></div>';
       html += '<div class="history-group-list">';
       chats.forEach(chat => {
         const title = currentLang === 'mm' ? chat.title_mm : chat.title_en;
@@ -2655,11 +2492,7 @@
           const countStr = currentLang === 'mm' ? toMmNum(String(rc.count)) : String(rc.count);
           badgeHtml = '<span class="record-badge" data-chat-id="' + chat.id + '" title="' + rc.count + ' Records"><span class="record-dot"></span><span>' + countStr + '</span></span>';
         }
-        html += '<button class="history-group-item" onclick="openHistoryChat(\'' + chat.id + '\')">';
-        html += '<div class="item-title">' + escapeHtml(title) + '</div>';
-        html += badgeHtml;
-        html += '<i class="fa-solid fa-chevron-right item-arrow"></i>';
-        html += '</button>';
+        html += '<button class="history-group-item" onclick="openHistoryChat(\'' + chat.id + '\')"><div class="item-title">' + escapeHtml(title) + '</div>' + badgeHtml + '<i class="fa-solid fa-chevron-right item-arrow"></i></button>';
       });
       html += '</div></div>';
     });
@@ -2678,10 +2511,8 @@
       if (rc && rc.state === 'success' && rc.count !== null) total += rc.count;
       else allLoaded = false;
     });
-    if (allLoaded && chats.length > 0) {
-      countEl.textContent = currentLang === 'mm' ? toMmNum(String(total)) : String(total);
-      countEl.style.opacity = '1';
-    } else { countEl.textContent = '...'; countEl.style.opacity = '0.6'; }
+    if (allLoaded && chats.length > 0) { countEl.textContent = currentLang === 'mm' ? toMmNum(String(total)) : String(total); countEl.style.opacity = '1'; }
+    else { countEl.textContent = '...'; countEl.style.opacity = '0.6'; }
   }
   function updateRecordBadge(chatId) {
     const badge = document.querySelector('.record-badge[data-chat-id="' + chatId + '"]');
@@ -2700,7 +2531,7 @@
   }
   function escapeHtml(str) { return String(str || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;'); }
   
-  // ============ OPEN HISTORY CHAT ============
+  // ============ OPEN HISTORY ============
   function openHistoryChat(chatId) {
     const chat = HISTORY_CHATS.find(c => c.id === chatId);
     if (!chat) return;
@@ -2730,10 +2561,8 @@
   function openSub(brandKey, actionKey) {
     currentSub = { brand: brandKey, action: actionKey };
     hideExtensionForSubscreen();
-    const subScreen = document.getElementById('subScreen');
-    const subBody = document.getElementById('subBody');
-    subBody.classList.remove('sub-screen-body--iframe');
-    subScreen.classList.add('active');
+    document.getElementById('subScreen').classList.add('active');
+    document.getElementById('subBody').classList.remove('sub-screen-body--iframe');
     document.getElementById('bottomNav').classList.remove('hidden');
     document.getElementById('floatingBackBtn').classList.add('visible');
     renderSubPage(brandKey, actionKey, false);
@@ -2809,7 +2638,7 @@
     return '<div class="settings-row"><div class="settings-row-logo"><img src="' + cfg.logo + '" alt=""></div><div class="settings-row-content"><div class="settings-row-title">' + cfg.name + '</div></div><label class="switch"><input type="checkbox" ' + checked + ' onchange="toggleExtensionSetting(\'' + key + '\', this.checked)"><span class="switch-slider"></span></label></div>';
   }
   
-  // ============ BET SIZE (unchanged) ============
+  // ============ BET SIZE (compact - unchanged core logic) ============
   const betSizeState = { profitMult: 1, betCount: 6, openPicker: null, lastResult: null, copyTimer: null, calcTimer: null, inputValue: '' };
   function escapeHtmlAttr(str) { return String(str || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
   function renderBetSizePage(isSilentRender) {
@@ -2837,12 +2666,7 @@
     buildBetSizeOptions('count', betSizeState.betCount);
     const newInput = document.getElementById('betSizeFirstAmount');
     if (newInput) {
-      newInput.addEventListener('input', () => {
-        const digitsOnly = newInput.value.replace(/[^\d]/g, '');
-        if (newInput.value !== digitsOnly) newInput.value = digitsOnly;
-        betSizeState.inputValue = newInput.value;
-        setBetSizeAmountError('');
-      });
+      newInput.addEventListener('input', () => { const digitsOnly = newInput.value.replace(/[^\d]/g, ''); if (newInput.value !== digitsOnly) newInput.value = digitsOnly; betSizeState.inputValue = newInput.value; setBetSizeAmountError(''); });
       newInput.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); runBetSizeCalculator(); } });
     }
     if (savedResult && wasResultShown) renderBetSizeResult(savedResult);
@@ -2982,6 +2806,7 @@
   // ============ CLOSE SUB ============
   function closeSub() {
     closeBetSizePickers();
+    stopWinRateAutoRefresh();
     const subBody = document.getElementById('subBody');
     const wasHistory = currentSub && currentSub.brand === 'history';
     const wasPrediction = currentSub && currentSub.brand === 'prediction';
@@ -3011,10 +2836,7 @@
     if (document.getElementById('tgSheet').classList.contains('active')) { closeTelegramSheet(); return; }
     if (document.getElementById('botSheet').classList.contains('active')) { closeBotSheet(); return; }
     if (currentExtensionOpen) { closeExtensionWebsite(); return; }
-    if (currentSub) {
-      if (currentSub.brand === 'prediction' && predictionGoBack()) return;
-      closeSub(); return;
-    }
+    if (currentSub) { if (currentSub.brand === 'prediction' && predictionGoBack()) return; closeSub(); return; }
     if (appState.mode === 'login' && appState.cameFromGuest) { closeLogin(); return; }
   });
   
@@ -3083,8 +2905,7 @@
   function showLoggedInView(data) {
     document.getElementById('displayUserId').textContent = data.chatId;
     const loginDate = data.loginTime ? new Date(data.loginTime) : new Date();
-    const month = loginDate.getMonth();
-    const year = loginDate.getFullYear();
+    const month = loginDate.getMonth(), year = loginDate.getFullYear();
     const sinceText = currentLang === 'mm' ? MM_MONTHS[month] + ' ' + toMmNum(year) : EN_MONTHS[month] + ' ' + year;
     document.getElementById('memberSince').textContent = sinceText;
     renderPremiumCards(data);
@@ -3117,8 +2938,7 @@
       };
       container.appendChild(card);
     });
-    const total = 4;
-    const countStr = currentLang === 'mm' ? toMmNum(activeCount) + ' / ' + toMmNum(total) : activeCount + ' / ' + total;
+    const countStr = currentLang === 'mm' ? toMmNum(activeCount) + ' / ' + toMmNum(4) : activeCount + ' / 4';
     document.getElementById('activePremiumCount').textContent = countStr;
   }
   function refreshProfileData() {
@@ -3135,8 +2955,7 @@
     const currentData = JSON.parse(localStorage.getItem('webUserData') || 'null');
     cleanupAllLogin(); stopSessionListener(); stopPremiumListener();
     if (currentData) await removeMySession(currentData.chatId);
-    localStorage.removeItem('webUserData');
-    localStorage.removeItem(SESSION_KEY);
+    localStorage.removeItem('webUserData'); localStorage.removeItem(SESSION_KEY);
     sessionStorage.removeItem('guestMode');
     userDataCache = null;
     if (currentExtensionOpen) closeExtensionWebsite();
@@ -3179,13 +2998,8 @@
     document.querySelectorAll('.otp-box').forEach(box => box.value = '');
     document.getElementById('chatIdError').classList.remove('show');
     document.getElementById('otpError').classList.remove('show');
-    const sendBtn = document.getElementById('sendCodeBtn');
-    sendBtn.disabled = false;
-    sendBtn.textContent = T[currentLang].send_code;
-    const verifyBtn = document.getElementById('verifyCodeBtn');
-    verifyBtn.disabled = false;
-    verifyBtn.style.opacity = '';
-    verifyBtn.textContent = T[currentLang].sign_in;
+    const sendBtn = document.getElementById('sendCodeBtn'); sendBtn.disabled = false; sendBtn.textContent = T[currentLang].send_code;
+    const verifyBtn = document.getElementById('verifyCodeBtn'); verifyBtn.disabled = false; verifyBtn.style.opacity = ''; verifyBtn.textContent = T[currentLang].sign_in;
     document.getElementById('resendTimer').innerHTML = '';
     if (loginResendInterval) { clearInterval(loginResendInterval); loginResendInterval = null; }
     sendBusy = false; loginBusy = false;
@@ -3211,8 +3025,7 @@
     if (!loginBridgeDb) return showError('chatIdError', 'Database error.');
     sendBusy = true;
     const btn = document.getElementById('sendCodeBtn');
-    btn.disabled = true;
-    btn.textContent = currentLang === 'mm' ? 'ပို့နေသည်...' : 'Sending...';
+    btn.disabled = true; btn.textContent = currentLang === 'mm' ? 'ပို့နေသည်...' : 'Sending...';
     document.getElementById('chatIdError').classList.remove('show');
     cleanupSend();
     currentLoginReqId = 'req_' + Date.now() + '_' + Math.floor(Math.random() * 1000);
@@ -3222,27 +3035,23 @@
         const data = snap.val();
         if (!data) return;
         if (data.status === 'error') {
-          cleanupSend(); sendBusy = false; btn.disabled = false;
-          btn.textContent = T[currentLang].send_code;
+          cleanupSend(); sendBusy = false; btn.disabled = false; btn.textContent = T[currentLang].send_code;
           showError('chatIdError', data.message || 'Error occurred.');
           try { snap.ref.remove(); } catch (e) {}
         } else if (data.status === 'code_sent') {
-          cleanupSend(); sendBusy = false;
-          btn.textContent = T[currentLang].send_code;
+          cleanupSend(); sendBusy = false; btn.textContent = T[currentLang].send_code;
           startResendTimer(60);
         }
       });
       sendTimeout = setTimeout(() => {
         if (sendBusy) {
-          cleanupSend(); sendBusy = false; btn.disabled = false;
-          btn.textContent = T[currentLang].send_code;
-          showError('chatIdError', currentLang === 'mm' ? '⚠️ အချိန်ကုန်သွားပါသည်။ ပြန်ကြိုးစားပါ။' : '⚠️ Connection timeout.');
+          cleanupSend(); sendBusy = false; btn.disabled = false; btn.textContent = T[currentLang].send_code;
+          showError('chatIdError', currentLang === 'mm' ? '⚠️ အချိန်ကုန်သွားပါသည်။' : '⚠️ Connection timeout.');
           if (currentLoginReqId) { try { loginBridgeDb.ref('web_login/' + currentLoginReqId).remove(); } catch (e) {} }
         }
       }, 15000);
     } catch (e) {
-      sendBusy = false; btn.disabled = false;
-      btn.textContent = T[currentLang].send_code;
+      sendBusy = false; btn.disabled = false; btn.textContent = T[currentLang].send_code;
       showError('chatIdError', 'Firebase Error: ' + (e.message || 'unknown'));
     }
   }
@@ -3254,8 +3063,7 @@
     if (!currentLoginReqId || !loginBridgeDb) return showError('otpError', currentLang === 'mm' ? 'ပထမဦးစွာ ကုဒ်တောင်းပါ။' : 'Please request a code first.');
     loginBusy = true;
     const btn = document.getElementById('verifyCodeBtn');
-    btn.disabled = true;
-    btn.textContent = currentLang === 'mm' ? 'ဝင်ရောက်နေသည်...' : 'Signing in...';
+    btn.disabled = true; btn.textContent = currentLang === 'mm' ? 'ဝင်ရောက်နေသည်...' : 'Signing in...';
     document.getElementById('otpError').classList.remove('show');
     if (currentVerifyListener && currentLoginReqId && loginBridgeDb) { try { loginBridgeDb.ref('web_login/' + currentLoginReqId).off('value', currentVerifyListener); } catch (e) {} currentVerifyListener = null; }
     if (verifyTimeout) { clearTimeout(verifyTimeout); verifyTimeout = null; }
@@ -3265,30 +3073,25 @@
         const data = snap.val();
         if (!data) return;
         if (data.status === 'success') {
-          cleanupVerify(); loginBusy = false;
-          btn.disabled = false; btn.textContent = T[currentLang].sign_in;
-          const chatId = data.chatId;
-          const platforms = data.platforms || {};
+          cleanupVerify(); loginBusy = false; btn.disabled = false; btn.textContent = T[currentLang].sign_in;
+          const chatId = data.chatId; const platforms = data.platforms || {};
           try { snap.ref.remove(); } catch (e) {}
           showLoginSuccess(chatId, platforms);
         } else if (data.status === 'error') {
           cleanupVerify();
           showError('otpError', data.message || 'Invalid Code.');
-          btn.disabled = true; btn.style.opacity = '0.6';
-          btn.textContent = T[currentLang].sign_in;
+          btn.disabled = true; btn.style.opacity = '0.6'; btn.textContent = T[currentLang].sign_in;
           setTimeout(() => { btn.disabled = false; btn.style.opacity = ''; loginBusy = false; }, 1500);
         }
       });
       verifyTimeout = setTimeout(() => {
         if (loginBusy) {
-          cleanupVerify(); loginBusy = false;
-          btn.disabled = false; btn.textContent = T[currentLang].sign_in;
-          showError('otpError', currentLang === 'mm' ? 'အချိန်ကုန်သွားပါသည်။ ထပ်ကြိုးစားပါ။' : 'Timeout. Please try again.');
+          cleanupVerify(); loginBusy = false; btn.disabled = false; btn.textContent = T[currentLang].sign_in;
+          showError('otpError', currentLang === 'mm' ? 'အချိန်ကုန်သွားပါသည်။' : 'Timeout. Please try again.');
         }
       }, 15000);
     } catch (e) {
-      loginBusy = false; btn.disabled = false;
-      btn.textContent = T[currentLang].sign_in;
+      loginBusy = false; btn.disabled = false; btn.textContent = T[currentLang].sign_in;
       showError('otpError', 'Error: ' + (e.message || 'unknown'));
     }
   }
@@ -3317,8 +3120,7 @@
   function showError(id, msg) {
     const el = document.getElementById(id);
     if (!el) return;
-    el.textContent = msg;
-    el.classList.add('show');
+    el.textContent = msg; el.classList.add('show');
     setTimeout(() => { if (el) el.classList.remove('show'); }, 4000);
   }
   function startResendTimer(seconds) {
@@ -3332,8 +3134,7 @@
         timerEl.innerHTML = (currentLang === 'mm' ? 'မရသေးဘူးလား? <span onclick="resendCode()" style="cursor:pointer;color:var(--ck-2);font-weight:800;">ပြန်ပို့</span>' : "Didn't receive? <span onclick=\"resendCode()\" style=\"cursor:pointer;color:var(--ck-2);font-weight:800;\">Resend</span>");
       }
     };
-    updateTimer();
-    loginResendInterval = setInterval(updateTimer, 1000);
+    updateTimer(); loginResendInterval = setInterval(updateTimer, 1000);
   }
   function resendCode() {
     document.getElementById('sendCodeBtn').disabled = false;
@@ -3372,7 +3173,7 @@
   style.textContent = '@keyframes themeSpin { 0% { transform: rotate(0deg) scale(1); } 50% { transform: rotate(180deg) scale(0.75); } 100% { transform: rotate(360deg) scale(1); } }';
   document.head.appendChild(style);
   
-  // ============ PREDICTION DATA ============
+  // ============ PREDICTION DATA — FIXED Global Trx Free Path ============
   const PREDICTION_DATA = {
     ck: {
       name: 'Ck Lottery', logo: 'Logo/ck_logo.jpg', accessKeys: ['ck'],
@@ -3472,7 +3273,8 @@
             { ver: 'v1.2', path: 'Mini/Global_TrxMini/global_trx1mini1-2.html' },
             { ver: 'v1.3', path: 'Mini/Global_TrxMini/global_trx1mini1-3.html' }
           ],
-          free: [{ ver: 'v1.1', path: 'Mini/Global_TrxMini/global_trx1mini1-1-free.html' }]
+          // ✅ FIXED: globaltrx (no underscore) for free
+          free: [{ ver: 'v1.1', path: 'Mini/Global_TrxMini/globaltrx1mini1-1-free.html' }]
         }
       }
     }
@@ -3482,47 +3284,38 @@
   const predictionLockedClicks = {};
   const PREDICTION_LOCK_THRESHOLD = 3;
   
-  // ============ WIN RATE ALGORITHMS (No 3) ============
+  // ============ WIN RATE ALGORITHMS ============
   function classifyBS(num) {
     var n = parseInt(num, 10);
     if (isNaN(n)) return null;
     return n >= 5 ? 'BIG' : 'SMALL';
   }
   
-  // V1.1 Algorithm — Streak Reversal + Weighted Counter-Trend
+  // V1.1 — Streak Reversal + Weighted Counter-Trend
   function v11Predict(history) {
     if (!history || history.length < 5) return null;
     var seq = history.slice(0, 8).map(r => classifyBS(r.number)).filter(Boolean);
     if (seq.length < 5) return null;
     var streak = 1;
-    for (var i = 1; i < seq.length; i++) {
-      if (seq[i] === seq[0]) streak++;
-      else break;
-    }
+    for (var i = 1; i < seq.length; i++) { if (seq[i] === seq[0]) streak++; else break; }
     if (streak >= 3) return { value: seq[0] === 'BIG' ? 'SMALL' : 'BIG' };
     var weights = [5, 4, 3, 2, 1];
     var bigW = 0, smallW = 0;
     seq.slice(0, 5).forEach((v, i) => { if (v === 'BIG') bigW += weights[i]; else smallW += weights[i]; });
-    var total = bigW + smallW;
-    var diff = Math.abs(bigW - smallW);
-    var ratio = total > 0 ? diff / total : 0;
-    var prediction = bigW > smallW ? 'SMALL' : 'BIG';
-    return { value: prediction, ratio: ratio };
+    return { value: bigW > smallW ? 'SMALL' : 'BIG' };
   }
-  
   function v11WinRate(results) {
     if (!results || results.length < 6) return null;
     var hits = 0, total = 0;
     for (var i = 0; i < 5 && i + 5 < results.length; i++) {
-      var hist = results.slice(i + 1);
-      var pred = v11Predict(hist);
+      var pred = v11Predict(results.slice(i + 1));
       var actual = classifyBS(results[i].number);
       if (pred && actual) { total++; if (pred.value === actual) hits++; }
     }
     return total > 0 ? Math.round(hits / total * 100) : null;
   }
   
-  // V1.2 Algorithm — Trend Following + Weighted Majority
+  // V1.2 — Trend Following + Weighted Majority
   function v12Predict(history) {
     if (!history || history.length < 3) return null;
     var last3 = history.slice(0, 3).map(r => classifyBS(r.number)).filter(Boolean);
@@ -3539,7 +3332,6 @@
     if (big === 0 && small === 0) return null;
     return { value: big >= small ? 'BIG' : 'SMALL' };
   }
-  
   function v12WinRate(results) {
     if (!results || results.length < 6) return null;
     var correct = 0, total = 0;
@@ -3552,7 +3344,7 @@
     return Math.round((correct / total) * 100);
   }
   
-  // V1.3 Algorithm — Pattern Detection (Mirror + Reverse)
+  // V1.3 — Pattern Detection (Mirror + Reverse)
   function v13Predict(history) {
     if (!history || history.length < 2) return null;
     var bsList = history.map(r => classifyBS(r.number)).filter(Boolean);
@@ -3561,7 +3353,6 @@
     if (bsList.length >= 4 && bsList[0] === bsList[1] && bsList[1] === bsList[2] && bsList[2] === bsList[3]) return { value: bsList[0] === 'BIG' ? 'SMALL' : 'BIG' };
     return { value: bsList[0] === 'BIG' ? 'SMALL' : 'BIG' };
   }
-  
   function v13WinRate(results) {
     if (!results || results.length < 6) return null;
     var correct = 0, total = 0;
@@ -3572,6 +3363,32 @@
     }
     if (total === 0) return null;
     return Math.round((correct / total) * 100);
+  }
+  
+  // FREE — Trend Follow (matches mini HTML's free_trend_follow)
+  function freeStrategyPredict(history) {
+    if (!history || history.length < 2) return null;
+    var recent = history.slice(0, Math.min(3, history.length));
+    var b = 0, s = 0;
+    recent.forEach(r => {
+      var bs = classifyBS(r.number);
+      if (bs === 'BIG') b++;
+      else if (bs === 'SMALL') s++;
+    });
+    if (b > s) return 'BIG';
+    if (s > b) return 'SMALL';
+    return classifyBS(recent[0].number);
+  }
+  function freeStrategyWinRate(results) {
+    if (!results || results.length < 5) return null;
+    var ok = 0, tot = 0;
+    for (var i = 0; i < 3 && i + 4 < results.length; i++) {
+      var p = freeStrategyPredict(results.slice(i + 1));
+      var a = classifyBS(results[i].number);
+      if (p && a) { if (p === a) ok++; tot++; }
+    }
+    if (tot === 0) return null;
+    return Math.round((ok / tot) * 100);
   }
   
   // ============ WIN RATE FETCH & CACHE ============
@@ -3589,7 +3406,7 @@
       const snap = await app.database().ref(path).once('value');
       const data = snap.val();
       const results = (data && data.list && Array.isArray(data.list)) ? data.list : [];
-      winRateCache[cacheKey] = { results, time: now };
+      winRateCache[cacheKey] = { results, time: now, rates: cached ? cached.rates : null };
       return results;
     } catch (e) {
       console.warn('WinRate fetch failed:', cacheKey, e);
@@ -3599,13 +3416,14 @@
   
   async function prefetchAndUpdateWinRates(platformKey, gameKey) {
     const cacheKey = platformKey + '_' + gameKey;
-    if (!winRateCache[cacheKey]) winRateCache[cacheKey] = { results: null, time: 0 };
+    if (!winRateCache[cacheKey]) winRateCache[cacheKey] = { results: null, time: 0, rates: null };
     const results = await fetchWinRateResults(platformKey, gameKey);
-    if (!results || results.length < 6) return;
+    if (!results || results.length < 5) return;
     const rates = {
       v11: v11WinRate(results),
       v12: v12WinRate(results),
-      v13: v13WinRate(results)
+      v13: v13WinRate(results),
+      free: freeStrategyWinRate(results)
     };
     winRateCache[cacheKey].rates = rates;
     if (predictionState && predictionState.platform === platformKey && predictionState.activeGame === gameKey) {
@@ -3622,26 +3440,78 @@
     if (ver === 'v1.3') return cached.rates.v13;
     return null;
   }
+  function getFreeWinRate(platformKey, gameKey) {
+    const cacheKey = platformKey + '_' + gameKey;
+    const cached = winRateCache[cacheKey];
+    if (!cached || !cached.rates) return null;
+    return cached.rates.free;
+  }
   
   function updateVersionWinRateDisplays() {
     if (!predictionState) return;
     const platformKey = predictionState.platform;
     const gameKey = predictionState.activeGame;
+  
+    // Special versions
     document.querySelectorAll('.pred-version-btn[data-type="special"]').forEach(btn => {
       const ver = btn.getAttribute('data-ver');
       if (!ver) return;
-      const rate = getWinRateForVersion(platformKey, gameKey, ver);
       const rateEl = btn.querySelector('.ver-winrate');
       if (!rateEl) return;
+      if (btn.classList.contains('is-placeholder')) {
+        rateEl.className = 'ver-winrate fixing';
+        rateEl.textContent = T[currentLang].fixing || 'Fixing...';
+        return;
+      }
+      const rate = getWinRateForVersion(platformKey, gameKey, ver);
       if (rate === null || rate === undefined) {
         rateEl.className = 'ver-winrate loading';
         rateEl.textContent = '...';
       } else {
         const cls = rate >= 60 ? 'high' : rate >= 40 ? 'medium' : 'low';
         rateEl.className = 'ver-winrate ' + cls;
-        rateEl.textContent = 'Win ' + rate + '%';
+        const fmt = T[currentLang].win_rate_fmt || 'Win {p}%';
+        rateEl.textContent = fmt.replace('{p}', rate);
       }
     });
+  
+    // Free versions
+    document.querySelectorAll('.pred-version-btn[data-type="free"]').forEach(btn => {
+      const rateEl = btn.querySelector('.ver-winrate');
+      if (!rateEl) return;
+      if (btn.classList.contains('is-placeholder')) {
+        rateEl.className = 'ver-winrate fixing';
+        rateEl.textContent = T[currentLang].fixing || 'Fixing...';
+        return;
+      }
+      const rate = getFreeWinRate(platformKey, gameKey);
+      if (rate === null || rate === undefined) {
+        rateEl.className = 'ver-winrate loading';
+        rateEl.textContent = '...';
+      } else {
+        const cls = rate >= 60 ? 'high' : rate >= 40 ? 'medium' : 'low';
+        rateEl.className = 'ver-winrate ' + cls;
+        const fmt = T[currentLang].win_rate_fmt || 'Win {p}%';
+        rateEl.textContent = fmt.replace('{p}', rate);
+      }
+    });
+  }
+  
+  // ============ AUTO REFRESH (30s) ============
+  function startWinRateAutoRefresh() {
+    stopWinRateAutoRefresh();
+    winRateRefreshInterval = setInterval(() => {
+      if (!predictionState || !currentSub || currentSub.brand !== 'prediction') return;
+      const key = predictionState.platform + '_' + predictionState.activeGame;
+      if (winRateCache[key]) winRateCache[key].time = 0;
+      prefetchAndUpdateWinRates(predictionState.platform, predictionState.activeGame);
+    }, 30000);
+  }
+  function stopWinRateAutoRefresh() {
+    if (winRateRefreshInterval) {
+      clearInterval(winRateRefreshInterval);
+      winRateRefreshInterval = null;
+    }
   }
   
   // ============ PREDICTION LIST ============
@@ -3684,17 +3554,18 @@
     container.innerHTML = html;
   }
   
-  // ============ OPEN PLATFORM (allow entry) ============
+  // ============ OPEN PLATFORM (Allow Guest) ============
   function openPredictionPlatform(platformKey) {
     const p = PREDICTION_DATA[platformKey];
     if (!p) return;
-    if (appState.mode !== 'user') {
-      const msg = currentLang === 'mm' ? 'ခန့်မှန်းချက်များ အသုံးပြုရန် Profile မှ ဝင်ရောက်ပါ။' : 'Please Login to access Predictions.';
-      showToast(msg, 'warning', 3000);
-      if (appState.mode === 'guest') setTimeout(() => openLoginFromGuest(), 400);
-      else setTimeout(() => switchTab('profile'), 400);
+  
+    // Block only if not in app at all (login screen)
+    if (appState.mode === 'login') {
+      showToast(T[currentLang].login_required || 'Please enter the app first.', 'warning', 3000);
       return;
     }
+  
+    // Guest & User both can enter. Free is accessible. Special is locked for guest.
     predictionLockedClicks[platformKey] = 0;
     if (currentSub) closeSub();
     hideExtensionForSubscreen();
@@ -3706,6 +3577,7 @@
     document.getElementById('floatingBackBtn').classList.add('visible');
     try { history.pushState({ prediction: true }, ''); } catch (e) {}
     renderPredictionPlatformDetail();
+    startWinRateAutoRefresh();
   }
   
   // ============ RENDER PLATFORM DETAIL ============
@@ -3745,6 +3617,8 @@
     if (!g) return '';
     const isPremium = predictionState.unlocked;
     let html = '';
+  
+    // Special Section
     if (g.special && g.special.length) {
       html += '<div class="pred-version-section"><div class="pred-version-label">Special</div><div class="pred-version-row-h">';
       g.special.forEach(v => {
@@ -3752,31 +3626,50 @@
         if (v.placeholder) cls += ' is-placeholder';
         const locked = !isPremium && !v.placeholder;
         if (locked) cls += ' is-locked-premium';
+        const iconHtml = v.placeholder
+          ? '<span class="ver-icon"><i class="fa-solid fa-wrench"></i></span>'
+          : locked
+            ? '<span class="ver-icon"><i class="fa-solid fa-lock"></i></span>'
+            : '<span class="ver-icon"><i class="fa-solid fa-crown"></i></span>';
+        const winRateHtml = v.placeholder
+          ? '<span class="ver-winrate fixing">' + escapeHtml(T[currentLang].fixing || 'Fixing...') + '</span>'
+          : '<span class="ver-winrate loading">...</span>';
         html += '<button class="' + cls + '" data-ver="' + v.ver + '" data-type="special" onclick="handlePredVersionClick(\'' + gameKey + '\', \'' + v.ver + '\', \'special\')">' +
+          iconHtml +
           '<span class="ver-num">' + escapeHtml(v.ver) + '</span>' +
-          '<span class="ver-winrate loading">...</span>' +
+          winRateHtml +
           '<i class="fa-solid fa-chevron-right ver-arrow"></i>' +
         '</button>';
       });
       html += '</div></div>';
     }
+  
+    // Free Section — with Win Rate
     if (g.free && g.free.length) {
       html += '<div class="pred-version-section"><div class="pred-version-label">Free</div><div class="pred-version-row-h">';
       g.free.forEach(v => {
         let cls = 'pred-version-btn free';
         if (v.placeholder) cls += ' is-placeholder';
+        const iconHtml = v.placeholder
+          ? '<span class="ver-icon"><i class="fa-solid fa-wrench"></i></span>'
+          : '<span class="ver-icon"><i class="fa-solid fa-check"></i></span>';
+        const winRateHtml = v.placeholder
+          ? '<span class="ver-winrate fixing">' + escapeHtml(T[currentLang].fixing || 'Fixing...') + '</span>'
+          : '<span class="ver-winrate loading">...</span>';
         html += '<button class="' + cls + '" data-ver="' + v.ver + '" data-type="free" onclick="handlePredVersionClick(\'' + gameKey + '\', \'' + v.ver + '\', \'free\')">' +
+          iconHtml +
           '<span class="ver-num">' + escapeHtml(v.ver) + '</span>' +
-          '<span class="ver-tag">Free</span>' +
+          winRateHtml +
           '<i class="fa-solid fa-chevron-right ver-arrow"></i>' +
         '</button>';
       });
       html += '</div></div>';
     }
+  
     return html;
   }
   
-  // ============ TAB SWITCH — Horizontal Slide (No 2 Option A) ============
+  // ============ TAB SWITCH (Horizontal Slide) ============
   function switchPredGame(gKey) {
     if (!predictionState) return;
     const p = PREDICTION_DATA[predictionState.platform];
@@ -3841,7 +3734,7 @@
     openPredictionMini(gameKey, verKey, type);
   }
   
-  // ============ OPEN MINI WITH LOADING ============
+  // ============ OPEN MINI ============
   function openPredictionMini(gameKey, verKey, type) {
     if (!predictionState) return;
     const p = PREDICTION_DATA[predictionState.platform];
@@ -3883,6 +3776,5 @@
   }
   
   </script>
-  
   </body>
   </html>
