@@ -3306,8 +3306,9 @@
   }
   function v11WinRate(results) {
     if (!results || results.length < 6) return null;
+    var testCount = Math.min(50, results.length - 5);
     var hits = 0, total = 0;
-    for (var i = 0; i < 5 && i + 5 < results.length; i++) {
+    for (var i = 0; i < testCount; i++) {
       var pred = v11Predict(results.slice(i + 1));
       var actual = classifyBS(results[i].number);
       if (pred && actual) { total++; if (pred.value === actual) hits++; }
@@ -3334,8 +3335,9 @@
   }
   function v12WinRate(results) {
     if (!results || results.length < 6) return null;
+    var testCount = Math.min(50, results.length - 5);
     var correct = 0, total = 0;
-    for (var i = 0; i < 3 && i + 5 < results.length; i++) {
+    for (var i = 0; i < testCount; i++) {
       var pred = v12Predict(results.slice(i + 1));
       var actual = classifyBS(results[i].number);
       if (pred && actual) { if (pred.value === actual) correct++; total++; }
@@ -3355,8 +3357,9 @@
   }
   function v13WinRate(results) {
     if (!results || results.length < 6) return null;
+    var testCount = Math.min(50, results.length - 4);
     var correct = 0, total = 0;
-    for (var i = 0; i < 4 && i + 4 < results.length; i++) {
+    for (var i = 0; i < testCount; i++) {
       var pred = v13Predict(results.slice(i + 1));
       var actual = classifyBS(results[i].number);
       if (pred && actual) { if (pred.value === actual) correct++; total++; }
@@ -3381,8 +3384,9 @@
   }
   function freeStrategyWinRate(results) {
     if (!results || results.length < 5) return null;
+    var testCount = Math.min(50, results.length - 4);
     var ok = 0, tot = 0;
-    for (var i = 0; i < 3 && i + 4 < results.length; i++) {
+    for (var i = 0; i < testCount; i++) {
       var p = freeStrategyPredict(results.slice(i + 1));
       var a = classifyBS(results[i].number);
       if (p && a) { if (p === a) ok++; tot++; }
